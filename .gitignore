@@ -1,1 +1,8 @@
+# IDE generated folders
 /.idea/
+
+# Cache
+__pycache__/
+
+# Database files
+database.db*

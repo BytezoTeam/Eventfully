@@ -9,6 +9,7 @@ packages = [{include = "accessibility_events"}]
 [tool.poetry.dependencies]
 python = "^3.11"
 flask = "^3.0.0"
+peewee = "^3.16.3"
 
 
 [build-system]
