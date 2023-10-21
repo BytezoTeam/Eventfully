@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=["GET"])
 def index():
-    return render_template('index.html')
+    return render_template('startseite.html')
 
 
 @app.route("/api/add_event", methods=["GET"])
