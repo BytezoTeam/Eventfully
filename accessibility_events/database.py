@@ -21,14 +21,14 @@ class BaseModel(Model):
         database = db
 
 
-class Location(BaseModel):
+class City(BaseModel):
     name = TextField(primary_key=True)
     longitude = FloatField()
     latitude = FloatField()
 
 
 class Event(BaseModel):
-    id = UUIDField(primary_key=True)
+    id = TextField(primary_key=True)
     title = TextField()
     description = TextField()
     link = TextField()
@@ -38,7 +38,8 @@ class Event(BaseModel):
     end_date = DateTimeField()
     age = TextField()
     accessibility = TextField()
-    location = ForeignKeyField(Location, null=True)
+    address = TextField()
+    city = ForeignKeyField(City)
 
 
 class EMailContent(BaseModel):
@@ -47,4 +48,4 @@ class EMailContent(BaseModel):
 
 
 db.connect()
-db.create_tables([Event, Location, EMailContent])
+db.create_tables([Event, EMailContent, City])
