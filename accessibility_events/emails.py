@@ -1,8 +1,7 @@
 from os import getenv
 from dotenv import load_dotenv
 from .database import *
-from imap_tools import MailBox, AND
-
+from imap_tools import MailBox
 
 
 clear_Emails = False
