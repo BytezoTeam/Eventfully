@@ -11,26 +11,30 @@ load_dotenv()
 openai.api_key = getenv("OPENAI_API_KEY")
 
 
-def categorize():
+def categorize_all():
     for email in db.EMailContent.select():
-        infos = loads(get_infos(email.subject + email.content))
-        tag = get_topic(email.subject + email.content)
+        categorize(email.subject + email.content)
 
-        email.delete_instance()
+    db.EMailContent.delete().execute()
 
-        db.Event.create(
-            id=uuid4(),
-            title=infos["title"],
-            description=infos["description"],
-            link=infos["link"],
-            price=infos["price"],
-            tags=tag,
-            start_date=infos["start_date"],
-            end_date=infos["end_date"],
-            age=infos["age"],
-            accessibility=infos["accessibility"],
-            location=None
-        )
+
+def categorize(text: str):
+    infos = loads(get_infos(text))
+    tag = get_topic(text)
+
+    db.Event.create(
+        id=uuid4(),
+        title=infos["title"],
+        description=infos["description"],
+        link=infos["link"],
+        price=infos["price"],
+        tags=tag,
+        start_date=infos["start_date"],
+        end_date=infos["end_date"],
+        age=infos["age"],
+        accessibility=infos["accessibility"],
+        location=None
+    )
 
 
 @lru_cache
@@ -38,7 +42,9 @@ def get_infos(text: str) -> str:
     messages = [
         {
             "role": "system",
-            "content": """Task: Extract the following event information's from the given text. The output should be in the specifed form.
+            "content": """Task: Extract the following event information's from the given text.
+The output should be in the specifed form. Respond with "---" if you don't have enought information to fill a field.
+
 Required Information:
 - title
 - description
