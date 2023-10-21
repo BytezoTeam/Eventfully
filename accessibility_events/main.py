@@ -12,11 +12,11 @@ database = db()
 def index():
     return render_template('startseite.html')
 
-@app.route('/events')
+@app.route('/api/events')
 def events():
     return jsonify(database.getAllEvents())
 
-@app.route('/emails')
+@app.route('/api/emails')
 def emails():
     return jsonify(database.getAllEmails())
 
