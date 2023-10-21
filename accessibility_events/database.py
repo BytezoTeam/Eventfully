@@ -42,8 +42,7 @@ class Event(BaseModel):
 
 
 class EMailContent(BaseModel):
-    id = UUIDField(primary_key=True)
-    subject = TextField()
+    subject = TextField(primary_key=True)
     content = TextField()
 
 
