@@ -31,9 +31,9 @@ def writeEmails(emails):
     for subject, body in emails.items():
         msg = body["msg"]
         body = body["body"]
-        if not EMailContent.select().where(EMailContent.id == msg.uid).exists():
+        if not EMailContent.select().where(EMailContent.subject == subject).exists():
             # Add the email to the database
-            EMailContent.create(id=msg.uid, subject=subject, content=body)
+            EMailContent.create(subject=subject, content=body)
             print(f"Added EMail with subject '{subject}' to database")
         else:
             print(f"EMail with subject '{subject}' already exists in database")
