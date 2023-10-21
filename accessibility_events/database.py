@@ -39,5 +39,11 @@ class Event(BaseModel):
     location = ForeignKeyField(Location)
 
 
+class EMailContent(BaseModel):
+    id = UUIDField(primary_key=True)
+    subject = TextField()
+    content = TextField()
+
+
 db.connect()
-db.create_tables([Event, Location])
+db.create_tables([Event, Location, EMailContent])
