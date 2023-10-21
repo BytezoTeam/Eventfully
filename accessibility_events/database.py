@@ -36,7 +36,9 @@ class Event(BaseModel):
     tags = TextField()
     start_date = DateTimeField()
     end_date = DateTimeField()
-    location = ForeignKeyField(Location)
+    age = TextField()
+    accessibility = TextField()
+    location = ForeignKeyField(Location, null=True)
 
 
 class EMailContent(BaseModel):
