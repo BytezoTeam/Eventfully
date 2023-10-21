@@ -12,7 +12,7 @@ openai.api_key = getenv("OPENAI_API_KEY")
 
 
 def main():
-    for event in db.Event.select().limit(20):
+    for event in db.Event.select():
         tag = get_topic(event.title + event.description)
         print(event.title, "-", tag)
         event.tags = tag
@@ -24,7 +24,7 @@ def get_topic(text: str) -> str:
     messages = [
         {
             "role": "system",
-            "content": """Task: Classify the following Text by **ONE** of the following topics. Don't make topics up on your own. 
+            "content": """Task: Classify the following Text by **ONE** of the following topics. Use the exact topic names that we give you. Don't make topics up on your own. 
  Topics:
  - MINT
  - Politik
