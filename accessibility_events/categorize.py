@@ -1,10 +1,10 @@
 from json import loads
 from functools import lru_cache
 import openai
-from uuid import uuid4
 from dotenv import load_dotenv
 from os import getenv
 
+import accessibility_events.utils as utils
 import accessibility_events.database as db
 
 load_dotenv()
@@ -15,26 +15,34 @@ def categorize_all():
     for email in db.EMailContent.select():
         categorize(email.subject + email.content)
 
-    db.EMailContent.delete().execute()
+    # db.EMailContent.delete().execute()
 
 
 def categorize(text: str):
+    event_id = utils.get_hash_string(text)
+    if db.Event.select().where(db.Event.id == event_id).exists():
+        return
+
     infos = loads(get_infos(text))
     tag = get_topic(text)
 
-    db.Event.create(
-        id=uuid4(),
-        title=infos["title"],
-        description=infos["description"],
-        link=infos["link"],
-        price=infos["price"],
-        tags=tag,
-        start_date=infos["start_date"],
-        end_date=infos["end_date"],
-        age=infos["age"],
-        accessibility=infos["accessibility"],
-        location=None
-    )
+    try:
+        db.Event.create(
+            id=event_id,
+            title=infos["title"],
+            description=infos["description"],
+            link=infos["link"],
+            price=infos["price"],
+            tags=tag,
+            start_date=infos["start_date"],
+            end_date=infos["end_date"],
+            age=infos["age"],
+            accessibility=infos["accessibility"],
+            address=infos["address"],
+            city=db.City.get(name=infos["city"]),
+        )
+    except KeyError:
+        return
 
 
 @lru_cache
@@ -44,13 +52,15 @@ def get_infos(text: str) -> str:
             "role": "system",
             "content": """Task: Extract the following event information's from the given text.
 The output should be in the specifed form. Respond with "---" if you don't have enought information to fill a field.
+You are allowed to shorten the output if you think it is necessary or too long.
 
 Required Information:
 - title
 - description
 - link
 - price
-- location
+- address
+- city
 - start date
 - end date
 - age
@@ -62,7 +72,8 @@ Output as JSON:
     "description": "..."
     "link": "..."
     "price": "..."
-    "location": "..."
+    "address": "...",
+    "city": "...",
     "start_date": "..."
     "end_date": "..."
     "age": "..."
@@ -133,4 +144,4 @@ def get_topic(text: str) -> str:
 
 
 if __name__ == "__main__":
-    categorize()
+    categorize_all()
