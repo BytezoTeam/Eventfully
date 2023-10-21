@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>MyEventWorld</title>
+</head>
+
+<body>
+    <main class="container">
+        <div style="display: flex; align-items: baseline; justify-content: space-between;">
+            <h1>MyEventWorld</h1>
+            <img src="logo.png" alt="Logo" />
+        </div>
+
+        <form>
+            <div class="grid">
+                <div>
+                    <label for="search">Suche</label>
+                    <input id="search" type="search" placeholder="Suche" autofocus />
+                </div>
+
+                <div>
+                    <label for="kategoire">Kategorie</label>
+                    <select name="Kategorie" id="kategorie">
+                        <option>MINT</option>
+                        <option>Politik</option>
+                        <option>Bürgerbeteiligung</option>
+                        <option>Sprache</option>
+                        <option>Handwerk</option>
+                        <option>Informatik</option>
+                        <option>Kunst/Kultur</option>
+                        <option>Geschichte</option>
+                        <option>Logikspiele/Spiele</option>
+                        <option>Sport</option>
+                        <option>Schule</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div>
+                    <label for="ort">Ort</label>
+                    <input id="ort" type="text" placeholder="Ort eingeben" />
+                </div>
+
+                <div>
+                    <label for="distanz">
+                        Distanz
+                        Distanz
+                    </label>
+
+                    <input id="distanz" type="range" min="0" max="100" />
+                </div>
+
+                <button type="submit">Suchen</button>
+
+            </div>
+
+        </form>
+
+        <h1 aria-busy="true"></h1>
+
+        <!--Hier EventCard-Komponenten-->
+
+    </main>
+
+    <script src="/path/to/your/script.js"></script> <!-- Hier können Sie den Pfad zu Ihrer JavaScript-Datei angeben -->
+
+</body>
+
+</html>
