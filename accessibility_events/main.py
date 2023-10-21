@@ -2,11 +2,12 @@ from flask import Flask, render_template, request, jsonify
 from uuid import uuid4
 from accessibility_events.categorize import get_topic
 import accessibility_events.database as db
+import accessibility_events.backend as backendDataBase
 
 app = Flask(__name__)
 
 
-database = db()
+database = backendDataBase()
 
 @app.route('/', methods=["GET"])
 def index():
