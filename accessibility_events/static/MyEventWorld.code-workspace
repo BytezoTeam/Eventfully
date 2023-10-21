@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../../../MyEventWorld"
+		},
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "accessibility_events"
+	}
+}
