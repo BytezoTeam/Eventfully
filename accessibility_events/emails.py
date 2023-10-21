@@ -1,30 +1,18 @@
-from .database import *
-from dotenv import load_dotenv
-import imaplib
 from os import getenv
+from dotenv import load_dotenv
+from .database import *
 from imap_tools import MailBox, AND
 
-load_dotenv()
 
-EMAIL = getenv("EMAIL")
-PASS = getenv("PASS")
-SERVER = getenv("SERVER")
 
 clear_Emails = True
 
-def main():
-    # Log into server and get emails
-    get_emails(EMAIL, PASS, SERVER)
-    # Write emails into database
-    writeEmails(emails)
-    # Clear emails from database (if wanted)
-    if clearEmails: 
-        clearEmails()
 
 def get_emails(EMAIL, PASS, SERVER):
     global emails
     emails = {}
     # Login into the server 
+    load_dotenv()
     with MailBox(SERVER).login(EMAIL, PASS, 'INBOX') as mailbox:
         # Fetch the emails from inbox
         for msg in mailbox.fetch():
@@ -58,3 +46,17 @@ def clearEmails():
 
 
 
+def main():
+    # Get the environment variables
+    load_dotenv()
+
+    EMAIL = getenv("EMAIL")
+    PASS = getenv("PASS")
+    SERVER = getenv("SERVER")
+
+    get_emails(EMAIL, PASS, SERVER)
+    # Write emails into database
+    writeEmails(emails)
+    # Clear emails from database (if wanted)
+    if clearEmails: 
+        clearEmails()
