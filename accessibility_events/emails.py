@@ -5,7 +5,7 @@ from imap_tools import MailBox, AND
 
 
 
-clear_Emails = True
+clear_Emails = False
 
 
 def get_emails(EMAIL, PASS, SERVER):
@@ -58,5 +58,5 @@ def main():
     # Write emails into database
     writeEmails(emails)
     # Clear emails from database (if wanted)
-    if clearEmails: 
+    if clear_Emails:
         clearEmails()
