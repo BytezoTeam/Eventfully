@@ -21,11 +21,6 @@ def filtersetting():
     return render_template('filterseting.html')
 
 
-@app.route("/api/events", methods=["GET"])
-def events():
-    return jsonify(list(db.Event.select().dicts()))
-
-
 # @app.route("/api/events/search")
 # def search_events():
 #     print(request.args)
