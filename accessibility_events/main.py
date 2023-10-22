@@ -12,15 +12,19 @@ def index():
     return render_template('startPage.html', events=list(db.Event.select().dicts()))
 
 
-@app.route("/api/events", methods=["GET"])
-def events():
-    return render_template("startPage.html", events=list(db.Event.select().dicts()))
+@app.route("/addWindow", methods=["GET"])
+def addWindow():
+    return render_template('addWindow.html')
 
 
 @app.route("/filterseting", methods=["GET"])
 def filtersetting():
     return render_template('filterseting.html')
 
+
+@app.route("/api/events", methods=["GET"])
+def events():
+    return render_template("startPage.html", events=list(db.Event.select().dicts()))
 
 # @app.route("/api/events/search")
 # def search_events():
