@@ -3,17 +3,18 @@ from uuid import uuid4
 from accessibility_events.categorize import get_topic
 import accessibility_events.database as db
 
+
 app = Flask(__name__)
 
 
 @app.route("/", methods=["GET"])
 def index():
-    return render_template('startPage.html')
+    return render_template('startPage.html', events=list(db.Event.select().dicts()))
 
 
 @app.route("/api/events", methods=["GET"])
 def events():
-    return jsonify(list(db.Event.select().dicts()))
+    return render_template("startPage.html", events=list(db.Event.select().dicts()))
 
 
 @app.route("/filterseting", methods=["GET"])
@@ -32,15 +33,21 @@ def getEvents():
     category = request.args.get("kategorie")
     therm = request.args.get("search")
     location = request.args.get("ort")
-    distance = request.args.get("distanz")
+    # distance = request.args.get("distanz")
 
     result = list(db.Event.select().where(
-        #(db.Event.tags.contains(category)) & 
-        #(db.Event.city.contains(location)) & 
-        (db.Event.title.contains(therm))).dicts())
-    
-    print(result)
-    return render_template("startPage.html", events=events)
+        (
+            (db.Event.title ** f"{therm}%") |
+            (db.Event.description ** f"%{therm}%")
+        ) & (
+            db.Event.tags ** f"%{category}%"
+        ) & (
+            db.Event.address ** f"%{location}%" |
+            db.Event.city.name == location
+        )
+    ).dicts())
+
+    return render_template("startPage.html", events=result)
 
 
 @app.route("/api/emails", methods=["GET"])
@@ -72,7 +79,7 @@ def add_event():
 
 
 def main():
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
 
 
 if __name__ == '__main__':
