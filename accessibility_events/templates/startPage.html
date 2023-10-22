@@ -1,75 +1,57 @@
 <!DOCTYPE html>
 <html>
-
-
-<head>
-    <link rel="stylesheet" type="text/css" href="/static/main.css">
-    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
-   <script src="/static/css/bootstrap.bundle.min.js"></script>
+  <head>
+    <link rel="stylesheet" type="text/css" href="/static/main.css" />
     <title>Search Event</title>
-</head>
-
-<body>
+  </head>
+  <body>
     <main class="container">
-        <div>
-            <h1>Search Events</h1>
-            <img src="logo.png" alt="Logo" />
+      <div
+        style="
+          display: flex;
+          align-items: baseline;
+          justify-content: space-between;
+        "
+      >
+        <h1>Search Event</h1>
+        <img src="/static/logo.png" style="width: 30%" alt="Logo" />
+      </div>
+
+      <form action="api/events/search" method="get">
+        <div class="grid">
+          <div>
+            <label for="search">Suche</label>
+            <input id="search" type="search" placeholder="Suche" autofocus />
+          </div>
+
+          <div>
+            <!-- Plus-Button, um zur anderen Seite zu gelangen -->
+            <button type="button" onclick="window.location.href='/addWindow';">
+              +
+            </button>
+          </div>
+
+          <div>
+            <!-- Button, um zur Unterseite zu gelangen -->
+            <button
+              type="button"
+              onclick="window.location.href='/filterseting';"
+            >
+              Filtereinstellungen
+            </button>
+          </div>
         </div>
 
-        <form>
-            <div class="grid">
-                <div>
-                    <label for="search">Suche</label>
-                    <input id="search" type="search" placeholder="Suche" autofocus />
-                </div>
+        <div class="grid">
+          <button type="submit">Suchen</button>
+        </div>
+      </form>
 
-                <div>
-                    <label for="kategoire">Kategorie</label>
-                    <select name="Kategorie" id="kategorie">
-                        <option>MINT</option>
-                        <option>Politik</option>
-                        <option>Bürgerbeteiligung</option>
-                        <option>Sprache</option>
-                        <option>Handwerk</option>
-                        <option>Informatik</option>
-                        <option>Kunst/Kultur</option>
-                        <option>Geschichte</option>
-                        <option>Logikspiele/Spiele</option>
-                        <option>Sport</option>
-                        <option>Schule</option>
-                    </select>
-                </div>
-            </div>
+      <h1 aria-busy="true"></h1>
 
-            <div class="grid">
-                <div>
-                    <label for="ort">Ort</label>
-                    <input id="ort" type="text" placeholder="Ort eingeben" />
-                </div>
-
-                <div>
-                    <label for="distanz">
-                        Distanz
-                        Distanz
-                    </label>
-
-                    <input id="distanz" type="range" min="0" max="100" />
-                </div>
-
-                <button type="submit">Suchen</button>
-
-            </div>
-
-        </form>
-
-        <h1 aria-busy="true"></h1>
-
-        <!--Hier EventCard-Komponenten-->
-
+      <!--Hier EventCard-Komponenten-->
     </main>
 
     <!-- Hier können Sie den Pfad zu Ihrer JavaScript-Datei angeben -->
-
-</body>
-
+  </body>
 </html>

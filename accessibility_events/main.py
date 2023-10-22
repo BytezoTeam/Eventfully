@@ -4,6 +4,7 @@ from accessibility_events.categorize import get_topic
 import accessibility_events.database as db
 from accessibility_events.backend import *
 
+
 app = Flask(__name__)
 
 
@@ -17,6 +18,27 @@ def index():
 def events():
 
     return jsonify(database.getAllEvents())
+
+@app.route("/", methods=["GET"])
+def index():
+    return render_template('startPage.html')
+
+
+@app.route("/filterseting", methods=["GET"])
+def filtersetting():
+    return render_template('filterseting.html')
+
+
+@app.route('/api/events')
+def events():
+    return jsonify(list(db.Event.select().dicts()))
+
+
+# @app.route("/api/events/search")
+# def search_events():
+#     print(request.args)
+#     return "", 200
+
 
 @app.route('/api/events/search')
 def getEvents():
@@ -38,7 +60,7 @@ def filter():
 
 @app.route('/api/emails')
 def emails():
-    return jsonify(database.getAllEmails())
+    return jsonify(list(db.EMailContent.select().dicts()))
 
 
 @app.route("/api/add_event")
@@ -66,6 +88,7 @@ def add_event():
 
 def main():
     app.run(host="0.0.0.0", port=5000, debug=True)
+
 
 
 if __name__ == '__main__':
