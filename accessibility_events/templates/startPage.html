@@ -1,57 +1,69 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="/static/main.css" />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css" />
+
     <title>Search Event</title>
+    <style>
+      .img-fluid {
+        max-width: 100%;
+        height: auto;
+      }
+    </style>
   </head>
   <body>
-    <main class="container">
-      <div
-        style="
-          display: flex;
-          align-items: baseline;
-          justify-content: space-between;
-        "
-      >
-        <h1>Search Event</h1>
-        <img src="/static/logo.png" style="width: 30%" alt="Logo" />
+    <div class="row">
+      <div class="col-md-2">
+        <img src="../static/schildkröte.gif" class="w-30" alt="Logo" />
       </div>
+      <div class="col-md-8">
+        <h1>Search Event</h1>
+      </div>
+      <div class="col-md-2">
+        <img src="../static/logo.png" class="img-fluid" alt="Logo" />
+      </div>
+    </div>
 
-      <form action="api/events/search" method="get">
-        <div class="grid">
-          <div>
-            <label for="search">Suche</label>
-            <input id="search" type="search" placeholder="Suche" autofocus />
-          </div>
-
-          <div>
-            <!-- Plus-Button, um zur anderen Seite zu gelangen -->
-            <button type="button" onclick="window.location.href='/addWindow';">
-              +
-            </button>
-          </div>
-
-          <div>
-            <!-- Button, um zur Unterseite zu gelangen -->
-            <button
-              type="button"
-              onclick="window.location.href='/filterseting';"
-            >
-              Filtereinstellungen
-            </button>
-          </div>
+    <form action="api/events/search" method="get">
+      <div class="row">
+        <!-- Plus-Button, um zur anderen Seite zu gelangen -->
+        <div class="col-md-2">
+          <button
+            type="button"
+            onclick="window.location.href='/addWindow';"
+            class="btn btn-primary mb-2"
+          >
+            +
+          </button>
         </div>
 
-        <div class="grid">
-          <button type="submit">Suchen</button>
+        <div class="col-md-8">
+          <input
+            id="search"
+            type="search"
+            placeholder="Suche"
+            autofocus
+            class="form-control"
+          />
         </div>
-      </form>
 
-      <h1 aria-busy="true"></h1>
-
-      <!--Hier EventCard-Komponenten-->
-    </main>
-
-    <!-- Hier können Sie den Pfad zu Ihrer JavaScript-Datei angeben -->
+        <!-- Button, um zur Unterseite zu gelangen -->
+        <div class="col-md-2">
+          <button
+            type="button"
+            onclick="window.location.href='/filterseting';"
+            class="btn btn-secondary mb-2"
+          >
+            Filtereinstellungen
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <button type="submit" class="btn btn-success">Suchen</button>
+        </div>
+      </div>
+    </form>
   </body>
 </html>
