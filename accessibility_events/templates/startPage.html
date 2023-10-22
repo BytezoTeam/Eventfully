@@ -28,27 +28,14 @@
       }
 
       to {
-      margin-left: 0%;
+     margin-left:0%;
       }
-      }
+    }
     </style>
-
-    <script>
-      /**function move() {
-        let turtule = document.getElementById("turtle");
-        right = parseInt(turtle.style.right);
-        if (parseInt(turtle.getBoundingClientRect().left) > 0) {
-          turtle.style.right = right + 5 + "px";
-        } else {
-          turtle.style.right = "0px";
-        }
-      }
-      window.onload = function () {
-        setInterval(move, 100);
-      };*/
-    </script>
   </head>
   <body>
+    <div class="container">
+
     <div class="row" style="position: relative">
       <div class="col-md-2">
         <img src="../static/schildkröte.gif" 
@@ -64,7 +51,7 @@
       </div>
     </div>
 
-      
+    <form onsubmit="search()" method="get">
     <div class="row">
           <div class="col-md-2">
           <button type="button" 
@@ -73,7 +60,7 @@
             |||
           </button>
             </div>
-            <form onsubmit="search()" method="get">
+            
           <div class="col-md-8">
             <input 
             id="search" 
@@ -135,8 +122,10 @@
         {% if not item.tags == "---"%}
         <p>Kategorien: {{  item.tags  }}</p>
         {% endif %}
-        {% endfor %}
+        {% endfor %
+  </div>}
         
+
       </div>
     </div>
   </body>
