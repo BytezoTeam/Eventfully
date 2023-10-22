@@ -50,7 +50,7 @@ def unbezahlbar():
             if db.EMailContent.select().where(db.EMailContent.subject == content_hash).exists():
                 continue
             db.EMailContent.create(subject=content_hash,
-                                   content=f"title: {title}\ntime: {time}\n info: {info}\naddress: {address}\ndescription: {description}\nlink: {link}\naddress: {address}\ncity: Zürich")
+                                   content=f"title: {title}\ntime_date: {time}\n info: {info}\naddress: {address}\ndescription: {description}\nlink: {link}\naddress: {address}\ncity: Zürich")
 
         # get_element(By.CSS_SELECTOR, "span.step-links a").click()
         get_element(By.XPATH, "//a[text()='weiter »']").click()
