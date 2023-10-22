@@ -34,17 +34,13 @@ def getEvents():
     location = request.args.get("ort")
     distance = request.args.get("distanz")
 
-    result = db.Event.select().where(
-        (db.Event.tags.contains(category)) &
-        (db.Event.city.contains(location)) &
-        (db.Event.title.contains(therm))).dicts()
-
-    return render_template("startPage.html", events=result)
-
-
-@app.route("/filter", methods=["GET"])
-def filter_template():
-    return render_template("filter.html")
+    result = list(db.Event.select().where(
+        #(db.Event.tags.contains(category)) & 
+        #(db.Event.city.contains(location)) & 
+        (db.Event.title.contains(therm))).dicts())
+    
+    print(result)
+    return render_template("startPage.html", events=events)
 
 
 @app.route("/api/emails", methods=["GET"])
@@ -76,7 +72,7 @@ def add_event():
 
 
 def main():
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(debug=True)
 
 
 if __name__ == '__main__':

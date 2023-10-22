@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/main.css">
+    <title>Filtereinstellungen</title>
+</head>
+
+<body>
+    <main class="container">
+        <div style="display: flex; align-items: baseline; justify-content: space-between;">
+            <h1>Filtereinstellungen</h1>
+            <img src="logo.png" alt="Logo" />
+        </div>
+
+        <form action="api/events/search" method="get">
+            <div class="grid">
+                <div>
+                    <label for="kategorie">Kategorie</label><br>
+                    <select name="Kategorie" id="kategorie">
+                        <option>MINT</option>
+                        <option>Politik</option>
+                        <option>Bürgerbeteiligung</option>
+                        <option>Sprache</option>
+                        <option>Handwerk</option>
+                        <option>Informatik</option>
+                        <option>Kunst/Kultur</option>
+                        <option>Geschichte</option>
+                        <option>Logikspiele/Spiele</option>
+                        <option>Sport</option>
+                        <option>Schule</option>
+
+                        <!-- Fügen Sie hier weitere Optionen hinzu -->
+                    </select><br>
+
+                    <label for="ort">Ort:</label><br>
+                    <input type="text" id="ort" name="ort"><br>
+
+                    <label for="distanz">Distanz:</label><br>
+                    <input id="distanz" type="range" min="0" max="100" /><br>
+
+                    <!-- Button, um zur Hauptseite zurückzukehren -->
+                    <button type="button" onclick="window.location.href='/';">Zurück zur Suche</button>
+
+                    <!-- Button, um die Filtereinstellungen anzuwenden -->
+                    <input type="submit" value="Anwenden">
+                </div>
+            </div>
+        </form>
+
+        <!--Hier EventCard-Komponenten-->
+
+    </main>
+
+    <!-- Hier können Sie den Pfad zu Ihrer JavaScript-Datei angeben -->
+
+</body>
+
+</html>

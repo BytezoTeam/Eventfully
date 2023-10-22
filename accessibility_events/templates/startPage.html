@@ -25,28 +25,34 @@
       </div>
     </div>
 
-    <form action="api/events/search" method="get">
-      <div class="row">
-        <!-- Plus-Button, um zur anderen Seite zu gelangen -->
-        <div class="col-md-2">
-          <button
-            type="button"
-            onclick="window.location.href='/addWindow';"
-            class="btn btn-primary mb-2"
-          >
-            +
-          </button>
+      <form action="api/events/search" method="get">
+        <div class="grid">
+          <div>
+            <label>Suche</label>
+            <input id="search" name="search" placeholder="Suche" autofocus/>
+          </div>
+          <div class="grid">
+            <button type="submit">Suchen</button>
+          </div>
+      </form>
+      
+          <div>
+            <!-- Plus-Button, um zur anderen Seite zu gelangen -->
+            <button type="button" onclick="window.location.href='/addWindow';">
+              +
+            </button>
+          </div>
+      
+          <div>
+            <!-- Button, um zur Unterseite zu gelangen -->
+            <button type="button" onclick="window.location.href='/filterseting';">
+              Filtereinstellungen
+            </button>
+          </div>
         </div>
+      
 
-        <div class="col-md-8">
-          <input
-            id="search"
-            type="search"
-            placeholder="Suche"
-            autofocus
-            class="form-control"
-          />
-        </div>
+      <h1 aria-busy="true"></h1>
 
         <!-- Button, um zur Unterseite zu gelangen -->
         <div class="col-md-2">
