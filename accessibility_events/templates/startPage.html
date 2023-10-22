@@ -66,7 +66,7 @@
             |||
         </button>
     </div>
-    <form hx-get="/api/events/search" hx-target="#search-result" hx-swap="innerHTML">
+    <form hx-get="/api/events/search" hx-trigger="load, submit" hx-target="#search-result" hx-swap="innerHTML">
         <div class="col-md-8">
             <input
                     id="search"
