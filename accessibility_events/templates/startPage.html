@@ -19,7 +19,7 @@
         height: auto;
       }
       #turtle{
-      animation: 3s infinite linear slide;
+      animation: 15s infinite linear slide;
       }
 
       @keyframes slide {
@@ -34,25 +34,24 @@
     </style>
   </head>
   <body>
-    <div class="container">
-
-    <div class="row" style="position: relative">
-      <div class="col-md-2">
+    <div class="container" >
+      <div style="position: absolute; width: 80%">
         <img src="../static/schildkröte.gif" 
         id="turtle" 
         
         alt="Logo" />
       </div>
-      <div class="col-md-8">
-        <h1>Search Event</h1>
+      <div class="row" style="position: relative"> 
+        <div class="col-md-8">
+          <h1>Search Event</h1>
+        </div>
+        <div class="col-md-2">
+          <img src="../static/logo.png" class="img-fluid" alt="Logo" />
+        </div>
       </div>
-      <div class="col-md-2">
-        <img src="../static/logo.png" class="img-fluid" alt="Logo" />
-      </div>
-    </div>
 
-    <form onsubmit="search()" method="get">
-    <div class="row">
+      <form onsubmit="search()" method="get">
+      <div class="row">
           <div class="col-md-2">
           <button type="button" 
           onclick="window.location.href='/filterseting';"
@@ -87,7 +86,6 @@
               Suchen
             </button>
           </div>
-        </div>
       </div>
       </form>
       
