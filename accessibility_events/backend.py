@@ -1,20 +1,12 @@
-from .database import *
+import accessibility_events.database as db
 
-class db:
-    def getAllEvents(self):
-        return list(Event.select().dicts())
 
-    def getAllEmails(self):
-        return list(EMailContent.select().dicts())
-    
 class searchInDataBase:
     def searchEvents(self, search):
-        return list(Event.select().where((Event.title.contains(search)) | (Event.content.contains(search)) | (Event.date.contains(search)) | (Event.time.contains(search)) | (Event.location.contains(search)) | (Event.link.contains(search)) | (Event.tags.contains(search))).dicts())
-    
+        return list(db.Event.select().where(
+            (db.Event.title.contains(search)) | (db.Event.content.contains(search)) | (db.Event.date.contains(search)) | (
+                db.Event.time.contains(search)) | (db.Event.location.contains(search)) | (db.Event.link.contains(search)) | (
+                db.Event.tags.contains(search))).dicts())
+
     def searchEmails(self, search):
-        return list(EMailContent.select().where(EMailContent.subject.contains(search)).dicts())
-    
-
-
-    
-    
+        return list(db.EMailContent.select().where(db.EMailContent.subject.contains(search)).dicts())
