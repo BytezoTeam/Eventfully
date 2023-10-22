@@ -1,16 +1,9 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="en">
+<head>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="../static/css/bootstrap.min.css" />
-    <script>
-      function search() {
-        let content = fetch (
-          "/api/events/search" + document.getElementById("search").value
-        ).then((response) => response.json()).then((data => console.log(data)));
-        return false;
-      }
-    </script>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css"/>
+    <script src="https://unpkg.com/htmx.org@1.9.6"></script>
 
     <title>Search Event</title>
     <style>
@@ -22,109 +15,92 @@
       animation: 15s infinite linear slide;
       }
 
-      @keyframes slide {
-      from {
-      margin-left: 100%;
-      }
+        @keyframes slide {
+        from {
+        margin-left: 100%;
+        }
 
-      to {
-     margin-left:0%;
-      }
-    }
+        to {
+        margin-left: 0%;
+        }
+        }
     </style>
-  </head>
-  <body>
-    <div class="container" >
-      <div style="position: absolute; width: 80%">
-        <img src="../static/schildkröte.gif" 
-        id="turtle" 
-        
-        alt="Logo" />
-      </div>
-      <div class="row" style="position: relative"> 
-        <div class="col-md-8">
-          <h1>Search Event</h1>
-        </div>
-        <div class="col-md-2">
-          <img src="../static/logo.png" class="img-fluid" alt="Logo" />
-        </div>
-      </div>
 
-      <form onsubmit="search()" method="get">
-      <div class="row">
-          <div class="col-md-2">
-          <button type="button" 
-          onclick="window.location.href='/filterseting';"
-          class="bnt btn-secondary mb-2">
+    <script>
+        /**function move() {
+          let turtule = document.getElementById("turtle");
+          right = parseInt(turtle.style.right);
+          if (parseInt(turtle.getBoundingClientRect().left) > 0) {
+            turtle.style.right = right + 5 + "px";
+          } else {
+            turtle.style.right = "0px";
+          }
+        }
+        window.onload = function () {
+          setInterval(move, 100);
+        };*/
+    </script>
+</head>
+<body>
+<div class="row" style="position: relative">
+    <div class="col-md-2">
+        <img src="../static/schildkröte.gif"
+             id="turtle"
+
+             alt="Logo"/>
+    </div>
+    <div class="col-md-8">
+        <h1>Search Event</h1>
+    </div>
+    <div class="col-md-2">
+        <img src="../static/logo.png" class="img-fluid" alt="Logo"/>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-2">
+        <button type="button"
+                onclick="window.location.href='/filterseting';"
+                class="bnt btn-secondary mb-2">
             |||
-          </button>
-            </div>
-            
-          <div class="col-md-8">
-            <input 
-            id="search" 
-            type="search" 
-            placeholder="Suche" 
-            autofocus
-            class="form_control"
+        </button>
+    </div>
+    <form hx-get="/api/events/search" hx-target="#search-result" hx-swap="innerHTML">
+        <div class="col-md-8">
+            <input
+                    id="search"
+                    name="search"
+                    type="text"
+                    placeholder="Suche"
+                    autofocus
+                    class="form_control"
             />
-          </div>
-          
-            <!-- Plus-Button, um zur anderen Seite zu gelangen -->
-            <div class="col-md-2">
-            <button 
-            type="button" 
-            onclick="window.location.href='/addWindow';"
-            class= "btn btn-primary mb-2">
-              +
-            </button>
-          </div>
         </div>
-          <div class="row">
-            <div class="col-md-12">
-            <button type="submit" class="btn btn-success">
-              Suchen
-            </button>
-          </div>
-      </div>
-      </form>
-      
 
+        <!-- Plus-Button, um zur anderen Seite zu gelangen -->
+        <div class="col-md-2">
+            <button
+                    type="button"
+                    onclick="window.location.href='/addWindow';"
+                    class="btn btn-primary mb-2">
+                +
+            </button>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-success">
+                    Suchen
+                </button>
+            </div>
+        </div>
+    </form>
 
 
     <!-- Show events -->
-    <div class"row">
-      <div class="col-md-12">
-        
-        {% for item in events %}
-        <h3>{{  item.title  }}</h3>
-        <p>Beschreibung: {{  item.description  }}</p>
-        {% if not item.link == "---"%}
-        <p>Link: {{  item.link  }}</p>
-        {% endif %}
-        {% if not item.price == "---"%}
-        <p>Preis: {{  item.price  }}</p>
-        {% endif %}
-        {% if not item.startdate == "-"%}
-        <p>Wann?: {{  item.startdate  }}-{{  item.enddate  }}</p>
-        {% endif %}
-        {% if not item.age == "---"%}
-        <p>Alter: {{  item.age  }}</p>
-        {% endif %}
-        {% if not item.accessibility == "---"%}
-        <p>Barrierefreiheit: {{  item.accessibility  }}</p>
-        {% endif %}
-        {% if not item.address == "-"%}
-        <p>Wo?: {{  item.address  }}</p>
-        {% endif %}
-        {% if not item.tags == "---"%}
-        <p>Kategorien: {{  item.tags  }}</p>
-        {% endif %}
-        {% endfor %
-  </div>}
-        
-
-      </div>
+    <div class=row">
+        <div class="col-md-12" id="search-result"></div>
     </div>
-  </body>
+</div>
+</body>
 </html>

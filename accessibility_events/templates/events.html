@@ -1,0 +1,25 @@
+{% for item in events %}
+    <h3>{{ item.title }}</h3>
+    <p>Beschreibung: {{ item.description }}</p>
+    {% if not item.link == "---"%}
+    <p>Link: {{ item.link }}</p>
+    {% endif %}
+    {% if not item.price == "---"%}
+    <p>Preis: {{ item.price }}</p>
+    {% endif %}
+    {% if not item.startdate == "-"%}
+    <p>Wann?: {{ item.startdate }}-{{ item.enddate }}</p>
+    {% endif %}
+    {% if not item.age == "---"%}
+    <p>Alter: {{ item.age }}</p>
+    {% endif %}
+    {% if not item.accessibility == "---"%}
+    <p>Barrierefreiheit: {{ item.accessibility }}</p>
+    {% endif %}
+    {% if not item.address == "-"%}
+    <p>Wo?: {{ item.address }}</p>
+    {% endif %}
+    {% if not item.tags == "---"%}
+    <p>Kategorien: {{ item.tags }}</p>
+    {% endif %}
+{% endfor %}

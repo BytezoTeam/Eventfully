@@ -30,10 +30,22 @@ def filtersetting():
 
 @app.route("/api/events/search", methods=["GET"])
 def getEvents():
-    category = request.args.get("kategorie")
-    therm = request.args.get("search")
-    location = request.args.get("ort")
+    category = request.args.get("kategorie", "")
+    therm = request.args.get("search", "")
+    location = request.args.get("ort", "")
     # distance = request.args.get("distanz")
+
+    # result = list(db.Event.select().where(
+    #     (
+    #         (db.Event.title ** f"{therm}%") |
+    #         (db.Event.description ** f"%{therm}%")
+    #     ) & (
+    #         db.Event.tags ** f"%{category}%"
+    #     ) & (
+    #         db.Event.address ** f"%{location}%" |
+    #         db.Event.city.name == location
+    #     )
+    # ).dicts())
 
     result = list(db.Event.select().where(
         (
@@ -41,13 +53,10 @@ def getEvents():
             (db.Event.description ** f"%{therm}%")
         ) & (
             db.Event.tags ** f"%{category}%"
-        ) & (
-            db.Event.address ** f"%{location}%" |
-            db.Event.city.name == location
         )
     ).dicts())
 
-    return render_template("startPage.html", events=result)
+    return render_template("events.html", events=result)
 
 
 @app.route("/api/emails", methods=["GET"])
