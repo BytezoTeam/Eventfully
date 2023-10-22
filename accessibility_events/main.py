@@ -11,7 +11,7 @@ def index():
     return render_template('startPage.html')
 
 
-@app.route("/api/events", methos=["GET"])
+@app.route("/api/events", methods=["GET"])
 def events():
     return jsonify(list(db.Event.select().dicts()))
 
