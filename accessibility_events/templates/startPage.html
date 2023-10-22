@@ -7,23 +7,23 @@
 
     <title>Search Event</title>
     <style>
-      .img-fluid {
-        max-width: 100%;
-        height: auto;
-      }
-      #turtle{
-      animation: 15s infinite linear slide;
-      }
-
-        @keyframes slide {
-        from {
-        margin-left: 100%;
+        .img-fluid {
+          max-width: 100%;
+          height: auto;
+        }
+        #turtle{
+        animation: 15s infinite linear slide;
         }
 
-        to {
-        margin-left: 0%;
-        }
-        }
+          @keyframes slide {
+          from {
+          margin-left: 100%;
+          }
+
+          to {
+          margin-left: 0%;
+          }
+          }
     </style>
 
     <script>
@@ -41,21 +41,21 @@
         };*/
     </script>
 </head>
-<body>
-<div class="row" style="position: relative">
-    <div class="col-md-2">
+<body class="container">
+    <div style="position: absolute; width: 80%">
         <img src="../static/schildkröte.gif"
              id="turtle"
 
              alt="Logo"/>
     </div>
-    <div class="col-md-8">
-        <h1>Search Event</h1>
+    <div class="row" style="position: relative">
+        <div class="col-md-8">
+            <h1>Search Event</h1>
+        </div>
+        <div class="col-md-2">
+            <img src="../static/logo.png" class="img-fluid" alt="Logo"/>
+        </div>
     </div>
-    <div class="col-md-2">
-        <img src="../static/logo.png" class="img-fluid" alt="Logo"/>
-    </div>
-</div>
 
 
 <div class="row">
