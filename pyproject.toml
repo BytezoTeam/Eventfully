@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "accessibility-events"
+name = "eventfully"
 version = "0.1.0"
 description = ""
 authors = ["Your Name <you@example.com>"]
 readme = "README.md"
-packages = [{include = "accessibility_events"}]
+packages = [{include = "eventfully"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -16,9 +16,9 @@ whyslow = "^0.1.7"
 selenium = "^4.14.0"
 
 [tool.poetry.scripts]
-dev = "accessibility_events.main:main"
-test = "accessibility_events.test:main"
-emails = "accessibility_events.emails:main"
+dev = "eventfully.main:main"
+test = "eventfully.test:main"
+emails = "eventfully.emails:main"
 
 
 [build-system]
