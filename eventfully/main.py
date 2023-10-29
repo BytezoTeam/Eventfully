@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 from uuid import uuid4
-from accessibility_events.categorize import get_topic
-import accessibility_events.database as db
+from eventfully.categorize import get_topic
+import eventfully.database as db
 
 
 app = Flask(__name__)

@@ -1,11 +1,11 @@
-# AccessibilityEvents
+# Eventfully
  
 ## Usage
 ### Pip
 - install dependencies:
   `pip install -r requirements.txt`
 - run server:
-  `python -m accessiblity_events.main`
+  `python -m eventfully.main`
 ### Poetry
 - install [Poetry](https://python-poetry.org)
 - install dependencies:

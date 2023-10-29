@@ -4,8 +4,8 @@ import openai
 from dotenv import load_dotenv
 from os import getenv
 
-import accessibility_events.utils as utils
-import accessibility_events.database as db
+import eventfully.utils as utils
+import eventfully.database as db
 
 load_dotenv()
 openai.api_key = getenv("OPENAI_API_KEY")

@@ -5,8 +5,8 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-import accessibility_events.utils as utils
-import accessibility_events.database as db
+import eventfully.utils as utils
+import eventfully.database as db
 
 chrome_options = Options()
 chrome_options.add_argument("--headless")
