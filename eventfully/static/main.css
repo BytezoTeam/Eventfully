@@ -1,26 +1,26 @@
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #ffffff;
-    font-family: Arial, sans-serif;
-    flex-wrap: wrap;
-    /* Erlaubt den Elementen, in mehrere Zeilen zu fließen */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #ffffff;
+  font-family: Arial, sans-serif;
+  flex-wrap: wrap;
+  /* Erlaubt den Elementen, in mehrere Zeilen zu fließen */
 }
 
 form,
 article {
-    border: 3px solid #2596be;
-    padding: 20px;
-    margin: 10px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
-   
-    box-sizing: border-box;
-    /* Stellt sicher, dass die Breite der Boxen die Ränder und Polsterungen einschließt */
+  border: 3px solid #2596be;
+  padding: 20px;
+  margin: 10px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+
+  box-sizing: border-box;
+  /* Stellt sicher, dass die Breite der Boxen die Ränder und Polsterungen einschließt */
 }
 
 h1,
@@ -30,9 +30,9 @@ label,
 input,
 select,
 button {
-    border: 3px solid #2596be;
-    padding: 10px;
-    margin: 10px 0;
-    background-color: #ffffff;
-    border-radius: 5px;
+  border: 3px solid #2596be;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #ffffff;
+  border-radius: 5px;
 }

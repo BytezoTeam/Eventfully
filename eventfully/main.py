@@ -9,22 +9,18 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
 def index():
-    return render_template('startPage.html', events=list(db.Event.select().dicts()))
+    return render_template('index.html', events=list(db.Event.select().dicts()))
 
 
-@app.route("/addWindow", methods=["GET"])
-def addWindow():
-    return render_template('addWindow.html')
+@app.route("/add_window", methods=["GET"])
+def add_window():
+    return render_template('add_window.html')
 
 
-@app.route("/filterseting", methods=["GET"])
-def filtersetting():
-    return render_template('filterseting.html')
+@app.route("/filter_setting", methods=["GET"])
+def filter_setting():
+    return render_template('filter_setting.html')
 
-
-@app.route("/api/events", methods=["GET"])
-def events():
-    return render_template("startPage.html", events=list(db.Event.select().dicts()))
 
 # @app.route("/api/events/search")
 # def search_events():
@@ -33,7 +29,7 @@ def events():
 
 
 @app.route("/api/events/search", methods=["GET"])
-def getEvents():
+def get_events():
     category = request.args.get("kategorie", "")
     therm = request.args.get("search", "")
     location = request.args.get("ort", "")
@@ -60,7 +56,7 @@ def getEvents():
         )
     ).dicts())
 
-    return render_template("events.html", events=result)
+    return render_template("api/events.html", events=result)
 
 
 @app.route("/api/emails", methods=["GET"])
