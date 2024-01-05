@@ -1,7 +1,7 @@
 import hashlib
 
 
-# Thank you ChatGPT!
+# Thank you, ChatGPT!
 def get_hash_string(input_string):
     # Create a new SHA-256 hash object
     hash_object = hashlib.sha1()
