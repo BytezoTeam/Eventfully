@@ -1,8 +1,9 @@
 # IDE generated folders
 /.idea/
 
-# Cache
+# Python
 __pycache__/
+.venv/
 
 # Enviroment Variables
 .env

@@ -1,26 +1,33 @@
-[tool.poetry]
+[project]
 name = "eventfully"
 version = "0.1.0"
-description = ""
-authors = ["Your Name <you@example.com>"]
+description = "Add your description here"
+authors = [
+    { name = "2mal3", email = "56305732+2mal3@users.noreply.github.com" }
+]
+dependencies = [
+    "flask>=3.0.0",
+    "peewee>=3.17.0",
+    "openai>=1.6.1",
+    "python-dotenv>=1.0.0",
+    "selenium>=4.16.0",
+]
 readme = "README.md"
-packages = [{include = "eventfully"}]
+requires-python = ">= 3.8"
 
-[tool.poetry.dependencies]
-python = "^3.11"
-flask = "^3.0.0"
-peewee = "^3.16.3"
-openai = "^0.28.1"
-python-dotenv = "^1.0.0"
-whyslow = "^0.1.7"
-selenium = "^4.14.0"
-
-[tool.poetry.scripts]
-dev = "eventfully.main:main"
-test = "eventfully.test:main"
-emails = "eventfully.emails:main"
-
+[project.scripts]
+hello = "eventfully:hello"
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = []
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/eventfully"]
