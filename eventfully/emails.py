@@ -13,8 +13,7 @@ SERVER = getenv("SERVER")
 
 def get_emails(email: str, password: str, server: str) -> dict[str, dict[str, str]]:
     emails = {}
-    # Login into the server 
-    load_dotenv()
+
     with MailBox(server).login(email, password, 'INBOX') as mailbox:
         # Fetch the emails from inbox
         for msg in mailbox.fetch():
