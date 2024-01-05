@@ -4,7 +4,7 @@
 
 import atexit
 
-from peewee import *
+from peewee import Model, TextField, FloatField, DateTimeField, ForeignKeyField
 from playhouse.sqlite_ext import SqliteExtDatabase
 
 
