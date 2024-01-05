@@ -32,13 +32,16 @@ def unbezahlbar():
                 continue
 
             try:
-                title = get_element(By.CSS_SELECTOR, ".reveal-modal.open .poster__title-span.poster__title-span-text").text
+                title = get_element(By.CSS_SELECTOR,
+                                    ".reveal-modal.open .poster__title-span.poster__title-span-text").text
                 time = get_element(By.CSS_SELECTOR, ".detailpost__date time").text
                 info = get_element(By.CSS_SELECTOR, "div.detailpost__info").text
                 address = get_element(By.CSS_SELECTOR, "address.detailpost__address").text
                 description = get_element(By.CSS_SELECTOR, "div.detailpost__description").text
                 link = get_element(By.CSS_SELECTOR, "a.detailpost__link").get_attribute("href")
-            except (selenium.common.exceptions.TimeoutException, selenium.common.exceptions.ElementClickInterceptedException):
+            except (
+                    selenium.common.exceptions.TimeoutException,
+                    selenium.common.exceptions.ElementClickInterceptedException):
                 print("Problem")
                 continue
 

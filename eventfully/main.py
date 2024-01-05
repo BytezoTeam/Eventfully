@@ -3,7 +3,6 @@ from uuid import uuid4
 from eventfully.categorize import get_topic
 import eventfully.database as db
 
-
 app = Flask(__name__)
 
 
@@ -49,10 +48,10 @@ def get_events():
 
     result = list(db.Event.select().where(
         (
-            (db.Event.title ** f"{therm}%") |
-            (db.Event.description ** f"%{therm}%")
+                (db.Event.title ** f"{therm}%") |
+                (db.Event.description ** f"%{therm}%")
         ) & (
-            db.Event.tags ** f"%{category}%"
+                db.Event.tags ** f"%{category}%"
         )
     ).dicts())
 

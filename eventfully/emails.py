@@ -3,7 +3,6 @@ from dotenv import load_dotenv
 from .database import *
 from imap_tools import MailBox
 
-
 clear_Emails = False
 
 
@@ -20,9 +19,10 @@ def get_emails(EMAIL, PASS, SERVER):
             # Write Data into Dictionary
             emails[subject] = {
                 "body": body,
-                "msg" : msg
+                "msg": msg
             }
             print(f"Got EMail with subject '{subject}'")
+
 
 def writeEmails(emails):
     # Write Data into Database
@@ -37,12 +37,11 @@ def writeEmails(emails):
         else:
             print(f"EMail with subject '{subject}' already exists in database")
 
+
 def clearEmails():
     # Clear all emails from the database
     EMailContent.delete().execute()
     print("Cleared all emails from database")
-
-
 
 
 def main():
