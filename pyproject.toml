@@ -12,6 +12,7 @@ dependencies = [
     "python-dotenv>=1.0.0",
     "selenium>=4.16.0",
     "imap-tools>=1.5.0",
+    "uvicorn>=0.25.0",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
