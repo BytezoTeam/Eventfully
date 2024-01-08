@@ -27,6 +27,9 @@ build-backend = "hatchling.build"
 managed = true
 dev-dependencies = []
 
+[tool.rye.scripts]
+serve = "uvicorn eventfully.main:app"
+
 [tool.hatch.metadata]
 allow-direct-references = true
 
