@@ -1,7 +1,7 @@
 # Eventfully
 
 ## Development Setup
-### Search Database Server
+### Meilisearch (Search Database Server)
 - [install and run Meilisearch](https://www.meilisearch.com/docs/learn/getting_started/installation)
 - note down master key and server url in the [.env file](/docs/dot-env.md)
 
