@@ -11,7 +11,9 @@ annotated-types==0.6.0
 anyio==4.2.0
 attrs==23.2.0
 blinker==1.7.0
+camel-converter==3.1.1
 certifi==2023.11.17
+charset-normalizer==3.3.2
 click==8.1.7
 distro==1.9.0
 flask==3.0.0
@@ -23,6 +25,7 @@ imap-tools==1.5.0
 itsdangerous==2.1.2
 jinja2==3.1.2
 markupsafe==2.1.3
+meilisearch==0.28.4
 openai==1.6.1
 outcome==1.3.0.post0
 peewee==3.17.0
@@ -30,6 +33,7 @@ pydantic==2.5.3
 pydantic-core==2.14.6
 pysocks==1.7.1
 python-dotenv==1.0.0
+requests==2.31.0
 selenium==4.16.0
 sniffio==1.3.0
 sortedcontainers==2.4.0
