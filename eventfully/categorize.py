@@ -26,23 +26,20 @@ def categorize(text: str):
     infos = loads(get_infos(text))
     tag = get_topic(text)
 
-    try:
-        db.Event.create(
-            id=event_id,
-            title=infos["title"],
-            description=infos["description"],
-            link=infos["link"],
-            price=infos["price"],
-            tags=tag,
-            start_date=infos["start_date"],
-            end_date=infos["end_date"],
-            age=infos["age"],
-            accessibility=infos["accessibility"],
-            address=infos["address"],
-            city=db.City.get(name=infos["city"]),
-        )
-    except KeyError:
-        return
+    event = db.Event(
+        title=infos["title"],
+        description=infos["description"],
+        link=infos["link"],
+        price=infos["price"],
+        tags=tag,
+        start_date=infos["start_date"],
+        end_date=infos["end_date"],
+        age=infos["age"],
+        accessibility=infos["accessibility"],
+        address=infos["address"],
+        city=db.City.get(name=infos["city"]),
+    )
+    db.add_event(event)
 
 
 @lru_cache

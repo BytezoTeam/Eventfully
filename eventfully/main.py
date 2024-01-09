@@ -34,26 +34,7 @@ def get_events():
     location = request.args.get("ort", "")
     # distance = request.args.get("distanz")
 
-    # result = list(db.Event.select().where(
-    #     (
-    #         (db.Event.title ** f"{therm}%") |
-    #         (db.Event.description ** f"%{therm}%")
-    #     ) & (
-    #         db.Event.tags ** f"%{category}%"
-    #     ) & (
-    #         db.Event.address ** f"%{location}%" |
-    #         db.Event.city.name == location
-    #     )
-    # ).dicts())
-
-    result = list(db.Event.select().where(
-        (
-                (db.Event.title ** f"{therm}%") |
-                (db.Event.description ** f"%{therm}%")
-        ) & (
-                db.Event.tags ** f"%{category}%"
-        )
-    ).dicts())
+    result = db.search_events(therm, category)
 
     return render_template("api/events.html", events=result)
 
@@ -69,19 +50,20 @@ def add_event():
     # location = request.args.get("location", "")
     tag = get_topic(request.args.get("description", "") + request.args.get("title", ""))
 
-    db.Event.create(
-        id=uuid4(),
-        title=request.args.get("title", "---"),
-        description=request.args.get("description", "---"),
-        link=request.args.get("link", "---"),
-        price=request.args.get("price", "---"),
+    event = db.Event(
+        title=request.args.get("title", ""),
+        description=request.args.get("description", ""),
+        link=request.args.get("link", ""),
+        price=request.args.get("price", ""),
         tags=tag,
-        start_date=request.args.get("start_date", "---"),
-        end_date=request.args.get("end_date", "---"),
-        age=request.args.get("age", "---"),
-        accessibility=request.args.get("accessibility", "---"),
-        location=None
+        start_date=request.args.get("start_date", ""),
+        end_date=request.args.get("end_date", ""),
+        age=request.args.get("age", ""),
+        accessibility=request.args.get("accessibility", ""),
+        address=request.args.get("address", ""),
+        city=request.args.get("city", ""),
     )
+    db.add_event(event)
 
     return "", 200
 
