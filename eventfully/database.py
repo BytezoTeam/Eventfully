@@ -24,6 +24,7 @@ ms_client = ms.Client(_MEILI_HOST, _MEILI_KEY)
 if not ms_client.is_healthy():
     raise Exception("Cannot connect to Meilisearch. Is it running? Correct host and key in .env file?")
 event_index = ms_client.index("events")
+ms_client.create_index("events", {"primaryKey": "id"})
 event_index.update_filterable_attributes([
     "tags"
 ])
