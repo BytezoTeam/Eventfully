@@ -74,4 +74,4 @@ def search_events(query: str, search_tag: str) -> list[Event]:
 
 
 db.connect()
-db.create_tables([EMailContent, City])
+db.create_tables([EMailContent])
