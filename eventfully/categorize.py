@@ -19,10 +19,6 @@ def categorize_all():
 
 
 def categorize(text: str):
-    event_id = utils.get_hash_string(text)
-    if db.Event.select().where(db.Event.id == event_id).exists():
-        return
-
     infos = loads(get_infos(text))
     tag = get_topic(text)
 
