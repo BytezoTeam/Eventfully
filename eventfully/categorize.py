@@ -33,7 +33,7 @@ def categorize(text: str):
         age=infos["age"],
         accessibility=infos["accessibility"],
         address=infos["address"],
-        city=db.City.get(name=infos["city"]),
+        city=infos["city"],
     )
     db.add_event(event)
 

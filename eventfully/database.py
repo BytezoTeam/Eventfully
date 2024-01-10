@@ -40,12 +40,6 @@ class _DBBaseModel(Model):
         database = db
 
 
-class City(_DBBaseModel):
-    name = TextField(primary_key=True)
-    longitude = FloatField()
-    latitude = FloatField()
-
-
 class Event(BaseModel):
     id: UUID4 = uuid.uuid4()
     title: str
