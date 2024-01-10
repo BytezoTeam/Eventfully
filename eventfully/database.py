@@ -9,9 +9,10 @@ from os import getenv
 
 import meilisearch as ms
 from dotenv import load_dotenv
-from peewee import Model, TextField, FloatField
+from peewee import Model, TextField
 from playhouse.sqlite_ext import SqliteExtDatabase
-from pydantic import BaseModel, UUID4, TypeAdapter
+from pydantic import BaseModel, UUID4
+from eventfully.utils import get_hash_string
 
 load_dotenv()
 _MEILI_HOST = getenv("MEILI_HOST")
@@ -41,18 +42,21 @@ class _DBBaseModel(Model):
 
 
 class Event(BaseModel):
-    id: UUID4 = uuid.uuid4()
     title: str
     description: str
     link: str
     price: str
     age: str
     tags: list[str]
-    start_date: datetime
-    end_date: datetime
+    start_date: int
+    end_date: int
     accessibility: str
     address: str
     city: str
+
+    @property
+    def id(self):
+        return get_hash_string(self.title + str(self.start_date))
 
 
 class EMailContent(_DBBaseModel):
