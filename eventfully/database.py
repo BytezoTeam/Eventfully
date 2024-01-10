@@ -3,15 +3,14 @@
 # Simply import this file to use the database, the tables will be created automatically
 
 import atexit
-import uuid
-from datetime import datetime
 from os import getenv
 
 import meilisearch as ms
 from dotenv import load_dotenv
 from peewee import Model, TextField
 from playhouse.sqlite_ext import SqliteExtDatabase
-from pydantic import BaseModel, UUID4
+from pydantic import BaseModel
+
 from eventfully.utils import get_hash_string
 
 load_dotenv()

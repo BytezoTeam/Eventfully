@@ -1,9 +1,10 @@
-from json import loads
-from functools import lru_cache
 from datetime import datetime
+from functools import lru_cache
+from json import loads
+from os import getenv
+
 import openai
 from dotenv import load_dotenv
-from os import getenv
 
 import eventfully.database as db
 
