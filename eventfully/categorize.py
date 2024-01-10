@@ -1,10 +1,10 @@
 from json import loads
 from functools import lru_cache
+from datetime import datetime
 import openai
 from dotenv import load_dotenv
 from os import getenv
 
-import eventfully.utils as utils
 import eventfully.database as db
 
 load_dotenv()
@@ -19,17 +19,19 @@ def categorize_all():
 
 
 def categorize(text: str):
+    time_format = "%d.%m.%Y"
+
     infos = loads(get_infos(text))
-    tag = get_topic(text)
+    tags = get_topic(text)
 
     event = db.Event(
         title=infos["title"],
         description=infos["description"],
         link=infos["link"],
         price=infos["price"],
-        tags=tag,
-        start_date=infos["start_date"],
-        end_date=infos["end_date"],
+        tags=[tags],
+        start_date=datetime.strptime(infos["start_date"], time_format),
+        end_date=datetime.strptime(infos["end_date"], time_format),
         age=infos["age"],
         accessibility=infos["accessibility"],
         address=infos["address"],
