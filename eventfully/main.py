@@ -68,9 +68,5 @@ def add_event():
     return "", 200
 
 
-def main():
-    app.run(host="0.0.0.0", port=5000, debug=True)
-
-
 if __name__ == '__main__':
-    main()
+    app.run(host="0.0.0.0", port=5000, debug=True)

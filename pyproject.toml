@@ -8,18 +8,16 @@ authors = [
 dependencies = [
     "flask>=3.0.0",
     "peewee>=3.17.0",
-    "openai>=1.6.1",
+    "openai~=0.28",
     "python-dotenv>=1.0.0",
     "selenium>=4.16.0",
     "imap-tools>=1.5.0",
     "meilisearch>=0.28.4",
     "pydantic>=2.5.3",
+    "uvicorn>=0.25.0",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
-
-[project.scripts]
-hello = "eventfully:hello"
 
 [build-system]
 requires = ["hatchling"]
@@ -29,8 +27,11 @@ build-backend = "hatchling.build"
 managed = true
 dev-dependencies = []
 
+[tool.rye.scripts]
+serve = "uvicorn eventfully.main:app"
+
 [tool.hatch.metadata]
 allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/eventfully"]
+packages = ["eventfully"]
