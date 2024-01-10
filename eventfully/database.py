@@ -9,7 +9,7 @@ import meilisearch as ms
 from dotenv import load_dotenv
 from peewee import Model, TextField
 from playhouse.sqlite_ext import SqliteExtDatabase
-from pydantic import BaseModel
+from pydantic import BaseModel, computed_field
 
 from eventfully.utils import get_hash_string
 
@@ -54,8 +54,9 @@ class Event(BaseModel):
     address: str
     city: str
 
+    @computed_field()
     @property
-    def id(self):
+    def id(self) -> str:
         return get_hash_string(self.title + str(self.start_date))
 
 
@@ -65,7 +66,8 @@ class EMailContent(_DBBaseModel):
 
 
 def add_event(event: Event):
-    ms_client.index("events").add_documents([event.model_dump()])
+    # TODO: add fail check
+    event_index.add_documents([event.model_dump()])
 
 
 def search_events(query: str, search_tag: str) -> list[Event]:
