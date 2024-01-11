@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
 def index():
-    return render_template('index.html', events=list(db.Event.select().dicts()))
+    return render_template('index.html')
 
 
 @app.route("/add_window", methods=["GET"])
