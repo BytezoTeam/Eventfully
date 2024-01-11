@@ -9,8 +9,10 @@
 -e file:.
 aiohttp==3.9.1
 aiosignal==1.3.1
+annotated-types==0.6.0
 attrs==23.2.0
 blinker==1.7.0
+camel-converter==3.1.1
 certifi==2023.11.17
 charset-normalizer==3.3.2
 click==8.1.7
@@ -22,10 +24,13 @@ imap-tools==1.5.0
 itsdangerous==2.1.2
 jinja2==3.1.2
 markupsafe==2.1.3
+meilisearch==0.28.4
 multidict==6.0.4
 openai==0.28.1
 outcome==1.3.0.post0
 peewee==3.17.0
+pydantic==2.5.3
+pydantic-core==2.14.6
 pysocks==1.7.1
 python-dotenv==1.0.0
 requests==2.31.0
@@ -35,6 +40,7 @@ sortedcontainers==2.4.0
 tqdm==4.66.1
 trio==0.24.0
 trio-websocket==0.11.1
+typing-extensions==4.9.0
 urllib3==2.1.0
 uvicorn==0.25.0
 werkzeug==3.0.1

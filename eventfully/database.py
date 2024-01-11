@@ -3,49 +3,84 @@
 # Simply import this file to use the database, the tables will be created automatically
 
 import atexit
+from os import getenv
 
-from peewee import Model, TextField, FloatField, DateTimeField, ForeignKeyField
+import meilisearch as ms
+from dotenv import load_dotenv
+from peewee import Model, TextField
 from playhouse.sqlite_ext import SqliteExtDatabase
+from pydantic import BaseModel, computed_field
 
+from eventfully.utils import get_hash_string
 
-PATH = "database.db"
+load_dotenv()
+_MEILI_HOST = getenv("MEILI_HOST")
+_MEILI_KEY = getenv("MEILI_KEY")
+_PATH = "database.db"
+
+# Meilisearch
+ms_client = ms.Client(_MEILI_HOST, _MEILI_KEY)
+if not ms_client.is_healthy():
+    raise Exception("Cannot connect to Meilisearch. Is it running? Correct host and key in .env file?")
+event_index = ms_client.index("events")
+ms_client.create_index("events", {"primaryKey": "id"})
+event_index.update_filterable_attributes([
+    "tags"
+])
+
+# SQLite with peewee
 db = SqliteExtDatabase(
-    PATH,
+    _PATH,
     pragmas={"journal_mode": "wal"},
 )
 atexit.register(lambda: db.close())
 
 
-class BaseModel(Model):
+class _DBBaseModel(Model):
     class Meta:
         database = db
 
 
-class City(BaseModel):
-    name = TextField(primary_key=True)
-    longitude = FloatField()
-    latitude = FloatField()
-
-
 class Event(BaseModel):
-    id = TextField(primary_key=True)
-    title = TextField()
-    description = TextField()
-    link = TextField()
-    price = TextField()
-    tags = TextField()
-    start_date = DateTimeField()
-    end_date = DateTimeField()
-    age = TextField()
-    accessibility = TextField()
-    address = TextField()
-    city = ForeignKeyField(City)
+    title: str
+    description: str
+    link: str
+    price: str
+    age: str
+    tags: list[str]
+    start_date: int
+    end_date: int
+    accessibility: str
+    address: str
+    city: str
+
+    @computed_field()
+    @property
+    def id(self) -> str:
+        return get_hash_string(self.title + str(self.start_date))
 
 
-class EMailContent(BaseModel):
+class EMailContent(_DBBaseModel):
     subject = TextField(primary_key=True)
     content = TextField()
 
 
+def add_event(event: Event):
+    # TODO: add fail check
+    event_index.add_documents([event.model_dump()])
+
+
+def search_events(query: str, search_tag: str) -> list[Event]:
+    if search_tag:
+        raw = event_index.search(query, {
+            "filter": f"tags IN ['{search_tag}']"
+        })
+    else:
+        raw = event_index.search(query)
+    # Convert raw event data in python dict form to pydantic Events
+    events = [Event(**raw_event) for raw_event in raw["hits"]]
+    return events
+
+
 db.connect()
-db.create_tables([Event, EMailContent, City])
+db.create_tables([EMailContent])

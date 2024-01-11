@@ -1,10 +1,11 @@
-from json import loads
+from datetime import datetime
 from functools import lru_cache
-import openai
-from dotenv import load_dotenv
+from json import loads
 from os import getenv
 
-import eventfully.utils as utils
+import openai
+from dotenv import load_dotenv
+
 import eventfully.database as db
 
 load_dotenv()
@@ -19,30 +20,26 @@ def categorize_all():
 
 
 def categorize(text: str):
-    event_id = utils.get_hash_string(text)
-    if db.Event.select().where(db.Event.id == event_id).exists():
-        return
+    time_format = "%d-%m-%Y %H:%M:%S"
 
     infos = loads(get_infos(text))
-    tag = get_topic(text)
+    tags = get_topic(text)
 
-    try:
-        db.Event.create(
-            id=event_id,
-            title=infos["title"],
-            description=infos["description"],
-            link=infos["link"],
-            price=infos["price"],
-            tags=tag,
-            start_date=infos["start_date"],
-            end_date=infos["end_date"],
-            age=infos["age"],
-            accessibility=infos["accessibility"],
-            address=infos["address"],
-            city=db.City.get(name=infos["city"]),
-        )
-    except KeyError:
-        return
+    print(infos["title"])
+    event = db.Event(
+        title=infos["title"],
+        description=infos["description"],
+        link=infos["link"],
+        price=infos["price"],
+        tags=[tags],
+        start_date=datetime.strptime(infos["start_date"], time_format).timestamp(),
+        end_date=datetime.strptime(infos["end_date"], time_format).timestamp(),
+        age=infos["age"],
+        accessibility=infos["accessibility"],
+        address=infos["address"],
+        city=infos["city"],
+    )
+    db.add_event(event)
 
 
 @lru_cache
@@ -53,6 +50,8 @@ def get_infos(text: str) -> str:
             "content": """Task: Extract the following event information's from the given text.
 The output should be in the specifed form. Respond with "---" if you don't have enought information to fill a field.
 You are allowed to shorten the output if you think it is necessary or too long.
+
+Time Format: DD-MM-YYYY HH:MM:SS. Use 00:00:00 if you don't have the time.
 
 Required Information:
 - title
