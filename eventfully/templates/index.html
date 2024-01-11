@@ -1,86 +1,67 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     {% include "default_head.html" %}
 
     <title>Eventfullly</title>
     <style>
-      .img-fluid {
-        max-width: 100%;
-        height: auto;
-      }
-
-      #turtle {
-        animation: 15s infinite linear slide;
-      }
-
-      @keyframes slide {
-        from {
-          margin-left: 100%;
+        #turtle {
+          animation: 15s infinite linear slide;
         }
 
-        to {
-          margin-left: 0%;
+        @keyframes slide {
+          from {
+            margin-left: 100%;
+          }
+
+          to {
+            margin-left: 0%;
+          }
         }
-      }
     </style>
-  </head>
+</head>
 
-  <body class="container">
+<header>
+    <nav class="navbar shadow container-fluid">
+        <div class="container-fluid">
+            <div class="navbar-brand">
+<!--                <img src="/static/logo.png" style="width: 1em; height: 1em" alt="Logo"/>-->
+                <h1>Eventfully</h1>
+            </div>
+            <form
+                    hx-get="/api/events/search"
+                    hx-target="#search-result"
+                    hx-swap="innerHTML"
+                    role="search"
+                    class="d-flex"
+            >
+                <input
+                        id="search"
+                        name="search"
+                        type="text"
+                        placeholder="Suche"
+                        autofocus
+                        class="form-control shadow-sm me-2"
+                />
+
+                <!-- Plus-Button, um zur anderen Seite zu gelangen -->
+                <button type="submit" class="btn btn-primary shadow-sm">Suchen</button>
+            </form>
+        </div>
+    </nav>
+</header>
+
+<body>
+
+<main class="container">
+    <!-- Show events -->
+    <div class="container" id="search-result"></div>
+</main>
+
+<footer>
     <div style="position: absolute; width: 80%">
-      <img src="/static/schildkröte.gif" id="turtle" alt="Logo" />
+        <img src="/static/schildkröte.gif" id="turtle" alt="Logo"/>
     </div>
-    <div class="row" style="position: relative">
-      <div class="col-md-8">
-        <h1>Eventfully</h1>
-      </div>
-      <div class="col-md-2">
-        <img src="/static/logo.png" class="img-fluid" alt="Logo" />
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-2">
-        <button
-          type="button"
-          onclick="window.location.href='/filter_setting';"
-          class="bnt btn-secondary mb-2"
-        >
-          |||
-        </button>
-      </div>
-      <form
-        hx-get="/api/events/search"
-        hx-trigger="load, submit"
-        hx-target="#search-result"
-        hx-swap="innerHTML"
-      >
-        <div class="col-md-8">
-          <input
-            id="search"
-            name="search"
-            type="text"
-            placeholder="Suche"
-            autofocus
-            class="form_control"
-          />
-        </div>
-
-        <!-- Plus-Button, um zur anderen Seite zu gelangen -->
-        <div class="col-md-2">
-          <a href="/add_window" class="btn btn-primary mb-2" role="button">+</a>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <button type="submit" class="btn btn-success">Suchen</button>
-          </div>
-        </div>
-      </form>
-
-      <!-- Show events -->
-      <div class="row">
-        <div class="col-md-12" id="search-result"></div>
-      </div>
-    </div>
-  </body>
+</footer>
+</body>
 </html>
