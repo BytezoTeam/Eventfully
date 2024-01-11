@@ -71,11 +71,14 @@ def add_event(event: Event):
 
 
 def search_events(query: str, search_tag: str) -> list[Event]:
-    raw_events = event_index.search(query, {
-        "filter": f"tags IN [{search_tag}]"
-    })["hits"]
+    if search_tag:
+        raw = event_index.search(query, {
+            "filter": f"tags IN ['{search_tag}']"
+        })
+    else:
+        raw = event_index.search(query)
     # Convert raw event data in python dict form to pydantic Events
-    events = [Event(**raw_event) for raw_event in raw_events]
+    events = [Event(**raw_event) for raw_event in raw["hits"]]
     return events
 
 
