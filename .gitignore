@@ -14,4 +14,6 @@ database.db-shm
 database.db-wal
 
 # Meilisearch
-meilisearch/
+meilisearch
+data.ms/
+dumps/
