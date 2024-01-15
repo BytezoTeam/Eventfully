@@ -1,9 +1,9 @@
 # .env File
 
-The file must be named `.env` and should be located in the root of the project.
+The file must be named `.env` and should be located in the root of the project (the same file level as `README.md` file).
 
 ```
 OPENAI_API_KEY="<openai api key>"
-MEILI_KEY=<meilisearch master key>
-MEILI_HOST=<address of the meilisearch server e.g. http://localhost:7700>
+MEILI_KEY="<meilisearch master key>"
+MEILI_HOST="<address of the meilisearch server e.g. http://localhost:7700>"
 ```
