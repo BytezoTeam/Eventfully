@@ -17,6 +17,10 @@ load_dotenv()
 _MEILI_HOST = getenv("MEILI_HOST")
 _MEILI_KEY = getenv("MEILI_KEY")
 _PATH = "database.db"
+if not _MEILI_KEY:
+    raise Exception("No MeiliSearch key provided. Please set MEILI_KEY in .env file.")
+if not _MEILI_HOST:
+    raise Exception("No MeiliSearch host provided. Please set MEILI_HOST in .env file.")
 
 # Meilisearch
 ms_client = ms.Client(_MEILI_HOST, _MEILI_KEY)

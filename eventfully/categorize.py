@@ -9,7 +9,10 @@ from dotenv import load_dotenv
 import eventfully.database as db
 
 load_dotenv()
-openai.api_key = getenv("OPENAI_API_KEY")
+OPENAI_API_KEY = getenv("OPENAI_API_KEY")
+if not OPENAI_API_KEY:
+    raise Exception("No OpenAI key provided. Please set OPENAI_API_KEY in .env file.")
+openai.api_key = OPENAI_API_KEY
 
 
 def categorize_all():
