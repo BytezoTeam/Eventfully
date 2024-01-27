@@ -15,6 +15,7 @@ dependencies = [
     "meilisearch>=0.28.4",
     "pydantic>=2.5.3",
     "uvicorn>=0.25.0",
+    "Flask-APScheduler~=1.13.1",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
