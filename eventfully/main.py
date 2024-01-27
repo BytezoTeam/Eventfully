@@ -6,6 +6,7 @@ from eventfully.categorize import get_topic
 import eventfully.database as db
 import eventfully.emails as emails
 import eventfully.categorize as categorize
+import eventfully.scraping as scraping
 
 
 class Config:
@@ -26,7 +27,12 @@ def get_emails():
     emails.main()
 
 
-@scheduler.task("cron", id="categorize", hour=1)
+@scheduler.task("cron", id="scrape", hour=1)
+def scrape():
+    scraping.main()
+
+
+@scheduler.task("cron", id="categorize", hour=6)
 def categorize():
     categorize.main()
 
