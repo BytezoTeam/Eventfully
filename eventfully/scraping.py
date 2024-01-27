@@ -23,7 +23,7 @@ def unbezahlbar(browser: webdriver.Chrome):
     browser.get("https://www.zuerichunbezahlbar.ch/events/")
 
     for _ in range(6):
-        browser_events = get_elements(By.CSS_SELECTOR, ".poster__title-span.poster__title-span-text")
+        browser_events = get_elements(browser, By.CSS_SELECTOR, ".poster__title-span.poster__title-span-text")
         for event in browser_events:
             try:
                 event.click()
@@ -47,7 +47,7 @@ def unbezahlbar(browser: webdriver.Chrome):
 
             print(title)
 
-            get_element(By.CSS_SELECTOR, ".close-reveal-modal").click()
+            get_element(browser, By.CSS_SELECTOR, ".close-reveal-modal").click()
 
             content_hash = utils.get_hash_string(title + time)
             if db.EMailContent.select().where(db.EMailContent.subject == content_hash).exists():
