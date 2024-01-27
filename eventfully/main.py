@@ -24,17 +24,29 @@ atexit.register(lambda: scheduler.shutdown())
 # Scheduled tasks
 @scheduler.task("cron", id="get_emails", hour=0)
 def get_emails():
-    emails.main()
+    app.logger.info("JOB: get_emails")
+    try:
+        emails.main()
+    except Exception as e:
+        app.logger.error(e)
 
 
 @scheduler.task("cron", id="scrape", hour=1)
 def scrape():
-    scraping.main()
+    app.logger.info("JOB: scrape")
+    try:
+        scraping.main()
+    except Exception as e:
+        app.logger.error(e)
 
 
 @scheduler.task("cron", id="categorize", hour=6)
 def categorize():
-    categorize.main()
+    app.logger.info("JOB: categorize")
+    try:
+        categorize.main()
+    except Exception as e:
+        app.logger.error(e)
 
 
 scheduler.start()
