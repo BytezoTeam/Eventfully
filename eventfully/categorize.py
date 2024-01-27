@@ -15,13 +15,6 @@ if not OPENAI_API_KEY:
 openai.api_key = OPENAI_API_KEY
 
 
-def categorize_all():
-    for email in db.EMailContent.select():
-        categorize(email.subject + email.content)
-
-    # db.EMailContent.delete().execute()
-
-
 def categorize(text: str):
     time_format = "%d-%m-%Y %H:%M:%S"
 
@@ -145,5 +138,11 @@ def get_topic(text: str) -> str:
     return response["choices"][0]["message"]["content"]
 
 
+def main():
+    for email in db.EMailContent.select():
+        categorize(email.subject + email.content)
+
+    # db.EMailContent.delete().execute()
+
 if __name__ == "__main__":
-    categorize_all()
+    main()

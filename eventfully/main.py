@@ -1,11 +1,40 @@
 from flask import Flask, render_template, request, jsonify
+from flask_apscheduler import APScheduler
+import atexit
 from uuid import uuid4
 from eventfully.categorize import get_topic
 import eventfully.database as db
+import eventfully.emails as emails
+import eventfully.categorize as categorize
+
+
+class Config:
+    SCHEDULER_API_ENABLED = True
+
 
 app = Flask(__name__)
+app.config.from_object(Config())
+
+scheduler = APScheduler()
+scheduler.init_app(app)
+atexit.register(lambda: scheduler.shutdown())
 
 
+# Scheduled tasks
+@scheduler.task("cron", id="get_emails", hour=0)
+def get_emails():
+    emails.main()
+
+
+@scheduler.task("cron", id="categorize", hour=1)
+def categorize():
+    categorize.main()
+
+
+scheduler.start()
+
+
+# Routes
 @app.route("/", methods=["GET"])
 def index():
     return render_template('index.html')
