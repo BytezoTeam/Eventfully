@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, jsonify
-from uuid import uuid4
-from eventfully.categorize import get_topic
+
 import eventfully.database as db
 
 app = Flask(__name__)
