@@ -1,8 +1,8 @@
+import atexit
+
 from flask import Flask, render_template, request, jsonify
 from flask_apscheduler import APScheduler
-import atexit
-from uuid import uuid4
-from eventfully.categorize import get_topic
+
 import eventfully.database as db
 import eventfully.emails as emails
 import eventfully.categorize as categorize

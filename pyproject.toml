@@ -6,15 +6,15 @@ authors = [
     { name = "2mal3", email = "56305732+2mal3@users.noreply.github.com" }
 ]
 dependencies = [
-    "flask>=3.0.0",
-    "peewee>=3.17.0",
+    "flask~=3.0",
+    "peewee~=3.17",
     "openai~=0.28",
-    "python-dotenv>=1.0.0",
-    "selenium>=4.16.0",
-    "imap-tools>=1.5.0",
-    "meilisearch>=0.28.4",
-    "pydantic>=2.5.3",
-    "uvicorn>=0.25.0",
+    "python-dotenv~=1.0",
+    "selenium~=4.16",
+    "imap-tools~=1.5",
+    "meilisearch~=0.28",
+    "pydantic~=2.5",
+    "uvicorn~=0.25",
     "Flask-APScheduler~=1.13.1",
 ]
 readme = "README.md"
