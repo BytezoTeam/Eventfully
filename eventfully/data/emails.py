@@ -13,7 +13,7 @@ PASS = getenv("PASS")
 SERVER = getenv("SERVER")
 
 
-def _get_emails(email: str, password: str, server: str) -> dict[str, dict[str, str]]:
+def _get_emails_from_server(email: str, password: str, server: str) -> dict[str, dict[str, str]]:
     emails = {}
 
     with MailBox(server).login(email, password, 'INBOX') as mailbox:
@@ -38,9 +38,9 @@ def _write_emails_to_db(emails: dict[str, dict[str, str]]):
         print(f"Added Event '{event.title}' to database")
 
 
-def main() -> Result[None, Exception]:
+def get_emails() -> Result[None, Exception]:
     try:
-        emails = _get_emails(EMAIL, PASS, SERVER)
+        emails = _get_emails_from_server(EMAIL, PASS, SERVER)
         _write_emails_to_db(emails)
     except Exception as e:
         return Err(e)
@@ -49,4 +49,4 @@ def main() -> Result[None, Exception]:
 
 
 if __name__ == "__main__":
-    main()
+    get_emails()

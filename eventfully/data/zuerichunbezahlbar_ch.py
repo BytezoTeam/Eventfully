@@ -9,7 +9,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 import eventfully.database as db
 
 
-def main() -> Result[None, Exception]:
+def get_zuerichunbezahlbar() -> Result[None, Exception]:
     try:
         chrome_options = Options()
         chrome_options.add_argument("--headless")
@@ -90,4 +90,4 @@ def _get_elements(browser: webdriver.Chrome, selector_type: str, selector: str):
 
 
 if __name__ == '__main__':
-    main()
+    get_zuerichunbezahlbar()
