@@ -74,6 +74,11 @@ def add_event(event: Event):
     event_index.add_documents([event.model_dump()])
 
 
+def add_events(events: list[Event]):
+    for event in events:
+        add_event(event)
+
+
 def search_events(query: str, search_tag: str) -> list[Event]:
     if search_tag:
         raw = event_index.search(query, {
