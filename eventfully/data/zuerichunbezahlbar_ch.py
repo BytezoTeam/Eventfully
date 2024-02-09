@@ -7,7 +7,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 import eventfully.database as db
-import eventfully.utils as utils
 
 
 def main() -> Result[None, Exception]:
@@ -16,17 +15,21 @@ def main() -> Result[None, Exception]:
         chrome_options.add_argument("--headless")
         browser = webdriver.Chrome(chrome_options)
 
-        _unbezahlbar(browser)
+        events = _unbezahlbar(browser)
 
         browser.quit()
+
+        db.add_events(events)
     except Exception as e:
         return Err(e)
 
     return Ok(None)
 
 
-def _unbezahlbar(browser: webdriver.Chrome):
+def _unbezahlbar(browser: webdriver.Chrome) -> list[db.Event]:
     browser.get("https://www.zuerichunbezahlbar.ch/events/")
+
+    events = []
 
     for _ in range(6):
         browser_events = _get_elements(browser, By.CSS_SELECTOR, ".poster__title-span.poster__title-span-text")
@@ -55,14 +58,25 @@ def _unbezahlbar(browser: webdriver.Chrome):
 
             _get_element(browser, By.CSS_SELECTOR, ".close-reveal-modal").click()
 
-            content_hash = utils.get_hash_string(title + time)
-            if db.EMailContent.select().where(db.EMailContent.subject == content_hash).exists():
-                continue
-            db.EMailContent.create(subject=content_hash,
-                                   content=f"title: {title}\ntime_date: {time}\n info: {info}\naddress: {address}\ndescription: {description}\nlink: {link}\naddress: {address}\ncity: Zürich")
+            event = db.Event(
+                title=title,
+                description=description,
+                link=link,
+                price="",
+                tags="",
+                start_date=time,
+                end_date=time,
+                age="",
+                accessibility="",
+                address=address,
+                city="Zürich",
+            )
+            events.append(event)
 
         # get_element(By.CSS_SELECTOR, "span.step-links a").click()
         _get_element(browser, By.XPATH, "//a[text()='weiter »']").click()
+
+    return events
 
 
 def _get_element(browser: webdriver.Chrome, selector_type: str, selector: str):
