@@ -1,9 +1,10 @@
 from os import getenv
 from dotenv import load_dotenv
-from eventfully.database import EMailContent
 from imap_tools import MailBox
+from result import Result, Ok
 
-clear_Emails = False
+from .categorize import categorize
+import eventfully.database as db
 
 load_dotenv()
 EMAIL = getenv("EMAIL")
@@ -11,7 +12,7 @@ PASS = getenv("PASS")
 SERVER = getenv("SERVER")
 
 
-def get_emails(email: str, password: str, server: str) -> dict[str, dict[str, str]]:
+def _get_emails(email: str, password: str, server: str) -> dict[str, dict[str, str]]:
     emails = {}
 
     with MailBox(server).login(email, password, 'INBOX') as mailbox:
@@ -29,32 +30,18 @@ def get_emails(email: str, password: str, server: str) -> dict[str, dict[str, st
     return emails
 
 
-def write_emails(emails: dict[str, dict[str, str]]):
-    # Write Data into Database
-    # Check if the email already exists in the database
+def _write_emails_to_db(emails: dict[str, dict[str, str]]):
     for subject, body in emails.items():
-        body = body["body"]
-        if not EMailContent.select().where(EMailContent.subject == subject).exists():
-            # Add the email to the database
-            EMailContent.create(subject=subject, content=body)
-            print(f"Added EMail with subject '{subject}' to database")
-        else:
-            print(f"EMail with subject '{subject}' already exists in database")
+        event = categorize(f"Subject: {subject} Body: {body['body']}")
+        db.add_event(event)
+        print(f"Added Event '{event.title}' to database")
 
 
-def clear_emails():
-    # Clear all emails from the database
-    EMailContent.delete().execute()
-    print("Cleared all emails from database")
+def main() -> Result[None, str]:
+    emails = _get_emails(EMAIL, PASS, SERVER)
+    _write_emails_to_db(emails)
 
-
-def main():
-    emails = get_emails(EMAIL, PASS, SERVER)
-    # Write emails into database
-    write_emails(emails)
-    # Clear emails from database (if wanted)
-    if clear_Emails:
-        clear_emails()
+    return Ok(None)
 
 
 if __name__ == "__main__":
