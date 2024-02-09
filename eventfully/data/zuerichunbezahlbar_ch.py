@@ -4,13 +4,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from result import Result, Ok
+from result import Result, Ok, Err
 
 import eventfully.utils as utils
 import eventfully.database as db
 
 
-def main() -> Result[None, str]:
+def main() -> Result[None, Exception]:
     try:
         chrome_options = Options()
         chrome_options.add_argument("--headless")
@@ -20,7 +20,7 @@ def main() -> Result[None, str]:
 
         browser.quit()
     except Exception as e:
-        return Result.Err(str(e))
+        return Err(e)
 
     return Ok(None)
 

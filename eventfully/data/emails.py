@@ -1,7 +1,7 @@
 from os import getenv
 from dotenv import load_dotenv
 from imap_tools import MailBox
-from result import Result, Ok
+from result import Result, Ok, Err
 
 from .categorize import categorize
 import eventfully.database as db
@@ -37,9 +37,12 @@ def _write_emails_to_db(emails: dict[str, dict[str, str]]):
         print(f"Added Event '{event.title}' to database")
 
 
-def main() -> Result[None, str]:
-    emails = _get_emails(EMAIL, PASS, SERVER)
-    _write_emails_to_db(emails)
+def main() -> Result[None, Exception]:
+    try:
+        emails = _get_emails(EMAIL, PASS, SERVER)
+        _write_emails_to_db(emails)
+    except Exception as e:
+        return Err(e)
 
     return Ok(None)
 
