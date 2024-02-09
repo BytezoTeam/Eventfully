@@ -1,10 +1,11 @@
 from os import getenv
+
 from dotenv import load_dotenv
 from imap_tools import MailBox
 from result import Result, Ok, Err
 
-from .categorize import categorize
 import eventfully.database as db
+from .categorize import categorize
 
 load_dotenv()
 EMAIL = getenv("EMAIL")

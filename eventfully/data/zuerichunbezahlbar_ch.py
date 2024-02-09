@@ -1,13 +1,13 @@
 import selenium.common.exceptions
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from result import Result, Ok, Err
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
-import eventfully.utils as utils
 import eventfully.database as db
+import eventfully.utils as utils
 
 
 def main() -> Result[None, Exception]:
