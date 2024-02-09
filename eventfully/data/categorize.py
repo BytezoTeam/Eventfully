@@ -15,13 +15,12 @@ if not OPENAI_API_KEY:
 openai.api_key = OPENAI_API_KEY
 
 
-def categorize(text: str):
+def categorize(text: str) -> db.Event:
     time_format = "%d-%m-%Y %H:%M:%S"
 
     infos = loads(get_infos(text))
     tags = get_topic(text)
 
-    print(infos["title"])
     event = db.Event(
         title=infos["title"],
         description=infos["description"],
@@ -35,7 +34,7 @@ def categorize(text: str):
         address=infos["address"],
         city=infos["city"],
     )
-    db.add_event(event)
+    return event
 
 
 @lru_cache
@@ -136,13 +135,3 @@ def get_topic(text: str) -> str:
         messages=messages,
     )
     return response["choices"][0]["message"]["content"]
-
-
-def main():
-    for email in db.EMailContent.select():
-        categorize(email.subject + email.content)
-
-    # db.EMailContent.delete().execute()
-
-if __name__ == "__main__":
-    main()
