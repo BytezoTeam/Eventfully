@@ -16,6 +16,8 @@ dependencies = [
     "pydantic~=2.5",
     "uvicorn~=0.25",
     "Flask-APScheduler~=1.13.1",
+    "result~=0.16",
+    "beartype~=0.17",
     "black~=24.1",
 ]
 readme = "README.md"
