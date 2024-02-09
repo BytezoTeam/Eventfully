@@ -23,10 +23,7 @@ atexit.register(lambda: scheduler.shutdown())
 @scheduler.task("cron", id="get_data", hour=0)
 def get_data():
     app.logger.info("JOB: get_data")
-    try:
-        data.main()
-    except Exception as e:
-        app.logger.error(e)
+    data.main()
 
 
 scheduler.start()
