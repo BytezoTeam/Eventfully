@@ -10,7 +10,6 @@ from dotenv import load_dotenv
 from peewee import Model, TextField
 from playhouse.sqlite_ext import SqliteExtDatabase
 from pydantic import BaseModel, computed_field
-
 from eventfully.utils import get_hash_string
 
 load_dotenv()
@@ -39,6 +38,15 @@ atexit.register(lambda: db.close())
 class _DBBaseModel(Model):
     class Meta:
         database = db
+
+
+class AccountData(Model):
+    userId = TextField(primary_key=True)
+    password = TextField()
+    username = TextField()
+
+    class Meta:
+        database = db  # Use the existing SQLite database connection
 
 
 class Event(BaseModel):
@@ -70,6 +78,33 @@ def add_event(event: Event):
     event_index.add_documents([event.model_dump()])
 
 
+def addAccount(username, password, userid):
+    res = AccountData.insert({
+        AccountData.userId: userid,
+        AccountData.username: username,
+        AccountData.password: password
+    }).execute()
+    return userid
+
+
+def deleteAccount(user_id):
+    try:
+        account = AccountData.get(AccountData.userId == user_id)
+        account.delete_instance()
+        print(f'Account with userId {user_id} was successfully deleted.')
+    except AccountData.DoesNotExist:
+        print(f'No account found with userId {user_id}.')
+
+
+def getUserData(user_id):
+    try:
+        account = AccountData.get(AccountData.userId == user_id)
+        return account.__data__  # Returns a dictionary of all the field values
+    except AccountData.DoesNotExist:
+        print(f'No account found with userId {user_id}.')
+        return None
+
+
 def search_events(query: str, search_tag: str) -> list[Event]:
     if search_tag:
         raw = event_index.search(query, {
@@ -82,5 +117,4 @@ def search_events(query: str, search_tag: str) -> list[Event]:
     return events
 
 
-db.connect()
-db.create_tables([EMailContent])
+

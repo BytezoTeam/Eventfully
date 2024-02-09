@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, make_response, redirect
 from uuid import uuid4
 from eventfully.categorize import get_topic
+from utils import createUserId
 import eventfully.database as db
 
 app = Flask(__name__)
@@ -9,6 +10,45 @@ app = Flask(__name__)
 @app.route("/", methods=["GET"])
 def index():
     return render_template('index.html')
+
+
+# Check the Cookie or redirect to log in
+@app.route("/checkAccount")
+def checkAccount():
+    userID = request.cookies.get('userID')
+    if userID:
+        return db.getUserData(request.cookies.get("userID"))
+    else:
+        return redirect("/login", 302)
+
+
+# Adding the User Data to the Database
+@app.route("/signin/add")
+def registerUser():
+    userID = createUserId()
+    db.addAccount(request.args.get("username"), request.args.get("password"), userID)
+    resp = make_response(redirect("/checkAccount", 302))
+    resp.set_cookie('userID', userID)
+    return resp
+
+
+# Checking Password and Username and setting UserID-Cookie
+# TODO: Implementing Password and Username Check
+@app.route("/login/check")
+def loginUser():
+    pass
+
+
+# TODO: Implement Signin (WebSite)
+@app.route("/signin")
+def signin():
+    return "Not implemented yet"
+
+
+# TODO: Implement Login (WebSite)
+@app.route("/login")
+def login():
+    return "Not implemented yet"
 
 
 @app.route("/add_window", methods=["GET"])
