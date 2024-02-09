@@ -1,6 +1,6 @@
 from os import getenv
 from dotenv import load_dotenv
-from .database import EMailContent
+from eventfully.database import EMailContent
 from imap_tools import MailBox
 
 clear_Emails = False
