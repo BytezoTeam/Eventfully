@@ -28,6 +28,8 @@ if not ms_client.is_healthy():
     raise Exception("Cannot connect to Meilisearch. Is it running? Correct host and key in .env file?")
 event_index = ms_client.index("events")
 ms_client.create_index("events", {"primaryKey": "id"})
+raw_event_index = ms_client.index("raw_events")
+ms_client.create_index("raw_events", {"primaryKey": "id"})
 event_index.update_filterable_attributes([
     "tags"
 ])
@@ -64,14 +66,33 @@ class Event(BaseModel):
         return get_hash_string(self.title + str(self.start_date))
 
 
-class EMailContent(_DBBaseModel):
-    subject = TextField(primary_key=True)
-    content = TextField()
+class RawEvent(BaseModel):
+    title: str
+    description: str
+    link: str
+    price: str
+    age: str
+    tags: str
+    start_date: str
+    end_date: str
+    accessibility: str
+    address: str
+    city: str
+
+    @computed_field()
+    @property
+    def id(self) -> str:
+        return get_hash_string(self.title + str(self.start_date))
 
 
 def add_event(event: Event):
     # TODO: add fail check
     event_index.add_documents([event.model_dump()])
+
+
+def add_raw_events(events: list[RawEvent]):
+    for event in events:
+        raw_event_index.add_documents([event.model_dump()])
 
 
 def add_events(events: list[Event]):
@@ -92,4 +113,4 @@ def search_events(query: str, search_tag: str) -> list[Event]:
 
 
 db.connect()
-db.create_tables([EMailContent])
+db.create_tables([])

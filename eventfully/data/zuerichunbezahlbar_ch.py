@@ -9,7 +9,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 import eventfully.database as db
 
 
-def get_zuerichunbezahlbar() -> Result[None, Exception]:
+def get_zuerichunbezahlbar() -> Result[list[db.RawEvent], Exception]:
     try:
         chrome_options = Options()
         chrome_options.add_argument("--headless")
@@ -18,20 +18,18 @@ def get_zuerichunbezahlbar() -> Result[None, Exception]:
         events = _unbezahlbar(browser)
 
         browser.quit()
-
-        db.add_events(events)
     except Exception as e:
         return Err(e)
 
-    return Ok(None)
+    return Ok(events)
 
 
-def _unbezahlbar(browser: webdriver.Chrome) -> list[db.Event]:
+def _unbezahlbar(browser: webdriver.Chrome) -> list[db.RawEvent]:
     browser.get("https://www.zuerichunbezahlbar.ch/events/")
 
     events = []
 
-    for _ in range(6):
+    for _ in range(1):
         browser_events = _get_elements(browser, By.CSS_SELECTOR, ".poster__title-span.poster__title-span-text")
         for event in browser_events:
             try:
@@ -58,9 +56,9 @@ def _unbezahlbar(browser: webdriver.Chrome) -> list[db.Event]:
 
             _get_element(browser, By.CSS_SELECTOR, ".close-reveal-modal").click()
 
-            event = db.Event(
+            event = db.RawEvent(
                 title=title,
-                description=description,
+                description=description + info,
                 link=link,
                 price="",
                 tags="",

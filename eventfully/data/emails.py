@@ -13,39 +13,40 @@ PASS = getenv("PASS")
 SERVER = getenv("SERVER")
 
 
-def _get_emails_from_server(email: str, password: str, server: str) -> dict[str, dict[str, str]]:
-    emails = {}
+def _get_emails_from_server(email: str, password: str, server: str) -> list[db.RawEvent]:
+    events: list[db.RawEvent] = []
 
     with MailBox(server).login(email, password, 'INBOX') as mailbox:
         # Fetch the emails from inbox
         for msg in mailbox.fetch():
             body = msg.text or msg.html
             subject = msg.subject
-            # Write Data into Dictionary
-            emails[subject] = {
-                "body": body,
-                "msg": msg
-            }
-            print(f"Got EMail with subject '{subject}'")
+            print(f"Got E-Mail with subject '{subject}'")
 
-    return emails
+            events.append(db.RawEvent(
+                title=subject,
+                description=body,
+                link=msg.from_,
+                price="",
+                age="",
+                tags="",
+                start_date="",
+                end_date="",
+                accessibility="",
+                address="",
+                city=""
+            ))
+
+    return events
 
 
-def _write_emails_to_db(emails: dict[str, dict[str, str]]):
-    for subject, body in emails.items():
-        event = categorize(f"Subject: {subject} Body: {body['body']}")
-        db.add_event(event)
-        print(f"Added Event '{event.title}' to database")
-
-
-def get_emails() -> Result[None, Exception]:
+def get_emails() -> Result[list[db.RawEvent], Exception]:
     try:
-        emails = _get_emails_from_server(EMAIL, PASS, SERVER)
-        _write_emails_to_db(emails)
+        events = _get_emails_from_server(EMAIL, PASS, SERVER)
     except Exception as e:
         return Err(e)
 
-    return Ok(None)
+    return Ok(events)
 
 
 if __name__ == "__main__":
