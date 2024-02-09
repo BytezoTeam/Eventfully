@@ -4,19 +4,25 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from result import Result, Ok
 
 import eventfully.utils as utils
 import eventfully.database as db
 
 
-def main():
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    browser = webdriver.Chrome(chrome_options)
+def main() -> Result[None, str]:
+    try:
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")
+        browser = webdriver.Chrome(chrome_options)
 
-    unbezahlbar(browser)
+        unbezahlbar(browser)
 
-    browser.quit()
+        browser.quit()
+    except Exception as e:
+        return Result.Err(str(e))
+
+    return Ok(None)
 
 
 def unbezahlbar(browser: webdriver.Chrome):
