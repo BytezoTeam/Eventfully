@@ -91,8 +91,7 @@ def add_event(event: Event):
 
 
 def add_raw_events(events: list[RawEvent]):
-    for event in events:
-        raw_event_index.add_documents([event.model_dump()])
+    raw_event_index.add_documents([event.model_dump() for event in events])
 
 
 def add_events(events: list[Event]):
