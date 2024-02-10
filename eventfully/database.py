@@ -79,11 +79,11 @@ def add_event(event: Event):
 
 
 def add_Account(username, password, userid):
-    res = AccountData.insert({
-        AccountData.userId: userid,
-        AccountData.username: username,
-        AccountData.password: password
-    }).execute()
+    AccountData.create(
+        userId=userid,
+        username=username,
+        password=password
+    )
     return userid
 
 
