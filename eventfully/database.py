@@ -124,3 +124,7 @@ def search_events(query: str, search_tag: str) -> list[Event]:
     # Convert raw event data in python dict form to pydantic Events
     events = [Event(**raw_event) for raw_event in raw["hits"]]
     return events
+
+
+db.connect()
+db.create_tables([AccountData])
