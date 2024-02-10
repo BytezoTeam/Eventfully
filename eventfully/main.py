@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify, make_response, redirect
 from uuid import uuid4
 from eventfully.categorize import get_topic
-from utils import createUserId
+from utils import create_user_id
 import eventfully.database as db
 
 app = Flask(__name__)
@@ -25,7 +25,7 @@ def checkAccount():
 # Adding the User Data to the Database
 @app.route("/signin/add")
 def registerUser():
-    userID = createUserId()
+    userID = create_user_id()
     db.addAccount(request.args.get("username"), request.args.get("password"), userID)
     resp = make_response(redirect("/checkAccount", 302))
     resp.set_cookie('userID', userID)

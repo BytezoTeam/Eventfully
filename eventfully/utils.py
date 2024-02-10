@@ -1,7 +1,5 @@
 import hashlib
-import random
-import string
-import eventfully.database as db
+from uuid import uuid4
 
 
 # Thank you, ChatGPT!
@@ -21,17 +19,10 @@ def get_hash_string(input_string):
     return hash_string
 
 
-def createUserId(length=4):
-    # Generate 4 groups of 4 characters or digits separated by '-'
-    groups = [
-        ''.join(random.choices(string.ascii_lowercase + string.digits, k=4))
-        for _ in range(length)
-    ]
-
-    # Combine the groups with '-'
-    userId = '-'.join(groups)
+def create_user_id() -> str:
+    return str(uuid4())
 
     if db.AccountData.select().where(db.AccountData.userID == userId).exists():
-        createUserId(length)
+        create_user_id(length)
 
     return userId
