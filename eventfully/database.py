@@ -9,6 +9,7 @@ import meilisearch as ms
 from dotenv import load_dotenv
 from peewee import Model, TextField, DoesNotExist
 from playhouse.sqlite_ext import SqliteExtDatabase
+from playhouse.shortcuts import model_to_dict
 from pydantic import BaseModel, computed_field
 from eventfully.utils import get_hash_string
 
@@ -99,7 +100,7 @@ def delete_Account(user_id):
 def get_User_Data(user_id):
     try:
         account = AccountData.get(AccountData.userId == user_id)
-        return account.__data__  # Returns a dictionary of all the field values
+        return model_to_dict(account)
     except DoesNotExist:
         print(f'No account found with userId {user_id}.')
         return None
