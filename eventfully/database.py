@@ -78,7 +78,7 @@ def add_event(event: Event):
     event_index.add_documents([event.model_dump()])
 
 
-def addAccount(username, password, userid):
+def add_Account(username, password, userid):
     res = AccountData.insert({
         AccountData.userId: userid,
         AccountData.username: username,
@@ -87,7 +87,7 @@ def addAccount(username, password, userid):
     return userid
 
 
-def deleteAccount(user_id):
+def delete_Account(user_id):
     try:
         account = AccountData.get(AccountData.userId == user_id)
         account.delete_instance()
@@ -96,13 +96,22 @@ def deleteAccount(user_id):
         print(f'No account found with userId {user_id}.')
 
 
-def getUserData(user_id):
+def get_User_Data(user_id):
     try:
         account = AccountData.get(AccountData.userId == user_id)
         return account.__data__  # Returns a dictionary of all the field values
     except AccountData.DoesNotExist:
         print(f'No account found with userId {user_id}.')
         return None
+
+
+def authenticate_user(username, password):
+    try:
+        user = AccountData.get((AccountData.username == username) & (AccountData.password == password))
+        return user.userId
+    except AccountData.DoesNotExist:
+        print("User not found or incorrect password.")
+        return False
 
 
 def search_events(query: str, search_tag: str) -> list[Event]:
@@ -115,6 +124,3 @@ def search_events(query: str, search_tag: str) -> list[Event]:
     # Convert raw event data in python dict form to pydantic Events
     events = [Event(**raw_event) for raw_event in raw["hits"]]
     return events
-
-
-

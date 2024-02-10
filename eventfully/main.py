@@ -17,26 +17,34 @@ def index():
 def checkAccount():
     userID = request.cookies.get('userID')
     if userID:
-        return db.getUserData(request.cookies.get("userID"))
+        return db.get_User_Data(request.cookies.get("userID"))
     else:
         return redirect("/login", 302)
+
+
+@app.route("/setAccount/<string:userID>/")
+def set_Cookie(userID):
+    resp = make_response(redirect("/checkAccount", 302))
+    resp.set_cookie('userID', userID)
+    return resp
 
 
 # Adding the User Data to the Database
 @app.route("/signin/add")
 def registerUser():
     userID = create_user_id()
-    db.addAccount(request.args.get("username"), request.args.get("password"), userID)
-    resp = make_response(redirect("/checkAccount", 302))
-    resp.set_cookie('userID', userID)
-    return resp
+    db.add_Account(request.args.get("username"), request.args.get("password"), userID)
+    return redirect(f"/setAccount/{userID}", 302)
 
 
 # Checking Password and Username and setting UserID-Cookie
-# TODO: Implementing Password and Username Check
 @app.route("/login/check")
 def loginUser():
-    pass
+    userID = db.authenticate_user(request.args.get("username"), request.args.get("password"))
+    if userID:
+        return redirect(f"/setAccount/{userID}/", 302)
+    else:
+        return redirect("/login", 302)
 
 
 # TODO: Implement Signin (WebSite)

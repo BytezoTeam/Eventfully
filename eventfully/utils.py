@@ -19,10 +19,6 @@ def get_hash_string(input_string):
     return hash_string
 
 
+# TODO: For safety: Add check to look if UserID already exists
 def create_user_id() -> str:
     return str(uuid4())
-
-    if db.AccountData.select().where(db.AccountData.userID == userId).exists():
-        create_user_id(length)
-
-    return userId
