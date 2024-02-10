@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify, make_response, redirect
 from uuid import uuid4
 from eventfully.categorize import get_topic
-from utils import create_user_id
+from eventfully.utils import create_user_id
 import eventfully.database as db
 
 app = Flask(__name__)

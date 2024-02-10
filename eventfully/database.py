@@ -7,8 +7,9 @@ from os import getenv
 
 import meilisearch as ms
 from dotenv import load_dotenv
-from peewee import Model, TextField
+from peewee import Model, TextField, DoesNotExist
 from playhouse.sqlite_ext import SqliteExtDatabase
+from playhouse.shortcuts import model_to_dict
 from pydantic import BaseModel, computed_field
 from eventfully.utils import get_hash_string
 
@@ -79,11 +80,11 @@ def add_event(event: Event):
 
 
 def add_Account(username, password, userid):
-    res = AccountData.insert({
-        AccountData.userId: userid,
-        AccountData.username: username,
-        AccountData.password: password
-    }).execute()
+    AccountData.create(
+        userId=userid,
+        username=username,
+        password=password
+    )
     return userid
 
 
@@ -92,15 +93,15 @@ def delete_Account(user_id):
         account = AccountData.get(AccountData.userId == user_id)
         account.delete_instance()
         print(f'Account with userId {user_id} was successfully deleted.')
-    except AccountData.DoesNotExist:
+    except DoesNotExist:
         print(f'No account found with userId {user_id}.')
 
 
 def get_User_Data(user_id):
     try:
         account = AccountData.get(AccountData.userId == user_id)
-        return account.__data__  # Returns a dictionary of all the field values
-    except AccountData.DoesNotExist:
+        return model_to_dict(account)
+    except DoesNotExist:
         print(f'No account found with userId {user_id}.')
         return None
 
@@ -109,7 +110,7 @@ def authenticate_user(username, password):
     try:
         user = AccountData.get((AccountData.username == username) & (AccountData.password == password))
         return user.userId
-    except AccountData.DoesNotExist:
+    except DoesNotExist:
         print("User not found or incorrect password.")
         return False
 
@@ -124,3 +125,7 @@ def search_events(query: str, search_tag: str) -> list[Event]:
     # Convert raw event data in python dict form to pydantic Events
     events = [Event(**raw_event) for raw_event in raw["hits"]]
     return events
+
+
+db.connect()
+db.create_tables([AccountData])
