@@ -23,6 +23,10 @@ def main():
             print(f"[ERROR] {source_name} {str(result.err())}")
             continue
 
+        if not result.ok() is list[db.RawEvent]:
+            print(f"[ERROR] {source_name} returned wrong type {type(result.ok())}")
+            continue
+
         print(f"Adding {source_name} ...")
         db.add_raw_events(result.ok())
 
