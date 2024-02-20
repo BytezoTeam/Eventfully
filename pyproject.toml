@@ -6,19 +6,19 @@ authors = [
     { name = "2mal3", email = "56305732+2mal3@users.noreply.github.com" }
 ]
 dependencies = [
-    "flask~=3.0",
-    "peewee~=3.17",
-    "openai~=0.28",
-    "python-dotenv~=1.0",
-    "selenium~=4.16",
-    "imap-tools~=1.5",
-    "meilisearch~=0.28",
-    "pydantic~=2.5",
-    "uvicorn~=0.25",
-    "Flask-APScheduler~=1.13.1",
-    "result~=0.16",
-    "beartype~=0.17",
-    "black~=24.1",
+    "flask==3.*",
+    "peewee==3.*",
+    "openai==0.*",
+    "python-dotenv==1.*",
+    "selenium==4.*",
+    "imap-tools==1.*",
+    "meilisearch==0.*",
+    "pydantic==2.*",
+    "uvicorn==0.*",
+    "Flask-APScheduler==1.*",
+    "result==0.*",
+    "beartype==0.*",
+    "black==24.*",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
