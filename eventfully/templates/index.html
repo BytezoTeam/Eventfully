@@ -5,12 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eventfully</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        #loginModal {
+            transition: opacity 0.25s ease;
+        }
+        .dark-mode {
+            background-color: #1a202c;
+            color: #a0aec0;
+        }
+        .dark-mode .bg-white {
+            background-color: #2d3748;
+        }
+        .dark-mode .text-black {
+            color: #a0aec0;
+        }
+    </style>
 </head>
-<body class="bg-gray-200 p-6">
+<body class="bg-gray-200 p-6 text-black">
     <div class="container mx-auto">
         <div class="flex justify-between items-center bg-white rounded shadow p-6">
             <h2 class="text-2xl mb-4">Event Suche</h2>
-            <button id="loginBtn" class="bg-blue-500 text-white rounded p-2">Anmelden</button>
+            <div>
+                <button id="loginBtn" class="bg-blue-500 text-white rounded p-2">Anmelden</button>
+                <button id="darkModeBtn" class="ml-2 bg-gray-500 text-white rounded p-2">🌞</button>
+            </div>
         </div>
         <div class="mt-4 bg-white rounded shadow p-6">
             <div class="flex items-center">
@@ -29,7 +47,7 @@
     </div>
 
     <!-- Login Modal -->
-    <div id="loginModal" class="fixed inset-0 flex items-center justify-center z-50 invisible opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out">
+    <div id="loginModal" class="fixed inset-0 flex items-center justify-center z-50 invisible opacity-0 pointer-events-none transition-opacity duration-300 ease-out">
         <div id="loginBox" class="bg-white rounded shadow p-6 m-4 max-w-xs max-h-full text-center">
             <h2 class="text-2xl mb-4">Anmelden</h2>
             <input class="w-full p-2 border rounded mb-2" type="text" placeholder="Benutzername">
@@ -43,6 +61,7 @@
         var loginModal = document.getElementById('loginModal');
         var loginBox = document.getElementById('loginBox');
         var loginBtn = document.getElementById('loginBtn');
+        var darkModeBtn = document.getElementById('darkModeBtn');
 
         loginBtn.addEventListener('click', function() {
             loginModal.classList.remove('invisible', 'pointer-events-none', 'opacity-0');
@@ -55,6 +74,15 @@
             if (!isClickInside && !isClickOnButton && loginModal.classList.contains('visible')) {
                 loginModal.classList.remove('visible', 'pointer-events-auto', 'opacity-100');
                 loginModal.classList.add('invisible', 'pointer-events-none', 'opacity-0');
+            }
+        });
+
+        darkModeBtn.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeBtn.textContent = '🌜';
+            } else {
+                darkModeBtn.textContent = '🌞';
             }
         });
     </script>
