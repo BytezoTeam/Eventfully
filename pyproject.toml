@@ -14,11 +14,11 @@ dependencies = [
     "imap-tools==1.*",
     "meilisearch==0.*",
     "pydantic==2.*",
-    "uvicorn==0.*",
     "Flask-APScheduler==1.*",
     "result==0.*",
     "beartype==0.*",
     "black==24.*",
+    "gunicorn==21.*",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
@@ -32,7 +32,7 @@ managed = true
 dev-dependencies = []
 
 [tool.rye.scripts]
-serve = "uvicorn eventfully.main:app"
+dev = "gunicorn eventfully.main:app -w 1 -b localhost:5000 --reload"
 
 [tool.hatch.metadata]
 allow-direct-references = true
