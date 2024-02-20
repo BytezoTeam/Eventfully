@@ -106,7 +106,7 @@ def search_events(query: str, search_tag: str) -> list[Event]:
         })
     else:
         raw = event_index.search(query)
-    # Convert raw event data in python dict form to pydantic Events
+    # Convert raw event sources in python dict form to pydantic Events
     events = [Event(**raw_event) for raw_event in raw["hits"]]
     return events
 

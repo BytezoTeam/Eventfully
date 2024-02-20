@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, jsonify
 from flask_apscheduler import APScheduler
 
 import eventfully.database as db
-import eventfully.data.main as data
+import eventfully.sources.main as sources
 
 
 class Config:
@@ -23,7 +23,7 @@ atexit.register(lambda: scheduler.shutdown())
 @scheduler.task("cron", id="get_data", hour=0)
 def get_data():
     app.logger.info("JOB: get_data")
-    data.main()
+    sources.main()
 
 
 scheduler.start()

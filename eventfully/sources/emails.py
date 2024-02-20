@@ -5,7 +5,7 @@ from imap_tools import MailBox
 from result import Result, Ok, Err
 
 import eventfully.database as db
-from eventfully.data.categorize import categorize
+from eventfully.sources.categorize import categorize
 
 load_dotenv()
 EMAIL = getenv("EMAIL")

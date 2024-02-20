@@ -2,8 +2,8 @@ from typing import Callable
 
 from result import Result
 
-from eventfully.data.emails import get_emails
-from eventfully.data.zuerichunbezahlbar_ch import get_zuerichunbezahlbar
+from eventfully.sources.emails import get_emails
+from eventfully.sources.zuerichunbezahlbar_ch import get_zuerichunbezahlbar
 import eventfully.database as db
 
 # Add new sources here
