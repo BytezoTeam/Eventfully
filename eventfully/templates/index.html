@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eventfully</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
     <style>
         .dark-mode {
             background-color: #1a202c;
@@ -28,19 +29,13 @@
             </div>
         </div>
         <div class="mt-4 bg-white rounded shadow p-6">
-            <div class="flex items-center">
+            <form class="flex items-center" hx-get="/api/search" hx-target="#event-search-result">
                 <input class="w-full p-2 border rounded mb-2" type="text" placeholder="Suche nach Events...">
-                <button class="ml-2 bg-blue-500 text-white rounded p-2">Suchen</button>
+                <button type="submit" class="ml-2 bg-blue-500 text-white rounded p-2">Suchen</button>
                 <button class="ml-2 bg-green-500 text-white rounded p-2">Filter</button>
-            </div>
+            </form>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6">
-            <div class="bg-white rounded shadow p-6">
-                <img class="w-full h-32 object-cover mb-2" src="https://via.placeholder.com/150" alt="Event Bild">
-                <p>Event 1 Beschreibung</p>
-            </div>
-            <!-- Weitere Event-Boxen hier -->
-        </div>
+        <div id="event-search-result" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6"></div>
     </div>
 
     <!-- Login Modal -->

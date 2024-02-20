@@ -74,7 +74,7 @@ def filter_setting():
 #     return "", 200
 
 
-@app.route("/api/events/search", methods=["GET"])
+@app.route("/api/search", methods=["GET"])
 def get_events():
     category = request.args.get("kategorie", "")
     therm = request.args.get("search", "")
