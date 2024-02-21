@@ -8,7 +8,7 @@ authors = [
 dependencies = [
     "flask==3.*",
     "peewee==3.*",
-    "openai==0.*",
+    "openai==1.*",
     "python-dotenv==1.*",
     "selenium==4.*",
     "imap-tools==1.*",
