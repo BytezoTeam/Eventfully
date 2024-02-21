@@ -4,9 +4,7 @@ from flask import Flask, render_template, request, jsonify
 from flask_apscheduler import APScheduler
 
 import eventfully.database as db
-import eventfully.emails as emails
-import eventfully.categorize as categorize
-import eventfully.scraping as scraping
+import eventfully.sources.main as sources
 
 
 class Config:
@@ -22,31 +20,10 @@ atexit.register(lambda: scheduler.shutdown())
 
 
 # Scheduled tasks
-@scheduler.task("cron", id="get_emails", hour=0)
-def get_emails():
-    app.logger.info("JOB: get_emails")
-    try:
-        emails.main()
-    except Exception as e:
-        app.logger.error(e)
-
-
-@scheduler.task("cron", id="scrape", hour=1)
-def scrape():
-    app.logger.info("JOB: scrape")
-    try:
-        scraping.main()
-    except Exception as e:
-        app.logger.error(e)
-
-
-@scheduler.task("cron", id="categorize", hour=6)
-def categorize():
-    app.logger.info("JOB: categorize")
-    try:
-        categorize.main()
-    except Exception as e:
-        app.logger.error(e)
+@scheduler.task("cron", id="get_data", hour=0)
+def get_data():
+    app.logger.info("JOB: get_data")
+    sources.main()
 
 
 scheduler.start()
