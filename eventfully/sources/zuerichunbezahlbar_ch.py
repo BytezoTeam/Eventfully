@@ -57,15 +57,12 @@ def _unbezahlbar(browser: webdriver.Chrome) -> list[db.RawEvent]:
             _get_element(browser, By.CSS_SELECTOR, ".close-reveal-modal").click()
 
             event = db.RawEvent(
+                raw=description + info,
                 title=title,
                 description=description + info,
                 link=link,
-                price="",
-                tags="",
                 start_date=time,
                 end_date=time,
-                age="",
-                accessibility="",
                 address=address,
                 city="Zürich",
             )

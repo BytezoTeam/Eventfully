@@ -24,17 +24,9 @@ def _get_emails_from_server(email: str, password: str, server: str) -> list[db.R
             print(f"Got E-Mail with subject '{subject}'")
 
             events.append(db.RawEvent(
+                raw=subject + body,
                 title=subject,
-                description=body,
                 link=msg.from_,
-                price="",
-                age="",
-                tags="",
-                start_date="",
-                end_date="",
-                accessibility="",
-                address="",
-                city=""
             ))
 
     return events

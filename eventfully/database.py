@@ -69,22 +69,23 @@ class Event(BaseModel):
 
 
 class RawEvent(BaseModel):
-    title: str
-    description: str
-    link: str
-    price: str
-    age: str
-    tags: str
-    start_date: str
-    end_date: str
-    accessibility: str
-    address: str
-    city: str
+    raw: str
+    title: str | None = None
+    description: str | None = None
+    link: str | None = None
+    price: str | None = None
+    age: str | None = None
+    tags: str | None = None
+    start_date: str | None = None
+    end_date: str | None = None
+    accessibility: str | None = None
+    address: str | None = None
+    city: str | None = None
 
     @computed_field()
     @property
     def id(self) -> str:
-        return get_hash_string(self.title + str(self.start_date))
+        return get_hash_string(self.raw)
 
 
 def add_event(event: Event):
