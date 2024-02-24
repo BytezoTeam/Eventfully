@@ -19,6 +19,7 @@ dependencies = [
     "beartype==0.*",
     "black==24.*",
     "gunicorn==21.*",
+    "tenacity==8.*",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
