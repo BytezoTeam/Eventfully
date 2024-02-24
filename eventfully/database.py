@@ -28,8 +28,6 @@ if not ms_client.is_healthy():
     raise Exception("Cannot connect to Meilisearch. Is it running? Correct host and key in .env file?")
 event_index = ms_client.index("events")
 ms_client.create_index("events", {"primaryKey": "id"})
-raw_event_index = ms_client.index("raw_events")
-ms_client.create_index("raw_events", {"primaryKey": "id"})
 event_index.update_filterable_attributes([
     "tags"
 ])
@@ -45,6 +43,10 @@ atexit.register(lambda: db.close())
 class _DBBaseModel(Model):
     class Meta:
         database = db
+
+
+class ExisingEvents(_DBBaseModel):
+    id = TextField(primary_key=True)
 
 
 class Event(BaseModel):
@@ -90,10 +92,6 @@ def add_event(event: Event):
     event_index.add_documents([event.model_dump()])
 
 
-def add_raw_events(events: list[RawEvent]):
-    raw_event_index.add_documents([event.model_dump() for event in events])
-
-
 def add_events(events: list[Event]):
     for event in events:
         add_event(event)
@@ -111,5 +109,9 @@ def search_events(query: str, search_tag: str) -> list[Event]:
     return events
 
 
+def get_existing_event_ids() -> list[str]:
+    return [event.id for event in ExisingEvents.select()]
+
+
 db.connect()
-db.create_tables([])
+db.create_tables([ExisingEvents])

@@ -14,6 +14,8 @@ sources: list[Callable[[], Result[list[db.RawEvent], Exception]]] = [
 
 
 def main():
+    # Get the data from the sources
+    raw_events: list[db.RawEvent] = []
     for source in sources:
         source_name = source.__name__
 
@@ -27,8 +29,12 @@ def main():
             print(f"[ERROR] {source_name} returned wrong type {type(result.ok())}")
             continue
 
-        print(f"Adding {source_name} ...")
-        db.add_raw_events(result.ok())
+        raw_events += result.ok()
+
+    # Clear duplicates
+    exising_event_ids = db.get_existing_event_ids()
+    new_raw_events = [event for event in raw_events if event.id not in exising_event_ids]
+
 
 
 if __name__ == "__main__":
