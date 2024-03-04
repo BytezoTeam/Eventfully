@@ -14,11 +14,11 @@
       "description": "The link to the event (website)"
     },
     "price": {
-      "type": "number",
+      "type": "string",
       "description": "The price of the event in EUR"
     },
     "age": {
-      "type": "number",
+      "type": "string",
       "description": "The minimum age for the event"
     },
     "tags": {
