@@ -60,5 +60,5 @@
       "type": "string",
       "description": "The city where the event takes place"
     }
-  },
+  }
 }
