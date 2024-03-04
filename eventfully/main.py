@@ -60,50 +60,50 @@ def index():
 
 
 # Check the Cookie or redirect to log in
-@app.route("/checkAccount")
+@app.route("/accounts/addCookie")
 def checkAccount():
     userID = request.cookies.get('userID')
     if userID:
         return db.get_User_Data(request.cookies.get("userID"))
     else:
-        return redirect("/login", 302)
+        return redirect("/", 302)
 
 
-@app.route("/setAccount/<string:userID>/")
-def set_Cookie(userID):
-    resp = make_response(redirect("/checkAccount", 302))
+# Log out and delete the UserID-Cookie
+@app.route("/accounts/logout")
+def logout():
+    resp = make_response(redirect("/", 302))
+    resp.set_cookie('userID', '', expires=0)
+    return resp
+
+
+# Log out and delete the UserID-Cookie    
+@app.route("/accounts/delete")
+def deleteAccount():
+    db.delete_Account(request.cookies.get("userID"))
+    return redirect("/accounts/logout", 302)
+
+
+# Adding the User Data to the Database and setting the UserID-Cookie
+@app.route("/accounts/addAccount")
+def registerUser():
+    userID = create_user_id()
+    db.add_Account(request.args.get("username"), request.args.get("password"), userID, request.args.get("email"))
+    resp = make_response(redirect("/accounts/addCookie", 302))
     resp.set_cookie('userID', userID)
     return resp
 
 
-# Adding the User Data to the Database
-@app.route("/signin/add")
-def registerUser():
-    userID = create_user_id()
-    db.add_Account(request.args.get("username"), request.args.get("password"), userID)
-    return redirect(f"/setAccount/{userID}", 302)
-
-
 # Checking Password and Username and setting UserID-Cookie
-@app.route("/login/check")
+@app.route("/accounts/checkAccount")
 def loginUser():
     userID = db.authenticate_user(request.args.get("username"), request.args.get("password"))
     if userID:
-        return redirect(f"/setAccount/{userID}/", 302)
+        resp = make_response(redirect("/accounts/addCookie", 302))
+        resp.set_cookie('userID', userID)
+        return resp
     else:
         return redirect("/login", 302)
-
-
-# TODO: Implement Signin (WebSite)
-@app.route("/signin")
-def signin():
-    return "Not implemented yet"
-
-
-# TODO: Implement Login (WebSite)
-@app.route("/login")
-def login():
-    return "Not implemented yet"
 
 
 @app.route("/add_window", methods=["GET"])

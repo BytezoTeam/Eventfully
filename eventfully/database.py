@@ -49,6 +49,7 @@ class AccountData(Model):
     userId = TextField(primary_key=True)
     password = TextField()
     username = TextField()
+    email = TextField()
 
     class Meta:
         database = db  # Use the existing SQLite database connection
@@ -83,9 +84,11 @@ def add_event(event: Event):
     event_index.add_documents([event.model_dump()])
 
 
-def add_Account(username, password, userid):
+# TODO: Add check to look if email is real
+def add_Account(username, password, userid, email):
     AccountData.create(
         userId=userid,
+        email=email,
         username=username,
         password=password
     )

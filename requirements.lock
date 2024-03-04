@@ -5,131 +5,61 @@
 #   pre: false
 #   features: []
 #   all-features: false
-#   with-sources: false
 
 -e file:.
-aiohttp==3.9.3
-    # via openai
+aiohttp==3.9.1
 aiosignal==1.3.1
-    # via aiohttp
 annotated-types==0.6.0
-    # via pydantic
 apscheduler==3.10.4
-    # via flask-apscheduler
 attrs==23.2.0
-    # via aiohttp
-    # via outcome
-    # via trio
 beartype==0.17.2
-    # via eventfully
 black==24.2.0
-    # via eventfully
 blinker==1.7.0
-    # via flask
 camel-converter==3.1.1
+certifi==2023.11.17
 cffi==1.16.0
-    # via meilisearch
-certifi==2024.2.2
-    # via requests
-    # via selenium
 charset-normalizer==3.3.2
-    # via request
 click==8.1.7
 colorama==0.4.6
-    # via black
-    # via flask
-flask==3.0.2
-    # via eventfully
-    # via flask-apscheduler
+flask==3.0.0
 flask-apscheduler==1.13.1
-    # via eventfully
 frozenlist==1.4.1
-    # via aiohttp
-    # via aiosignal
 gunicorn==21.2.0
-    # via eventfully
 h11==0.14.0
-    # via wsproto
 idna==3.6
-    # via requests
-    # via trio
-    # via yarl
 imap-tools==1.5.0
-    # via eventfully
 itsdangerous==2.1.2
-    # via flask
-jinja2==3.1.3
-    # via flask
-markupsafe==2.1.5
-    # via jinja2
-    # via werkzeug
-meilisearch==0.30.0
-    # via eventfully
-multidict==6.0.5
-    # via aiohttp
-    # via yarl
+jinja2==3.1.2
+markupsafe==2.1.3
+meilisearch==0.28.4
+multidict==6.0.4
 mypy-extensions==1.0.0
-    # via black
 openai==0.28.1
-    # via eventfully
 outcome==1.3.0.post0
-pycparser==2.21
-    # via trio
 packaging==23.2
-    # via black
-    # via gunicorn
 pathspec==0.12.1
-    # via black
-peewee==3.17.1
-    # via eventfully
+peewee==3.17.0
 platformdirs==4.2.0
-    # via black
-pydantic==2.6.1
-    # via camel-converter
-    # via eventfully
-pydantic-core==2.16.2
-    # via pydantic
+pycparser==2.21
+pydantic==2.5.3
+pydantic-core==2.14.6
 pysocks==1.7.1
-    # via urllib3
-python-dateutil==2.8.2
-    # via flask-apscheduler
-python-dotenv==1.0.1
-    # via eventfully
+python-dateutil==2.9.0.post0
+python-dotenv==1.0.0
 pytz==2024.1
-    # via apscheduler
 requests==2.31.0
-    # via meilisearch
-    # via openai
-result==0.16.0
-    # via eventfully
-selenium==4.18.1
-    # via eventfully
+result==0.16.1
+selenium==4.16.0
 six==1.16.0
-    # via apscheduler
-    # via python-dateutil
 sniffio==1.3.0
-    # via trio
 sortedcontainers==2.4.0
-    # via trio
-tqdm==4.66.2
-    # via openai
+tqdm==4.66.1
 trio==0.24.0
-    # via selenium
-    # via trio-websocket
 trio-websocket==0.11.1
-    # via selenium
 typing-extensions==4.9.0
-    # via pydantic
-    # via pydantic-core
-    # via selenium
+tzdata==2024.1
 tzlocal==5.2
-    # via apscheduler
-urllib3==2.2.1
-    # via requests
-    # via selenium
+urllib3==2.1.0
 werkzeug==3.0.1
-    # via flask
 wsproto==1.2.0
-    # via trio-websocket
 yarl==1.9.4
-    # via aiohttp
