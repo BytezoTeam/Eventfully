@@ -6,15 +6,19 @@ authors = [
     { name = "2mal3", email = "56305732+2mal3@users.noreply.github.com" }
 ]
 dependencies = [
-    "flask>=3.0.0",
-    "peewee>=3.17.0",
-    "openai~=0.28",
-    "python-dotenv>=1.0.0",
-    "selenium>=4.16.0",
-    "imap-tools>=1.5.0",
-    "meilisearch>=0.28.4",
-    "pydantic>=2.5.3",
-    "uvicorn>=0.25.0",
+    "flask==3.*",
+    "peewee==3.*",
+    "openai==0.*",
+    "python-dotenv==1.*",
+    "selenium==4.*",
+    "imap-tools==1.*",
+    "meilisearch==0.*",
+    "pydantic==2.*",
+    "Flask-APScheduler==1.*",
+    "result==0.*",
+    "beartype==0.*",
+    "black==24.*",
+    "gunicorn==21.*",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
@@ -28,7 +32,7 @@ managed = true
 dev-dependencies = []
 
 [tool.rye.scripts]
-serve = "uvicorn eventfully.main:app"
+dev = "gunicorn eventfully.main:app -w 1 -b localhost:5000 --reload"
 
 [tool.hatch.metadata]
 allow-direct-references = true

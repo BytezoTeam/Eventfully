@@ -1,6 +1,6 @@
 {% for item in events %}
 
-<div class="card shadow mt-5 p-3">
+<div class="bg-white rounded shadow p-6">
     <h2>{{ item.title }}</h2>
     <p>Beschreibung: {{ item.description }}</p>
     {% if not item.link == "---"%}
@@ -17,6 +17,7 @@
     <p>Wo?: {{ item.address }}</p>
     {% endif %} {% if not item.tags == "---"%}
     <p>Kategorien: {{ item.tags }}</p>
+
 </div>
 
 {% endif %} {% endfor %}

@@ -9,14 +9,10 @@ from dotenv import load_dotenv
 import eventfully.database as db
 
 load_dotenv()
-openai.api_key = getenv("OPENAI_API_KEY")
-
-
-def categorize_all():
-    for email in db.EMailContent.select():
-        categorize(email.subject + email.content)
-
-    # db.EMailContent.delete().execute()
+OPENAI_API_KEY = getenv("OPENAI_API_KEY")
+if not OPENAI_API_KEY:
+    raise Exception("No OpenAI key provided. Please set OPENAI_API_KEY in .env file.")
+openai.api_key = OPENAI_API_KEY
 
 
 def categorize(text: str):
@@ -142,5 +138,11 @@ def get_topic(text: str) -> str:
     return response["choices"][0]["message"]["content"]
 
 
+def main():
+    for email in db.EMailContent.select():
+        categorize(email.subject + email.content)
+
+    # db.EMailContent.delete().execute()
+
 if __name__ == "__main__":
-    categorize_all()
+    main()
