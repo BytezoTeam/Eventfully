@@ -33,6 +33,7 @@ dev-dependencies = []
 
 [tool.rye.scripts]
 dev = "gunicorn eventfully.main:app -w 1 -b localhost:5000 --reload"
+main = "python3 startup.py"
 
 [tool.hatch.metadata]
 allow-direct-references = true

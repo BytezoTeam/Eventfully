@@ -87,10 +87,14 @@ def deleteAccount():
 
 
 # Adding the User Data to the Database and setting the UserID-Cookie
-@app.route("/accounts/addAccount")
+@app.route("/accounts/addAccount", methods=["POST"])
 def registerUser():
     userID = create_user_id()
-    db.add_Account(request.args.get("username"), request.args.get("password"), userID, request.args.get("email"))
+    username = request.form.get("username")
+    password = request.form.get("password")
+    email = request.form.get("email")
+
+    db.add_Account(username, password, userID, email)
     resp = make_response(redirect("/accounts/addCookie", 302))
     resp.set_cookie('userID', userID, secure=True, httponly=True)
     return resp
