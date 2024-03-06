@@ -61,6 +61,11 @@ def process_raw_event(raw_event: db.RawEvent, prompts_path: str) -> db.Event:
 
     filled_fields = {}
     for field_name, field_data in prompts["fields"].items():
+        # Only get the description from the raw event if it's not empty to save tokens
+        if field_name == "description" and raw_event.description:
+            filled_fields[field_name] = raw_event.description
+            continue
+
         field = process_field(raw_event, field_name, field_data, prompts["general"])
         print(field_name, field)
         filled_fields[field_name] = field
