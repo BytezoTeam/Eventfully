@@ -50,7 +50,7 @@
     },
     "accessibility": {
       "type": "string",
-      "description": "The accessibility of the event"
+      "description": "The accessibility of the event. Keep it short."
     },
     "address": {
       "type": "string",
