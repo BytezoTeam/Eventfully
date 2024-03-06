@@ -24,4 +24,5 @@ def test_process_field():
 
 
 def test_process_raw_event():
-    process_raw_event(raw_event, "../eventfully/sources/prompts.json")
+    e = process_raw_event(raw_event, "../eventfully/sources/prompts.json")
+    print(e)
