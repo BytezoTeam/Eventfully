@@ -7,7 +7,8 @@ from tenacity import retry, wait_random_exponential, stop_after_attempt, retry_i
 
 load_dotenv()
 OPENAI_API_KEY = getenv("OPENAI_API_KEY")
-GPT_MODEL = "gpt-3.5-turbo-0125"    # "gpt-4-turbo-preview" for better results but ~20x the cost
+# "gpt-3.5-turbo-0125" or "gpt-4-turbo-preview" for better results but ~20x the cost
+GPT_MODEL = "gpt-4-turbo-preview"
 
 _client = OpenAI(api_key=OPENAI_API_KEY)
 
