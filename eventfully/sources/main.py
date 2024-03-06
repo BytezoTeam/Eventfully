@@ -68,6 +68,11 @@ def process_raw_event(raw_event: db.RawEvent, prompts_path: str) -> db.Event:
 
         field = process_field(raw_event, field_name, field_data, prompts["general"])
         print(field_name, field)
+
+        # Convert date strings to time in seconds (e.g. 2024-02-25T13:30:00Z)
+        if field_name in ["start_date", "end_date"]:
+            field = int(datetime.strptime(field, "%Y-%m-%dT%H:%M:%SZ").timestamp())
+
         filled_fields[field_name] = field
     print(filled_fields)
 

@@ -42,11 +42,11 @@
     },
     "start_date": {
       "type": "string",
-      "description": "The start date of the event in ISO 8601 format"
+      "description": "The start date of the event in %Y-%m-%dT%H:%M:%SZ format"
     },
     "end_date": {
       "type": "string",
-      "description": "The end date of the event in ISO 8601 format"
+      "description": "The end date of the event in %Y-%m-%dT%H:%M:%SZ format"
     },
     "accessibility": {
       "type": "string",
