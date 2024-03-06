@@ -3,7 +3,6 @@ from os import getenv
 from dotenv import load_dotenv
 from openai import OpenAI
 from openai.types.chat.chat_completion import ChatCompletion
-from result import Result, Ok, Err
 from tenacity import retry, wait_random_exponential, stop_after_attempt, retry_if_result
 
 load_dotenv()
