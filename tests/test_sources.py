@@ -20,10 +20,8 @@ def test_process_field():
         {"type": "string", "description": "The title of the event."},
         "Extract the following information from the given event data from the user."
     )
-    assert result.is_ok()
-    assert result.ok() == "OpenSunday Aemtler"
+    assert result == "OpenSunday Aemtler"
 
 
 def test_process_raw_event():
-    result = process_raw_event(raw_event, "../eventfully/sources/prompts.json")
-    assert result.is_ok()
+    process_raw_event(raw_event, "../eventfully/sources/prompts.json")

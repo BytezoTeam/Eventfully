@@ -1,5 +1,4 @@
 import selenium.common.exceptions
-from result import Result, Ok, Err
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -9,19 +8,16 @@ from selenium.webdriver.support.ui import WebDriverWait
 import eventfully.database as db
 
 
-def get_zuerichunbezahlbar() -> Result[list[db.RawEvent], Exception]:
-    try:
-        chrome_options = Options()
-        chrome_options.add_argument("--headless")
-        browser = webdriver.Chrome(chrome_options)
+def get_zuerichunbezahlbar() -> list[db.RawEvent]:
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    browser = webdriver.Chrome(chrome_options)
 
-        events = _unbezahlbar(browser)
+    events = _unbezahlbar(browser)
 
-        browser.quit()
-    except Exception as e:
-        return Err(e)
+    browser.quit()
 
-    return Ok(events)
+    return events
 
 
 def _unbezahlbar(browser: webdriver.Chrome) -> list[db.RawEvent]:

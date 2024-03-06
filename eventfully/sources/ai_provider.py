@@ -13,8 +13,8 @@ GPT_MODEL = "gpt-3.5-turbo-0125"    # "gpt-4-turbo-preview" for better results b
 _client = OpenAI(api_key=OPENAI_API_KEY)
 
 
-@retry(wait=wait_random_exponential(max=5), stop=stop_after_attempt(3), retry=retry_if_result(lambda r: r.is_err()))
-def chat_completion_request(messages: list[dict[str, any]], tools=None, tool_choice=None, model=GPT_MODEL) -> Result[ChatCompletion, Exception]:
+@retry(wait=wait_random_exponential(max=5), stop=stop_after_attempt(3))
+def chat_completion_request(messages: list[dict[str, any]], tools=None, tool_choice=None, model=GPT_MODEL) -> ChatCompletion:
     try:
         response = _client.chat.completions.create(
             model=model,
@@ -22,6 +22,7 @@ def chat_completion_request(messages: list[dict[str, any]], tools=None, tool_cho
             tools=tools,
             tool_choice=tool_choice,
         )
-        return Ok(response)
+        return response
     except Exception as e:
-        return Err(e)
+        print("Unable to generate ChatCompletion response")
+        return e

@@ -32,13 +32,10 @@ def _get_emails_from_server(email: str, password: str, server: str) -> list[db.R
     return events
 
 
-def get_emails() -> Result[list[db.RawEvent], Exception]:
-    try:
-        events = _get_emails_from_server(EMAIL, PASS, SERVER)
-    except Exception as e:
-        return Err(e)
+def get_emails() -> list[db.RawEvent]:
+    events = _get_emails_from_server(EMAIL, PASS, SERVER)
 
-    return Ok(events)
+    return events
 
 
 if __name__ == "__main__":
