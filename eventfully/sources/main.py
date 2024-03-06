@@ -49,10 +49,10 @@ def main():
         except Exception as e:
             print(f"[ERROR] {str(e)}")
             continue
-        new_events.append(new_event.ok())
+        new_events.append(new_event)
 
     # Add the new events to the search database
-    # db.add_events(new_events)
+    db.add_events(new_events)
 
 
 @beartype
