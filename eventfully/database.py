@@ -7,10 +7,10 @@ from os import getenv
 
 import meilisearch as ms
 from dotenv import load_dotenv
-from peewee import Model, TextField
+from peewee import Model, TextField, DoesNotExist
 from playhouse.sqlite_ext import SqliteExtDatabase
+from playhouse.shortcuts import model_to_dict
 from pydantic import BaseModel, computed_field
-
 from eventfully.utils import get_hash_string
 
 load_dotenv()
@@ -45,6 +45,16 @@ class _DBBaseModel(Model):
         database = db
 
 
+class AccountData(Model):
+    userId = TextField(primary_key=True)
+    password = TextField()
+    username = TextField()
+    email = TextField()
+
+    class Meta:
+        database = db  # Use the existing SQLite database connection
+
+
 class Event(BaseModel):
     title: str
     description: str
@@ -74,6 +84,44 @@ def add_event(event: Event):
     event_index.add_documents([event.model_dump()])
 
 
+# TODO: Add check to look if email is real
+def add_Account(username, password, userid, email):
+    AccountData.create(
+        userId=userid,
+        email=email,
+        username=username,
+        password=password
+    )
+    return userid
+
+
+def delete_Account(user_id):
+    try:
+        account = AccountData.get(AccountData.userId == user_id)
+        account.delete_instance()
+        print(f'Account with userId {user_id} was successfully deleted.')
+    except DoesNotExist:
+        print(f'No account found with userId {user_id}.')
+
+
+def get_User_Data(user_id):
+    try:
+        account = AccountData.get(AccountData.userId == user_id)
+        return model_to_dict(account)
+    except DoesNotExist:
+        print(f'No account found with userId {user_id}.')
+        return None
+
+
+def authenticate_user(username, password):
+    try:
+        user = AccountData.get((AccountData.username == username) & (AccountData.password == password))
+        return user.userId
+    except DoesNotExist:
+        print("User not found or incorrect password.")
+        return False
+
+
 def search_events(query: str, search_tag: str) -> list[Event]:
     if search_tag:
         raw = event_index.search(query, {
@@ -87,4 +135,5 @@ def search_events(query: str, search_tag: str) -> list[Event]:
 
 
 db.connect()
+db.create_tables([AccountData])
 db.create_tables([EMailContent])

@@ -21,32 +21,40 @@
 </head>
 <body class="bg-gray-200 p-6 text-black">
     <div class="container mx-auto">
-        <div class="flex justify-between items-center bg-white rounded shadow p-6">
-            <h2 class="text-2xl mb-4">Event Suche</h2>
+        <header class="flex justify-between items-center bg-white rounded shadow p-6 mb-4">
+            <h1 class="text-3xl font-bold">Eventfully</h1>
             <div>
-                <button id="loginBtn" class="bg-blue-500 text-white rounded p-2">Anmelden</button>
+                <button id="loginBtn" class="bg-blue-500 text-white rounded p-2 mr-2">Anmelden</button>
                 <button id="darkModeBtn" class="ml-2 bg-gray-500 text-white rounded p-2">🌞</button>
             </div>
-        </div>
-        <div class="mt-4 bg-white rounded shadow p-6">
-            <form class="flex items-center" hx-get="/api/search" hx-target="#event-search-result">
-                <input class="w-full p-2 border rounded mb-2" type="text" placeholder="Suche nach Events...">
-                <button type="submit" class="ml-2 bg-blue-500 text-white rounded p-2">Suchen</button>
-                <button class="ml-2 bg-green-500 text-white rounded p-2">Filter</button>
-            </form>
-        </div>
-        <div id="event-search-result" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6"></div>
+        </header>
+        <main>
+            <section class="bg-white rounded shadow p-6 mb-4">
+                <h2 class="text-2xl mb-4">Event Suche</h2>
+                <form class="flex items-center" hx-get="/api/search" hx-target="#event-search-result">
+                    <input class="w-full p-2 border rounded mb-2" type="text" placeholder="Suche nach Events...">
+                    <button type="submit" class="ml-2 bg-blue-500 text-white rounded p-2">Suchen</button>
+                    <button class="ml-2 bg-green-500 text-white rounded p-2">Filter</button>
+                </form>
+            </section>
+            <section id="event-search-result" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></section>
+        </main>
     </div>
 
     <!-- Login Modal -->
     <div id="loginModal" class="fixed inset-0 flex items-center justify-center z-50 invisible opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out">
-        <div id="loginBox" class="bg-white rounded shadow p-6 m-4 max-w-xs max-h-full text-center">
+        <form
+            hx-post="/accounts/addAccount"
+            id="loginBox" class="bg-white rounded shadow p-6 m-4 max-w-xs max-h-full text-center"
+            hx-swap="none"
+        >
             <h2 class="text-2xl mb-4">Anmelden</h2>
-            <input class="w-full p-2 border rounded mb-2" type="text" placeholder="Benutzername">
-            <input class="w-full p-2 border rounded mb-2" type="password" placeholder="Passwort">
-            <button class="w-full bg-blue-500 text-white rounded p-2 mb-2">Anmelden</button>
-            <button class="w-full bg-green-500 text-white rounded p-2">Jetzt registrieren</button>
-        </div>
+            <input id="email" name="email" class="w-full p-2 border rounded mb-2" type="email" placeholder="E-Mail" required>
+            <input id="username" name="username" class="w-full p-2 border rounded mb-2" type="text" placeholder="Benutzername" required>
+            <input id="password" name="password" class="w-full p-2 border rounded mb-2" type="password" placeholder="Passwort" required>
+<!--            <button class="w-full bg-blue-500 text-white rounded p-2 mb-2">Anmelden</button>-->
+            <button type="submit" class="w-full bg-green-500 text-white rounded p-2">Jetzt registrieren</button>
+        </form>
     </div>
 
     <script>
