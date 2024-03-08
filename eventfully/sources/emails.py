@@ -2,10 +2,8 @@ from os import getenv
 
 from dotenv import load_dotenv
 from imap_tools import MailBox
-from result import Result, Ok, Err
 
 import eventfully.database as db
-from eventfully.sources.categorize import categorize
 
 load_dotenv()
 EMAIL = getenv("EMAIL")
@@ -24,29 +22,18 @@ def _get_emails_from_server(email: str, password: str, server: str) -> list[db.R
             print(f"Got E-Mail with subject '{subject}'")
 
             events.append(db.RawEvent(
+                raw=subject + body,
                 title=subject,
-                description=body,
                 link=msg.from_,
-                price="",
-                age="",
-                tags="",
-                start_date="",
-                end_date="",
-                accessibility="",
-                address="",
-                city=""
             ))
 
     return events
 
 
-def get_emails() -> Result[list[db.RawEvent], Exception]:
-    try:
-        events = _get_emails_from_server(EMAIL, PASS, SERVER)
-    except Exception as e:
-        return Err(e)
+def get_emails() -> list[db.RawEvent]:
+    events = _get_emails_from_server(EMAIL, PASS, SERVER)
 
-    return Ok(events)
+    return events
 
 
 if __name__ == "__main__":

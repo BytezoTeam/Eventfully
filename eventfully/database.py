@@ -28,8 +28,6 @@ if not ms_client.is_healthy():
     raise Exception("Cannot connect to Meilisearch. Is it running? Correct host and key in .env file?")
 event_index = ms_client.index("events")
 ms_client.create_index("events", {"primaryKey": "id"})
-raw_event_index = ms_client.index("raw_events")
-ms_client.create_index("raw_events", {"primaryKey": "id"})
 event_index.update_filterable_attributes([
     "tags"
 ])
@@ -45,6 +43,10 @@ atexit.register(lambda: db.close())
 class _DBBaseModel(Model):
     class Meta:
         database = db
+
+
+class ExisingEvents(_DBBaseModel):
+    id = TextField(primary_key=True)
 
 
 class Event(BaseModel):
@@ -67,31 +69,28 @@ class Event(BaseModel):
 
 
 class RawEvent(BaseModel):
-    title: str
-    description: str
-    link: str
-    price: str
-    age: str
-    tags: str
-    start_date: str
-    end_date: str
-    accessibility: str
-    address: str
-    city: str
+    raw: str
+    title: str | None = None
+    description: str | None = None
+    link: str | None = None
+    price: str | None = None
+    age: str | None = None
+    tags: str | None = None
+    start_date: str | None = None
+    end_date: str | None = None
+    accessibility: str | None = None
+    address: str | None = None
+    city: str | None = None
 
     @computed_field()
     @property
     def id(self) -> str:
-        return get_hash_string(self.title + str(self.start_date))
+        return get_hash_string(self.raw)
 
 
 def add_event(event: Event):
     # TODO: add fail check
     event_index.add_documents([event.model_dump()])
-
-
-def add_raw_events(events: list[RawEvent]):
-    raw_event_index.add_documents([event.model_dump() for event in events])
 
 
 def add_events(events: list[Event]):
@@ -111,5 +110,9 @@ def search_events(query: str, search_tag: str) -> list[Event]:
     return events
 
 
+def get_existing_event_ids() -> list[str]:
+    return [event.id for event in ExisingEvents.select()]
+
+
 db.connect()
-db.create_tables([])
+db.create_tables([ExisingEvents])
