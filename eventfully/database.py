@@ -85,7 +85,7 @@ def add_event(event: Event):
 
 
 # TODO: Add check to look if email is real
-def add_Account(username, password, userid, email):
+def add_account(username, password, userid, email):
     AccountData.create(
         userId=userid,
         email=email,
@@ -95,7 +95,7 @@ def add_Account(username, password, userid, email):
     return userid
 
 
-def delete_Account(user_id):
+def delete_account(user_id):
     try:
         account = AccountData.get(AccountData.userId == user_id)
         account.delete_instance()
@@ -104,7 +104,7 @@ def delete_Account(user_id):
         print(f'No account found with userId {user_id}.')
 
 
-def get_User_Data(user_id):
+def get_user_data(user_id):
     try:
         account = AccountData.get(AccountData.userId == user_id)
         return model_to_dict(account)

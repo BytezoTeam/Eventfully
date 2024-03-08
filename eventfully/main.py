@@ -60,52 +60,43 @@ def index():
 
 
 # Check the Cookie or redirect to log in
-@app.route("/accounts/addCookie")
-def checkAccount():
+@app.route("/accounts/add_cookie")
+def check_account():
     userID = request.cookies.get('userID')
     if userID:
-        return db.get_User_Data(request.cookies.get("userID"))
+        return db.get_user_data(request.cookies.get("userID"))
     else:
         return redirect("/", 302)
 
 
-# TODO: reimplement (Doesn't work)
-# Log out and delete the UserID-Cookie
-# @app.route("/accounts/logout")
-# def logout():
-#    resp = make_response(redirect("/", 302))
-#    resp.set_cookie('userID', '', expires=0, secure=True, httponly=True)
-#    return resp
-
 
 # Log out and delete the UserID-Cookie    
 @app.route("/accounts/delete")
-def deleteAccount():
-    db.delete_Account(request.cookies.get("userID"))
-    # return redirect("/accounts/logout", 302)
+def delete_account():
+    db.delete_account(request.cookies.get("userID"))
     return redirect("/", 302)
 
 
 # Adding the User Data to the Database and setting the UserID-Cookie
-@app.route("/accounts/addAccount", methods=["POST"])
-def registerUser():
+@app.route("/accounts/add_account", methods=["POST"])
+def register_user():
     userID = create_user_id()
     username = request.form.get("username")
     password = request.form.get("password")
     email = request.form.get("email")
 
-    db.add_Account(username, password, userID, email)
-    resp = make_response(redirect("/accounts/addCookie", 302))
+    db.add_account(username, password, userID, email)
+    resp = make_response(redirect("/accounts/add_cookie", 302))
     resp.set_cookie('userID', userID, secure=True, httponly=True)
     return resp
 
 
 # Checking Password and Username and setting UserID-Cookie
-@app.route("/accounts/checkAccount")
-def loginUser():
+@app.route("/accounts/check_account")
+def login_user():
     userID = db.authenticate_user(request.args.get("username"), request.args.get("password"))
     if userID:
-        resp = make_response(redirect("/accounts/addCookie", 302))
+        resp = make_response(redirect("/accounts/add_cookie", 302))
         resp.set_cookie('userID', userID, secure=True, httponly=True)
         return resp
     else:
@@ -120,12 +111,6 @@ def add_window():
 @app.route("/filter_setting", methods=["GET"])
 def filter_setting():
     return render_template('filter_setting.html')
-
-
-# @app.route("/api/events/search")
-# def search_events():
-#     print(request.args)
-#     return "", 200
 
 
 @app.route("/api/search", methods=["GET"])
@@ -143,30 +128,6 @@ def get_events():
 @app.route("/api/emails", methods=["GET"])
 def emails():
     return jsonify(list(db.EMailContent.select().dicts()))
-
-
-# TODO: reimplement
-# @app.route("/api/add_event", methods=["POST"])
-# def add_event():
-#     # location = request.args.get("location", "")
-#     tag = get_topic(request.args.get("description", "") + request.args.get("title", ""))
-#
-#     event = db.Event(
-#         title=request.args.get("title", ""),
-#         description=request.args.get("description", ""),
-#         link=request.args.get("link", ""),
-#         price=request.args.get("price", ""),
-#         tags=tag,
-#         start_date=request.args.get("start_date", ""),
-#         end_date=request.args.get("end_date", ""),
-#         age=request.args.get("age", ""),
-#         accessibility=request.args.get("accessibility", ""),
-#         address=request.args.get("address", ""),
-#         city=request.args.get("city", ""),
-#     )
-#     db.add_event(event)
-#
-#     return "", 200
 
 
 if __name__ == '__main__':
