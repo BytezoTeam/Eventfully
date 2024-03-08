@@ -1,67 +1,90 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="de">
 <head>
-    {% include "default_head.html" %}
-
-    <title>Eventfullly</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventfully</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
     <style>
-        #turtle {
-          animation: 15s infinite linear slide;
+        .dark-mode {
+            background-color: #1a202c;
+            color: #a0aec0;
         }
-
-        @keyframes slide {
-          from {
-            margin-left: 100%;
-          }
-
-          to {
-            margin-left: 0%;
-          }
+        .dark-mode .bg-white {
+            background-color: #2d3748;
+        }
+        .dark-mode .text-black {
+            color: #a0aec0;
         }
     </style>
 </head>
-
-<header>
-    <nav class="navbar shadow container-fluid">
-        <div class="container-fluid">
-            <div class="navbar-brand">
-<!--                <img src="/static/logo.png" style="width: 1em; height: 1em" alt="Logo"/>-->
-                <h1>Eventfully</h1>
+<body class="bg-gray-200 p-6 text-black">
+    <div class="container mx-auto">
+        <header class="flex justify-between items-center bg-white rounded shadow p-6 mb-4">
+            <h1 class="text-3xl font-bold">Eventfully</h1>
+            <div>
+                <button id="loginBtn" class="bg-blue-500 text-white rounded p-2 mr-2">Anmelden</button>
+                <button id="darkModeBtn" class="ml-2 bg-gray-500 text-white rounded p-2">🌞</button>
             </div>
-            <form
-                    hx-get="/api/events/search"
-                    hx-target="#search-result"
-                    hx-swap="innerHTML"
-                    role="search"
-                    class="d-flex"
-            >
-                <input
-                        id="search"
-                        name="search"
-                        type="text"
-                        placeholder="Suche"
-                        autofocus
-                        class="form-control shadow-sm me-2"
-                />
-
-                <!-- Plus-Button, um zur anderen Seite zu gelangen -->
-                <button type="submit" class="btn btn-primary shadow-sm">Suchen</button>
-            </form>
-        </div>
-    </nav>
-</header>
-
-<body>
-
-<main class="container">
-    <!-- Show events -->
-    <div class="container" id="search-result"></div>
-</main>
-
-<footer>
-    <div style="position: absolute; width: 80%">
-        <img src="/static/schildkröte.gif" id="turtle" alt="Logo"/>
+        </header>
+        <main>
+            <section class="bg-white rounded shadow p-6 mb-4">
+                <h2 class="text-2xl mb-4">Event Suche</h2>
+                <form class="flex items-center" hx-get="/api/search" hx-target="#event-search-result">
+                    <input class="w-full p-2 border rounded mb-2" type="text" placeholder="Suche nach Events...">
+                    <button type="submit" class="ml-2 bg-blue-500 text-white rounded p-2">Suchen</button>
+                    <button class="ml-2 bg-green-500 text-white rounded p-2">Filter</button>
+                </form>
+            </section>
+            <section id="event-search-result" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></section>
+        </main>
     </div>
-</footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 flex items-center justify-center z-50 invisible opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out">
+        <form
+            hx-post="/accounts/add_account"
+            id="loginBox" class="bg-white rounded shadow p-6 m-4 max-w-xs max-h-full text-center"
+            hx-swap="none"
+        >
+            <h2 class="text-2xl mb-4">Anmelden</h2>
+            <input id="email" name="email" class="w-full p-2 border rounded mb-2" type="email" placeholder="E-Mail" required>
+            <input id="username" name="username" class="w-full p-2 border rounded mb-2" type="text" placeholder="Benutzername" required>
+            <input id="password" name="password" class="w-full p-2 border rounded mb-2" type="password" placeholder="Passwort" required>
+<!--            <button class="w-full bg-blue-500 text-white rounded p-2 mb-2">Anmelden</button>-->
+            <button type="submit" class="w-full bg-green-500 text-white rounded p-2">Jetzt registrieren</button>
+        </form>
+    </div>
+
+    <script>
+        var loginModal = document.getElementById('loginModal');
+        var loginBox = document.getElementById('loginBox');
+        var loginBtn = document.getElementById('loginBtn');
+        var darkModeBtn = document.getElementById('darkModeBtn');
+
+        loginBtn.addEventListener('click', function() {
+            loginModal.classList.remove('invisible', 'pointer-events-none', 'opacity-0');
+            loginModal.classList.add('visible', 'pointer-events-auto', 'opacity-100');
+        });
+
+        document.addEventListener('click', function(event) {
+            var isClickInside = loginBox.contains(event.target);
+            var isClickOnButton = loginBtn.contains(event.target);
+            if (!isClickInside && !isClickOnButton && loginModal.classList.contains('visible')) {
+                loginModal.classList.remove('visible', 'pointer-events-auto', 'opacity-100');
+                loginModal.classList.add('invisible', 'pointer-events-none', 'opacity-0');
+            }
+        });
+
+        darkModeBtn.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeBtn.textContent = '🌜';
+            } else {
+                darkModeBtn.textContent = '🌞';
+            }
+        });
+    </script>
 </body>
 </html>

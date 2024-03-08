@@ -7,8 +7,9 @@ from os import getenv, path
 
 import meilisearch as ms
 from dotenv import load_dotenv
-from peewee import Model, TextField
+from peewee import Model, TextField, DoesNotExist
 from playhouse.sqlite_ext import SqliteExtDatabase
+from playhouse.shortcuts import model_to_dict
 from pydantic import BaseModel, computed_field
 from get_project_root import root_path
 
@@ -46,6 +47,16 @@ class _DBBaseModel(Model):
         database = db
 
 
+class AccountData(Model):
+    userId = TextField(primary_key=True)
+    password = TextField()
+    username = TextField()
+    email = TextField()
+
+    class Meta:
+        database = db  # Use the existing SQLite database connection
+        
+        
 class ExisingEvents(_DBBaseModel):
     id = TextField(primary_key=True)
 
@@ -94,6 +105,42 @@ def add_event(event: Event):
     event_index.add_documents([event.model_dump()])
 
 
+# TODO: Add check to look if email is real
+def add_account(username, password, userid, email):
+    AccountData.create(
+        userId=userid,
+        email=email,
+        username=username,
+        password=password
+    )
+    return userid
+
+
+def delete_account(user_id):
+    try:
+        account = AccountData.get(AccountData.userId == user_id)
+        account.delete_instance()
+        print(f'Account with userId {user_id} was successfully deleted.')
+    except DoesNotExist:
+        print(f'No account found with userId {user_id}.')
+
+
+def get_user_data(user_id):
+    try:
+        account = AccountData.get(AccountData.userId == user_id)
+        return model_to_dict(account)
+    except DoesNotExist:
+        print(f'No account found with userId {user_id}.')
+        return None
+
+
+def authenticate_user(username, password):
+    try:
+        user = AccountData.get((AccountData.username == username) & (AccountData.password == password))
+        return user.userId
+    except DoesNotExist:
+        print("User not found or incorrect password.")
+        return False
 def add_events(events: list[Event]):
     for event in events:
         add_event(event)
@@ -116,4 +163,4 @@ def get_existing_event_ids() -> list[str]:
 
 
 db.connect()
-db.create_tables([ExisingEvents])
+db.create_tables([AccountData])
