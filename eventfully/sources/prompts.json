@@ -1,0 +1,64 @@
+{
+  "general": "Extract the following information from the given event data from the user.",
+  "fields": {
+    "title": {
+      "type": "string",
+      "description": "The title of the event"
+    },
+    "description": {
+      "type": "string",
+      "description": "The description of the event. Slightly shortened if too long."
+    },
+    "link": {
+      "type": "string",
+      "description": "The link to the event (website)"
+    },
+    "price": {
+      "type": "string",
+      "description": "The price of the event in EUR"
+    },
+    "age": {
+      "type": "string",
+      "description": "The minimum age for the event"
+    },
+    "tags": {
+      "type": "array",
+      "description": "The tags or categories that the event belongs to",
+      "items": {
+        "type": "string",
+        "enum": [
+          "music",
+          "art",
+          "theater",
+          "dance",
+          "film",
+          "literature",
+          "sports",
+          "food",
+          "festival",
+          "other"
+        ]
+      }
+    },
+    "start_date": {
+      "type": "string",
+      "description": "The start date of the event in %Y-%m-%dT%H:%M:%SZ format"
+    },
+    "end_date": {
+      "type": "string",
+      "description": "The end date of the event in %Y-%m-%dT%H:%M:%SZ format"
+    },
+    "accessibility": {
+      "type": "string",
+      "description": "The accessibility of the event. Keep it short."
+    },
+    "address": {
+      "type": "string",
+      "description": "The address where the event takes place"
+    },
+    "city": {
+      "type": "string",
+      "description": "The city where the event takes place"
+    }
+  }
+}
