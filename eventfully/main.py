@@ -102,10 +102,5 @@ def get_events():
     return render_template("api/events.html", events=result)
 
 
-@app.route("/api/emails", methods=["GET"])
-def emails():
-    return jsonify(list(db.EMailContent.select().dicts()))
-
-
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True)
