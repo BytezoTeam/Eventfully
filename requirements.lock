@@ -43,6 +43,8 @@ flask==3.0.2
     # via flask-apscheduler
 flask-apscheduler==1.13.1
     # via eventfully
+get-project-root==0.2
+    # via eventfully
 gunicorn==21.2.0
     # via eventfully
 h11==0.14.0

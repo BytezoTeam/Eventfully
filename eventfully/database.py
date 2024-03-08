@@ -3,20 +3,21 @@
 # Simply import this file to use the database, the tables will be created automatically
 
 import atexit
-from os import getenv
+from os import getenv, path
 
 import meilisearch as ms
 from dotenv import load_dotenv
 from peewee import Model, TextField
 from playhouse.sqlite_ext import SqliteExtDatabase
 from pydantic import BaseModel, computed_field
+from get_project_root import root_path
 
 from eventfully.utils import get_hash_string
 
 load_dotenv()
 _MEILI_HOST = getenv("MEILI_HOST")
 _MEILI_KEY = getenv("MEILI_KEY")
-_PATH = "database.db"
+_SQL_DB_PATH = path.join(root_path(ignore_cwd=True), "database", "sqlite", "database.db")
 if not _MEILI_KEY:
     raise Exception("No MeiliSearch key provided. Please set MEILI_KEY in .env file.")
 if not _MEILI_HOST:
@@ -34,7 +35,7 @@ event_index.update_filterable_attributes([
 
 # SQLite with peewee
 db = SqliteExtDatabase(
-    _PATH,
+    _SQL_DB_PATH,
     pragmas={"journal_mode": "wal"},
 )
 atexit.register(lambda: db.close())

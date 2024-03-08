@@ -21,6 +21,7 @@ dependencies = [
     "gunicorn==21.*",
     "tenacity==8.*",
     "pytest==8.*",
+    "get-project-root==0.*",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
