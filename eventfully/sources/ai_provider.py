@@ -3,7 +3,7 @@ from os import getenv
 from dotenv import load_dotenv
 from openai import OpenAI
 from openai.types.chat.chat_completion import ChatCompletion
-from tenacity import retry, wait_random_exponential, stop_after_attempt, retry_if_result
+from tenacity import retry, wait_random_exponential, stop_after_attempt
 
 load_dotenv()
 OPENAI_API_KEY = getenv("OPENAI_API_KEY")

@@ -1,11 +1,11 @@
 import atexit
+
+from flask import Flask, render_template, request, make_response, redirect
 from flask_apscheduler import APScheduler
-from flask import Flask, render_template, request, jsonify, make_response, redirect
-from uuid import uuid4
-from eventfully.categorize import get_topic
-from eventfully.utils import create_user_id
+
 import eventfully.database as db
 import eventfully.sources.main as sources
+from eventfully.utils import create_user_id
 
 
 class Config:

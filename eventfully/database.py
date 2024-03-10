@@ -7,11 +7,11 @@ from os import getenv, path
 
 import meilisearch as ms
 from dotenv import load_dotenv
-from peewee import Model, TextField, DoesNotExist
-from playhouse.sqlite_ext import SqliteExtDatabase
-from playhouse.shortcuts import model_to_dict
-from pydantic import BaseModel, computed_field
 from get_project_root import root_path
+from peewee import Model, TextField, DoesNotExist
+from playhouse.shortcuts import model_to_dict
+from playhouse.sqlite_ext import SqliteExtDatabase
+from pydantic import BaseModel, computed_field
 
 from eventfully.utils import get_hash_string
 

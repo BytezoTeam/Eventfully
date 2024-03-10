@@ -1,13 +1,13 @@
-from typing import Callable
 import json
 from datetime import datetime
+from typing import Callable
 
 from beartype import beartype
 
 import eventfully.database as db
+from eventfully.sources.ai_provider import chat_completion_request
 from eventfully.sources.emails import get_emails
 from eventfully.sources.zuerichunbezahlbar_ch import get_zuerichunbezahlbar
-from eventfully.sources.ai_provider import chat_completion_request
 
 # Add new sources here
 sources: list[Callable[[], list[db.RawEvent]]] = [
@@ -80,16 +80,18 @@ def process_raw_event(raw_event: db.RawEvent, prompts_path: str) -> db.Event:
 
 
 @beartype
-def process_field(raw_event: db.RawEvent, field_name: str, field_data: dict[str, any], general_prompt: str) -> str | list[str]:
+def process_field(
+    raw_event: db.RawEvent,
+    field_name: str,
+    field_data: dict[str, any],
+    general_prompt: str,
+) -> str | list[str]:
     messages = [
         {
             "role": "system",
-            "content": general_prompt + "\n### Information\n" + str(field_data)
+            "content": general_prompt + "\n### Information\n" + str(field_data),
         },
-        {
-            "role": "user",
-            "content": str(raw_event)
-        }
+        {"role": "user", "content": str(raw_event)},
     ]
     tools = [
         {
@@ -99,12 +101,10 @@ def process_field(raw_event: db.RawEvent, field_name: str, field_data: dict[str,
                 "description": f"Get {field_data['description']}",
                 "parameters": {
                     "type": "object",
-                    "properties": {
-                        field_name: field_data
-                    },
-                    "required": [field_name]
-                }
-            }
+                    "properties": {field_name: field_data},
+                    "required": [field_name],
+                },
+            },
         }
     ]
 
