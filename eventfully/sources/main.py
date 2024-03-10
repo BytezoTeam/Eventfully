@@ -5,6 +5,7 @@ from typing import Callable
 from beartype import beartype
 
 import eventfully.database as db
+from eventfully.logger import log
 from eventfully.sources.ai_provider import chat_completion_request
 from eventfully.sources.emails import get_emails
 from eventfully.sources.zuerichunbezahlbar_ch import get_zuerichunbezahlbar
@@ -22,15 +23,15 @@ def main():
     for source in sources:
         source_name = source.__name__
 
-        print(f"Getting {source_name} ...")
+        log.debug(f"Getting data from source {source_name} ...")
         try:
             result = source()
         except Exception as e:
-            print(f"[ERROR] {source_name} {str(e)}")
+            log.warning(f"Error while getting data from {source_name}", exc_info=e)
             continue
 
         if result is not list[db.RawEvent]:
-            print(f"[ERROR] {source_name} returned wrong type {type(result)}")
+            log.error(f"{source_name} returned wrong type {type(result)}")
             continue
 
         raw_events += result
@@ -47,7 +48,7 @@ def main():
         try:
             new_event = process_raw_event(raw_event, "prompts.json")
         except Exception as e:
-            print(f"[ERROR] {str(e)}")
+            log.warning(f"Error while processing event '{raw_event}'", exc_info=e)
             continue
         new_events.append(new_event)
 

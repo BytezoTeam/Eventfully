@@ -6,6 +6,10 @@ from flask_apscheduler import APScheduler
 import eventfully.database as db
 import eventfully.sources.main as sources
 from eventfully.utils import create_user_id
+from eventfully.logger import log
+
+
+log.info("Starting Server ...")
 
 
 class Config:
@@ -23,11 +27,17 @@ atexit.register(lambda: scheduler.shutdown())
 # Scheduled tasks
 @scheduler.task("cron", id="get_data", hour=0)
 def get_data():
-    app.logger.info("JOB: get_data")
+    log.info("Running scheduled job get_data")
     sources.main()
 
 
 scheduler.start()
+
+
+@app.errorhandler(500)
+def internal_error_server_error(error):
+    log.error("Internal Server Error: " + str(error))
+    return make_response(), 500
 
 
 # Routes

@@ -20,14 +20,14 @@ _MEILI_HOST = getenv("MEILI_HOST")
 _MEILI_KEY = getenv("MEILI_KEY")
 _SQL_DB_PATH = path.join(root_path(ignore_cwd=True), "database", "sqlite", "database.db")
 if not _MEILI_KEY:
-    raise Exception("No MeiliSearch key provided. Please set MEILI_KEY in .env file.")
+    raise ValueError("No MeiliSearch key provided. Please set MEILI_KEY in .env file.")
 if not _MEILI_HOST:
-    raise Exception("No MeiliSearch host provided. Please set MEILI_HOST in .env file.")
+    raise ValueError("No MeiliSearch host provided. Please set MEILI_HOST in .env file.")
 
 # Meilisearch
 ms_client = ms.Client(_MEILI_HOST, _MEILI_KEY)
 if not ms_client.is_healthy():
-    raise Exception("Cannot connect to Meilisearch. Is it running? Correct host and key in .env file?")
+    raise ConnectionError("Cannot connect to Meilisearch. Is it running? Correct host and key in .env file?")
 event_index = ms_client.index("events")
 ms_client.create_index("events", {"primaryKey": "id"})
 event_index.update_filterable_attributes([

@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from openai.types.chat.chat_completion import ChatCompletion
 from tenacity import retry, wait_random_exponential, stop_after_attempt
+from eventfully.logger import log
+
 
 load_dotenv()
 OPENAI_API_KEY = getenv("OPENAI_API_KEY")
@@ -24,5 +26,5 @@ def chat_completion_request(messages: list[dict[str, any]], tools=None, tool_cho
         )
         return response
     except Exception as e:
-        print("Unable to generate ChatCompletion response")
+        log.debug("Unable to generate ChatCompletion response", exc_info=e)
         return e
