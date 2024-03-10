@@ -47,15 +47,12 @@ class _DBBaseModel(Model):
         database = db
 
 
-class AccountData(Model):
+class AccountData(_DBBaseModel):
     userId = TextField(primary_key=True)
     password = TextField()
     username = TextField()
     email = TextField()
 
-    class Meta:
-        database = db  # Use the existing SQLite database connection
-        
         
 class ExisingEvents(_DBBaseModel):
     id = TextField(primary_key=True)
