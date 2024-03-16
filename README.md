@@ -1,23 +1,33 @@
 # Eventfully
+![image](https://img.shields.io/badge/Sqlite-003B57?style=for-the-badge&logo=sqlite&logoColor=white) ![image](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white) ![image](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white) ![img](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue) ![img](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+
+Eventfully is a Python-based web-application designed to process and show various events in your area
 
 ## Development Setup
-### Meilisearch (Search Database Server)
+### 1. Clone or Download Eventfully
+- Download Eventfully from GitHub or clone the repository with `git clone https://github.com/BytezoTeam/Eventfully` from your Terminal with [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) installed
+- Open the Project in your Terminal or in your Files
+  
+### 2. Install Meilisearch (Search Database Server)
 - [install and run Meilisearch](https://www.meilisearch.com/docs/learn/getting_started/installation)
 - note down master key and server url in the .env file
-### .env File
+  
+### 3. Make the .env File
 
 The file must be named `.env` and should be located in the root of the project (the same file level as `README.md` file).
+It should contain this information (replace values with yours):
 
 ```
 OPENAI_API_KEY="<openai api key>"
 MEILI_KEY="<meilisearch master key>"
 MEILI_HOST="<address of the meilisearch server e.g. http://localhost:7700>"
 ```
-
-### Python
+### 4. Install Rye
 - install [Rye](https://rye-up.com/guide/installation/)
 - run `rye sync` inside the folder to install the required python packages
-- start the server with `rye run dev`
+
+### 5. Run Eventfully
+- start the server with `rye run dev` or use `rye run main` (Only on Windows) to start the startup program
 
 ## Tech Stack
 - [Bootstrap](https://getbootstrap.com/) for CSS (frontend)
