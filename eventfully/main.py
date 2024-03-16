@@ -43,18 +43,18 @@ def internal_error_server_error(error):
 # Routes
 @app.route("/", methods=["GET"])
 def index():
-    return render_template('index.html')
-
-
-# Check the Cookie or redirect to log in
-@app.route("/accounts/add_cookie")
-def check_account():
     userID = request.cookies.get('userID')
     if userID:
-        return db.get_user_data(request.cookies.get("userID"))
+        try:
+            user = db.get_user_data(userID)
+            log.info("Cookie found")
+            return render_template('index.html', logged_in=True, username=user.get("username"))
+        except AttributeError:
+            log.error("User with userID " + userID + " is not in the database")
+            return render_template('index.html', logged_in=False)
     else:
-        return redirect("/", 302)
-
+        log.info("No user is logged in")
+        return render_template('index.html', logged_in=False)
 
 
 # Log out and delete the UserID-Cookie    
@@ -73,8 +73,9 @@ def register_user():
     email = request.form.get("email")
 
     db.add_account(username, password, userID, email)
-    resp = make_response(redirect("/accounts/add_cookie", 302))
-    resp.set_cookie('userID', userID, secure=True, httponly=True)
+    resp = make_response(redirect("/", 302))
+    resp.set_cookie('userID', userID)
+    log.info("User with userID " + userID + " was successfully added.")
     return resp
 
 
@@ -83,12 +84,17 @@ def register_user():
 def login_user():
     userID = db.authenticate_user(request.args.get("username"), request.args.get("password"))
     if userID:
-        resp = make_response(redirect("/accounts/add_cookie", 302))
+        resp = make_response(redirect("/", 302))
         resp.set_cookie('userID', userID, secure=True, httponly=True)
         return resp
     else:
         return redirect("/login", 302)
 
+@app.route("/accounts/logout")
+def logout_user():
+    resp = make_response(redirect("/", 302))
+    resp.set_cookie('userID', "", expires=0)
+    return resp
 
 @app.route("/add_window", methods=["GET"])
 def add_window():

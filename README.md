@@ -4,6 +4,15 @@
 ### Meilisearch (Search Database Server)
 - [install and run Meilisearch](https://www.meilisearch.com/docs/learn/getting_started/installation)
 - note down master key and server url in the [.env file](/docs/dot-env.md)
+# .env File
+
+The file must be named `.env` and should be located in the root of the project (the same file level as `README.md` file).
+
+```
+OPENAI_API_KEY="<openai api key>"
+MEILI_KEY="<meilisearch master key>"
+MEILI_HOST="<address of the meilisearch server e.g. http://localhost:7700>"
+```
 
 ### Python
 - install [Rye](https://rye-up.com/guide/installation/)

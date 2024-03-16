@@ -24,7 +24,13 @@
         <header class="flex justify-between items-center bg-white rounded shadow p-6 mb-4">
             <h1 class="text-3xl font-bold">Eventfully</h1>
             <div>
-                <button id="loginBtn" class="bg-blue-500 text-white rounded p-2 mr-2">Anmelden</button>
+                {%if logged_in %}
+                    <span class="mr-2">{{ username }}</span>
+                    <button onclick="window.location.href='/profile'" class="bg-blue-500 text-white rounded p-2 mr-2">Profil</button>
+                    <button onclick="window.location.href='/accounts/logout'" class="bg-red-500 text-white rounded p-2 mr-2">Abmelden</button>
+                {% else %}
+                    <button id="loginBtn" class="bg-blue-500 text-white rounded p-2 mr-2">Anmelden</button>
+                {% endif %}
                 <button id="darkModeBtn" class="ml-2 bg-gray-500 text-white rounded p-2">🌞</button>
             </div>
         </header>
@@ -52,10 +58,18 @@
             <input id="email" name="email" class="w-full p-2 border rounded mb-2" type="email" placeholder="E-Mail" required>
             <input id="username" name="username" class="w-full p-2 border rounded mb-2" type="text" placeholder="Benutzername" required>
             <input id="password" name="password" class="w-full p-2 border rounded mb-2" type="password" placeholder="Passwort" required>
-            <button class="w-full bg-blue-500 text-white rounded p-2 mb-2">Anmelden</button>
             <button type="submit" class="w-full bg-green-500 text-white rounded p-2">Jetzt registrieren</button>
+      <!--  <button class="w-full bg-blue-500 text-white rounded p-2 mb-2">Anmelden</button> -->
         </form>
     </div>
+    {% if logged_in == False %}
+    <script>
+     loginBtn.addEventListener('click', function() {
+            loginModal.classList.remove('invisible', 'pointer-events-none', 'opacity-0');
+            loginModal.classList.add('visible', 'pointer-events-auto', 'opacity-100');
+        });
+    </script>
+    {% endif %}
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -86,7 +100,6 @@
             var loginModal = document.getElementById('loginModal');
             var loginBox = document.getElementById('loginBox');
             var loginBtn = document.getElementById('loginBtn');
-            // ...
         });
     </script>
 </body>
