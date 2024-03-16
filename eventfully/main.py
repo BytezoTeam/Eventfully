@@ -1,7 +1,7 @@
 import atexit
-from uuid import uuid4
 from datetime import datetime, timedelta
 from http import HTTPStatus
+from uuid import uuid4
 
 from flask import Flask, render_template, request, make_response
 from flask_apscheduler import APScheduler
@@ -12,7 +12,6 @@ from wtforms.validators import DataRequired, Length
 import eventfully.database as db
 import eventfully.sources.main as sources
 from eventfully.logger import log
-
 
 log.info("Starting Server ...")
 
