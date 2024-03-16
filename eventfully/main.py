@@ -23,6 +23,7 @@ class Config:
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = uuid4().hex
+app.config["WTF_CSRF_ENABLED"] = False
 
 scheduler = APScheduler()
 scheduler.init_app(app)
