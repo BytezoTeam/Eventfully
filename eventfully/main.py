@@ -81,7 +81,7 @@ class SignUpForm(FlaskForm):
 
 @app.route("/api/account/signup", methods=["POST"])
 def signup_account():
-    form = SignUpForm(request.form)
+    form = SignUpForm()
     if not form.validate():
         return make_response(), HTTPStatus.BAD_REQUEST
 
@@ -104,7 +104,7 @@ class SignInForm(FlaskForm):
 
 @app.route("/api/account/signin", methods=["POST"])
 def signin_account():
-    form = SignInForm(request.form)
+    form = SignInForm()
     if not form.validate():
         return make_response(), HTTPStatus.BAD_REQUEST
 
