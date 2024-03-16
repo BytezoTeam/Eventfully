@@ -58,32 +58,35 @@
     </div>
 
     <script>
-        var loginModal = document.getElementById('loginModal');
-        var loginBox = document.getElementById('loginBox');
-        var loginBtn = document.getElementById('loginBtn');
-        var darkModeBtn = document.getElementById('darkModeBtn');
+        document.addEventListener('DOMContentLoaded', () => {
+            // Verbesserter Dunkelmodus-Code
+            var darkModeBtn = document.getElementById('darkModeBtn');
+            var preferredTheme = localStorage.getItem('preferredTheme');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-        loginBtn.addEventListener('click', function() {
-            loginModal.classList.remove('invisible', 'pointer-events-none', 'opacity-0');
-            loginModal.classList.add('visible', 'pointer-events-auto', 'opacity-100');
-        });
+            const applyTheme = (theme) => {
+                document.body.classList.toggle('dark-mode', theme === 'dark');
+                darkModeBtn.textContent = theme === 'dark' ? '🌜' : '🌞';
+            };
 
-        document.addEventListener('click', function(event) {
-            var isClickInside = loginBox.contains(event.target);
-            var isClickOnButton = loginBtn.contains(event.target);
-            if (!isClickInside && !isClickOnButton && loginModal.classList.contains('visible')) {
-                loginModal.classList.remove('visible', 'pointer-events-auto', 'opacity-100');
-                loginModal.classList.add('invisible', 'pointer-events-none', 'opacity-0');
+            if (preferredTheme) {
+                applyTheme(preferredTheme);
+            } else if (systemPrefersDark) {
+                applyTheme('dark');
             }
-        });
 
-        darkModeBtn.addEventListener('click', function() {
-            document.body.classList.toggle('dark-mode');
-            if (document.body.classList.contains('dark-mode')) {
-                darkModeBtn.textContent = '🌜';
-            } else {
-                darkModeBtn.textContent = '🌞';
-            }
+            darkModeBtn.addEventListener('click', () => {
+                let currentTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+                let newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                localStorage.setItem('preferredTheme', newTheme);
+                applyTheme(newTheme);
+            });
+
+            // Vorhandener Code für das Anmeldefenster
+            var loginModal = document.getElementById('loginModal');
+            var loginBox = document.getElementById('loginBox');
+            var loginBtn = document.getElementById('loginBtn');
+            // ...
         });
     </script>
 </body>
