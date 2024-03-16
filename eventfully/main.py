@@ -2,6 +2,7 @@ import atexit
 
 from flask import Flask, render_template, request, make_response, redirect
 from flask_apscheduler import APScheduler
+from flask_wtf.csrf import CSRFProtect
 
 import eventfully.database as db
 import eventfully.sources.main as sources
@@ -18,6 +19,8 @@ class Config:
 
 app = Flask(__name__)
 app.config.from_object(Config())
+csrf = CSRFProtect(app)
+csrf.init_app(app)
 
 scheduler = APScheduler()
 scheduler.init_app(app)
@@ -110,8 +113,6 @@ def filter_setting():
 def get_events():
     category = request.args.get("kategorie", "")
     therm = request.args.get("search", "")
-    location = request.args.get("ort", "")
-    # distance = request.args.get("distanz")
 
     result = db.search_events(therm, category)
 
