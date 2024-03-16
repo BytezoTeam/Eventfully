@@ -62,7 +62,7 @@ def index():
         return render_template('index.html', logged_in=False)
 
 
-@app.route("/api/account/delte", methods=["POST"])
+@app.route("/api/account/delete", methods=["POST"])
 def delete_account():
     user_id = request.cookies.get("user_id")
 
