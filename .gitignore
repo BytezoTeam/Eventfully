@@ -8,12 +8,5 @@ __pycache__/
 # Enviroment Variables
 .env
 
-# Database files
-database.db*
-database.db-shm
-database.db-wal
-
-# Meilisearch
-meilisearch
-data.ms/
-dumps/
+# Logs
+*.log

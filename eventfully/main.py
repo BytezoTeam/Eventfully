@@ -1,12 +1,15 @@
 import atexit
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, make_response, redirect
 from flask_apscheduler import APScheduler
 
 import eventfully.database as db
-import eventfully.emails as emails
-import eventfully.categorize as categorize
-import eventfully.scraping as scraping
+import eventfully.sources.main as sources
+from eventfully.utils import create_user_id
+from eventfully.logger import log
+
+
+log.info("Starting Server ...")
 
 
 class Config:
@@ -22,40 +25,69 @@ atexit.register(lambda: scheduler.shutdown())
 
 
 # Scheduled tasks
-@scheduler.task("cron", id="get_emails", hour=0)
-def get_emails():
-    app.logger.info("JOB: get_emails")
-    try:
-        emails.main()
-    except Exception as e:
-        app.logger.error(e)
-
-
-@scheduler.task("cron", id="scrape", hour=1)
-def scrape():
-    app.logger.info("JOB: scrape")
-    try:
-        scraping.main()
-    except Exception as e:
-        app.logger.error(e)
-
-
-@scheduler.task("cron", id="categorize", hour=6)
-def categorize():
-    app.logger.info("JOB: categorize")
-    try:
-        categorize.main()
-    except Exception as e:
-        app.logger.error(e)
+@scheduler.task("cron", id="get_data", hour=0)
+def get_data():
+    log.info("Running scheduled job get_data")
+    sources.main()
 
 
 scheduler.start()
+
+
+@app.errorhandler(500)
+def internal_error_server_error(error):
+    log.error("Internal Server Error: " + str(error))
+    return make_response(), 500
 
 
 # Routes
 @app.route("/", methods=["GET"])
 def index():
     return render_template('index.html')
+
+
+# Check the Cookie or redirect to log in
+@app.route("/accounts/add_cookie")
+def check_account():
+    userID = request.cookies.get('userID')
+    if userID:
+        return db.get_user_data(request.cookies.get("userID"))
+    else:
+        return redirect("/", 302)
+
+
+
+# Log out and delete the UserID-Cookie    
+@app.route("/accounts/delete")
+def delete_account():
+    db.delete_account(request.cookies.get("userID"))
+    return redirect("/", 302)
+
+
+# Adding the User Data to the Database and setting the UserID-Cookie
+@app.route("/accounts/add_account", methods=["POST"])
+def register_user():
+    userID = create_user_id()
+    username = request.form.get("username")
+    password = request.form.get("password")
+    email = request.form.get("email")
+
+    db.add_account(username, password, userID, email)
+    resp = make_response(redirect("/accounts/add_cookie", 302))
+    resp.set_cookie('userID', userID, secure=True, httponly=True)
+    return resp
+
+
+# Checking Password and Username and setting UserID-Cookie
+@app.route("/accounts/check_account")
+def login_user():
+    userID = db.authenticate_user(request.args.get("username"), request.args.get("password"))
+    if userID:
+        resp = make_response(redirect("/accounts/add_cookie", 302))
+        resp.set_cookie('userID', userID, secure=True, httponly=True)
+        return resp
+    else:
+        return redirect("/login", 302)
 
 
 @app.route("/add_window", methods=["GET"])
@@ -71,47 +103,6 @@ def filter_setting():
 # @app.route("/api/events/search")
 # def search_events():
 #     print(request.args)
-#     return "", 200
-
-
-@app.route("/api/search", methods=["GET"])
-def get_events():
-    category = request.args.get("kategorie", "")
-    therm = request.args.get("search", "")
-    location = request.args.get("ort", "")
-    # distance = request.args.get("distanz")
-
-    result = db.search_events(therm, category)
-
-    return render_template("api/events.html", events=result)
-
-
-@app.route("/api/emails", methods=["GET"])
-def emails():
-    return jsonify(list(db.EMailContent.select().dicts()))
-
-
-# TODO: reimplement
-# @app.route("/api/add_event", methods=["POST"])
-# def add_event():
-#     # location = request.args.get("location", "")
-#     tag = get_topic(request.args.get("description", "") + request.args.get("title", ""))
-#
-#     event = db.Event(
-#         title=request.args.get("title", ""),
-#         description=request.args.get("description", ""),
-#         link=request.args.get("link", ""),
-#         price=request.args.get("price", ""),
-#         tags=tag,
-#         start_date=request.args.get("start_date", ""),
-#         end_date=request.args.get("end_date", ""),
-#         age=request.args.get("age", ""),
-#         accessibility=request.args.get("accessibility", ""),
-#         address=request.args.get("address", ""),
-#         city=request.args.get("city", ""),
-#     )
-#     db.add_event(event)
-#
 #     return "", 200
 
 

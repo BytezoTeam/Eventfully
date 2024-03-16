@@ -1,4 +1,5 @@
 import hashlib
+from uuid import uuid4
 
 
 # Thank you, ChatGPT!
@@ -16,3 +17,8 @@ def get_hash_string(input_string):
     hash_string = hash_object.hexdigest()
 
     return hash_string
+
+
+# TODO: For safety: Add check to look if UserID already exists
+def create_user_id() -> str:
+    return str(uuid4())

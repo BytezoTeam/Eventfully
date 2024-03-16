@@ -18,6 +18,9 @@ apscheduler==3.10.4
     # via flask-apscheduler
 attrs==23.2.0
     # via aiohttp
+anyio==4.3.0
+    # via httpx
+    # via openai
     # via outcome
     # via trio
 beartype==0.17.2
@@ -29,6 +32,8 @@ blinker==1.7.0
 camel-converter==3.1.1
     # via meilisearch
 certifi==2024.2.2
+    # via httpcore
+    # via httpx
     # via requests
     # via selenium
 charset-normalizer==3.3.2
@@ -36,24 +41,46 @@ charset-normalizer==3.3.2
 click==8.1.7
     # via black
     # via flask
+distro==1.9.0
+    # via openai
 flask==3.0.2
     # via eventfully
     # via flask-apscheduler
 flask-apscheduler==1.13.1
     # via eventfully
-frozenlist==1.4.1
-    # via aiohttp
-    # via aiosignal
-gunicorn==21.2.0
+imap-tools==1.5.0
     # via eventfully
-h11==0.14.0
-    # via wsproto
 idna==3.6
     # via requests
     # via trio
     # via yarl
+h11==0.14.0
+    # via wsproto
+gunicorn==21.2.0
+    # via eventfully
+frozenlist==1.4.1
+    # via aiohttp
+    # via aiosignal
+get-project-root==0.2
+    # via eventfully
+gunicorn==21.2.0
+    # via eventfully
+h11==0.14.0
+    # via httpcore
+    # via wsproto
+httpcore==1.0.4
+    # via httpx
+httpx==0.27.0
+    # via openai
+idna==3.6
+    # via anyio
+    # via httpx
+    # via requests
+    # via trio
 imap-tools==1.5.0
     # via eventfully
+iniconfig==2.0.0
+    # via pytest
 itsdangerous==2.1.2
     # via flask
 jinja2==3.1.3
@@ -68,26 +95,32 @@ multidict==6.0.5
     # via yarl
 mypy-extensions==1.0.0
     # via black
-openai==0.28.1
+openai==1.12.0
     # via eventfully
 outcome==1.3.0.post0
     # via trio
 packaging==23.2
     # via black
     # via gunicorn
+    # via pytest
 pathspec==0.12.1
     # via black
 peewee==3.17.1
     # via eventfully
 platformdirs==4.2.0
     # via black
+pluggy==1.4.0
+    # via pytest
 pydantic==2.6.1
     # via camel-converter
     # via eventfully
+    # via openai
 pydantic-core==2.16.2
     # via pydantic
 pysocks==1.7.1
     # via urllib3
+pytest==8.0.2
+    # via eventfully
 python-dateutil==2.8.2
     # via flask-apscheduler
 python-dotenv==1.0.1
@@ -105,9 +138,14 @@ six==1.16.0
     # via apscheduler
     # via python-dateutil
 sniffio==1.3.0
+    # via anyio
+    # via httpx
+    # via openai
     # via trio
 sortedcontainers==2.4.0
     # via trio
+tenacity==8.2.3
+    # via eventfully
 tqdm==4.66.2
     # via openai
 trio==0.24.0
@@ -116,6 +154,7 @@ trio==0.24.0
 trio-websocket==0.11.1
     # via selenium
 typing-extensions==4.9.0
+    # via openai
     # via pydantic
     # via pydantic-core
     # via selenium
