@@ -77,7 +77,7 @@ def register_user():
 
     db.add_account(username, password, userID, email)
     resp = make_response(redirect("/", 302))
-    resp.set_cookie('userID', userID)
+    resp.set_cookie('userID', userID, secure=True)
     log.info("User with userID " + userID + " was successfully added.")
     return resp
 
@@ -96,7 +96,7 @@ def login_user():
 @app.route("/accounts/logout")
 def logout_user():
     resp = make_response(redirect("/", 302))
-    resp.set_cookie('userID', "", expires=0)
+    resp.set_cookie('userID', "", expires=0, secure=True)
     return resp
 
 @app.route("/add_window", methods=["GET"])
