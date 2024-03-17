@@ -67,12 +67,12 @@
         </form>
     </div>
     {% if logged_in == False %}
-    <script>
-     loginBtn.addEventListener('click', function() {
-            loginModal.classList.remove('invisible', 'pointer-events-none', 'opacity-0');
-            loginModal.classList.add('visible', 'pointer-events-auto', 'opacity-100');
-        });
-    </script>
+        <script>
+         loginBtn.addEventListener('click', function() {
+                loginModal.classList.remove('invisible', 'pointer-events-none', 'opacity-0');
+                loginModal.classList.add('visible', 'pointer-events-auto', 'opacity-100');
+            });
+        </script>
     {% endif %}
 
     <script>
