@@ -27,7 +27,12 @@
                 {%if logged_in %}
                     <span class="mr-2">{{ username }}</span>
                     <button onclick="window.location.href='/profile'" class="bg-blue-500 text-white rounded p-2 mr-2">Profil</button>
-                    <button onclick="window.location.href='/accounts/logout'" class="bg-red-500 text-white rounded p-2 mr-2">Abmelden</button>
+                    <form
+                        hx-post="/api/account/signout"
+                        hx-swap="none"
+                    >
+                    <button type="submit" class="bg-red-500 text-white rounded p-2 mr-2">Abmelden</button>
+                    </form>
                 {% else %}
                     <button id="loginBtn" class="bg-blue-500 text-white rounded p-2 mr-2">Anmelden</button>
                 {% endif %}
@@ -50,7 +55,7 @@
     <!-- Login Modal -->
     <div id="loginModal" class="fixed inset-0 flex items-center justify-center z-50 invisible opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out">
         <form
-            hx-post="/accounts/add_account"
+            hx-post="/api/account/signup"
             id="loginBox" class="bg-white rounded shadow p-6 m-4 max-w-xs max-h-full text-center"
             hx-swap="none"
         >

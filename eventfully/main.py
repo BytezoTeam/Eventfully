@@ -1,14 +1,17 @@
 import atexit
+from datetime import datetime, timedelta
+from http import HTTPStatus
+from uuid import uuid4
 
-from flask import Flask, render_template, request, make_response, redirect
+from flask import Flask, render_template, request, make_response
 from flask_apscheduler import APScheduler
-from flask_wtf.csrf import CSRFProtect
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField
+from wtforms.validators import DataRequired, Length
 
 import eventfully.database as db
 import eventfully.sources.main as sources
-from eventfully.utils import create_user_id
 from eventfully.logger import log
-
 
 log.info("Starting Server ...")
 
@@ -18,9 +21,8 @@ class Config:
 
 
 app = Flask(__name__)
-app.config.from_object(Config())
-csrf = CSRFProtect(app)
-csrf.init_app(app)
+app.config["SECRET_KEY"] = uuid4().hex
+app.config["WTF_CSRF_ENABLED"] = False
 
 scheduler = APScheduler()
 scheduler.init_app(app)
@@ -40,13 +42,13 @@ scheduler.start()
 @app.errorhandler(500)
 def internal_error_server_error(error):
     log.error("Internal Server Error: " + str(error))
-    return make_response(), 500
+    return make_response(), HTTPStatus.INTERNAL_SERVER_ERROR
 
 
 # Routes
 @app.route("/", methods=["GET"])
 def index():
-    userID = request.cookies.get('userID')
+    userID = request.cookies.get('user_id')
     if userID:
         try:
             user = db.get_user_data(userID)
@@ -60,44 +62,70 @@ def index():
         return render_template('index.html', logged_in=False)
 
 
-# Log out and delete the UserID-Cookie    
-@app.route("/accounts/delete")
+@app.route("/api/account/delete", methods=["POST"])
 def delete_account():
-    db.delete_account(request.cookies.get("userID"))
-    return redirect("/", 302)
+    user_id = request.cookies.get("user_id")
+
+    db.delete_account(user_id)
+
+    response = make_response()
+    response.delete_cookie("user_id")
+    return response, HTTPStatus.OK
 
 
-# Adding the User Data to the Database and setting the UserID-Cookie
-@app.route("/accounts/add_account", methods=["POST"])
-def register_user():
-    userID = create_user_id()
-    username = request.form.get("username")
-    password = request.form.get("password")
-    email = request.form.get("email")
-
-    db.add_account(username, password, userID, email)
-    resp = make_response(redirect("/", 302))
-    resp.set_cookie('userID', userID, secure=True)
-    log.info("User with userID " + userID + " was successfully added.")
-    return resp
+class SignUpForm(FlaskForm):
+    username = StringField("Username", validators=[DataRequired(), Length(min=4, max=20)])
+    password = PasswordField("Password", validators=[DataRequired(), Length(min=8, max=64)])
+    email = StringField("Email", validators=[DataRequired()])
 
 
-# Checking Password and Username and setting UserID-Cookie
-@app.route("/accounts/check_account")
-def login_user():
-    userID = db.authenticate_user(request.args.get("username"), request.args.get("password"))
-    if userID:
-        resp = make_response(redirect("/", 302))
-        resp.set_cookie('userID', userID, secure=True, httponly=True)
-        return resp
-    else:
-        return redirect("/login", 302)
+@app.route("/api/account/signup", methods=["POST"])
+def signup_account():
+    form = SignUpForm()
+    if not form.validate():
+        return form.errors, HTTPStatus.BAD_REQUEST
 
-@app.route("/accounts/logout")
-def logout_user():
-    resp = make_response(redirect("/", 302))
-    resp.set_cookie('userID', "", expires=0, secure=True)
-    return resp
+    user_id = str(uuid4())
+    db.add_account(form.username.data, form.password.data, user_id, form.email.data)
+
+    response = make_response()
+    expire_date = datetime.now() + timedelta(days=30)
+    response.set_cookie("user_id", user_id, httponly=True, expires=expire_date)
+
+    log.info(f"User '{form.username.data}' signed up with user_id '{user_id}'")
+
+    return response, HTTPStatus.OK
+
+
+class SignInForm(FlaskForm):
+    username = StringField("Username", validators=[DataRequired()])
+    password = PasswordField("Password", validators=[DataRequired()])
+
+
+@app.route("/api/account/signin", methods=["POST"])
+def signin_account():
+    form = SignInForm()
+    if not form.validate():
+        return form.errors, HTTPStatus.BAD_REQUEST
+
+    user_id = db.authenticate_user(form.username.data, form.password.data)
+
+    if not user_id:
+        return make_response(), HTTPStatus.UNAUTHORIZED
+
+    response = make_response()
+    expire_date = datetime.now() + timedelta(days=30)
+    response.set_cookie("user_id", user_id, httponly=True, expires=expire_date)
+    return response, HTTPStatus.OK
+
+
+@app.route("/api/account/signout", methods=["POST"])
+def signout_account():
+    response = make_response()
+    response.delete_cookie("user_id")
+
+    return response, HTTPStatus.OK
+
 
 @app.route("/add_window", methods=["GET"])
 def add_window():
