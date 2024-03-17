@@ -131,16 +131,6 @@ def signout_account():
     return response, HTTPStatus.OK
 
 
-@app.route("/add_window", methods=["GET"])
-def add_window():
-    return render_template("add_window.html")
-
-
-@app.route("/filter_setting", methods=["GET"])
-def filter_setting():
-    return render_template("filter_setting.html")
-
-
 @app.route("/api/search", methods=["GET"])
 def get_events():
     category = request.args.get("kategorie", "")
