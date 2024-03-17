@@ -48,18 +48,18 @@ def internal_error_server_error(error):
 # Routes
 @app.route("/", methods=["GET"])
 def index():
-    user_id = request.cookies.get('user_id')
+    user_id = request.cookies.get("user_id")
     if not user_id:
         log.info("No user is logged in")
-        return render_template('index.html', logged_in=False)
+        return render_template("index.html", logged_in=False)
 
     if not db.check_user_exists(user_id):
         log.error(f"User with user_id '{user_id}' is not in the database")
-        return render_template('index.html', logged_in=False)
+        return render_template("index.html", logged_in=False)
 
     user = db.get_user_data(user_id)
     log.info("Cookie found")
-    return render_template('index.html', logged_in=True, username=user.get("username"))
+    return render_template("index.html", logged_in=True, username=user.get("username"))
 
 
 @app.route("/api/account/delete", methods=["POST"])
@@ -74,8 +74,12 @@ def delete_account():
 
 
 class SignUpForm(FlaskForm):
-    username = StringField("Username", validators=[DataRequired(), Length(min=4, max=20)])
-    password = PasswordField("Password", validators=[DataRequired(), Length(min=8, max=64)])
+    username = StringField(
+        "Username", validators=[DataRequired(), Length(min=4, max=20)]
+    )
+    password = PasswordField(
+        "Password", validators=[DataRequired(), Length(min=8, max=64)]
+    )
     email = StringField("Email", validators=[DataRequired()])
 
 
@@ -129,12 +133,12 @@ def signout_account():
 
 @app.route("/add_window", methods=["GET"])
 def add_window():
-    return render_template('add_window.html')
+    return render_template("add_window.html")
 
 
 @app.route("/filter_setting", methods=["GET"])
 def filter_setting():
-    return render_template('filter_setting.html')
+    return render_template("filter_setting.html")
 
 
 @app.route("/api/search", methods=["GET"])
@@ -147,5 +151,5 @@ def get_events():
     return render_template("api/events.html", events=result)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
