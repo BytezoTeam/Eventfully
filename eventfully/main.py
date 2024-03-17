@@ -83,7 +83,7 @@ class SignUpForm(FlaskForm):
 def signup_account():
     form = SignUpForm()
     if not form.validate():
-        return make_response(), HTTPStatus.BAD_REQUEST
+        return form.errors, HTTPStatus.BAD_REQUEST
 
     user_id = str(uuid4())
     db.add_account(form.username.data, form.password.data, user_id, form.email.data)
@@ -106,7 +106,7 @@ class SignInForm(FlaskForm):
 def signin_account():
     form = SignInForm()
     if not form.validate():
-        return make_response(), HTTPStatus.BAD_REQUEST
+        return form.errors, HTTPStatus.BAD_REQUEST
 
     user_id = db.authenticate_user(form.username.data, form.password.data)
 
