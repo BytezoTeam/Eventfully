@@ -48,7 +48,7 @@ def internal_error_server_error(error):
 # Routes
 @app.route("/", methods=["GET"])
 def index():
-    userID = request.cookies.get('userID')
+    userID = request.cookies.get('user_id')
     if userID:
         try:
             user = db.get_user_data(userID)
@@ -90,7 +90,7 @@ def signup_account():
 
     response = make_response()
     expire_date = datetime.now() + timedelta(days=30)
-    response.set_cookie("user_id", user_id, secure=True, httponly=True, expires=expire_date)
+    response.set_cookie("user_id", user_id, httponly=True, expires=expire_date)
 
     log.info(f"User '{form.username.data}' signed up with user_id '{user_id}'")
 
@@ -115,7 +115,7 @@ def signin_account():
 
     response = make_response()
     expire_date = datetime.now() + timedelta(days=30)
-    response.set_cookie("user_id", user_id, secure=True, httponly=True, expires=expire_date)
+    response.set_cookie("user_id", user_id, httponly=True, expires=expire_date)
     return response, HTTPStatus.OK
 
 
