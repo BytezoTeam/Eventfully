@@ -138,6 +138,16 @@ def authenticate_user(username, password):
     except DoesNotExist:
         print("User not found or incorrect password.")
         return False
+
+
+def check_user_exists(user_id: str):
+    try:
+        AccountData.get(AccountData.userId == user_id)
+        return True
+    except DoesNotExist:
+        return False
+
+
 def add_events(events: list[Event]):
     for event in events:
         add_event(event)

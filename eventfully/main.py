@@ -48,18 +48,18 @@ def internal_error_server_error(error):
 # Routes
 @app.route("/", methods=["GET"])
 def index():
-    userID = request.cookies.get('user_id')
-    if userID:
-        try:
-            user = db.get_user_data(userID)
-            log.info("Cookie found")
-            return render_template('index.html', logged_in=True, username=user.get("username"))
-        except AttributeError:
-            log.error("User with userID " + userID + " is not in the database")
-            return render_template('index.html', logged_in=False)
-    else:
+    user_id = request.cookies.get('user_id')
+    if not user_id:
         log.info("No user is logged in")
         return render_template('index.html', logged_in=False)
+
+    if not db.check_user_exists(user_id):
+        log.error(f"User with user_id '{user_id}' is not in the database")
+        return render_template('index.html', logged_in=False)
+
+    user = db.get_user_data(user_id)
+    log.info("Cookie found")
+    return render_template('index.html', logged_in=True, username=user.get("username"))
 
 
 @app.route("/api/account/delete", methods=["POST"])
