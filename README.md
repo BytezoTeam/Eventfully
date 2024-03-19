@@ -3,6 +3,12 @@
 
 Eventfully is a Python-based web-application designed to process and show various events in your area
 
+## Statistics
+![image](https://img.shields.io/github/issues-search/BytezoTeam/Eventfully?query=is%3Aissue%20is%3Aclosed%20&style=flat-square&label=Closed%20Issues)
+![image](https://github.com/BytezoTeam/Eventfully/actions/workflows/codeql.yml/badge.svg?style=flat-square)
+![image](https://tokei.rs/b1/github/BytezoTeam/Eventfully)
+![image](https://tokei.rs/b1/github/BytezoTeam/Eventfully?category=files)
+
 ## Development Setup
 ### 1. Clone or Download Eventfully
 - Download Eventfully from GitHub or clone the repository with `git clone https://github.com/BytezoTeam/Eventfully` from your Terminal with [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) installed
