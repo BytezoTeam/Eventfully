@@ -6,6 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 import eventfully.database as db
+from eventfully.logger import log
 
 
 def get_zuerichunbezahlbar() -> list[db.RawEvent]:
@@ -31,7 +32,6 @@ def _unbezahlbar(browser: webdriver.Chrome) -> list[db.RawEvent]:
             try:
                 event.click()
             except selenium.common.exceptions.ElementClickInterceptedException:
-                print("Problem")
                 continue
 
             try:
@@ -45,10 +45,9 @@ def _unbezahlbar(browser: webdriver.Chrome) -> list[db.RawEvent]:
             except (
                     selenium.common.exceptions.TimeoutException,
                     selenium.common.exceptions.ElementClickInterceptedException):
-                print("Problem")
                 continue
 
-            print(title)
+            log.debug(f"Got event '{title}'")
 
             _get_element(browser, By.CSS_SELECTOR, ".close-reveal-modal").click()
 

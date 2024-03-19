@@ -23,15 +23,15 @@ def main():
     for source in sources:
         source_name = source.__name__
 
-        log.debug(f"Getting data from source {source_name} ...")
+        log.debug(f"Getting data from source '{source_name}' ...")
         try:
             result = source()
         except Exception as e:
-            log.warning(f"Error while getting data from {source_name}", exc_info=e)
+            log.warning(f"Error while getting data from '{source_name}'", exc_info=e)
             continue
 
         if result is not list[db.RawEvent]:
-            log.error(f"{source_name} returned wrong type {type(result)}")
+            log.error(f"'{source_name}' returned wrong type {type(result)}")
             continue
 
         raw_events += result
