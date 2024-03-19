@@ -30,7 +30,8 @@ def main():
             log.warning(f"Error while getting data from '{source_name}'", exc_info=e)
             continue
 
-        if result is not list[db.RawEvent]:
+        # Check if the result is a list of RawEvents
+        if not (isinstance(result, list) and all(isinstance(i, db.RawEvent) for i in result)):
             log.error(f"'{source_name}' returned wrong type {type(result)}")
             continue
 
