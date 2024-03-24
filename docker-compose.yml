@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  meilisearch:
+    image: "getmeili/meilisearch:v1.7"
+    environment:
+      MEILI_MASTER_KEY: ""  # Change this to a secure value
+    volumes:
+      - "meilisearch-data:/meili_data"
+
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - "sqlite-data:/app/database/sqlite"
+    environment:
+      MEILI_HOST: "http://meilisearch:7700"
+      MEILI_KEY: ""   # Change this to a secure value
+      OPENAI_API_KEY: ""    # Change this to your OpenAI API key
+    depends_on:
+      - "meilisearch"
+
+volumes:
+  meilisearch-data:
+  sqlite-data:
