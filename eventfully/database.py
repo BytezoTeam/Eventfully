@@ -97,9 +97,14 @@ class RawEvent(BaseModel):
         return get_hash_string(self.raw)
 
 
+# TODO: add fail check
 def add_event(event: Event):
-    # TODO: add fail check
     event_index.add_documents([event.model_dump()])
+
+
+def add_events(events: list[Event]):
+    event_dicts = [event.model_dump() for event in events]
+    event_index.add_documents(event_dicts)
 
 
 # TODO: Add check to look if email is real
@@ -146,11 +151,6 @@ def check_user_exists(user_id: str):
         return True
     except DoesNotExist:
         return False
-
-
-def add_events(events: list[Event]):
-    for event in events:
-        add_event(event)
 
 
 def search_events(query: str, search_tag: str) -> list[Event]:
