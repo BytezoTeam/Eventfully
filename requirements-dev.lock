@@ -54,6 +54,8 @@ flask-wtf==1.2.1
     # via eventfully
 get-project-root==0.2
     # via eventfully
+goodtools==0.3
+    # via eventfully
 gunicorn==21.2.0
     # via eventfully
 h11==0.14.0
