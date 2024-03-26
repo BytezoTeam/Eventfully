@@ -13,7 +13,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - "sqlite-data:/app/database/sqlite"
+      - "sqlite-data:/home/eventfully/database/sqlite"
     environment:
       MEILI_HOST: "http://meilisearch:7700"
       MEILI_KEY: ""   # Change this to a secure value
