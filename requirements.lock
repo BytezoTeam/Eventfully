@@ -31,11 +31,17 @@ certifi==2024.2.2
     # via httpx
     # via requests
     # via selenium
+cffi==1.16.0
+    # via trio
 charset-normalizer==3.3.2
     # via requests
 click==8.1.7
     # via black
     # via flask
+colorama==0.4.6
+    # via click
+    # via pytest
+    # via tqdm
 distro==1.9.0
     # via openai
 flask==3.0.2
@@ -97,6 +103,8 @@ platformdirs==4.2.0
     # via black
 pluggy==1.4.0
     # via pytest
+pycparser==2.21
+    # via cffi
 pydantic==2.6.1
     # via camel-converter
     # via eventfully
@@ -141,6 +149,8 @@ typing-extensions==4.9.0
     # via pydantic
     # via pydantic-core
     # via selenium
+tzdata==2024.1
+    # via tzlocal
 tzlocal==5.2
     # via apscheduler
 urllib3==2.2.1
