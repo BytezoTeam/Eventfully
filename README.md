@@ -1,7 +1,7 @@
 # Eventfully
 ![image](https://img.shields.io/badge/Sqlite-003B57?style=for-the-badge&logo=sqlite&logoColor=white) ![image](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white) ![image](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white) ![img](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue) ![img](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white) ![ChatGPT](https://img.shields.io/badge/chatGPT-74aa9c?style=for-the-badge&logo=openai&logoColor=white)
 
-Eventfully is a Python-based web-application designed to process and show various events in your area
+Eventfully is a python based web-application designed to process and show various events in your area
 
 ## Statistics
 ![image](https://img.shields.io/github/issues-search/BytezoTeam/Eventfully?query=is%3Aissue%20is%3Aclosed%20&style=flat-square&label=Closed%20Issues)
@@ -11,14 +11,14 @@ Eventfully is a Python-based web-application designed to process and show variou
 
 ## Development Setup
 ### 1. Clone or Download Eventfully
-- Download Eventfully from GitHub or clone the repository with `git clone https://github.com/BytezoTeam/Eventfully` from your Terminal with [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) installed
-- Open the Project in your Terminal or in your Files
+- download Eventfully from GitHub or clone the repository with `git clone https://github.com/BytezoTeam/Eventfully` from your terminal with [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) installed
+- open the project in your terminal or in your files
   
 ### 2. Install Meilisearch (Search Database Server)
 - [install and run Meilisearch](https://www.meilisearch.com/docs/learn/getting_started/installation)
 - note down master key and server url in the .env file
   
-### 3. Make the .env File
+### 3. Make a .env File
 
 The file must be named `.env` and should be located in the root of the project (the same file level as `README.md` file).
 It should contain this information (replace values with yours):
