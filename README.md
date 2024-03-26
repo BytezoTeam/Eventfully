@@ -1,13 +1,8 @@
 # Eventfully
-![image](https://img.shields.io/badge/Sqlite-003B57?style=for-the-badge&logo=sqlite&logoColor=white) ![image](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white) ![image](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white) ![img](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue) ![img](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white) ![ChatGPT](https://img.shields.io/badge/chatGPT-74aa9c?style=for-the-badge&logo=openai&logoColor=white)
+![sqlite batch](https://img.shields.io/badge/Sqlite-003B57?style=for-the-badge&logo=sqlite&logoColor=white) ![bootstrap batch](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white) ![flask batch](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white) ![pyhton batch](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue) ![html batch](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white) ![chatgpt batch](https://img.shields.io/badge/chatGPT-74aa9c?style=for-the-badge&logo=openai&logoColor=white) <br>
+![closed issues batch](https://img.shields.io/github/issues-search/BytezoTeam/Eventfully?query=is%3Aissue%20is%3Aclosed%20&style=flat-square&label=Closed%20Issues) ![codeql status batch](https://github.com/BytezoTeam/Eventfully/actions/workflows/codeql.yml/badge.svg?style=flat-square) ![total lines batch](https://tokei.rs/b1/github/BytezoTeam/Eventfully) ![files batch](https://tokei.rs/b1/github/BytezoTeam/Eventfully?category=files)
 
 Eventfully is a python based web-application designed to process and show various events in your area
-
-## Statistics
-![image](https://img.shields.io/github/issues-search/BytezoTeam/Eventfully?query=is%3Aissue%20is%3Aclosed%20&style=flat-square&label=Closed%20Issues)
-![image](https://github.com/BytezoTeam/Eventfully/actions/workflows/codeql.yml/badge.svg?style=flat-square)
-![image](https://tokei.rs/b1/github/BytezoTeam/Eventfully)
-![image](https://tokei.rs/b1/github/BytezoTeam/Eventfully?category=files)
 
 ## Development Setup
 ### 1. Clone or Download Eventfully
