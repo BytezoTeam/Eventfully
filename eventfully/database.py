@@ -169,5 +169,11 @@ def get_existing_event_ids() -> list[str]:
     return [event.id for event in ExisingEvents.select()]
 
 
+def add_existing_event_ids(event_ids: list[str]):
+    with db.atomic():
+        for event_id in event_ids:
+            ExisingEvents.create(id=event_id)
+
+
 db.connect()
 db.create_tables([AccountData])

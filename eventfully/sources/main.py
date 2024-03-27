@@ -62,6 +62,10 @@ def main():
 
     log.info(f"Processed all new events in {sum(processing_times)} seconds. In average {sum(processing_times) / len(processing_times)} seconds per event.")
 
+    # Add processed event ids to the sqlite database
+    added_events_ids = [event.id for event in new_events]
+    db.add_existing_event_ids(added_events_ids)
+
     # Add the new events to the search database
     db.add_events(new_events)
 
