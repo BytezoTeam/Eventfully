@@ -20,7 +20,7 @@ attrs==23.2.0
     # via trio
 beartype==0.17.2
     # via eventfully
-black==24.2.0
+black==24.3.0
     # via eventfully
 blinker==1.7.0
     # via flask
@@ -31,17 +31,11 @@ certifi==2024.2.2
     # via httpx
     # via requests
     # via selenium
-cffi==1.16.0
-    # via trio
 charset-normalizer==3.3.2
     # via requests
 click==8.1.7
     # via black
     # via flask
-colorama==0.4.6
-    # via click
-    # via pytest
-    # via tqdm
 distro==1.9.0
     # via openai
 flask==3.0.2
@@ -83,15 +77,15 @@ markupsafe==2.1.5
     # via jinja2
     # via werkzeug
     # via wtforms
-meilisearch==0.30.0
+meilisearch==0.31.0
     # via eventfully
 mypy-extensions==1.0.0
     # via black
-openai==1.12.0
+openai==1.14.3
     # via eventfully
 outcome==1.3.0.post0
     # via trio
-packaging==23.2
+packaging==24.0
     # via black
     # via gunicorn
     # via pytest
@@ -103,19 +97,17 @@ platformdirs==4.2.0
     # via black
 pluggy==1.4.0
     # via pytest
-pycparser==2.21
-    # via cffi
-pydantic==2.6.1
+pydantic==2.6.4
     # via camel-converter
     # via eventfully
     # via openai
-pydantic-core==2.16.2
+pydantic-core==2.16.3
     # via pydantic
 pysocks==1.7.1
     # via urllib3
-pytest==8.0.2
+pytest==8.1.1
     # via eventfully
-python-dateutil==2.8.2
+python-dateutil==2.9.0.post0
     # via flask-apscheduler
 python-dotenv==1.0.1
     # via eventfully
@@ -128,7 +120,7 @@ selenium==4.18.1
 six==1.16.0
     # via apscheduler
     # via python-dateutil
-sniffio==1.3.0
+sniffio==1.3.1
     # via anyio
     # via httpx
     # via openai
@@ -139,18 +131,16 @@ tenacity==8.2.3
     # via eventfully
 tqdm==4.66.2
     # via openai
-trio==0.24.0
+trio==0.25.0
     # via selenium
     # via trio-websocket
 trio-websocket==0.11.1
     # via selenium
-typing-extensions==4.9.0
+typing-extensions==4.10.0
     # via openai
     # via pydantic
     # via pydantic-core
     # via selenium
-tzdata==2024.1
-    # via tzlocal
 tzlocal==5.2
     # via apscheduler
 urllib3==2.2.1
