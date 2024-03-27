@@ -54,6 +54,8 @@ flask-wtf==1.2.1
     # via eventfully
 get-project-root==0.2
     # via eventfully
+goodtools==0.3
+    # via eventfully
 gunicorn==21.2.0
     # via eventfully
 h11==0.14.0
@@ -121,8 +123,6 @@ pytz==2024.1
     # via apscheduler
 requests==2.31.0
     # via meilisearch
-result==0.16.0
-    # via eventfully
 selenium==4.18.1
     # via eventfully
 six==1.16.0
@@ -156,7 +156,6 @@ tzlocal==5.2
 urllib3==2.2.1
     # via requests
     # via selenium
-    # via urllib3
 werkzeug==3.0.1
     # via flask
 wsproto==1.2.0

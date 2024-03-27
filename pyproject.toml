@@ -15,7 +15,6 @@ dependencies = [
     "meilisearch==0.*",
     "pydantic==2.*",
     "Flask-APScheduler==1.*",
-    "result==0.*",
     "beartype==0.*",
     "black==24.*",
     "gunicorn==21.*",
@@ -23,6 +22,7 @@ dependencies = [
     "pytest==8.*",
     "get-project-root==0.*",
     "flask-wtf==1.*",
+    "goodtools>=0.3",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
