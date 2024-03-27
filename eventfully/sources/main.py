@@ -60,22 +60,27 @@ def main():
 @beartype
 def process_raw_event(raw_event: db.RawEvent, prompts_path: str) -> db.Event:
     # Load attributes from the json file
-    prompts = json.load(open(prompts_path))
+    prompts: dict[str, str | dict[str, dict]] = json.load(open(prompts_path))
 
     filled_fields = {}
-    for field_name, field_data in prompts["fields"].items():
+    for prompt_field_name, prompt_field_data in prompts["fields"].items():
         # Only get the description from the raw event if it's not empty to save tokens
-        if field_name == "description" and raw_event.description:
-            filled_fields[field_name] = raw_event.description
+        if prompt_field_name == "description" and raw_event.description:
+            filled_fields[prompt_field_name] = raw_event.description
             continue
 
-        field = process_field(raw_event, field_name, field_data, prompts["general"])
+        # If the field in the raw event is already set only give it as context
+        field_content = getattr(raw_event, prompt_field_name)
+        if field_content:
+            field = process_field(field_content, prompt_field_name, prompt_field_data, prompts["general"])
+        else:
+            field = process_field(raw_event, prompt_field_name, prompt_field_data, prompts["general"])
 
         # Convert date strings to time in seconds (e.g. 2024-02-25T13:30:00Z)
-        if field_name in ["start_date", "end_date"]:
+        if prompt_field_name in ["start_date", "end_date"]:
             field = int(datetime.strptime(field, "%Y-%m-%dT%H:%M:%SZ").timestamp())
 
-        filled_fields[field_name] = field
+        filled_fields[prompt_field_name] = field
 
     event = db.Event(**filled_fields)
     return event
@@ -83,7 +88,7 @@ def process_raw_event(raw_event: db.RawEvent, prompts_path: str) -> db.Event:
 
 @beartype
 def process_field(
-    raw_event: db.RawEvent,
+    context,
     field_name: str,
     field_data: dict[str, any],
     general_prompt: str,
@@ -93,7 +98,7 @@ def process_field(
             "role": "system",
             "content": general_prompt + "\n### Information\n" + str(field_data),
         },
-        {"role": "user", "content": str(raw_event)},
+        {"role": "user", "content": str(context)},
     ]
     tools = [
         {
@@ -114,7 +119,6 @@ def process_field(
 
     # Check if the AI has actually called the function
     if not completion.choices[0].message.tool_calls:
-        raise ValueError(f"AI didn't call the function for field '{field_name}'")
 
     result_field_json = completion.choices[0].message.tool_calls[0].function.arguments
     result_field = json.loads(result_field_json)
