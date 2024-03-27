@@ -1,5 +1,5 @@
 {
-  "general": "Extract the following information from the given event data in the given format from the user.",
+  "general": "Your task is to analyze the provided text closely and extract specific data points as outlined below. Your focus should be on identifying and extracting the information accurately according to the specifications for each field. While the output format is pre-defined for each field, please ensure your extractions are precise and in line with the given hints. Stick to the specifications provided for each category, applying them consistently across the text.",
   "fields": {
     "title": {
       "type": "string",
@@ -23,7 +23,7 @@
     },
     "tags": {
       "type": "array",
-      "description": "The tags or categories that the event belongs to. The tag 'other' should only be chosen if no other tag matches.",
+      "description": "One or two tags or categories that the event belongs to. The tag 'other' should **ONLY** be chosen if no other tag matches.",
       "items": {
         "type": "string",
         "enum": [

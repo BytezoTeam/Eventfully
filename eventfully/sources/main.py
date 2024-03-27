@@ -6,7 +6,7 @@ from beartype import beartype
 
 import eventfully.database as db
 from eventfully.logger import log
-from eventfully.sources.ai_provider import chat_completion_request
+from eventfully.sources.ai_provider import chat_completion_request, ACCURATE_MODEL, FAST_MODEL
 from eventfully.sources.emails import get_emails
 from eventfully.sources.zuerichunbezahlbar_ch import get_zuerichunbezahlbar
 
@@ -31,7 +31,9 @@ def main():
             continue
 
         # Check if the result is a list of RawEvents
-        if not (isinstance(result, list) and all(isinstance(i, db.RawEvent) for i in result)):
+        if not (
+            isinstance(result, list) and all(isinstance(i, db.RawEvent) for i in result)
+        ):
             log.error(f"'{source_name}' returned wrong type {type(result)}")
             continue
 
@@ -69,12 +71,27 @@ def process_raw_event(raw_event: db.RawEvent, prompts_path: str) -> db.Event:
             filled_fields[prompt_field_name] = raw_event.description
             continue
 
+        # Use the more capable model for the tags field, because it's the other one isn't capable of handling this
+        if prompt_field_name == "tags":
+            filled_fields[prompt_field_name] = process_field(
+                raw_event,
+                prompt_field_name,
+                prompt_field_data,
+                prompts["general"],
+                model=ACCURATE_MODEL,
+            )
+            continue
+
         # If the field in the raw event is already set only give it as context
         field_content = getattr(raw_event, prompt_field_name)
         if field_content:
-            field = process_field(field_content, prompt_field_name, prompt_field_data, prompts["general"])
+            field = process_field(
+                field_content, prompt_field_name, prompt_field_data, prompts["general"]
+            )
         else:
-            field = process_field(raw_event, prompt_field_name, prompt_field_data, prompts["general"])
+            field = process_field(
+                raw_event, prompt_field_name, prompt_field_data, prompts["general"]
+            )
 
         # Convert date strings to time in seconds (e.g. 2024-02-25T13:30:00Z)
         if prompt_field_name in ["start_date", "end_date"]:
@@ -92,11 +109,20 @@ def process_field(
     field_name: str,
     field_data: dict[str, any],
     general_prompt: str,
-) -> str | list[str]:
+    model: str = FAST_MODEL,
+) -> str | list[str] | None:
+    system_prompt = (
+        "### Task\n"
+        + general_prompt
+        + "\n### Field Specification\n"
+        + str(field_data["description"])
+        + "\n### Information\n"
+        + str(field_data)
+    )
     messages = [
         {
             "role": "system",
-            "content": general_prompt + "\n### Field Specification\n" + str(field_data["description"]) + "\n### Information\n" + str(field_data),
+            "content": system_prompt,
         },
         {"role": "user", "content": str(context)},
     ]
@@ -115,10 +141,11 @@ def process_field(
         }
     ]
 
-    completion = chat_completion_request(messages, tools)
+    completion = chat_completion_request(messages, tools, model=model)
 
     # Check if the AI has actually called the function
     if not completion.choices[0].message.tool_calls:
+        raise ValueError(f"AI did not call the function 'get_{field_name}'")
 
     result_field_json = completion.choices[0].message.tool_calls[0].function.arguments
     result_field = json.loads(result_field_json)
