@@ -96,7 +96,7 @@ def process_field(
     messages = [
         {
             "role": "system",
-            "content": general_prompt + "\n### Information\n" + str(field_data),
+            "content": general_prompt + "\n### Field Specification\n" + str(field_data["description"]) + "\n### Information\n" + str(field_data),
         },
         {"role": "user", "content": str(context)},
     ]

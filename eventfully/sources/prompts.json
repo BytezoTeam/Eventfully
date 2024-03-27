@@ -1,5 +1,5 @@
 {
-  "general": "Extract the following information from the given event data from the user.",
+  "general": "Extract the following information from the given event data in the given format from the user.",
   "fields": {
     "title": {
       "type": "string",
@@ -23,7 +23,7 @@
     },
     "tags": {
       "type": "array",
-      "description": "The tags or categories that the event belongs to",
+      "description": "The tags or categories that the event belongs to. The tag 'other' should only be chosen if no other tag matches.",
       "items": {
         "type": "string",
         "enum": [
@@ -36,6 +36,7 @@
           "sports",
           "food",
           "festival",
+          "science",
           "other"
         ]
       }
