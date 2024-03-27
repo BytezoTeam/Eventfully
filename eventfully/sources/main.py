@@ -40,9 +40,9 @@ def main():
         raw_events += result
 
     # Clear duplicates
-    exising_event_ids = db.get_existing_event_ids()
+    existing_event_ids = db.get_existing_event_ids()
     new_raw_events = [
-        event for event in raw_events if event.id not in exising_event_ids
+        event for event in raw_events if event.id not in existing_event_ids
     ]
 
     # Process the data with the AI provider
