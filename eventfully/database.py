@@ -19,11 +19,15 @@ from eventfully.utils import get_hash_string
 load_dotenv()
 _MEILI_HOST = getenv("MEILI_HOST")
 _MEILI_KEY = getenv("MEILI_KEY")
-_SQL_DB_PATH = path.join(root_path(ignore_cwd=True), "database", "sqlite", "database.db")
+_SQL_DB_PATH = path.join(
+    root_path(ignore_cwd=True), "database", "sqlite", "database.db"
+)
 if not _MEILI_KEY:
     raise ValueError("No MeiliSearch key provided. Please set MEILI_KEY in .env file.")
 if not _MEILI_HOST:
-    raise ValueError("No MeiliSearch host provided. Please set MEILI_HOST in .env file.")
+    raise ValueError(
+        "No MeiliSearch host provided. Please set MEILI_HOST in .env file."
+    )
 
 # Meilisearch
 ms_client = ms.Client(_MEILI_HOST, _MEILI_KEY)
@@ -44,9 +48,7 @@ if not ms_client.is_healthy():
     raise ConnectionError(choice(FUNNY_ERRORS))
 event_index = ms_client.index("events")
 ms_client.create_index("events", {"primaryKey": "id"})
-event_index.update_filterable_attributes([
-    "tags"
-])
+event_index.update_filterable_attributes(["tags"])
 
 # SQLite with peewee
 db = SqliteExtDatabase(
@@ -67,7 +69,7 @@ class AccountData(_DBBaseModel):
     username = TextField()
     email = TextField()
 
-        
+
 class ExisingEvents(_DBBaseModel):
     id = TextField(primary_key=True)
 
@@ -123,12 +125,7 @@ def add_events(events: list[Event]):
 
 # TODO: Add check to look if email is real
 def add_account(username, password, userid, email):
-    AccountData.create(
-        userId=userid,
-        email=email,
-        username=username,
-        password=password
-    )
+    AccountData.create(userId=userid, email=email, username=username, password=password)
     return userid
 
 
@@ -136,9 +133,9 @@ def delete_account(user_id):
     try:
         account = AccountData.get(AccountData.userId == user_id)
         account.delete_instance()
-        print(f'Account with userId {user_id} was successfully deleted.')
+        print(f"Account with userId {user_id} was successfully deleted.")
     except DoesNotExist:
-        print(f'No account found with userId {user_id}.')
+        print(f"No account found with userId {user_id}.")
 
 
 def get_user_data(user_id):
@@ -146,13 +143,15 @@ def get_user_data(user_id):
         account = AccountData.get(AccountData.userId == user_id)
         return model_to_dict(account)
     except DoesNotExist:
-        print(f'No account found with userId {user_id}.')
+        print(f"No account found with userId {user_id}.")
         return None
 
 
 def authenticate_user(username, password):
     try:
-        user = AccountData.get((AccountData.username == username) & (AccountData.password == password))
+        user = AccountData.get(
+            (AccountData.username == username) & (AccountData.password == password)
+        )
         return user.userId
     except DoesNotExist:
         print("User not found or incorrect password.")
@@ -169,9 +168,7 @@ def check_user_exists(user_id: str):
 
 def search_events(query: str, search_tag: str) -> list[Event]:
     if search_tag:
-        raw = event_index.search(query, {
-            "filter": f"tags IN ['{search_tag}']"
-        })
+        raw = event_index.search(query, {"filter": f"tags IN ['{search_tag}']"})
     else:
         raw = event_index.search(query)
     # Convert raw event sources in python dict form to pydantic Events
