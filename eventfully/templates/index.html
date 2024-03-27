@@ -105,6 +105,15 @@
             document.getElementById('loginBox');
             document.getElementById('loginBtn');
         });
+		 // Event-Listener für das Schließen des Modals
+		window.addEventListener('click', function(event) {
+        var loginModal = document.getElementById('loginModal');
+        var loginBox = document.getElementById('loginBox');
+        if (event.target == loginModal && event.target != loginBox && !loginBox.contains(event.target)) {
+            loginModal.classList.add('invisible', 'pointer-events-none', 'opacity-0');
+            loginModal.classList.remove('visible', 'pointer-events-auto', 'opacity-100');
+        }
+    });
     </script>
 </body>
 </html>

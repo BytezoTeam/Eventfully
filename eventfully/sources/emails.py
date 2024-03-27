@@ -19,7 +19,6 @@ def _get_emails_from_server(email: str, password: str, server: str) -> list[db.R
         for msg in mailbox.fetch():
             body = msg.text or msg.html
             subject = msg.subject
-            print(f"Got E-Mail with subject '{subject}'")
 
             events.append(db.RawEvent(
                 raw=subject + body,
