@@ -4,6 +4,7 @@
 
 import atexit
 from os import getenv, path
+from random import choice
 
 import meilisearch as ms
 from dotenv import load_dotenv
@@ -18,21 +19,36 @@ from eventfully.utils import get_hash_string
 load_dotenv()
 _MEILI_HOST = getenv("MEILI_HOST")
 _MEILI_KEY = getenv("MEILI_KEY")
-_SQL_DB_PATH = path.join(root_path(ignore_cwd=True), "database", "sqlite", "database.db")
+_SQL_DB_PATH = path.join(
+    root_path(ignore_cwd=True), "database", "sqlite", "database.db"
+)
 if not _MEILI_KEY:
     raise ValueError("No MeiliSearch key provided. Please set MEILI_KEY in .env file.")
 if not _MEILI_HOST:
-    raise ValueError("No MeiliSearch host provided. Please set MEILI_HOST in .env file.")
+    raise ValueError(
+        "No MeiliSearch host provided. Please set MEILI_HOST in .env file."
+    )
 
 # Meilisearch
 ms_client = ms.Client(_MEILI_HOST, _MEILI_KEY)
 if not ms_client.is_healthy():
-    raise ConnectionError("Cannot connect to Meilisearch. Is it running? Correct host and key in .env file?")
+    FUNNY_ERRORS = [
+        "Oh, trying to connect to Meilisearch, are we? Did you make sure it's not on a coffee break? Check if it's running and the .env file isn't just a decorative piece.",
+        "Looks like Meilisearch is playing hard to get. Maybe it's just not that into you? Double-check if it's running and if you've wooed it with the correct host and key in the .env file.",
+        "Attempting to connect to Meilisearch, huh? It seems to have ghosted you. Ensure it's actually there (you know, running) and that you've slid the right host and key into the .env file DMs.",
+        "Meilisearch connection attempt detected. Outcome: Epic fail. It's either playing hide and seek, or you've got the .env file credentials all wrong. Time for a little game of 'find the mistake'?",
+        "Ah, the classic 'Cannot connect to Meilisearch' saga. Have you tried asking it nicely if it's running? Also, a quick peek at the .env file for the correct host and key might just be the magic word.",
+        "Your connection to Meilisearch seems as absent as my last vacation. Maybe check if it's actually running and not off on a beach somewhere? And hey, that .env file might need a second look for the right host and key.",
+        "Meilisearch and you are currently not on speaking terms, it seems. Is it running, or did it stand you up? Make sure your .env file isn't sending mixed signals with the wrong host and key.",
+        "Trying to connect to Meilisearch but it's just not that into you. Maybe it's not running, or perhaps your .env file flirtation technique needs work. Correct host and key might just win its heart.",
+        "Meilisearch connection status: It's complicated. Is it running, or is it just not ready for a commitment? Ensure your .env file is putting its best foot forward with the correct host and key.",
+        "Looks like Meilisearch is playing the silent game. Is it running, or is it just really good at hiding? Maybe it's time to play detective with your .env file and see if you've got the right host and key.",
+    ]
+    # "Cannot connect to Meilisearch. Is it running? Correct host and key in .env file?"
+    raise ConnectionError(choice(FUNNY_ERRORS))
 event_index = ms_client.index("events")
 ms_client.create_index("events", {"primaryKey": "id"})
-event_index.update_filterable_attributes([
-    "tags"
-])
+event_index.update_filterable_attributes(["tags"])
 
 # SQLite with peewee
 db = SqliteExtDatabase(
@@ -53,7 +69,7 @@ class AccountData(_DBBaseModel):
     username = TextField()
     email = TextField()
 
-        
+
 class ExisingEvents(_DBBaseModel):
     id = TextField(primary_key=True)
 
@@ -109,12 +125,7 @@ def add_events(events: list[Event]):
 
 # TODO: Add check to look if email is real
 def add_account(username, password, userid, email):
-    AccountData.create(
-        userId=userid,
-        email=email,
-        username=username,
-        password=password
-    )
+    AccountData.create(userId=userid, email=email, username=username, password=password)
     return userid
 
 
@@ -122,9 +133,9 @@ def delete_account(user_id):
     try:
         account = AccountData.get(AccountData.userId == user_id)
         account.delete_instance()
-        print(f'Account with userId {user_id} was successfully deleted.')
+        print(f"Account with userId {user_id} was successfully deleted.")
     except DoesNotExist:
-        print(f'No account found with userId {user_id}.')
+        print(f"No account found with userId {user_id}.")
 
 
 def get_user_data(user_id):
@@ -132,13 +143,15 @@ def get_user_data(user_id):
         account = AccountData.get(AccountData.userId == user_id)
         return model_to_dict(account)
     except DoesNotExist:
-        print(f'No account found with userId {user_id}.')
+        print(f"No account found with userId {user_id}.")
         return None
 
 
 def authenticate_user(username, password):
     try:
-        user = AccountData.get((AccountData.username == username) & (AccountData.password == password))
+        user = AccountData.get(
+            (AccountData.username == username) & (AccountData.password == password)
+        )
         return user.userId
     except DoesNotExist:
         print("User not found or incorrect password.")
@@ -155,9 +168,7 @@ def check_user_exists(user_id: str):
 
 def search_events(query: str, search_tag: str) -> list[Event]:
     if search_tag:
-        raw = event_index.search(query, {
-            "filter": f"tags IN ['{search_tag}']"
-        })
+        raw = event_index.search(query, {"filter": f"tags IN ['{search_tag}']"})
     else:
         raw = event_index.search(query)
     # Convert raw event sources in python dict form to pydantic Events

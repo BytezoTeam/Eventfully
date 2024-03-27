@@ -1,6 +1,6 @@
 {% for item in events %}
 
-<div class="bg-white rounded shadow p-6">
+<div class="bg-white rounded shadow p-6 prose">
     <h2>{{ item.title }}</h2>
     <p>Beschreibung: {{ item.description }}</p>
     {% if not item.link == "---"%}
