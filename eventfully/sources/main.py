@@ -23,15 +23,16 @@ def main():
     for source in sources:
         source_name = source.__name__
 
-        log.debug(f"Getting data from source {source_name} ...")
+        log.debug(f"Getting data from source '{source_name}' ...")
         try:
             result = source()
         except Exception as e:
-            log.warning(f"Error while getting data from {source_name}", exc_info=e)
+            log.warning(f"Error while getting data from '{source_name}'", exc_info=e)
             continue
 
-        if result is not list[db.RawEvent]:
-            log.error(f"{source_name} returned wrong type {type(result)}")
+        # Check if the result is a list of RawEvents
+        if not (isinstance(result, list) and all(isinstance(i, db.RawEvent) for i in result)):
+            log.error(f"'{source_name}' returned wrong type {type(result)}")
             continue
 
         raw_events += result
@@ -110,6 +111,11 @@ def process_field(
     ]
 
     completion = chat_completion_request(messages, tools)
+
+    # Check if the AI has actually called the function
+    if not completion.choices[0].message.tool_calls:
+        raise ValueError(f"AI didn't call the function for field '{field_name}'")
+
     result_field_json = completion.choices[0].message.tool_calls[0].function.arguments
     result_field = json.loads(result_field_json)
     return result_field[field_name]
