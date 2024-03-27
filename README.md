@@ -40,7 +40,6 @@ MEILI_HOST="<address of the meilisearch server e.g. http://localhost:7700>"
 - start the server with `rye run dev` or use `rye run main` (Only on Windows) to start the startup program
 
 ## Add Test-Data to Eventfully (Optional)
-- If you havend run the server, please run the `database.py` file once to configure meilisearch
 - Run the `injectTestData.py` Script in the [Tests](https://github.com/BytezoTeam/Eventfully/tree/main/tests) Folder
 - Paste Test-Data in a .json format in the GUI-Textbox
 - Press the 'Inject' button
