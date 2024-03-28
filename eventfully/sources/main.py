@@ -10,11 +10,13 @@ from eventfully.logger import log
 from eventfully.sources.ai_provider import chat_completion_request, ACCURATE_MODEL, FAST_MODEL
 from eventfully.sources.emails import get_emails
 from eventfully.sources.zuerichunbezahlbar_ch import get_zuerichunbezahlbar
+from eventfully.sources.kulturloewen import get_kulturloewen
 
 # Add new sources here
 sources: list[Callable[[], list[db.RawEvent]]] = [
     get_emails,
     get_zuerichunbezahlbar,
+    get_kulturloewen,
 ]
 
 
