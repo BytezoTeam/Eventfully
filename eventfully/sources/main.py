@@ -11,12 +11,14 @@ from eventfully.sources.ai_provider import chat_completion_request, ACCURATE_MOD
 from eventfully.sources.emails import get_emails
 from eventfully.sources.zuerichunbezahlbar_ch import get_zuerichunbezahlbar
 from eventfully.sources.kulturloewen import get_kulturloewen
+from eventfully.sources.eventim import get_eventim
 
 # Add new sources here
 sources: list[Callable[[], list[db.RawEvent]]] = [
     get_emails,
     get_zuerichunbezahlbar,
     get_kulturloewen,
+    get_eventim
 ]
 
 
