@@ -13,6 +13,11 @@ Eventfully is a python based web-application designed to process and show variou
 - [meilisearch](https://www.meilisearch.com/) as the database for the search (backend)
 - [OpenAI API](https://openai.com/product) for the classification of events (backend)
 
+## Our Sources
+- [Zuerichunbezahlbar](https://www.zuerichunbezahlbar.ch/events/): Events for Zürich in Switzerland
+- [Eventim](https://www.eventim.de/): Events for Germany
+- [Kulturlöwen](https://www.kulturloewen.de/startseitehttps://www.kulturloewen.de/startseite): Events in Velbert, a small City near Essen, Germany
+
 ## Development Setup
 ### 1. Clone or Download Eventfully
 - download Eventfully from GitHub or clone the repository with `git clone https://github.com/BytezoTeam/Eventfully` from your terminal with [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) installed
