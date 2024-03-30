@@ -97,7 +97,6 @@ def scrape() -> list[db.RawEvent]:
                 description=description,
                 link="https://www.kulturloewen.de/veranstaltungen",
                 start_date=time,
-                end_date="/",
                 address=address,
                 city="Velbert",
             )
@@ -112,11 +111,7 @@ def scrape() -> list[db.RawEvent]:
             event = db.RawEvent(
                 raw="",
                 title=title,
-                description="[NaN]",
                 link="https://www.kulturloewen.de/veranstaltungen",
-                start_date="[NaN]",
-                end_date="[NaN]",
-                address="[NaN]",
                 city="Velbert",
             )
             # Append the event to the list

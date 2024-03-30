@@ -71,12 +71,9 @@ def scrape() -> list[db.RawEvent]:
                     event = db.RawEvent(
                         raw="",
                         title=title,
-                        description="/",
                         link=link,
                         price=price,
                         start_date=time,
-                        end_date="/",
-                        address="/",
                         city=city,
                     )
                     # Append the event to the list
@@ -85,7 +82,7 @@ def scrape() -> list[db.RawEvent]:
             browser.quit()
         return raw_events
     except Exception as e:
-        log.error(f"Error while scraping Eventim: Returning events so far!", exc_info=e)
+        log.error("Error while scraping Eventim: Returning events so far!", exc_info=e)
         return raw_events
 
 
