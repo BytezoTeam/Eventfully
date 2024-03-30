@@ -70,7 +70,7 @@ class AccountData(_DBBaseModel):
     email = TextField()
 
 
-class ExisingEvents(_DBBaseModel):
+class ExistingEvents(_DBBaseModel):
     id = TextField(primary_key=True)
 
 
@@ -177,13 +177,13 @@ def search_events(query: str, search_tag: str) -> list[Event]:
 
 
 def get_existing_event_ids() -> list[str]:
-    return [event.id for event in ExisingEvents.select()]
+    return [event.id for event in ExistingEvents.select()]
 
 
 def add_existing_event_ids(event_ids: list[str]):
     with db.atomic():
         for event_id in event_ids:
-            ExisingEvents.create(id=event_id)
+            ExistingEvents.create(id=event_id)
 
 
 db.connect()
