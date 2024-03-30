@@ -16,7 +16,7 @@ Eventfully is a python based web-application designed to process and show variou
 ## Our Sources
 - [Zuerichunbezahlbar](https://www.zuerichunbezahlbar.ch/events/): Events for Zürich in Switzerland
 - [Eventim](https://www.eventim.de/): Events for Germany
-- [Kulturlöwen](https://www.kulturloewen.de/startseitehttps://www.kulturloewen.de/startseite): Events in Velbert, a small City near Essen, Germany
+- [Kulturlöwen](https://www.kulturloewen.de): Events in Velbert, a small City near Essen, Germany
 
 ## Development Setup
 ### 1. Clone or Download Eventfully
