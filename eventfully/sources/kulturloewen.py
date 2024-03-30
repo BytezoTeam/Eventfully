@@ -32,9 +32,9 @@ def scrape() -> list[db.RawEvent]:
     event_box = browser.find_element(By.ID, "klive-kalenderbox")
 
     # Get the event ids
-    log.info("Getting event ids")
+    log.debug("Getting event ids")
     ids = event_box.find_elements(By.XPATH, "//a[@name]")
-    log.info("Removing ids that are not numbers")
+    log.debug("Removing ids that are not numbers")
     event_ids = []
 
     # Remove ids that are not numbers
@@ -48,7 +48,7 @@ def scrape() -> list[db.RawEvent]:
     # Get the events
     events = event_box.find_elements(By.CLASS_NAME, "klive-terminbox")
     count = 0
-    log.info("Beginning to scrape events")
+    log.debug("Beginning to scrape events")
     # Loop through the events
     for event in events:
         information = event.find_element(By.CLASS_NAME, "klive-kurzfassung")
@@ -126,7 +126,7 @@ def scrape() -> list[db.RawEvent]:
         count += 1
 
     # Give the user some feedback
-    log.info(f"Finished scraping events: Added {len(raw_events)} events to the list. {full_events} events have full "
+    log.debug(f"Finished scraping events: Added {len(raw_events)} events to the list. {full_events} events have full "
              f"information, {min_events} events have minimal information")
     return raw_events
 

@@ -27,11 +27,11 @@ def scrape() -> list[db.RawEvent]:
             chrome_options = Options()
             # Start minimized
             browser = webdriver.Chrome(chrome_options)
-            log.info(f"Getting page {page + 1}")
+            log.debug(f"Getting page {page + 1}")
             # Get the website
-            log.info("Initialize Browser")
+            log.debug("Initialize Browser")
             browser.get(f"https://www.eventim.de/events/kultur-2/?ticketDirect=true&page={page + 1}")
-            log.info('Waiting for Cookie Popup')
+            log.debug('Waiting for Cookie Popup')
             try:
                 WebDriverWait(browser, 5).until(
                     EC.presence_of_element_located((By.ID, 'cmpbntyestxt')),
@@ -39,14 +39,14 @@ def scrape() -> list[db.RawEvent]:
                 )
                 browser.find_element(By.ID, 'cmpbntyestxt').click()
             except selenium.common.exceptions.TimeoutException:
-                log.info('No Cookie Popup')
+                log.debug('No Cookie Popup')
 
-            log.info('Waiting for Main Events loaded')
+            log.debug('Waiting for Main Events loaded')
             sleep(5)
             artists = browser.find_elements(By.CSS_SELECTOR, 'product-group-item[class="hydrated"]')
-            log.info(f"Found {len(artists)} Main Events")
+            log.debug(f"Found {len(artists)} Main Events")
             for count, artist in enumerate(artists):
-                log.info(f"[{count + 1}/{len(artists)}] Getting Artist")
+                log.debug(f"[{count + 1}/{len(artists)}] Getting Artist")
                 artist_name = artist.find_element(By.XPATH, f'//*[@id="listing-headline-{count}"]/span[1]').text
                 events = artist.find_element(By.CSS_SELECTOR, 'div[class="nested-products"]').find_elements(
                     By.CSS_SELECTOR,
@@ -85,7 +85,7 @@ def scrape() -> list[db.RawEvent]:
             browser.quit()
         return raw_events
     except Exception as e:
-        log.error(f"Error while scraping Eventim: Returning events so far! Error: {e}")
+        log.error(f"Error while scraping Eventim: Returning events so far!", exc_info=e)
         return raw_events
 
 
