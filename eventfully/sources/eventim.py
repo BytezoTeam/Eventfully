@@ -2,12 +2,11 @@ import selenium.common.exceptions
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
 from time import sleep
 
 import eventfully.database as db
 from eventfully.logger import log
+from eventfully.sources.utils import get_element
 
 
 # TODO: Documentation
@@ -33,11 +32,7 @@ def scrape() -> list[db.RawEvent]:
             browser.get(f"https://www.eventim.de/events/kultur-2/?ticketDirect=true&page={page + 1}")
             log.debug('Waiting for Cookie Popup')
             try:
-                WebDriverWait(browser, 5).until(
-                    EC.presence_of_element_located((By.ID, 'cmpbntyestxt')),
-
-                )
-                browser.find_element(By.ID, 'cmpbntyestxt').click()
+                get_element(browser, By.ID, 'cmpbntyestxt').click()
             except selenium.common.exceptions.TimeoutException:
                 log.debug('No Cookie Popup')
 

@@ -2,11 +2,10 @@ import selenium.common.exceptions
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
 
 import eventfully.database as db
 from eventfully.logger import log
+from eventfully.sources.utils import get_element, get_elements
 
 
 def get_zuerichunbezahlbar() -> list[db.RawEvent]:
@@ -27,7 +26,7 @@ def _unbezahlbar(browser: webdriver.Chrome) -> list[db.RawEvent]:
     events = []
 
     for _ in range(1):
-        browser_events = _get_elements(browser, By.CSS_SELECTOR, ".poster__title-span.poster__title-span-text")
+        browser_events = get_elements(browser, By.CSS_SELECTOR, ".poster__title-span.poster__title-span-text")
         for event in browser_events:
             try:
                 event.click()
@@ -35,13 +34,13 @@ def _unbezahlbar(browser: webdriver.Chrome) -> list[db.RawEvent]:
                 continue
 
             try:
-                title = _get_element(browser, By.CSS_SELECTOR,
+                title = get_element(browser, By.CSS_SELECTOR,
                                     ".reveal-modal.open .poster__title-span.poster__title-span-text").text
-                time = _get_element(browser, By.CSS_SELECTOR, ".detailpost__date time").text
-                info = _get_element(browser, By.CSS_SELECTOR, "div.detailpost__info").text
-                address = _get_element(browser, By.CSS_SELECTOR, "address.detailpost__address").text
-                description = _get_element(browser, By.CSS_SELECTOR, "div.detailpost__description").text
-                link = _get_element(browser, By.CSS_SELECTOR, "a.detailpost__link").get_attribute("href")
+                time = get_element(browser, By.CSS_SELECTOR, ".detailpost__date time").text
+                info = get_element(browser, By.CSS_SELECTOR, "div.detailpost__info").text
+                address = get_element(browser, By.CSS_SELECTOR, "address.detailpost__address").text
+                description = get_element(browser, By.CSS_SELECTOR, "div.detailpost__description").text
+                link = get_element(browser, By.CSS_SELECTOR, "a.detailpost__link").get_attribute("href")
             except (
                     selenium.common.exceptions.TimeoutException,
                     selenium.common.exceptions.ElementClickInterceptedException):
@@ -49,7 +48,7 @@ def _unbezahlbar(browser: webdriver.Chrome) -> list[db.RawEvent]:
 
             log.debug(f"Got event '{title}'")
 
-            _get_element(browser, By.CSS_SELECTOR, ".close-reveal-modal").click()
+            get_element(browser, By.CSS_SELECTOR, ".close-reveal-modal").click()
 
             event = db.RawEvent(
                 raw=description + info,
@@ -64,19 +63,9 @@ def _unbezahlbar(browser: webdriver.Chrome) -> list[db.RawEvent]:
             events.append(event)
 
         # get_element(By.CSS_SELECTOR, "span.step-links a").click()
-        _get_element(browser, By.XPATH, "//a[text()='weiter »']").click()
+        get_element(browser, By.XPATH, "//a[text()='weiter »']").click()
 
     return events
-
-
-def _get_element(browser: webdriver.Chrome, selector_type: str, selector: str):
-    return WebDriverWait(browser, 5).until(
-        EC.presence_of_element_located((selector_type, selector)))
-
-
-def _get_elements(browser: webdriver.Chrome, selector_type: str, selector: str):
-    return WebDriverWait(browser, 5).until(
-        EC.presence_of_all_elements_located((selector_type, selector)))
 
 
 if __name__ == '__main__':
