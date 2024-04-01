@@ -110,7 +110,7 @@ class SignInForm(FlaskForm):
 def signin_account():
     form = SignInForm()
     if not form.validate():
-        retu.errors, HTTPStatus.BAD_REQUEST
+        return form.errors, HTTPStatus.BAD_REQUEST
 
     user_id = db.authenticate_user(form.username.data, form.password.data)
 
