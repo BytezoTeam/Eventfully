@@ -110,7 +110,7 @@ class SignInForm(FlaskForm):
 def signin_account():
     form = SignInForm()
     if not form.validate():
-        return form.errors, HTTPStatus.BAD_REQUEST
+        retu.errors, HTTPStatus.BAD_REQUEST
 
     user_id = db.authenticate_user(form.username.data, form.password.data)
 
@@ -139,6 +139,14 @@ def get_events():
     result = db.search_events(therm, category)
 
     return render_template("api/events.html", events=result)
+
+@app.route("/api/account/loadForm", methods=["GET"])
+def load_form():
+    if request.args.get("signup") is None:
+        return render_template("api/signup_form.html")
+    else:
+        return render_template("api/login_form.html")
+
 
 
 if __name__ == "__main__":

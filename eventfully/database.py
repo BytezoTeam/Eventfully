@@ -65,6 +65,7 @@ class _DBBaseModel(Model):
 
 class AccountData(_DBBaseModel):
     userId = TextField(primary_key=True)
+    event_organiser = TextField()
     password = TextField()
     username = TextField()
     email = TextField()
@@ -124,8 +125,8 @@ def add_events(events: list[Event]):
 
 
 # TODO: Add check to look if email is real
-def add_account(username, password, userid, email):
-    AccountData.create(userId=userid, email=email, username=username, password=password)
+def add_account(username, password, userid, email, event_organiser=False):
+    AccountData.create(userId=userid, email=email, username=username, password=password, event_organiser=event_organiser)
     return userid
 
 
