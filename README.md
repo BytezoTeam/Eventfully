@@ -44,16 +44,31 @@ MEILI_KEY="<meilisearch master key>"
 MEILI_HOST="<address of the meilisearch server e.g. http://localhost:7700>"
 ```
 
-### 4. Install Rye
+### 4. Install Node
 
-- install [Rye](https://rye-up.com/guide/installation/)
-- run `rye sync` inside the folder to install the required python packages
+- [Node Installation Instructions](https://nodejs.org/en/learn/getting-started/how-to-install-nodejs)
 
-### 5. Run Eventfully
+### 5. Install Node Dependencies
 
-- start the server with `rye run dev` to start the startup program
+- run `npm install`
 
-### 6. Add Test-Data to Eventfully (Optional)
+### 6. Build CSS
+
+- run `npm run dev`
+
+### 7. Install Rye
+
+- [Rye Installation Instructions](https://rye-up.com/guide/installation/)
+
+### 8. Install Python Dependencies
+
+- run `rye sync`
+
+### 9. Run Eventfully
+
+- run `rye run dev`
+
+### 10. Add Test-Data to Eventfully (Optional)
 
 - Run the `injectTestDataGUI.py` (GUI Version) or `injectTestDataTerminal.py` (Termainal Version) Script in the [Tests](https://github.com/BytezoTeam/Eventfully/tree/main/tests) Folder
 
@@ -86,7 +101,6 @@ MEILI_HOST="<address of the meilisearch server e.g. http://localhost:7700>"
 - Paste a vaild .json file path into the console, if you want to use your own Test-Data (Must contain the values listed on top)
   or
 - Press enter, and [this](https://github.com/BytezoTeam/Eventfully/blob/main/tests/test-data.json) Test-Data will be injected autmaticly
-
 
 ## License
 
