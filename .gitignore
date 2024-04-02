@@ -1,12 +1,10 @@
-# IDE generated folders
+# editor files
 /.idea/
 
-# Python
+# python files
 __pycache__/
 .venv/
 
-# Enviroment Variables
+# private files
 .env
-
-# Logs
 *.log
