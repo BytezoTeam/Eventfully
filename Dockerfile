@@ -1,3 +1,13 @@
+FROM oven/bun:1.1-alpine AS build
+
+WORKDIR /build
+
+COPY package.json tailwind.config.js ./
+COPY eventfully/ eventfully/
+
+RUN bun install
+RUN bun run build
+
 FROM python:3.11-alpine AS run
 
 # Install dependencies
@@ -14,7 +24,7 @@ USER eventfully
 
 # Run eventfully
 WORKDIR /home/eventfully
-COPY eventfully/ eventfully/
+COPY --from=build /build/eventfully/ eventfully/
 
 EXPOSE 8000
 
