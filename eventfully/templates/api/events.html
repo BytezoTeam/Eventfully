@@ -1,23 +1,19 @@
 {% for item in events %}
-
-<div class="bg-white rounded shadow p-6 prose">
-    <h2>{{ item.title }}</h2>
-    <p>Beschreibung: {{ item.description }}</p>
-    {% if not item.link == "---"%}
-    <p>Link: {{ item.link }}</p>
-    {% endif %} {% if not item.price == "---"%}
-    <p>Preis: {{ item.price }}</p>
-    {% endif %} {% if not item.startdate == "-"%}
-    <p>Wann?: {{ item.startdate }}-{{ item.enddate }}</p>
-    {% endif %} {% if not item.age == "---"%}
-    <p>Alter: {{ item.age }}</p>
-    {% endif %} {% if not item.accessibility == "---"%}
-    <p>Barrierefreiheit: {{ item.accessibility }}</p>
-    {% endif %} {% if not item.address == "-"%}
-    <p>Wo?: {{ item.address }}</p>
-    {% endif %} {% if not item.tags == "---"%}
-    <p>Kategorien: {{ item.tags }}</p>
-
+  <div class="card w-96 glass shadow-xl">
+      <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes" /></figure>
+        <div class="card-body">
+          <h2 class="card-title">{{ item.title }}</h2>
+          <p>{{ item.description }}</p>
+          <details class="collapse bg-base-200">
+            <summary class="collapse-title font-medium">
+              Mehr
+            </summary>
+            <div class="collapse-content">
+              <a class="btn btn-neutral" href="{{ item.link }}">Zur Quelle</a>
+            </div>
+              </details>
+        </div>
+  </div>
 </div>
 
-{% endif %} {% endfor %}
+{% endfor %}
