@@ -1,111 +1,197 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eventfully</title>
-  <link rel="stylesheet" href="/static/output.css"></link>
-  <script src="https://unpkg.com/htmx.org@1.9.10"
-          integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
-          crossorigin="anonymous"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <style>
-    .dark-mode {
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Eventfully</title>
+    <link rel="stylesheet" href="/static/output.css" />
+    <script
+      src="https://unpkg.com/htmx.org@1.9.10"
+      integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <style>
+      .dark-mode {
         background-color: #1a202c;
         color: #a0aec0;
-    }
-    .dark-mode .bg-white {
+      }
+      .dark-mode .bg-white {
         background-color: #2d3748;
-    }
-    .dark-mode .text-black {
+      }
+      .dark-mode .text-black {
         color: #a0aec0;
-    }
-  </style>
-</head>
-<body class="bg-gray-200 p-6 text-black"
-  x-data="{ darkMode: localStorage.getItem('dark') === 'true' }"
-  x-init="$watch('darkMode', val => localStorage.setItem('dark', val))"
-  x-bind:class="{ 'dark': darkMode }"
->
-<div class="container mx-auto">
-  <header class="flex justify-between items-center bg-white rounded shadow p-6 mb-4">
-    <h1 class="text-3xl font-bold">Eventfully</h1>
-    <div>
-      {%if logged_in %}
-      <span class="mr-2">{{ username }}</span>
-      <button onclick="window.location.href='/profile'" class="bg-blue-500 text-white rounded p-2 mr-2">Profil</button>
-      <form
-              hx-post="/api/account/signout"
-              hx-swap="none"
+      }
+    </style>
+
+    {% if logged_in == False %}
+    <script>
+      loginBtn.addEventListener("click", function () {
+        loginModal.classList.remove(
+          "invisible",
+          "pointer-events-none",
+          "opacity-0"
+        );
+        loginModal.classList.add(
+          "visible",
+          "pointer-events-auto",
+          "opacity-100"
+        );
+      });
+    </script>
+    {% endif %}
+
+    <script>
+      document.addEventListener("htmx:load", () => {
+        // Vorhandener Code für das Anmeldefenster
+        document.getElementById("loginModal");
+        document.getElementById("loginBox");
+        document.getElementById("loginBtn");
+      });
+
+      // Event-Listener für das Schließen des Modals
+      window.addEventListener("click", function (event) {
+        var loginModal = document.getElementById("loginModal");
+        var loginBox = document.getElementById("loginBox");
+        if (
+          event.target == loginModal &&
+          event.target != loginBox &&
+          !loginBox.contains(event.target)
+        ) {
+          loginModal.classList.add(
+            "invisible",
+            "pointer-events-none",
+            "opacity-0"
+          );
+          loginModal.classList.remove(
+            "visible",
+            "pointer-events-auto",
+            "opacity-100"
+          );
+        }
+      });
+    </script>
+  </head>
+
+  <body
+    class="bg-gray-200 p-6 text-black"
+    x-data="{ darkMode: localStorage.getItem('dark') === 'true' }"
+    x-init="$watch('darkMode', val => localStorage.setItem('dark', val))"
+    x-bind:class="{ 'dark': darkMode }"
+  >
+    <div class="container mx-auto">
+      <!-- Head -->
+      <header
+        class="flex justify-between items-center bg-white rounded shadow p-6 mb-4"
       >
-        <button type="submit" class="bg-red-500 text-white rounded p-2 mr-2">Abmelden</button>
-      </form>
-      {% else %}
-      <button id="loginBtn" class="bg-blue-500 text-white rounded p-2 mr-2">Anmelden</button>
-      {% endif %}
-      <label class="swap swap-rotate"">
-        <input @click="darkMode = !darkMode" type="checkbox" />
-        <img src="/static/sun.svg" class="swap-on fill-current" />
-        <img src="/static/moon.svg" class="swap-off fill-current" />
-      </label>
+        <h1 class="text-3xl font-bold">Eventfully</h1>
+        <div>
+          {%if logged_in %}
+          <span class="mr-2">{{ username }}</span>
+          <button
+            onclick="window.location.href='/profile'"
+            class="bg-blue-500 text-white rounded p-2 mr-2"
+          >
+            Profil
+          </button>
+          <form hx-post="/api/account/signout" hx-swap="none">
+            <button
+              type="submit"
+              class="bg-red-500 text-white rounded p-2 mr-2"
+            >
+              Abmelden
+            </button>
+          </form>
+          {% else %}
+          <button id="loginBtn" class="bg-blue-500 text-white rounded p-2 mr-2">
+            Anmelden
+          </button>
+          {% endif %}
+          <label class="swap swap-rotate">
+            <input @click="darkMode = !darkMode" type="checkbox" />
+            <img src="/static/sun.svg" class="swap-on fill-current" />
+            <img src="/static/moon.svg" class="swap-off fill-current" />
+          </label>
+        </div>
+      </header>
+
+      <!-- Main -->
+      <main>
+        <section class="bg-white rounded shadow p-6 mb-4">
+          <!-- Event Search -->
+          <h2 class="text-2xl mb-4">Event Suche</h2>
+          <form
+            class="flex items-center"
+            hx-get="/api/search"
+            hx-target="#event-search-result"
+            hx-trigger="click,load"
+          >
+            <input
+              class="w-full p-2 border rounded mb-2"
+              type="text"
+              placeholder="Suche nach Events..."
+            />
+            <button
+              type="submit"
+              class="ml-2 bg-blue-500 text-white rounded p-2"
+            >
+              Suchen
+            </button>
+            <button class="ml-2 bg-green-500 text-white rounded p-2">
+              Filter
+            </button>
+          </form>
+        </section>
+
+        <!-- Event Results -->
+        <section
+          id="event-search-result"
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
+        ></section>
+      </main>
     </div>
-  </header>
-  <main>
-    <section class="bg-white rounded shadow p-6 mb-4">
-      <!-- Event Search -->
-      <h2 class="text-2xl mb-4">Event Suche</h2>
-      <form class="flex items-center" hx-get="/api/search" hx-target="#event-search-result" hx-trigger="click,load">
-        <input class="w-full p-2 border rounded mb-2" type="text" placeholder="Suche nach Events...">
-        <button type="submit" class="ml-2 bg-blue-500 text-white rounded p-2">Suchen</button>
-        <button class="ml-2 bg-green-500 text-white rounded p-2">Filter</button>
-      </form>
-    </section>
-    <section id="event-search-result" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></section>
-  </main>
-</div>
 
-<!-- Login Modal -->
-<div id="loginModal"
-     class="fixed inset-0 flex items-center justify-center z-50 invisible opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out">
-   <div id="loginBox" class="bg-white rounded shadow-2xl p-6 m-4 max-w-xs max-h-full text-center">
-     <h2 class="text-2xl mb-4">Anmelden</h2>
-     <br>
-    <form class="flex items-center" hx-get="/api/account/loadForm" hx-target="#form" hx-trigger="click,load">
-        <!-- Option between Login or SignUp -->
-        <button type="submit" name="signin" hx-params='{"signin": "True"}' class="ml-2 bg-blue-500 text-white p-2">Sign In</button>
-        <button type="submit" name="signup" hx-params='{"signup": "True"}' class="ml-2 bg-blue-500 text-white p-2">Sign Up</button>
-    </form>
-     <br>
-     <section id="form"></section>
-   </div>
-  </div>
-</div>
-{% if logged_in == False %}
-<script>
-  loginBtn.addEventListener('click', function() {
-    loginModal.classList.remove('invisible', 'pointer-events-none', 'opacity-0');
-    loginModal.classList.add('visible', 'pointer-events-auto', 'opacity-100');
-  });
-</script>
-{% endif %}
-
-<script>
-  document.addEventListener('htmx:load', () => {
-    // Vorhandener Code für das Anmeldefenster
-    document.getElementById('loginModal');
-    document.getElementById('loginBox');
-    document.getElementById('loginBtn');
-  });
-
-  // Event-Listener für das Schließen des Modals
-  window.addEventListener('click', function(event) {
-    var loginModal = document.getElementById('loginModal');
-    var loginBox = document.getElementById('loginBox');
-    if (event.target == loginModal && event.target != loginBox && !loginBox.contains(event.target)) {
-        loginModal.classList.add('invisible', 'pointer-events-none', 'opacity-0');
-        loginModal.classList.remove('visible', 'pointer-events-auto', 'opacity-100');
-    }
-  });
-</script>
-</body>
+    <!-- Login Modal -->
+    <div
+      id="loginModal"
+      class="fixed inset-0 flex items-center justify-center z-50 invisible opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out"
+    >
+      <div
+        id="loginBox"
+        class="bg-white rounded shadow-2xl p-6 m-4 max-w-xs max-h-full text-center"
+      >
+        <h2 class="text-2xl mb-4">Anmelden</h2>
+        <br />
+        <form
+          class="flex items-center"
+          hx-get="/api/account/loadForm"
+          hx-target="#form"
+          hx-trigger="click,load"
+        >
+          <!-- Option between Login or SignUp -->
+          <button
+            type="submit"
+            name="signin"
+            hx-params='{"signin": "True"}'
+            class="ml-2 bg-blue-500 text-white p-2"
+          >
+            Sign In
+          </button>
+          <button
+            type="submit"
+            name="signup"
+            hx-params='{"signup": "True"}'
+            class="ml-2 bg-blue-500 text-white p-2"
+          >
+            Sign Up
+          </button>
+        </form>
+        <br />
+        <section id="form"></section>
+      </div>
+    </div>
+  </body>
 </html>
