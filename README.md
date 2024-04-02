@@ -51,7 +51,7 @@ MEILI_HOST="<address of the meilisearch server e.g. http://localhost:7700>"
 
 ### 5. Run Eventfully
 
-- start the server with `rye run dev` or use `rye run main` (Only on Windows) to start the startup program
+- start the server with `rye run dev` to start the startup program
 
 ### 6. Add Test-Data to Eventfully (Optional)
 
