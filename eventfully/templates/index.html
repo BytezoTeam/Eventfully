@@ -8,6 +8,7 @@
   <script src="https://unpkg.com/htmx.org@1.9.10"
           integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
           crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <style>
     .dark-mode {
         background-color: #1a202c;
@@ -21,7 +22,11 @@
     }
   </style>
 </head>
-<body class="bg-gray-200 p-6 text-black">
+<body class="bg-gray-200 p-6 text-black"
+  x-data="{ darkMode: localStorage.getItem('dark') === 'true' }"
+  x-init="$watch('darkMode', val => localStorage.setItem('dark', val))"
+  x-bind:class="{ 'dark': darkMode }"
+>
 <div class="container mx-auto">
   <header class="flex justify-between items-center bg-white rounded shadow p-6 mb-4">
     <h1 class="text-3xl font-bold">Eventfully</h1>
@@ -38,7 +43,11 @@
       {% else %}
       <button id="loginBtn" class="bg-blue-500 text-white rounded p-2 mr-2">Anmelden</button>
       {% endif %}
-      <button id="darkModeBtn" class="ml-2 bg-gray-500 text-white rounded p-2">🌞</button>
+      <label class="swap swap-rotate"">
+        <input @click="darkMode = !darkMode" type="checkbox" />
+        <img src="/static/sun.svg" class="swap-on fill-current" />
+        <img src="/static/moon.svg" class="swap-off fill-current" />
+      </label>
     </div>
   </header>
   <main>
@@ -69,59 +78,34 @@
      <br>
      <section id="form"></section>
    </div>
-
-
   </div>
 </div>
 {% if logged_in == False %}
 <script>
   loginBtn.addEventListener('click', function() {
-         loginModal.classList.remove('invisible', 'pointer-events-none', 'opacity-0');
-         loginModal.classList.add('visible', 'pointer-events-auto', 'opacity-100');
-     });
+    loginModal.classList.remove('invisible', 'pointer-events-none', 'opacity-0');
+    loginModal.classList.add('visible', 'pointer-events-auto', 'opacity-100');
+  });
 </script>
 {% endif %}
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-      // Verbesserter Dunkelmodus-Code
-      var darkModeBtn = document.getElementById('darkModeBtn');
-      var preferredTheme = localStorage.getItem('preferredTheme');
-      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-      const applyTheme = (theme) => {
-          document.body.classList.toggle('dark-mode', theme === 'dark');
-          darkModeBtn.textContent = theme === 'dark' ? '🌜' : '🌞';
-      };
-
-      if (preferredTheme) {
-          applyTheme(preferredTheme);
-      } else if (systemPrefersDark) {
-          applyTheme('dark');
-      }
-
-      darkModeBtn.addEventListener('click', () => {
-          let currentTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
-          let newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-          localStorage.setItem('preferredTheme', newTheme);
-          applyTheme(newTheme);
-      });
-
-      // Vorhandener Code für das Anmeldefenster
-      document.getElementById('loginModal');
-      document.getElementById('loginBox');
-      document.getElementById('loginBtn');
+  document.addEventListener('htmx:load', () => {
+    // Vorhandener Code für das Anmeldefenster
+    document.getElementById('loginModal');
+    document.getElementById('loginBox');
+    document.getElementById('loginBtn');
   });
-// Event-Listener für das Schließen des Modals
-window.addEventListener('click', function(event) {
-  var loginModal = document.getElementById('loginModal');
-  var loginBox = document.getElementById('loginBox');
-  if (event.target == loginModal && event.target != loginBox && !loginBox.contains(event.target)) {
-      loginModal.classList.add('invisible', 'pointer-events-none', 'opacity-0');
-      loginModal.classList.remove('visible', 'pointer-events-auto', 'opacity-100');
-  }
-});
 
+  // Event-Listener für das Schließen des Modals
+  window.addEventListener('click', function(event) {
+    var loginModal = document.getElementById('loginModal');
+    var loginBox = document.getElementById('loginBox');
+    if (event.target == loginModal && event.target != loginBox && !loginBox.contains(event.target)) {
+        loginModal.classList.add('invisible', 'pointer-events-none', 'opacity-0');
+        loginModal.classList.remove('visible', 'pointer-events-auto', 'opacity-100');
+    }
+  });
 </script>
 </body>
 </html>
