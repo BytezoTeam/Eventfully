@@ -36,7 +36,7 @@ managed = true
 dev-dependencies = []
 
 [tool.rye.scripts]
-dev = "gunicorn eventfully.main:app -w 1 -b localhost:5000 --reload"
+dev = "python3 -m eventfully.main"
 main = "python3 startup.py"
 
 [tool.hatch.metadata]
