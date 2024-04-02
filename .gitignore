@@ -8,6 +8,7 @@ __pycache__/
 
 # node files
 node_modules/
+output.css
 
 # private files
 .env
