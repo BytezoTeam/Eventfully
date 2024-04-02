@@ -1,9 +1,13 @@
 # editor files
-/.idea/
+.idea/
+.vscode/
 
 # python files
 __pycache__/
 .venv/
+
+# node files
+node_modules/
 
 # private files
 .env

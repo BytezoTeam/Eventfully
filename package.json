@@ -1,0 +1,11 @@
+{
+  "devDependencies": {
+    "@tailwindcss/typography": "^0",
+    "daisyui": "^4",
+    "tailwindcss": "^3"
+  },
+  "scripts": {
+    "build": "tailwindcss -i ./eventfully/static/input.css -o ./eventfully/static/output.css",
+    "dev": "tailwindcss -i ./eventfully/static/input.css -o ./eventfully/static/output.css --watch"
+  }
+}
