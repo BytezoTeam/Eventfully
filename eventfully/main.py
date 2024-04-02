@@ -140,13 +140,13 @@ def get_events():
 
     return render_template("api/events.html", events=result)
 
+
 @app.route("/api/account/loadForm", methods=["GET"])
 def load_form():
     if request.args.get("signup") is None:
-        return render_template("api/signup_form.html")
-    else:
         return render_template("api/login_form.html")
-
+    else:
+        return render_template("api/signup_form.html")
 
 
 if __name__ == "__main__":
