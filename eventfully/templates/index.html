@@ -3,7 +3,8 @@
   lang="de"
   x-data="{ darkMode: localStorage.getItem('dark') === 'true' }"
   x-init="$watch('darkMode', val => localStorage.setItem('dark', val))"
-  x-bind:class="{ 'dark': darkMode }"
+  x-bind:class="darkMode ? 'dark' : ''"
+  x-bind:data-theme="darkMode ? 'dark' : 'light'"
 >
   <head>
     <meta charset="UTF-8" />
