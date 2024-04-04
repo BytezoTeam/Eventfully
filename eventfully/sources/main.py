@@ -122,7 +122,7 @@ def process_raw_event(raw_event: db.RawEvent, prompts_path: str) -> db.Event:
 def process_field(
     context,
     field_name: str,
-    field_data: dict[str, any],
+    field_data: dict[str, str | dict],
     general_prompt: str,
     model: str = FAST_MODEL,
 ) -> str | list[str] | None:
