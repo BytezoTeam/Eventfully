@@ -77,9 +77,11 @@
             class="flex flex-row justify-start gap-4"
             hx-get="/api/search"
             hx-target="#event-search-result"
-            hx-trigger="click,load"
+            hx-trigger="submit,load"
           >
             <input
+              name="therm"
+              id="therm"
               class="input input-bordered"
               type="search"
               placeholder="Suche nach Events..."
