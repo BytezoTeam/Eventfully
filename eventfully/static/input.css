@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.cool-card {
+  @apply dark:bg-gray-800 bg-gray-100 card shadow-xl rounded-xl
+}

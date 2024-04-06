@@ -5,6 +5,7 @@
   x-init="$watch('darkMode', val => localStorage.setItem('dark', val))"
   x-bind:class="darkMode ? 'dark' : ''"
   x-bind:data-theme="darkMode ? 'dark' : 'light'"
+  class="dark:bg-gray-900 bg-gray-200"
 >
   <head>
     <meta charset="UTF-8" />
@@ -20,18 +21,6 @@
       defer
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
-    <style>
-      .dark-mode {
-        background-color: #1a202c;
-        color: #a0aec0;
-      }
-      .dark-mode .bg-white {
-        background-color: #2d3748;
-      }
-      .dark-mode .text-black {
-        color: #a0aec0;
-      }
-    </style>
 
     {% if logged_in == False %}
     <script>
@@ -82,11 +71,11 @@
     </script>
   </head>
 
-  <body class="bg-gray-200 p-6 text-black">
-    <div class="container mx-auto">
+  <body>
+    <div class="container mx-auto p-8">
       <!-- Head -->
       <header
-        class="flex justify-between items-center bg-white rounded shadow p-6 mb-4"
+        class="cool-card flex justify-between items-center mb-4"
       >
         <h1 class="text-3xl font-bold">Eventfully</h1>
         <div>
@@ -94,34 +83,34 @@
           <span class="mr-2">{{ username }}</span>
           <button
             onclick="window.location.href='/profile'"
-            class="bg-blue-500 text-white rounded p-2 mr-2"
+            class="bg-blue-500 rounded p-2 mr-2"
           >
             Profil
           </button>
           <form hx-post="/api/account/signout" hx-swap="none">
             <button
               type="submit"
-              class="bg-red-500 text-white rounded p-2 mr-2"
+              class="bg-red-500 rounded p-2 mr-2"
             >
               Abmelden
             </button>
           </form>
           {% else %}
-          <button id="loginBtn" class="bg-blue-500 text-white rounded p-2 mr-2">
+          <button id="loginBtn" class="bg-blue-500 rounded p-2 mr-2">
             Anmelden
           </button>
           {% endif %}
           <label class="swap swap-rotate">
-            <input @click="darkMode = !darkMode" type="checkbox" />
-            <img src="/static/sun.svg" class="swap-on fill-current" />
-            <img src="/static/moon.svg" class="swap-off fill-current" />
+            <input @click="darkMode = !darkMode" type="checkbox" x-bind:checked="!darkMode" />
+            <img src="/static/sun.svg" class="swap-on" />
+            <img src="/static/moon.svg" class="swap-off stroke-white" />
           </label>
         </div>
       </header>
 
       <!-- Main -->
       <main>
-        <section class="bg-white rounded shadow p-6 mb-4">
+        <section class="cool-card p-6 mb-4">
           <!-- Event Search -->
           <h2 class="text-2xl mb-4">Event Suche</h2>
           <form
@@ -137,11 +126,11 @@
             />
             <button
               type="submit"
-              class="ml-2 bg-blue-500 text-white rounded p-2"
+              class="ml-2 bg-blue-500 rounded p-2"
             >
               Suchen
             </button>
-            <button class="ml-2 bg-green-500 text-white rounded p-2">
+            <button class="ml-2 bg-green-500 rounded p-2">
               Filter
             </button>
           </form>
@@ -177,7 +166,7 @@
             type="submit"
             name="signin"
             hx-params='{"signin": "True"}'
-            class="ml-2 bg-blue-500 text-white p-2"
+            class="ml-2 bg-blue-500 p-2"
           >
             Sign In
           </button>
@@ -185,7 +174,7 @@
             type="submit"
             name="signup"
             hx-params='{"signup": "True"}'
-            class="ml-2 bg-blue-500 text-white p-2"
+            class="ml-2 bg-blue-500 p-2"
           >
             Sign Up
           </button>
