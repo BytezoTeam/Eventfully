@@ -21,87 +21,47 @@
       defer
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
-
-    {% if logged_in == False %}
-    <script>
-      loginBtn.addEventListener("click", function () {
-        loginModal.classList.remove(
-          "invisible",
-          "pointer-events-none",
-          "opacity-0"
-        );
-        loginModal.classList.add(
-          "visible",
-          "pointer-events-auto",
-          "opacity-100"
-        );
-      });
-    </script>
-    {% endif %}
-
-    <script>
-      document.addEventListener("htmx:load", () => {
-        // Vorhandener Code für das Anmeldefenster
-        document.getElementById("loginModal");
-        document.getElementById("loginBox");
-        document.getElementById("loginBtn");
-      });
-
-      // Event-Listener für das Schließen des Modals
-      window.addEventListener("click", function (event) {
-        var loginModal = document.getElementById("loginModal");
-        var loginBox = document.getElementById("loginBox");
-        if (
-          event.target == loginModal &&
-          event.target != loginBox &&
-          !loginBox.contains(event.target)
-        ) {
-          loginModal.classList.add(
-            "invisible",
-            "pointer-events-none",
-            "opacity-0"
-          );
-          loginModal.classList.remove(
-            "visible",
-            "pointer-events-auto",
-            "opacity-100"
-          );
-        }
-      });
-    </script>
   </head>
 
   <body>
+    <!-- Main Container - No Modals -->
     <div class="container mx-auto p-8">
       <!-- Head -->
-      <header
-        class="cool-card flex justify-between items-center mb-4"
-      >
+      <header class="cool-card mb-8 flex flex-row items-center justify-between">
         <h1 class="text-3xl font-bold">Eventfully</h1>
-        <div>
-          {%if logged_in %}
-          <span class="mr-2">{{ username }}</span>
-          <button
-            onclick="window.location.href='/profile'"
-            class="bg-blue-500 rounded p-2 mr-2"
-          >
-            Profil
-          </button>
-          <form hx-post="/api/account/signout" hx-swap="none">
+        <div class="flex flex-row items-center gap-6">
+          <!-- Account -->
+          <div class="flex flex-row items-center gap-3">
+            {%if logged_in %}
+            <span class="mr-2">{{ username }}</span>
             <button
-              type="submit"
-              class="bg-red-500 rounded p-2 mr-2"
+              onclick="window.location.href='/profile'"
+              class="bg-blue-500 rounded p-2"
             >
-              Abmelden
+              Profil
             </button>
-          </form>
-          {% else %}
-          <button id="loginBtn" class="bg-blue-500 rounded p-2 mr-2">
-            Anmelden
-          </button>
-          {% endif %}
+            <form hx-post="/api/account/signout" hx-swap="none">
+              <button type="submit" class="bg-red-500 rounded p-2">
+                Abmelden
+              </button>
+            </form>
+            {% else %}
+            <button
+              class="btn btn-ghost btn-active"
+              @click="loginModal.showModal()"
+            >
+              Anmelden
+            </button>
+            {% endif %}
+          </div>
+
+          <!-- Theme Switch -->
           <label class="swap swap-rotate">
-            <input @click="darkMode = !darkMode" type="checkbox" x-bind:checked="!darkMode" />
+            <input
+              @click="darkMode = !darkMode"
+              type="checkbox"
+              x-bind:checked="!darkMode"
+            />
             <img src="/static/sun.svg" class="swap-on" />
             <img src="/static/moon.svg" class="swap-off stroke-white" />
           </label>
@@ -109,79 +69,101 @@
       </header>
 
       <!-- Main -->
-      <main>
-        <section class="cool-card p-6 mb-4">
+      <main class="flex flex-col gap-8">
+        <section class="cool-card">
           <!-- Event Search -->
           <h2 class="text-2xl mb-4">Event Suche</h2>
           <form
-            class="flex items-center"
+            class="flex flex-row justify-start gap-4"
             hx-get="/api/search"
             hx-target="#event-search-result"
             hx-trigger="click,load"
           >
             <input
-              class="w-full p-2 border rounded mb-2"
-              type="text"
+              class="input input-bordered"
+              type="search"
               placeholder="Suche nach Events..."
             />
-            <button
-              type="submit"
-              class="ml-2 bg-blue-500 rounded p-2"
-            >
-              Suchen
-            </button>
-            <button class="ml-2 bg-green-500 rounded p-2">
-              Filter
-            </button>
+            <button type="submit" class="btn btn-primary">Suchen</button>
           </form>
         </section>
 
         <!-- Event Results -->
         <section
           id="event-search-result"
-          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"
         ></section>
       </main>
     </div>
 
     <!-- Login Modal -->
-    <div
-      id="loginModal"
-      class="fixed inset-0 flex items-center justify-center z-50 invisible opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out"
-    >
+    <dialog id="loginModal" class="modal">
       <div
-        id="loginBox"
-        class="bg-white rounded shadow-2xl p-6 m-4 max-w-xs max-h-full text-center"
+        class="modal-box dark:bg-gray-800 bg-gray-100 prose flex flex-col items-center gap-4"
       >
-        <h2 class="text-2xl mb-4">Anmelden</h2>
-        <br />
+        <!-- Login Form -->
+        <h1>Anmelden</h1>
         <form
-          class="flex items-center"
+          class="flex flex-col items-center gap-4"
           hx-get="/api/account/loadForm"
           hx-target="#form"
           hx-trigger="click,load"
         >
+          <!-- Username -->
+          <label class="input input-bordered flex items-center gap-2">
+            <input
+              name="username"
+              id="username"
+              type="text"
+              class="grow"
+              placeholder="Username"
+            />
+          </label>
+          <!-- Email -->
+          <label class="input input-bordered flex items-center gap-2">
+            <input
+              name="email"
+              id="email"
+              type="email"
+              class="grow"
+              placeholder="Email"
+            />
+          </label>
+          <!-- Password -->
+          <label class="input input-bordered flex items-center gap-2">
+            <input
+              name="password"
+              id="password"
+              type="password"
+              class="grow"
+              placeholder="Password"
+            />
+          </label>
+
           <!-- Option between Login or SignUp -->
-          <button
-            type="submit"
-            name="signin"
-            hx-params='{"signin": "True"}'
-            class="ml-2 bg-blue-500 p-2"
-          >
-            Sign In
-          </button>
-          <button
-            type="submit"
-            name="signup"
-            hx-params='{"signup": "True"}'
-            class="ml-2 bg-blue-500 p-2"
-          >
-            Sign Up
-          </button>
+          <div class="w-full flex flex-row justify-between gap-8">
+            <button
+              type="submit"
+              name="signin"
+              hx-params='{"signin": "True"}'
+              class="btn btn-primary"
+            >
+              Sign In
+            </button>
+            <button
+              type="submit"
+              name="signup"
+              hx-params='{"signup": "True"}'
+              class="btn btn-primary"
+            >
+              Sign Up
+            </button>
+          </div>
         </form>
-        <br />
-        <section id="form"></section>
       </div>
-    </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>Close</button>
+      </form>
+    </dialog>
   </body>
 </html>

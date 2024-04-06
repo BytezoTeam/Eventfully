@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 .cool-card {
-  @apply dark:bg-gray-800 bg-gray-100 card shadow-xl rounded-xl
+  @apply dark:bg-gray-800 bg-gray-100 shadow-xl rounded-2xl p-6
 }
