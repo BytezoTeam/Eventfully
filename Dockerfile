@@ -11,19 +11,13 @@ RUN bun run build
 FROM python:3.11-alpine AS run
 
 # Install dependencies
-WORKDIR /tmp
+WORKDIR /app
 
 COPY requirements.lock ./
 RUN sed '/-e/d' requirements.lock > requirements.txt && \
     pip install -r requirements.txt
 
-# Add non root user
-RUN addgroup eventfully && \
-    adduser --system -G eventfully --disabled-password eventfully
-USER eventfully
-
 # Run eventfully
-WORKDIR /home/eventfully
 COPY --from=build /build/eventfully/ eventfully/
 
 EXPOSE 8000
