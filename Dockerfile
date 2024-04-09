@@ -19,6 +19,7 @@ RUN sed '/-e/d' requirements.lock > requirements.txt && \
 
 # Run eventfully
 COPY --from=build /build/eventfully/ eventfully/
+COPY tests/ tests/
 
 EXPOSE 8000
 
