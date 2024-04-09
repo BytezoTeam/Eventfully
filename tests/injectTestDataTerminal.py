@@ -1,6 +1,7 @@
 import eventfully.database as db
 from datetime import datetime
 import json
+from os import path
 
 
 def create_events(data):
@@ -37,7 +38,7 @@ def inject(test_data):
 
 path_to_json = input("Enter the path to the .json file:  [Default: tests/test_data.json]: ")
 if not path_to_json:
-    path_to_json = "test-data.json"
+    path_to_json = path.join("tests", "test-data.json")
 
 with open(path_to_json) as f:
     test_data = json.load(f)
