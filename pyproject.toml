@@ -47,6 +47,8 @@ dev-dependencies = []
 [tool.rye.scripts]
 serve = "python3 -m eventfully.main"
 main = "python3 startup.py"
+css-gen = "tailwindcss -i ./eventfully/static/input.css -o ./eventfully/static/output.css --watch"
+css-build = "tailwindcss -i ./eventfully/static/input.css -o ./eventfully/static/output.css"
 
 [tool.hatch.metadata]
 allow-direct-references = true
