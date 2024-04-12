@@ -102,6 +102,8 @@ MEILI_HOST="<address of the meilisearch server e.g. http://localhost:7700>"
   or
 - Press enter, and [this](https://github.com/BytezoTeam/Eventfully/blob/main/tests/test-data.json) Test-Data will be injected autmaticly
 
+## [Running In Production](/docs/running-in-production.md) (Docker)
+
 ## License
 
 [GPL-3.0](/LICENSE.txt)
