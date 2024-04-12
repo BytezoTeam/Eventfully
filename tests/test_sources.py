@@ -1,7 +1,7 @@
 import pytest
 
 import eventfully.database as db
-from eventfully.sources.main import process_raw_event
+from eventfully.sources.ai_provider import process_raw_event
 
 
 @pytest.mark.parametrize(
