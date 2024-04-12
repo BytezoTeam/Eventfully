@@ -24,6 +24,7 @@ dependencies = [
     "goodtools>=0.3",
     "niquests==3.*",
     "beautifulsoup4==4.*",
+    "pytailwindcss==0.*",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"

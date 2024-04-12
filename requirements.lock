@@ -121,6 +121,8 @@ pydantic-core==2.18.1
     # via pydantic
 pysocks==1.7.1
     # via urllib3
+pytailwindcss==0.2.0
+    # via eventfully
 pytest==8.1.1
     # via eventfully
 python-dateutil==2.9.0.post0
