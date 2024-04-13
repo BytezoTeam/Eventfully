@@ -19,6 +19,7 @@ attrs==23.2.0
     # via outcome
     # via trio
 beartype==0.18.0
+beautifulsoup4==4.12.3
     # via eventfully
 black==24.3.0
     # via eventfully
@@ -148,6 +149,8 @@ sniffio==1.3.1
     # via trio
 sortedcontainers==2.4.0
     # via trio
+soupsieve==2.5
+    # via beautifulsoup4
 tenacity==8.2.3
     # via eventfully
 tqdm==4.66.2
