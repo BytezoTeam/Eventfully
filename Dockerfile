@@ -10,14 +10,13 @@ RUN bun run build
 
 FROM python:3.11-alpine AS run
 
-# Install dependencies
 WORKDIR /app
 
+# Install dependencies
 COPY requirements.lock ./
 RUN sed '/-e/d' requirements.lock > requirements.txt && \
     pip install -r requirements.txt
 
-# Run eventfully
 COPY --from=build /build/eventfully/ eventfully/
 COPY tests/ tests/
 
