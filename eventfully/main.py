@@ -10,7 +10,6 @@ from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Length
 
 import eventfully.database as db
-import eventfully.sources.main as sources
 from eventfully.logger import log
 
 log.info("Starting Server ...")
@@ -27,13 +26,6 @@ app.config["WTF_CSRF_ENABLED"] = False
 scheduler = APScheduler()
 scheduler.init_app(app)
 atexit.register(lambda: scheduler.shutdown())
-
-
-# Scheduled tasks
-@scheduler.task("cron", id="get_data", hour=0)
-def get_data():
-    log.info("Running scheduled job get_data")
-    sources.main()
 
 
 scheduler.start()
