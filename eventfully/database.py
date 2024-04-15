@@ -9,12 +9,14 @@ from random import choice
 import meilisearch as ms
 from dotenv import load_dotenv
 from get_project_root import root_path
-from peewee import Model, TextField, DoesNotExist
+from peewee import Model, TextField, DoesNotExist, DateTimeField
 from playhouse.shortcuts import model_to_dict
 from playhouse.sqlite_ext import SqliteExtDatabase
-from pydantic import BaseModel, computed_field
+from pydantic import BaseModel, computed_field, field_serializer
+from datetime import datetime
 
 from eventfully.utils import get_hash_string
+
 
 load_dotenv()
 _MEILI_HOST = getenv("MEILI_HOST")
@@ -48,7 +50,8 @@ if not ms_client.is_healthy():
     raise ConnectionError(choice(FUNNY_ERRORS))
 event_index = ms_client.index("events")
 ms_client.create_index("events", {"primaryKey": "id"})
-event_index.update_filterable_attributes(["tags"])
+event_index.update_searchable_attributes(["title", "web_link"])
+event_index.update_filterable_attributes(["city"])
 
 # SQLite with peewee
 db = SqliteExtDatabase(
@@ -71,57 +74,31 @@ class AccountData(_DBBaseModel):
     email = TextField()
 
 
-class ExistingEvents(_DBBaseModel):
-    id = TextField(primary_key=True)
+class SearchCache(_DBBaseModel):
+    search_hash = TextField(primary_key=True)
+    time = DateTimeField()
+
+
+class UnprocessedEvent(_DBBaseModel):
+    event_id = TextField(primary_key=True)
 
 
 class Event(BaseModel):
-    title: str
-    description: str
-    link: str
-    price: str
-    age: str
-    tags: list[str]
-    start_date: int
-    end_date: int
-    accessibility: str
-    address: str
-    city: str
-
-    @computed_field()
-    @property
-    def id(self) -> str:
-        return get_hash_string(self.title + str(self.start_date))
-
-
-class RawEvent(BaseModel):
-    raw: str
+    web_link: str
+    start_time: datetime
+    end_time: datetime
     title: str | None = None
-    description: str | None = None
-    link: str | None = None
-    price: str | None = None
-    age: str | None = None
-    tags: str | None = None
-    start_date: str | None = None
-    end_date: str | None = None
-    accessibility: str | None = None
-    address: str | None = None
+    image_link: str | None = None
     city: str | None = None
 
     @computed_field()
     @property
     def id(self) -> str:
-        return get_hash_string(self.raw)
+        return get_hash_string(self.web_link + str(self.start_time) + str(self.end_time))
 
-
-# TODO: add fail check
-def add_event(event: Event):
-    event_index.add_documents([event.model_dump()])
-
-
-def add_events(events: list[Event]):
-    event_dicts = [event.model_dump() for event in events]
-    event_index.add_documents(event_dicts)
+    @field_serializer("start_time", "end_time")
+    def serialize_start(self, time: datetime, _info):
+        return time.timestamp()
 
 
 # TODO: Add check to look if email is real
@@ -167,25 +144,5 @@ def check_user_exists(user_id: str):
         return False
 
 
-def search_events(query: str, search_tag: str) -> list[Event]:
-    if search_tag:
-        raw = event_index.search(query, {"filter": f"tags IN ['{search_tag}']"})
-    else:
-        raw = event_index.search(query)
-    # Convert raw event sources in python dict form to pydantic Events
-    events = [Event(**raw_event) for raw_event in raw["hits"]]
-    return events
-
-
-def get_existing_event_ids() -> list[str]:
-    return [event.id for event in ExistingEvents.select()]
-
-
-def add_existing_event_ids(event_ids: list[str]):
-    with db.atomic():
-        for event_id in event_ids:
-            ExistingEvents.create(id=event_id)
-
-
 db.connect()
-db.create_tables([AccountData])
+db.create_tables([AccountData, SearchCache, UnprocessedEvent])

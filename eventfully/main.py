@@ -10,6 +10,7 @@ from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Length
 
 import eventfully.database as db
+from eventfully.search.main import search
 from eventfully.logger import log
 
 log.info("Starting Server ...")
@@ -127,7 +128,7 @@ def signout_account():
 def get_events():
     therm = request.args.get("therm", "")
 
-    result = db.search_events(therm, "")
+    result = search(therm, datetime.today(), datetime.today(), "Zürich")
 
     return render_template("api/events.html", events=result)
 
