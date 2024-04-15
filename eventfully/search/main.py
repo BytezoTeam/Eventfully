@@ -2,10 +2,10 @@ from datetime import datetime
 
 from beartype import beartype
 
-from eventfully.logger import log
-from eventfully.utils import get_hash_string
 import eventfully.database as db
+from eventfully.logger import log
 from eventfully.search.sources import zuerichunbezahlbar
+from eventfully.utils import get_hash_string
 
 
 @beartype
