@@ -96,6 +96,9 @@ class Event(BaseModel):
     def id(self) -> str:
         return get_hash_string(self.web_link + str(self.start_time) + str(self.end_time))
 
+    def __hash__(self):
+        return hash(self.web_link + str(self.start_time) + str(self.end_time))
+
     @field_serializer("start_time", "end_time")
     def serialize_start(self, time: datetime, _info):
         return time.timestamp()

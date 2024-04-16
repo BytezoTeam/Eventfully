@@ -9,21 +9,18 @@ from eventfully.utils import get_hash_string
 
 
 @beartype
-def search(therm: str, min_date: datetime, max_date: datetime, city: str) -> list[db.Event]:
-    events: list[db.Event] = []
+def search(therm: str, min_date: datetime, max_date: datetime, city: str) -> set[db.Event]:
+    events: set[db.Event] = set()
 
     db_events = _search_db(therm, min_date, max_date, city)
-    events += db_events
+    events.update(db_events)
 
     # Skip if this search has been performed before and the events are already in the database
     combined_search_string = therm + str(min_date.date()) + str(max_date.date()) + city
     search_hash = get_hash_string(combined_search_string)
     if not db.SearchCache.select().where(db.SearchCache.search_hash == search_hash).exists():
         web_events = _search_web(therm, min_date, max_date, city)
-
-        # TODO: remove duplicates
-
-        events += web_events
+        events.update(web_events)
 
         # Add the new events to the database
         events_dicts = [event.model_dump() for event in web_events]
@@ -40,19 +37,19 @@ def search(therm: str, min_date: datetime, max_date: datetime, city: str) -> lis
 
 
 @beartype
-def _search_db(therm: str, min_date: datetime, max_date: datetime, city: str) -> list[db.Event]:
+def _search_db(therm: str, min_date: datetime, max_date: datetime, city: str) -> set[db.Event]:
     raw = db.event_index.search(therm)
     events = [db.Event(**raw_event) for raw_event in raw["hits"]]
-    return events
+    return set(events)
 
 
 @beartype
-def _search_web(therm: str, min_date: datetime, max_date: datetime, city: str) -> list[db.Event]:
-    events: list[db.Event] = []
+def _search_web(therm: str, min_date: datetime, max_date: datetime, city: str) -> set[db.Event]:
+    events: set[db.Event] = set()
 
     if city == "Zürich":    # This source is only for Zürich
         try:
-            events += zuerichunbezahlbar.search(therm, min_date, max_date)
+            events.update(zuerichunbezahlbar.search(therm, min_date, max_date))
         except ConnectionError as e:
             log.error("Problem with Zuerichunbezahlbar", exc_info=e)
 
@@ -61,3 +58,4 @@ def _search_web(therm: str, min_date: datetime, max_date: datetime, city: str) -
 
 if __name__ == "__main__":
     print(search("", datetime.today(), datetime.today(), "Zürich"))
+    # print(_search_db("", datetime.today(), datetime.today(), "Zürich"))

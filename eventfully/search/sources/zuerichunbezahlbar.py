@@ -2,13 +2,15 @@ from datetime import datetime
 
 import niquests
 from bs4 import BeautifulSoup
+from beartype import beartype
 
 import eventfully.database as db
 
 BASE_URL = "https://www.zuerichunbezahlbar.ch"
 
 
-def search(therm: str, min_date: datetime, max_date: datetime) -> list[db.Event]:
+@beartype
+def search(therm: str, min_date: datetime, max_date: datetime) -> set[db.Event]:
     min_date_str = min_date.strftime("%d-%m-%Y")
     max_date_str = max_date.strftime("%d-%m-%Y")
 
@@ -26,7 +28,7 @@ def search(therm: str, min_date: datetime, max_date: datetime) -> list[db.Event]
     soup = BeautifulSoup(request.text, "html.parser")
     raw_events = soup.find_all("article", class_="poster")
 
-    events: list[db.Event] = []
+    events: set[db.Event] = set()
     for raw_event in raw_events:
         title = raw_event.find("span", class_="poster__title-span").text.strip()
 
@@ -37,7 +39,7 @@ def search(therm: str, min_date: datetime, max_date: datetime) -> list[db.Event]
         raw_event_date = raw_event.find("time", class_="poster__date").get("datetime")
         event_datetime = datetime.strptime(raw_event_date, "%Y-%m-%d")
 
-        events.append(db.Event(
+        events.add(db.Event(
             title=title,
             web_link=link,
             image_link=image_link,
