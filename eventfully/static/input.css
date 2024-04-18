@@ -6,6 +6,10 @@
   @apply dark:bg-gray-800 bg-gray-100 shadow-xl rounded-xl p-6
 }
 
+.feather {
+  @apply stroke-gray-800 dark:stroke-gray-100
+}
+
 h1 {
   @apply font-extrabold text-4xl
 }

@@ -62,8 +62,12 @@
               type="checkbox"
               x-bind:checked="!darkMode"
             />
-            <img src="/static/sun.svg" class="swap-on" />
-            <img src="/static/moon.svg" class="swap-off stroke-white" />
+            <div class="swap-on">
+              {% include 'components/icons/sun.html' %}
+            </div>
+            <div class="swap-off">
+              {% include 'components/icons/moon.html' %}
+            </div>
           </label>
         </div>
       </header>
