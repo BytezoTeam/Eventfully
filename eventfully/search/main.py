@@ -39,7 +39,15 @@ def search(therm: str, min_date: datetime, max_date: datetime, city: str) -> set
 
 @beartype
 def _search_db(therm: str, min_date: datetime, max_date: datetime, city: str) -> set[db.Event]:
-    raw = db.event_index.search(therm)
+    filters = []
+    if city:
+        filters.append(f"city = '{city}'")
+    filter_string = " AND ".join(filters)
+    print("Filter string:", filter_string)
+
+    raw = db.event_index.search(therm, {
+        "filter": filter_string,
+    })
     events = [db.Event(**raw_event) for raw_event in raw["hits"]]
     return set(events)
 
@@ -48,13 +56,13 @@ def _search_db(therm: str, min_date: datetime, max_date: datetime, city: str) ->
 def _search_web(therm: str, min_date: datetime, max_date: datetime, city: str) -> set[db.Event]:
     events: set[db.Event] = set()
 
-    if city == "Zürich":    # This source is only for Zürich
+    if city == "Zürich" or city == "":    # This source is only for Zürich
         try:
             events.update(zuerichunbezahlbar_search(therm, min_date, max_date))
         except ConnectionError as e:
             log.error("Problem with Zuerichunbezahlbar", exc_info=e)
 
-    if city == "Velbert":
+    if city == "Velbert" or city == "":
         try:
             events.update(kulturloewen_search(therm, min_date, max_date))
         except ConnectionError as e:

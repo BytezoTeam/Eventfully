@@ -127,8 +127,9 @@ def signout_account():
 @app.route("/api/search", methods=["GET"])
 def get_events():
     therm = request.args.get("therm", "")
+    city = request.args.get("city", "")
 
-    result = search(therm, datetime.today(), datetime.today(), "Zürich")
+    result = search(therm, datetime.today(), datetime.today(), city)
 
     return render_template("api/events.html", events=result)
 
