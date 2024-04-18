@@ -78,6 +78,7 @@
             hx-get="/api/search"
             hx-target="#event-search-result"
             hx-trigger="submit,load"
+            hx-indicator=".htmx-indicator"
           >
             <input
               name="therm"
@@ -97,10 +98,10 @@
         </section>
 
         <!-- Event Results -->
-        <section
-          id="event-search-result"
-          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"
-        ></section>
+        <div class="htmx-indicator" id="event-search-result"></div>
+        <div class="flex justify-center items-center">
+          <span class="htmx-indicator center loading loading-spinner loading-lg mt-16"></span>
+        </div>
       </main>
     </div>
 
