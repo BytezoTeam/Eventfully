@@ -40,11 +40,16 @@ def search(therm: str, min_time: datetime, max_time: datetime) -> set[db.Event]:
             raw_image_style = raw_event.find("div", class_="klive-foto").get("style")
             image_link = _extract_with_regex(raw_image_style, r"url\((.+)\)")
 
+            event_id = raw_event.find("a", class_="aufklapplink").get("id").removeprefix("a")
+            event_web_link_base = "https://www.neanderticket.de/?"
+            web_link = event_web_link_base + event_id
+
             events.add(
                 db.Event(
-                    title=title,
+                    web_link=web_link,
                     start_time=time,
                     end_time=time,
+                    title=title,
                     image_link=image_link,
                     city="Velbert",
                 )
