@@ -27,6 +27,9 @@ h2 {
 .htmx-request .htmx-indicator {
   display:inline;
 }
+.htmx-request.htmx-indicator {
+  display:inline;
+}
 
 /* Hide elements when the request is loading */
 div.htmx-indicator {
@@ -34,6 +37,10 @@ div.htmx-indicator {
   opacity: 1;
 }
 div.htmx-request div.htmx-indicator {
+  display:none;
+  opacity: 0;
+}
+div.htmx-request.htmx-indicator {
   display:none;
   opacity: 0;
 }
