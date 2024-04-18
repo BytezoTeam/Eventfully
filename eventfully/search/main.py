@@ -4,7 +4,8 @@ from beartype import beartype
 
 import eventfully.database as db
 from eventfully.logger import log
-from eventfully.search.sources import zuerichunbezahlbar
+from eventfully.search.sources.zuerichunbezahlbar import search as zuerichunbezahlbar_search
+from eventfully.search.sources.kulturloewen import search as kulturloewen_search
 from eventfully.utils import get_hash_string
 
 
@@ -49,9 +50,16 @@ def _search_web(therm: str, min_date: datetime, max_date: datetime, city: str) -
 
     if city == "Zürich":    # This source is only for Zürich
         try:
-            events.update(zuerichunbezahlbar.search(therm, min_date, max_date))
+            events.update(zuerichunbezahlbar_search(therm, min_date, max_date))
         except ConnectionError as e:
             log.error("Problem with Zuerichunbezahlbar", exc_info=e)
+
+    if city == "Velbert":
+        try:
+            events.update(kulturloewen_search(therm, min_date, max_date))
+        except ConnectionError as e:
+            log.error("Problem with Kulturloewen", exc_info=e)
+
 
     return events
 
