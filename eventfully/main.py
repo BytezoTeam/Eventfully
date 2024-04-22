@@ -2,6 +2,7 @@ import atexit
 from datetime import datetime, timedelta
 from http import HTTPStatus
 from uuid import uuid4
+from threading import Thread
 
 from flask import Flask, render_template, request, make_response
 from flask_apscheduler import APScheduler
@@ -10,6 +11,7 @@ from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Length
 
 import eventfully.database as db
+from eventfully.search.post_processing import main as post_processing_main
 from eventfully.search.main import search
 from eventfully.logger import log
 
@@ -28,8 +30,10 @@ scheduler = APScheduler()
 scheduler.init_app(app)
 atexit.register(lambda: scheduler.shutdown())
 
-
 scheduler.start()
+
+post_processing_thread = Thread(target=post_processing_main)
+post_processing_thread.start()
 
 
 @app.errorhandler(500)

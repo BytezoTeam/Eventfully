@@ -49,6 +49,7 @@ def search(therm: str, min_time: datetime, max_time: datetime) -> set[db.Event]:
                     web_link=web_link,
                     start_time=time,
                     end_time=time,
+                    source="kulturloewen",
                     title=title,
                     image_link=image_link,
                     city="Velbert",
@@ -60,6 +61,12 @@ def search(therm: str, min_time: datetime, max_time: datetime) -> set[db.Event]:
     return events
 
 
+@beartype
+def post_process(event: db.Event) -> db.Event:
+    raise NotImplementedError()
+
+
+@beartype
 def _extract_with_regex(text: str, pattern: str) -> str:
     search_match = re.search(pattern, text)
     if search_match:

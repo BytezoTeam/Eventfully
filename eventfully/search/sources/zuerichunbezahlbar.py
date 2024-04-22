@@ -40,15 +40,21 @@ def search(therm: str, min_date: datetime, max_date: datetime) -> set[db.Event]:
         event_datetime = datetime.strptime(raw_event_date, "%Y-%m-%d")
 
         events.add(db.Event(
-            title=title,
             web_link=link,
-            image_link=image_link,
             start_time=event_datetime,
             end_time=event_datetime,
+            source="zuerichunbezahlbar",
+            title=title,
+            image_link=image_link,
             city="Zürich"   # This source is only for Zürich
         ))
 
     return events
+
+
+@beartype
+def post_process(event: db.Event) -> db.Event:
+    raise NotImplementedError()
 
 
 if __name__ == "__main__":

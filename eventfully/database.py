@@ -52,7 +52,7 @@ if not ms_client.is_healthy():
 event_index = ms_client.index("events")
 ms_client.create_index("events", {"primaryKey": "id"})
 event_index.update_searchable_attributes(["title", "web_link"])
-event_index.update_filterable_attributes(["city"])
+event_index.update_filterable_attributes(["id", "city"])
 
 # SQLite with peewee
 db = SqliteExtDatabase(
@@ -88,6 +88,7 @@ class Event(BaseModel):
     web_link: str
     start_time: datetime
     end_time: datetime
+    source: str
     title: str | None = None
     image_link: str | None = None
     city: str | None = None
