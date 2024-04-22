@@ -5,6 +5,7 @@
 import atexit
 from os import getenv, path
 from random import choice
+from typing import Iterable
 
 import meilisearch as ms
 from dotenv import load_dotenv
@@ -145,6 +146,11 @@ def check_user_exists(user_id: str):
         return True
     except DoesNotExist:
         return False
+
+
+def add_events(events: Iterable[Event]):
+    events_dicts = [event.model_dump() for event in events]
+    event_index.add_documents(events_dicts)
 
 
 db.connect()

@@ -24,8 +24,7 @@ def search(therm: str, min_date: datetime, max_date: datetime, city: str) -> set
         events.update(web_events)
 
         # Add the new events to the database
-        events_dicts = [event.model_dump() for event in web_events]
-        db.event_index.add_documents(events_dicts)
+        db.add_events(web_events)
 
         # Store references for the new events in the db, so we know which ones we need to process with AI
         with db.db.atomic():
@@ -67,7 +66,6 @@ def _search_web(therm: str, min_date: datetime, max_date: datetime, city: str) -
             events.update(kulturloewen_search(therm, min_date, max_date))
         except ConnectionError as e:
             log.error("Problem with Kulturloewen", exc_info=e)
-
 
     return events
 
