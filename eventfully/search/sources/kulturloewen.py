@@ -25,11 +25,16 @@ def search(therm: str, min_time: datetime, max_time: datetime) -> set[db.Event]:
         raw_events = soup.find_all("div", class_="klive-terminbox")
         for raw_event in raw_events:
             raw_artist_element = raw_event.find("span", class_="klive-titel-artist")
-            raw_title_element = raw_event.find("span", class_="klive-titek-title")
+            raw_title_element = raw_event.find("span", class_="klive-titel-titel")
+            raw_subtitle_element = raw_event.find("span", class_="klive-titel-subtitel")
+            title_elements = []
+            if raw_artist_element:
+                title_elements.append(raw_artist_element.text)
             if raw_title_element:
-                title = raw_title_element.text
-            else:
-                title = raw_artist_element.text
+                title_elements.append(raw_title_element.text)
+            if raw_subtitle_element:
+                title_elements.append(raw_subtitle_element.text)
+            title = " - ".join(title_elements)
 
             time = search_time
             raw_time_long_text = raw_event.find("div", class_="klive-zeit").text
