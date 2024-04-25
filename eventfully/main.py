@@ -12,7 +12,7 @@ from wtforms.validators import DataRequired, Length
 
 import eventfully.database as db
 from eventfully.search.post_processing import main as post_processing_main
-from eventfully.search.main import search
+from eventfully.search.search import search
 from eventfully.logger import log
 
 log.info("Starting Server ...")
