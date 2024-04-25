@@ -28,24 +28,25 @@ def main():
 
 @beartype
 def _post_process():
-    unprocessed_event_ids = db.UnprocessedEvent.select()
-    if not unprocessed_event_ids.exists():
+    unprocessed_event_db_entries = db.UnprocessedEvent.select()
+    if not unprocessed_event_db_entries.exists():
         return
 
     log.info("Found unprocessed events ...")
 
     processed_events = set()
-    for unprocessed_event_id in unprocessed_event_ids:
-        unprocessed_event = _get_event_by_id(unprocessed_event_id.event_id)
+    for unprocessed_event_dp_entry in unprocessed_event_db_entries:
+        unprocessed_event = _get_event_by_id(unprocessed_event_dp_entry.event_id)
         try:
             processed_event = SOURCES[unprocessed_event.source](unprocessed_event)
         except Exception as e:
             log.warn(
-                f"Could not process event {unprocessed_event_id.event_id} from {unprocessed_event.source}",
+                f"Could not process event {unprocessed_event_dp_entry.event_id} from {unprocessed_event.source}",
                 exc_info=e,
             )
             continue
         processed_events.add(processed_event)
+        unprocessed_event_dp_entry.delete_instance()
 
     db.add_events(processed_events)
 
