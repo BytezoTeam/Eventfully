@@ -8,11 +8,20 @@
     />
   </figure>
   <div class="card-body">
+    <a class="btn btn-neutral" href="/api/like_event?id={{ item.id }}">Like</a>
+
     <h2 class="card-title">{{ item.title }}</h2>
     <p>{{ item.description }}</p>
     <details class="collapse">
       <summary class="collapse-title font-medium">Mehr</summary>
       <div class="collapse-content">
+        <p>Preis: {{ item.price }}</p>
+        <p>Wann?: {{ item.startdate }}-{{ item.enddate }}</p>
+        <p>Alter: {{ item.age }}</p>
+        <p>Barrierefreiheit: {{ item.accessibility }}</p>
+        <p>Wo?: {{ item.address }}</p>
+        <p>Kategorien: {{ item.tags }}</p>
+        <br>
         <a class="btn btn-neutral" href="{{ item.link }}">Zur Quelle</a>
       </div>
     </details>

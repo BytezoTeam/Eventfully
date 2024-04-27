@@ -70,6 +70,10 @@ class AccountData(_DBBaseModel):
     username = TextField()
     email = TextField()
 
+class like_data(_DBBaseModel):
+    userId = TextField(primary_key=True)
+    liked_event_id = TextField()
+
 
 class ExistingEvents(_DBBaseModel):
     id = TextField(primary_key=True)
@@ -147,6 +151,11 @@ def get_user_data(user_id):
         print(f"No account found with userId {user_id}.")
         return None
 
+def like_event(user_id, event_id):
+    like_data.create(userID=user_id, liked_event_id=event_id)
+    
+    return event_id
+
 
 def authenticate_user(username, password):
     try:
@@ -188,4 +197,4 @@ def add_existing_event_ids(event_ids: list[str]):
 
 
 db.connect()
-db.create_tables([AccountData])
+db.create_tables([like_data, AccountData])
