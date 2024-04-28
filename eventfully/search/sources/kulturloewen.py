@@ -68,7 +68,16 @@ def search(therm: str, min_time: datetime, max_time: datetime) -> set[db.Event]:
 
 @beartype
 def post_process(event: db.Event) -> db.Event:
-    raise NotImplementedError()
+    request = niquests.get(event.web_link)
+    if request.status_code != 200:
+        raise ConnectionError("Bad response")
+
+    soup = BeautifulSoup(request.text, "html.parser")
+
+    event.description = soup.find("div", class_="bText").text
+    event.address = soup.find("div", class_="location").find("p").text.strip()
+
+    return event
 
 
 @beartype

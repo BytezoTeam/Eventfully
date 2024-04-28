@@ -40,13 +40,11 @@ def _post_process():
         try:
             processed_event = SOURCES[unprocessed_event.source](unprocessed_event)
         except Exception as e:
-            log.warn(
-                f"Could not process event {unprocessed_event_dp_entry.event_id} from {unprocessed_event.source}",
-                exc_info=e,
-            )
+            log.warn(f"Could not process event {unprocessed_event_dp_entry.event_id} from {unprocessed_event.source}: {e}")
             continue
+        finally:
+            unprocessed_event_dp_entry.delete_instance()
         processed_events.add(processed_event)
-        unprocessed_event_dp_entry.delete_instance()
 
     db.add_events(processed_events)
 

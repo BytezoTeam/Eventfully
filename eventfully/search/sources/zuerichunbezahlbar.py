@@ -36,6 +36,7 @@ def search(therm: str, min_date: datetime, max_date: datetime) -> set[db.Event]:
 
         image_link = raw_event.find("img", class_="poster__image").get("src")
 
+        # TODO: also extract the time
         raw_event_date = raw_event.find("time", class_="poster__date").get("datetime")
         event_datetime = datetime.strptime(raw_event_date, "%Y-%m-%d")
 
@@ -54,8 +55,19 @@ def search(therm: str, min_date: datetime, max_date: datetime) -> set[db.Event]:
 
 @beartype
 def post_process(event: db.Event) -> db.Event:
-    raise NotImplementedError()
+    request = niquests.get(event.web_link)
+    if request.status_code != 200:
+        raise ConnectionError("Bad response")
+
+    soup = BeautifulSoup(request.text, "html.parser")
+
+    event.description = soup.find("div", class_="detailpost__description-text").text.strip()
+    event.address = soup.find("address", class_="detailpost__address").text.strip()
+    event.operator_web_link = soup.find("a", class_="detailpost__link").get("href")
+
+    return event
 
 
 if __name__ == "__main__":
     print(search("", datetime.today(), datetime.today()))
+    print(post_process(db.Event()))
