@@ -3,7 +3,7 @@ from typing import Callable
 
 import pytest
 
-import eventfully.database as db
+from eventfully.database import schemas
 import eventfully.search.sources.kulturloewen as kulturloewen
 import eventfully.search.sources.zuerichunbezahlbar as zuerichunbezahlbar
 
@@ -20,7 +20,7 @@ def test_search(search_source: Callable):
     (kulturloewen.post_process, "https://www.neanderticket.de/?512805", ["description", "address"]),
 ])
 def test_post_processing(post_process_function: Callable, web_link: str, required_fields: list[str]):
-    raw_event = db.Event(
+    raw_event = schemas.Event(
         web_link=web_link,
         start_time=datetime.now(),
         end_time=datetime.now(),
