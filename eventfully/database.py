@@ -96,10 +96,15 @@ class Event(BaseModel):
     @computed_field()
     @property
     def id(self) -> str:
-        return get_hash_string(self.web_link + str(self.start_time) + str(self.end_time))
+        return self._get_own_hash()
 
     def __hash__(self):
-        return hash(self.web_link + str(self.start_time) + str(self.end_time))
+        return hash(self._get_own_hash())
+
+    def _get_own_hash(self) -> str:
+        start_time_string = self.start_time.timestamp()
+        end_time_string = self.end_time.timestamp()
+        return get_hash_string(self.web_link + str(start_time_string) + str(end_time_string))
 
     @field_serializer("start_time", "end_time")
     def serialize_start(self, time: datetime, _info):
