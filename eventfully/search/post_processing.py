@@ -4,7 +4,7 @@ from typing import Callable
 from beartype import beartype
 
 from eventfully.logger import log
-import eventfully.database as db
+from eventfully.database import crud
 from eventfully.search.sources.zuerichunbezahlbar import (
     post_process as zuerichunbezahlbar_post_process,
 )
@@ -28,32 +28,20 @@ def main():
 
 @beartype
 def _post_process():
-    unprocessed_event_db_entries = db.UnprocessedEvent.select()
-    if not unprocessed_event_db_entries.exists():
-        return
-
-    log.info("Found unprocessed events ...")
-
     processed_events = set()
-    for unprocessed_event_dp_entry in unprocessed_event_db_entries:
-        unprocessed_event = _get_event_by_id(unprocessed_event_dp_entry.event_id)
+    for unprocessed_event in crud.get_unprocessed_events():
         try:
             processed_event = SOURCES[unprocessed_event.source](unprocessed_event)
         except Exception as e:
-            log.warn(f"Could not process event {unprocessed_event_dp_entry.event_id} from {unprocessed_event.source}: {e}")
+            log.warn(
+                f"Could not process event {unprocessed_event.id} from {unprocessed_event.source}: {e}"
+            )
             continue
-        finally:
-            unprocessed_event_dp_entry.delete_instance()
         processed_events.add(processed_event)
 
-    db.add_events(processed_events)
+    crud.delete_unprocessed_events([event.id for event in processed_events])
 
-
-@beartype
-def _get_event_by_id(event_id: str) -> db.Event:
-    raw_events = db.event_index.search("", {"filter": f"id = {event_id}"})
-    events = [db.Event(**raw_event) for raw_event in raw_events["hits"]]
-    return events[0]
+    crud.add_events(processed_events)
 
 
 if __name__ == "__main__":

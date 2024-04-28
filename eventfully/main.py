@@ -10,13 +10,14 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Length
 
-import eventfully.database as db
+from eventfully.database import crud
 from eventfully.search.post_processing import main as post_processing_main
 from eventfully.search.search import search
 from eventfully.logger import log
 
 log.info("Starting Server ...")
 
+crud.create_tables()
 
 class Config:
     SCHEDULER_API_ENABLED = True
@@ -50,11 +51,11 @@ def index():
         log.info("No user is logged in")
         return render_template("index.html", logged_in=False)
 
-    if not db.check_user_exists(user_id):
+    if not crud.check_user_exists(user_id):
         log.error(f"User with user_id '{user_id}' is not in the database")
         return render_template("index.html", logged_in=False)
 
-    user = db.get_user_data(user_id)
+    user = crud.get_user_data(user_id)
     log.info("Cookie found")
     return render_template("index.html", logged_in=True, username=user.get("username"))
 
@@ -64,7 +65,7 @@ def like_event():
     user_id = request.cookies.get("user_id")
 
     if user_id:
-        db.like_event(user_id, event_id)
+        crud.like_event(user_id, event_id)
         log.info(f"Event {event_id} liked by {user_id}")
 
     return render_template("index.html")
@@ -76,7 +77,7 @@ def like_event():
 def delete_account():
     user_id = request.cookies.get("user_id")
 
-    db.delete_account(user_id)
+    crud.delete_account(user_id)
 
     response = make_response()
     response.delete_cookie("user_id")
@@ -100,7 +101,7 @@ def signup_account():
         return form.errors, HTTPStatus.BAD_REQUEST
 
     user_id = str(uuid4())
-    db.add_account(form.username.data, form.password.data, user_id, form.email.data)
+    crud.add_account(form.username.data, form.password.data, user_id, form.email.data)
 
     response = make_response()
     expire_date = datetime.now() + timedelta(days=30)
@@ -122,7 +123,7 @@ def signin_account():
     if not form.validate():
         return form.errors, HTTPStatus.BAD_REQUEST
 
-    user_id = db.authenticate_user(form.username.data, form.password.data)
+    user_id = crud.authenticate_user(form.username.data, form.password.data)
 
     if not user_id:
         return make_response(), HTTPStatus.UNAUTHORIZED

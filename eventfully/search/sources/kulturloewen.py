@@ -5,12 +5,12 @@ from beartype import beartype
 import niquests
 from bs4 import BeautifulSoup
 
-import eventfully.database as db
+from eventfully.database import schemas
 
 
 @beartype
-def search(therm: str, min_time: datetime, max_time: datetime) -> set[db.Event]:
-    events: set[db.Event] = set()
+def search(therm: str, min_time: datetime, max_time: datetime) -> set[schemas.Event]:
+    events: set[schemas.Event] = set()
 
     search_time = min_time
     # we have to cycle through days because the "api" only returns events for one day
@@ -50,7 +50,7 @@ def search(therm: str, min_time: datetime, max_time: datetime) -> set[db.Event]:
             web_link = event_web_link_base + event_id
 
             events.add(
-                db.Event(
+                schemas.Event(
                     web_link=web_link,
                     start_time=time,
                     end_time=time,
@@ -67,7 +67,7 @@ def search(therm: str, min_time: datetime, max_time: datetime) -> set[db.Event]:
 
 
 @beartype
-def post_process(event: db.Event) -> db.Event:
+def post_process(event: schemas.Event) -> schemas.Event:
     request = niquests.get(event.web_link)
     if request.status_code != 200:
         raise ConnectionError("Bad response")
