@@ -6,7 +6,7 @@
       <img src="{{ item.image_link }}" loading="lazy" class="rounded-xl" />
     </figure>
     <div class="card-body">
-      <a class="btn btn-neutral" href="/api/like_event?id={{ item.id }}">Like</a>
+      <button class="btn btn-neutral" hx-get="/api/like_event?id={{ item.id }}" hx-swap="outerHTML">Like</button>
 
       <h2 class="card-title flex-gap-1">
         <a href="{{ item.web_link }}" target="_blank" rel="noopener"

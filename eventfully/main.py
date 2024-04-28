@@ -68,7 +68,7 @@ def like_event():
         crud.like_event(user_id, event_id)
         log.info(f"Event {event_id} liked by {user_id}")
 
-    return render_template("index.html")
+    return "", 200
 
 
 

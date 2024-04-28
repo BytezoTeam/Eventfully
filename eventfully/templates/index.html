@@ -52,6 +52,13 @@
             >
               Anmelden
             </button>
+
+            <button
+              class="btn btn-ghost btn-active"
+              @click="RegisterModal.showModal()"
+            >
+              Registrieren
+            </button>
             {% endif %}
           </div>
 
@@ -117,10 +124,11 @@
         <h1>Anmelden</h1>
         <form
           class="flex flex-col items-center gap-4"
-          hx-get="/api/account/loadForm"
-          hx-target="#form"
-          hx-trigger="click,load"
+          hx-post="/api/account/signin"
+          hx-trigger="submit"
         >
+
+          
           <!-- Username -->
           <label class="input input-bordered flex items-center gap-2">
             <input
@@ -131,16 +139,7 @@
               placeholder="Username"
             />
           </label>
-          <!-- Email -->
-          <label class="input input-bordered flex items-center gap-2">
-            <input
-              name="email"
-              id="email"
-              type="email"
-              class="grow"
-              placeholder="Email"
-            />
-          </label>
+          
           <!-- Password -->
           <label class="input input-bordered flex items-center gap-2">
             <input
@@ -151,28 +150,77 @@
               placeholder="Password"
             />
           </label>
+        
+        <div class="w-full flex flex-row justify-center gap-8">
+          <button type="submit" class="btn btn-primary">
+            Anmelden
+          </button>
+        
+        </div>
 
-          <!-- Option between Login or SignUp -->
-          <div class="w-full flex flex-row justify-between gap-8">
-            <button
-              type="submit"
-              name="signin"
-              hx-params='{"signin": "True"}'
-              class="btn btn-primary"
-            >
-              Sign In
-            </button>
-            <button
-              type="submit"
-              name="signup"
-              hx-params='{"signup": "True"}'
-              class="btn btn-primary"
-            >
-              Sign Up
-            </button>
-          </div>
         </form>
       </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>Close</button>
+      </form>
+    </dialog>
+
+
+    <!-- Register Modal -->
+    <dialog id="RegisterModal" class="modal">
+      <div
+        class="modal-box dark:bg-gray-800 bg-gray-100 flex flex-col items-center gap-4"
+      >
+        <!-- Login Form -->
+        <h1>Registrieren</h1>
+        <form
+          class="flex flex-col items-center gap-4"
+          hx-post="/api/account/signup"
+          hx-trigger="submit"
+        >
+
+          
+          <!-- Username -->
+          <label class="input input-bordered flex items-center gap-2">
+            <input
+              name="username"
+              id="username"
+              type="text"
+              class="grow"
+              placeholder="Username"
+            />
+          </label>
+
+          <!-- Email -->
+          <label class="input input-bordered flex items-center gap-2">
+            <input
+              name="email"
+              id="email"
+              type="email"
+              class="grow"
+              placeholder="Email"
+            />
+          </label>
+          
+          <!-- Password -->
+          <label class="input input-bordered flex items-center gap-2">
+            <input
+              name="password"
+              id="password"
+              type="password"
+              class="grow"
+              placeholder="Password"
+            />
+          </label>
+        
+          <div class="w-full flex flex-row justify-center gap-8">
+            <button type="submit" class="btn btn-primary">
+              Registrieren
+            </button>
+        
+          </div>
+
+        </form>
       <form method="dialog" class="modal-backdrop">
         <button>Close</button>
       </form>

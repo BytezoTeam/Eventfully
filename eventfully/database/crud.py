@@ -22,7 +22,7 @@ def create_tables():
 # Event Like
 @database.db.connection_context()
 def like_event(user_id, event_id):
-    models.like_data.create(userID=user_id, liked_event_id=event_id)
+    models.like_data.create(user_liked=user_id, liked_event_id=event_id)
 
     return event_id
 

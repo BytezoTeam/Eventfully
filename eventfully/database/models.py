@@ -1,4 +1,4 @@
-from peewee import TextField, DateTimeField
+from peewee import TextField, DateTimeField, CompositeKey
 
 from eventfully.database.database import _DBBaseModel, ms_client, db
 
@@ -17,8 +17,11 @@ class AccountData(_DBBaseModel):
 
 
 class like_data(_DBBaseModel):
-    userId = TextField(primary_key=True)
+    user_liked = TextField()
     liked_event_id = TextField()
+
+    class Meta():
+        primary_key=CompositeKey('user_liked', 'liked_event_id')
 
 
 class SearchCache(_DBBaseModel):
