@@ -8,8 +8,8 @@
 ![chatgpt batch](https://img.shields.io/badge/chatGPT-74aa9c?style=for-the-badge&logo=openai&logoColor=white) <br>
 ![closed issues batch](https://img.shields.io/github/issues-search/BytezoTeam/Eventfully?query=is%3Aissue%20is%3Aclosed%20&style=flat-square&label=Closed%20Issues)
 ![Sonar Quality Gate](https://img.shields.io/sonar/quality_gate/BytezoTeam_Eventfully?server=https%3A%2F%2Fsonarcloud.io&style=flat-square)
-![repo size](https://img.shields.io/github/repo-size/BytezoTeam/Eventfully)
-![commit activity](https://img.shields.io/github/commit-activity/m/BytezoTeam/Eventfully)
+![repo size](https://img.shields.io/github/repo-size/BytezoTeam/Eventfully?style=flat-square)
+![commit activity](https://img.shields.io/github/commit-activity/m/BytezoTeam/Eventfully?style=flat-square)
 
 Eventfully is a python based web-application designed to process and show various events in your area
 
