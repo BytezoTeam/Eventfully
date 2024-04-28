@@ -51,7 +51,7 @@ if not ms_client.is_healthy():
     raise ConnectionError(choice(FUNNY_ERRORS))
 event_index = ms_client.index("events")
 ms_client.create_index("events", {"primaryKey": "id"})
-event_index.update_searchable_attributes(["title", "web_link"])
+event_index.update_searchable_attributes(["title", "web_link", "description"])
 event_index.update_filterable_attributes(["id", "city"])
 
 # SQLite with peewee
@@ -84,6 +84,7 @@ class UnprocessedEvent(_DBBaseModel):
     event_id = TextField(primary_key=True)
 
 
+# TODO: categories
 class Event(BaseModel):
     web_link: str
     start_time: datetime
@@ -92,6 +93,9 @@ class Event(BaseModel):
     title: str | None = None
     image_link: str | None = None
     city: str | None = None
+    description: str | None = None
+    address: str | None = None
+    operator_web_link: str | None = None
 
     @computed_field()
     @property
