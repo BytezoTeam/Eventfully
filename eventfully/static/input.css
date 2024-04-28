@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .cool-card {
-  @apply dark:bg-gray-800 bg-gray-100 shadow-2xl rounded-xl p-6
+  @apply dark:bg-gray-800 bg-gray-100 shadow-2xl rounded-xl p-6 border-2 border-gray-300 dark:border-gray-900
 }
 
 .feather {
