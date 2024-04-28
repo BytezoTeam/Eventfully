@@ -1,31 +1,22 @@
-{% for item in events %}
+<section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+  {% for item in events %}
 
-<div class="cool-card w-full">
-  <figure>
-    <img
-      src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg"
-      alt="Shoes"
-    />
-  </figure>
-  <div class="card-body">
-    <a class="btn btn-neutral" href="/api/like_event?id={{ item.id }}">Like</a>
+  <div class="cool-card w-full" style="padding: 0 !important">
+    <figure class="pt-8 px-8">
+      <img src="{{ item.image_link }}" loading="lazy" class="rounded-xl" />
+    </figure>
+    <div class="card-body">
+      <h2 class="card-title flex-gap-1">
+        <a href="{{ item.web_link }}" target="_blank" rel="noopener"
+          >{{ item.title }}</a
+        >
+        {% include 'components/icons/external-link.html' %}
+      </h2>
 
-    <h2 class="card-title">{{ item.title }}</h2>
-    <p>{{ item.description }}</p>
-    <details class="collapse">
-      <summary class="collapse-title font-medium">Mehr</summary>
-      <div class="collapse-content">
-        <p>Preis: {{ item.price }}</p>
-        <p>Wann?: {{ item.startdate }}-{{ item.enddate }}</p>
-        <p>Alter: {{ item.age }}</p>
-        <p>Barrierefreiheit: {{ item.accessibility }}</p>
-        <p>Wo?: {{ item.address }}</p>
-        <p>Kategorien: {{ item.tags }}</p>
-        <br>
-        <a class="btn btn-neutral" href="{{ item.link }}">Zur Quelle</a>
-      </div>
-    </details>
+      <p>Wann?: {{ item.start_time }}-{{ item.end_time }}</p>
+      <p>Wo?: {{ item.address }}</p>
+    </div>
   </div>
-</div>
 
-{% endfor %}
+  {% endfor %}
+</section>

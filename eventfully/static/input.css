@@ -3,7 +3,11 @@
 @tailwind utilities;
 
 .cool-card {
-  @apply dark:bg-gray-800 bg-gray-100 shadow-xl rounded-2xl p-6
+  @apply dark:bg-gray-800 bg-gray-100 shadow-xl rounded-xl p-6
+}
+
+.feather {
+  @apply stroke-gray-800 dark:stroke-gray-100
 }
 
 h1 {
@@ -12,4 +16,31 @@ h1 {
 
 h2 {
   @apply font-bold text-2xl
+}
+
+
+/* Things for the loading indicator in search to work */
+/* Show Loader while the request is loading */
+.htmx-indicator {
+  display:none;
+}
+.htmx-request .htmx-indicator {
+  display:inline;
+}
+.htmx-request.htmx-indicator {
+  display:inline;
+}
+
+/* Hide elements when the request is loading */
+div.htmx-indicator {
+  display:inline;
+  opacity: 1;
+}
+div.htmx-request div.htmx-indicator {
+  display:none;
+  opacity: 0;
+}
+div.htmx-request.htmx-indicator {
+  display:none;
+  opacity: 0;
 }

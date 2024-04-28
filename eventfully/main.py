@@ -2,6 +2,7 @@ import atexit
 from datetime import datetime, timedelta
 from http import HTTPStatus
 from uuid import uuid4
+from threading import Thread
 
 from flask import Flask, render_template, request, make_response
 from flask_apscheduler import APScheduler
@@ -10,7 +11,8 @@ from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Length
 
 import eventfully.database as db
-import eventfully.sources.main as sources
+from eventfully.search.post_processing import main as post_processing_main
+from eventfully.search.search import search
 from eventfully.logger import log
 
 log.info("Starting Server ...")
@@ -28,15 +30,10 @@ scheduler = APScheduler()
 scheduler.init_app(app)
 atexit.register(lambda: scheduler.shutdown())
 
-
-# Scheduled tasks
-@scheduler.task("cron", id="get_data", hour=0)
-def get_data():
-    log.info("Running scheduled job get_data")
-    sources.main()
-
-
 scheduler.start()
+
+post_processing_thread = Thread(target=post_processing_main)
+post_processing_thread.start()
 
 
 @app.errorhandler(500)
@@ -147,8 +144,9 @@ def signout_account():
 @app.route("/api/search", methods=["GET"])
 def get_events():
     therm = request.args.get("therm", "")
+    city = request.args.get("city", "")
 
-    result = db.search_events(therm, "")
+    result = search(therm, datetime.today(), datetime.today(), city)
 
     return render_template("api/events.html", events=result)
 

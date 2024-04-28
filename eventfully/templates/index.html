@@ -62,8 +62,12 @@
               type="checkbox"
               x-bind:checked="!darkMode"
             />
-            <img src="/static/sun.svg" class="swap-on" />
-            <img src="/static/moon.svg" class="swap-off stroke-white" />
+            <div class="swap-on">
+              {% include 'components/icons/sun.html' %}
+            </div>
+            <div class="swap-off">
+              {% include 'components/icons/moon.html' %}
+            </div>
           </label>
         </div>
       </header>
@@ -78,6 +82,7 @@
             hx-get="/api/search"
             hx-target="#event-search-result"
             hx-trigger="submit,load"
+            hx-indicator=".htmx-indicator"
           >
             <input
               name="therm"
@@ -86,15 +91,20 @@
               type="search"
               placeholder="Suche nach Events..."
             />
+            <input type="" class="input" name="city" id="city" list="cities">
+            <datalist id="cities">
+              <option value="Zürich">Zürich</option>
+              <option value="Velbert">Velbert</option>
+            </datalist>
             <button type="submit" class="btn btn-primary">Suchen</button>
           </form>
         </section>
 
         <!-- Event Results -->
-        <section
-          id="event-search-result"
-          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"
-        ></section>
+        <div class="htmx-indicator" id="event-search-result"></div>
+        <div class="flex justify-center items-center">
+          <span class="htmx-indicator center loading loading-spinner loading-lg mt-16"></span>
+        </div>
       </main>
     </div>
 
