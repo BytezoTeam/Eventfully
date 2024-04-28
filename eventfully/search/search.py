@@ -2,7 +2,7 @@ from datetime import datetime
 
 from beartype import beartype
 
-from eventfully.database import schemas, models, crud, database
+from eventfully.database import schemas, crud
 from eventfully.logger import log
 from eventfully.search.sources.zuerichunbezahlbar import search as zuerichunbezahlbar_search
 from eventfully.search.sources.kulturloewen import search as kulturloewen_search
@@ -19,7 +19,7 @@ def search(therm: str, min_date: datetime, max_date: datetime, city: str) -> set
     # Skip if this search has been performed before and the events are already in the database
     combined_search_string = therm + str(min_date.date()) + str(max_date.date()) + city
     search_hash = get_hash_string(combined_search_string)
-    if not models.SearchCache.select().where(models.SearchCache.search_hash == search_hash).exists():
+    if not crud.in_search_cache(search_hash):
         web_events = _search_web(therm, min_date, max_date, city)
         events.update(web_events)
 
@@ -27,11 +27,9 @@ def search(therm: str, min_date: datetime, max_date: datetime, city: str) -> set
         crud.add_events(web_events)
 
         # Store references for the new events in the db, so we know which ones we need to process with AI
-        with database.db.atomic():
-            for event in web_events:
-                models.UnprocessedEvent.get_or_create(event_id=event.id)
+        crud.create_unprocessed_events(web_events)
 
-        models.SearchCache.create(search_hash=search_hash, time=datetime.now())
+        crud.create_search_cache(search_hash)
 
     return events
 
@@ -44,11 +42,7 @@ def _search_db(therm: str, min_date: datetime, max_date: datetime, city: str) ->
     filter_string = " AND ".join(filters)
     print("Filter string:", filter_string)
 
-    raw = models.event_index.search(therm, {
-        "filter": filter_string,
-    })
-    events = [schemas.Event(**raw_event) for raw_event in raw["hits"]]
-    return set(events)
+    return crud.search_events(therm, filter_string)
 
 
 @beartype
