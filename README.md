@@ -1,7 +1,15 @@
 # Eventfully
 
-![sqlite batch](https://img.shields.io/badge/Sqlite-003B57?style=for-the-badge&logo=sqlite&logoColor=white) ![tailwindcss batch](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white) ![flask batch](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white) ![pyhton batch](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue) ![html batch](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white) ![chatgpt batch](https://img.shields.io/badge/chatGPT-74aa9c?style=for-the-badge&logo=openai&logoColor=white) <br>
-![closed issues batch](https://img.shields.io/github/issues-search/BytezoTeam/Eventfully?query=is%3Aissue%20is%3Aclosed%20&style=flat-square&label=Closed%20Issues) ![codeql status batch](https://github.com/BytezoTeam/Eventfully/actions/workflows/codeql.yml/badge.svg?style=flat-square) ![repo size](https://img.shields.io/github/repo-size/BytezoTeam/Eventfully) ![commit activity](https://img.shields.io/github/commit-activity/m/BytezoTeam/Eventfully)
+![sqlite batch](https://img.shields.io/badge/Sqlite-003B57?style=for-the-badge&logo=sqlite&logoColor=white) 
+![tailwindcss batch](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![flask batch](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
+![pyhton batch](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue)
+![html batch](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white) 
+![chatgpt batch](https://img.shields.io/badge/chatGPT-74aa9c?style=for-the-badge&logo=openai&logoColor=white) <br>
+![closed issues batch](https://img.shields.io/github/issues-search/BytezoTeam/Eventfully?query=is%3Aissue%20is%3Aclosed%20&style=flat-square&label=Closed%20Issues)
+![Sonar Quality Gate](https://img.shields.io/sonar/quality_gate/BytezoTeam_Eventfully?server=https%3A%2F%2Fsonarcloud.io&style=flat-square)
+![repo size](https://img.shields.io/github/repo-size/BytezoTeam/Eventfully)
+![commit activity](https://img.shields.io/github/commit-activity/m/BytezoTeam/Eventfully)
 
 Eventfully is a python based web-application designed to process and show various events in your area
 
