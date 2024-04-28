@@ -30,4 +30,3 @@ class UnprocessedEvent(_DBBaseModel):
     event_id = TextField(primary_key=True)
 
 
-db.create_tables([AccountData, SearchCache, UnprocessedEvent, like_data])

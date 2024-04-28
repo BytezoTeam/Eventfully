@@ -17,6 +17,7 @@ from eventfully.logger import log
 
 log.info("Starting Server ...")
 
+crud.create_tables()
 
 class Config:
     SCHEDULER_API_ENABLED = True

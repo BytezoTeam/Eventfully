@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from get_project_root import root_path
 from peewee import Model
 from playhouse.sqlite_ext import SqliteExtDatabase
+from playhouse.shortcuts import ThreadSafeDatabaseMetadata
 
 load_dotenv()
 _MEILI_HOST = getenv("MEILI_HOST")
@@ -51,6 +52,4 @@ atexit.register(lambda: db.close())
 class _DBBaseModel(Model):
     class Meta:
         database = db
-
-
-db.connect()
+        model_metadata_class = ThreadSafeDatabaseMetadata

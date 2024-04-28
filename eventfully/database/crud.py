@@ -8,7 +8,19 @@ from beartype import beartype
 from eventfully.database import models, schemas, database
 
 
+# General
+@database.db.connection_context()
+def create_tables():
+    database.db.create_tables([
+        models.AccountData,
+        models.SearchCache,
+        models.UnprocessedEvent,
+        models.like_data
+    ])
+
+
 # Event Like
+@database.db.connection_context()
 def like_event(user_id, event_id):
     models.like_data.create(userID=user_id, liked_event_id=event_id)
 
@@ -17,6 +29,7 @@ def like_event(user_id, event_id):
 
 # Account
 # TODO: Add check to look if email is real
+@database.db.connection_context()
 def add_account(username, password, userid, email, event_organiser=False):
     models.AccountData.create(
         userId=userid,
@@ -28,6 +41,7 @@ def add_account(username, password, userid, email, event_organiser=False):
     return userid
 
 
+@database.db.connection_context()
 def delete_account(user_id):
     try:
         account = models.AccountData.get(models.AccountData.userId == user_id)
@@ -37,6 +51,7 @@ def delete_account(user_id):
         print(f"No account found with userId {user_id}.")
 
 
+@database.db.connection_context()
 def get_user_data(user_id):
     try:
         account = models.AccountData.get(models.AccountData.userId == user_id)
@@ -46,6 +61,7 @@ def get_user_data(user_id):
         return None
 
 
+@database.db.connection_context()
 def authenticate_user(username, password):
     try:
         user = models.AccountData.get(
@@ -58,6 +74,7 @@ def authenticate_user(username, password):
         return False
 
 
+@database.db.connection_context()
 def check_user_exists(user_id: str):
     try:
         models.AccountData.get(models.AccountData.userId == user_id)
@@ -74,9 +91,12 @@ def add_events(events: Iterable[schemas.Event]):
 
 @beartype
 def search_events(therm: str, filter_string: str) -> set[schemas.Event]:
-    raw = models.event_index.search(therm, {
-        "filter": filter_string,
-    })
+    raw = models.event_index.search(
+        therm,
+        {
+            "filter": filter_string,
+        },
+    )
     events = [schemas.Event(**raw_event) for raw_event in raw["hits"]]
     return set(events)
 
@@ -90,24 +110,32 @@ def get_event_by_id(event_id: str) -> schemas.Event:
 
 # Search cache
 @beartype
+@database.db.connection_context()
 def create_search_cache(search_hash: str):
     models.SearchCache.create(search_hash=search_hash, time=datetime.now())
 
 
 @beartype
+@database.db.connection_context()
 def in_search_cache(search_hash: str) -> bool:
-    return models.SearchCache.select().where(models.SearchCache.search_hash == search_hash).exists()
+    return (
+        models.SearchCache.select()
+        .where(models.SearchCache.search_hash == search_hash)
+        .exists()
+    )
 
 
 # Unprocessed events
 @beartype
+@database.db.connection_context()
 def create_unprocessed_events(events: Iterable[schemas.Event]):
     with database.db.atomic():
         for event in events:
-            models.UnprocessedEvent.get_or_create(**event.dict())
+            models.UnprocessedEvent.get_or_create(event_id=event.id)
 
 
 @beartype
+@database.db.connection_context()
 def get_unprocessed_events() -> set[schemas.Event]:
     raw_unprocessed_events = models.UnprocessedEvent.select()
 
@@ -120,7 +148,10 @@ def get_unprocessed_events() -> set[schemas.Event]:
 
 
 @beartype
+@database.db.connection_context()
 def delete_unprocessed_events(event_ids: Iterable[str]):
     with database.db.atomic():
         for event_id in event_ids:
-            models.UnprocessedEvent.delete().where(models.UnprocessedEvent.event_id == event_id).execute()
+            models.UnprocessedEvent.delete().where(
+                models.UnprocessedEvent.event_id == event_id
+            ).execute()
