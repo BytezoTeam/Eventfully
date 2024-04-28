@@ -58,6 +58,19 @@ def index():
     log.info("Cookie found")
     return render_template("index.html", logged_in=True, username=user.get("username"))
 
+@app.route("/api/like_event")
+def like_event():
+    event_id = request.args.get("id")
+    user_id = request.cookies.get("user_id")
+
+    if user_id:
+        db.like_event(user_id, event_id)
+        log.info(f"Event {event_id} liked by {user_id}")
+
+    return render_template("index.html")
+
+
+
 
 @app.route("/api/account/delete", methods=["POST"])
 def delete_account():
