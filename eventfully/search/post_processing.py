@@ -28,8 +28,11 @@ def main():
 
 @beartype
 def _post_process():
+    log.debug("Running post processing ...")
+
     processed_events = set()
-    for unprocessed_event in crud.get_unprocessed_events():
+    unprocessed_events = crud.get_unprocessed_events()
+    for unprocessed_event in unprocessed_events:
         try:
             processed_event = SOURCES[unprocessed_event.source](unprocessed_event)
         except Exception as e:
@@ -39,7 +42,7 @@ def _post_process():
             continue
         processed_events.add(processed_event)
 
-    crud.delete_unprocessed_events([event.id for event in processed_events])
+    crud.delete_unprocessed_events([event.id for event in unprocessed_events])
 
     crud.add_events(processed_events)
 
