@@ -1,4 +1,5 @@
 from datetime import datetime
+from http import HTTPStatus
 
 import niquests
 from bs4 import BeautifulSoup
@@ -22,7 +23,7 @@ def search(therm: str, min_date: datetime, max_date: datetime) -> set[schemas.Ev
         "category": "",
     }
     request = niquests.get(f"{BASE_URL}/events", params, retries=3)
-    if request.status_code != 200:
+    if request.status_code != HTTPStatus.OK:
         raise ConnectionError("Bad response")
 
     soup = BeautifulSoup(request.text, "html.parser")
@@ -56,7 +57,7 @@ def search(therm: str, min_date: datetime, max_date: datetime) -> set[schemas.Ev
 @beartype
 def post_process(event: schemas.Event) -> schemas.Event:
     request = niquests.get(event.web_link)
-    if request.status_code != 200:
+    if request.status_code != HTTPStatus.OK:
         raise ConnectionError("Bad response")
 
     soup = BeautifulSoup(request.text, "html.parser")

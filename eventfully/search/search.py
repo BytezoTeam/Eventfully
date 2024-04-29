@@ -55,7 +55,7 @@ def _search_web(therm: str, min_date: datetime, max_date: datetime, city: str) -
         except ConnectionError as e:
             log.error("Problem with Zuerichunbezahlbar", exc_info=e)
 
-    if city == "Velbert" or city == "":
+    if city in ["Velbert", ""]:
         try:
             events.update(kulturloewen_search(therm, min_date, max_date))
         except ConnectionError as e:

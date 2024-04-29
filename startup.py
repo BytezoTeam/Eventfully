@@ -25,7 +25,6 @@ try:
     if input() == "y":
         os.remove("database/sqlite/database.db")
         print("Deleted database.db")
-        import eventfully.database
         print("Updated database.db")
 except PermissionError:
     print("database.db is in use. Please close the script or program that uses the database and run this script again.")

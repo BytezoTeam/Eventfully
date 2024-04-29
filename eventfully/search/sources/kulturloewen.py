@@ -1,5 +1,6 @@
 import re
 from datetime import datetime, timedelta
+from http import HTTPStatus
 
 from beartype import beartype
 import niquests
@@ -18,7 +19,7 @@ def search(therm: str, min_time: datetime, max_time: datetime) -> set[schemas.Ev
         search_time_string = search_time.strftime("%Y.%m.%d")
         url = f"https://www.neanderticket.de/events/introJS=1;client=kulturloewen&what=date&show={search_time_string}"
         requests = niquests.get(url)
-        if requests.status_code != 200:
+        if requests.status_code != HTTPStatus.OK:
             raise ConnectionError("Bad response")
 
         soup = BeautifulSoup(requests.text, "html.parser")
@@ -69,7 +70,7 @@ def search(therm: str, min_time: datetime, max_time: datetime) -> set[schemas.Ev
 @beartype
 def post_process(event: schemas.Event) -> schemas.Event:
     request = niquests.get(event.web_link)
-    if request.status_code != 200:
+    if request.status_code != HTTPStatus.OK:
         raise ConnectionError("Bad response")
 
     soup = BeautifulSoup(request.text, "html.parser")
