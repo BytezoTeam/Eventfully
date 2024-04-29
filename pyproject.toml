@@ -17,7 +17,7 @@ dependencies = [
     "Flask-APScheduler==1.*",
     "beartype==0.*",
     "black==24.*",
-    "gunicorn==21.*",
+    "gunicorn==22.*",
     "tenacity==8.*",
     "pytest==8.*",
     "get-project-root==0.*",
