@@ -22,8 +22,6 @@ beartype==0.18.2
     # via eventfully
 beautifulsoup4==4.12.3
     # via eventfully
-black==24.4.0
-    # via eventfully
 blinker==1.7.0
     # via flask
 camel-converter==3.1.1
@@ -39,7 +37,6 @@ charset-normalizer==3.3.2
     # via niquests
     # via requests
 click==8.1.7
-    # via black
     # via flask
 cryptography==42.0.5
     # via qh3
@@ -96,8 +93,6 @@ markupsafe==2.1.5
     # via wtforms
 meilisearch==0.31.0
     # via eventfully
-mypy-extensions==1.0.0
-    # via black
 niquests==3.5.5
     # via eventfully
 openai==1.17.1
@@ -105,15 +100,10 @@ openai==1.17.1
 outcome==1.3.0.post0
     # via trio
 packaging==24.0
-    # via black
     # via gunicorn
     # via pytest
-pathspec==0.12.1
-    # via black
 peewee==3.17.1
     # via eventfully
-platformdirs==4.2.0
-    # via black
 pluggy==1.4.0
     # via pytest
 pycparser==2.22
