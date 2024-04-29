@@ -49,7 +49,7 @@ def _search_db(therm: str, min_date: datetime, max_date: datetime, city: str) ->
 def _search_web(therm: str, min_date: datetime, max_date: datetime, city: str) -> set[schemas.Event]:
     events: set[schemas.Event] = set()
 
-    if city == "Zürich" or city == "":    # This source is only for Zürich
+    if city in ["Zürich", ""]:  # This source is only for Zürich
         try:
             events.update(zuerichunbezahlbar_search(therm, min_date, max_date))
         except ConnectionError as e:
