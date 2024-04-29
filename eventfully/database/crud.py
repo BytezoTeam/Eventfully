@@ -85,6 +85,8 @@ def check_user_exists(user_id: str):
 
 # Events
 def add_events(events: Iterable[schemas.Event]):
+    if not events:
+        return
     events_dicts = [event.model_dump() for event in events]
     models.event_index.add_documents(events_dicts)
 
