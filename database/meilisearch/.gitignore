@@ -1,3 +1,2 @@
-meilisearch
-data.ms/
-dumps/
+*
+!.gitignore
