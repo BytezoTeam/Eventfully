@@ -1,6 +1,6 @@
 from peewee import TextField, DateTimeField, CompositeKey
 
-from eventfully.database.database import _DBBaseModel, ms_client, db
+from eventfully.database.database import _DBBaseModel, ms_client
 
 event_index = ms_client.index("events")
 ms_client.create_index("events", {"primaryKey": "id"})
