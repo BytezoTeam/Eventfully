@@ -41,6 +41,8 @@ jobs:
 
       - name: Install Python
         uses: actions/setup-python@v5
+        with:
+          cache: pip
 
       - name: Install dependencies
         run: |
