@@ -38,11 +38,11 @@
               onclick="window.location.href='/profile'"
               class="bg-blue-500 rounded p-2"
             >
-              Profil
+              Profile
             </button>
             <form hx-post="/api/account/signout" hx-swap="none">
               <button type="submit" class="bg-red-500 rounded p-2">
-                Abmelden
+                Logout
               </button>
             </form>
             {% else %}
@@ -50,14 +50,14 @@
               class="btn btn-ghost btn-active"
               @click="loginModal.showModal()"
             >
-              Anmelden
+              Login
             </button>
 
             <button
               class="btn btn-ghost btn-active"
               @click="RegisterModal.showModal()"
             >
-              Registrieren
+              Register
             </button>
             {% endif %}
           </div>
@@ -83,7 +83,7 @@
       <main class="flex flex-col gap-8">
         <section class="sticky top-8 cool-card">
           <!-- Event Search -->
-          <h2>Event Suche</h2>
+          <h2>Event Search</h2>
           <form
             class="flex flex-row justify-start gap-4"
             hx-get="/api/search"
@@ -103,7 +103,7 @@
               <option value="Zürich">Zürich</option>
               <option value="Velbert">Velbert</option>
             </datalist>
-            <button type="submit" class="btn btn-primary">Suchen</button>
+            <button type="submit" class="btn btn-primary">Search</button>
           </form>
         </section>
 
@@ -121,7 +121,7 @@
         class="modal-box dark:bg-gray-800 bg-gray-100 flex flex-col items-center gap-4"
       >
         <!-- Login Form -->
-        <h1>Anmelden</h1>
+        <h1>Login</h1>
         <form
           class="flex flex-col items-center gap-4"
           hx-post="/api/account/signin"
@@ -153,7 +153,7 @@
         
         <div class="w-full flex flex-row justify-center gap-8">
           <button type="submit" class="btn btn-primary">
-            Anmelden
+            Login
           </button>
         
         </div>
@@ -171,8 +171,8 @@
       <div
         class="modal-box dark:bg-gray-800 bg-gray-100 flex flex-col items-center gap-4"
       >
-        <!-- Login Form -->
-        <h1>Registrieren</h1>
+        <!-- Register Form -->
+        <h1>Register</h1>
         <form
           class="flex flex-col items-center gap-4"
           hx-post="/api/account/signup"
@@ -215,7 +215,7 @@
         
           <div class="w-full flex flex-row justify-center gap-8">
             <button type="submit" class="btn btn-primary">
-              Registrieren
+              Register
             </button>
         
           </div>
