@@ -60,18 +60,22 @@ def index():
     return render_template("index.html", logged_in=True, username=user.get("username"))
 
 
-@app.route("/api/like_event")
-def like_event():
+@app.route("/api/toggle_event_like")
+def toggle_event_like():
     event_id = request.args.get("id")
     user_id = request.cookies.get("user_id")
 
-    if user_id:
+    if not user_id:
+        return "", 401
+
+    log.debug(f"Event '{event_id}' liked toggled for '{user_id}'")
+    liked_events = crud.get_liked_event_ids_by_user_id(user_id)
+    if event_id not in liked_events:
         crud.like_event(user_id, event_id)
-        log.info(f"Event {event_id} liked by {user_id}")
-
-    return "", 200
-
-
+        return render_template("components/liked-true-button.html", item={"id": event_id})
+    else:
+        crud.unlike_event(user_id, event_id)
+        return render_template("components/liked-false-button.html", item={"id": event_id})
 
 
 @app.route("/api/account/delete", methods=["POST"])
@@ -151,7 +155,7 @@ def get_events():
     user_id = request.cookies.get("user_id")
 
     if user_id:
-        liked_events = crud.get_liked_events_by_user_id(user_id)
+        liked_events = crud.get_liked_event_ids_by_user_id(user_id)
     else:
         liked_events = []
 
@@ -169,4 +173,4 @@ def load_form():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=False)

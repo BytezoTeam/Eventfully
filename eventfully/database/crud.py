@@ -26,9 +26,20 @@ def like_event(user_id, event_id):
 
     return event_id
 
+
+@beartype
 @database.db.connection_context()
-def get_liked_events_by_user_id(userid):
-    liked_events = models.like_data.select().where(models.like_data.user_liked == userid)
+def unlike_event(user_id: str, event_id: str) -> None:
+    models.like_data.delete().where(
+        models.like_data.user_liked == user_id,
+        models.like_data.liked_event_id == event_id
+    )
+
+
+@beartype
+@database.db.connection_context()
+def get_liked_event_ids_by_user_id(user_id: str) -> list[str]:
+    liked_events = models.like_data.select().where(models.like_data.user_liked == user_id)
     events_list = [event.liked_event_id for event in liked_events]
 
     return events_list
