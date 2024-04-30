@@ -33,7 +33,7 @@ def unlike_event(user_id: str, event_id: str) -> None:
     models.like_data.delete().where(
         models.like_data.user_liked == user_id,
         models.like_data.liked_event_id == event_id
-    )
+    ).execute()
 
 
 @beartype
