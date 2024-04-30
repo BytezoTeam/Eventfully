@@ -26,6 +26,13 @@ def like_event(user_id, event_id):
 
     return event_id
 
+@database.db.connection_context()
+def get_liked_events_by_user_id(userid):
+    liked_events = models.like_data.select().where(models.like_data.user_liked == userid)
+    events_list = [event.liked_event_id for event in liked_events]
+
+    return events_list
+
 
 # Account
 # TODO: Add check to look if email is real

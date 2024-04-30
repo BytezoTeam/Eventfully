@@ -59,6 +59,7 @@ def index():
     log.info("Cookie found")
     return render_template("index.html", logged_in=True, username=user.get("username"))
 
+
 @app.route("/api/like_event")
 def like_event():
     event_id = request.args.get("id")
@@ -147,9 +148,16 @@ def get_events():
     therm = request.args.get("therm", "")
     city = request.args.get("city", "")
 
+    user_id = request.cookies.get("user_id")
+
+    if user_id:
+        liked_events = crud.get_liked_events_by_user_id(user_id)
+    else:
+        liked_events = []
+
     result = search(therm, datetime.today(), datetime.today(), city)
 
-    return render_template("api/events.html", events=result)
+    return render_template("api/events.html", events=result, liked_events=liked_events)
 
 
 @app.route("/api/account/loadForm", methods=["GET"])

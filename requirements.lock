@@ -33,11 +33,16 @@ certifi==2024.2.2
     # via selenium
 cffi==1.16.0
     # via cryptography
+    # via trio
 charset-normalizer==3.3.2
     # via niquests
     # via requests
 click==8.1.7
     # via flask
+colorama==0.4.6
+    # via click
+    # via pytest
+    # via tqdm
 cryptography==42.0.5
     # via qh3
 distro==1.9.0
@@ -156,11 +161,14 @@ typing-extensions==4.11.0
     # via pydantic
     # via pydantic-core
     # via selenium
+tzdata==2024.1
+    # via tzlocal
 tzlocal==5.2
     # via apscheduler
 urllib3==2.2.1
     # via requests
     # via selenium
+    # via urllib3
 urllib3-future==2.7.903
     # via niquests
 wassima==1.1.0
