@@ -24,7 +24,7 @@ dependencies = [
     "goodtools>=0.3",
     "niquests==3.*",
     "beautifulsoup4==4.*",
-    "pytailwindcss==0.*",
+    "pytailwindcss-extra==0.*",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
@@ -47,8 +47,8 @@ dev-dependencies = []
 [tool.rye.scripts]
 serve = "python3 -m eventfully.main"
 main = "python3 startup.py"
-css-gen = "tailwindcss -i ./eventfully/static/input.css -o ./eventfully/static/output.css --watch"
-css-build = "tailwindcss -i ./eventfully/static/input.css -o ./eventfully/static/output.css"
+css-gen = "tailwindcss-extra -i ./eventfully/static/input.css -o ./eventfully/static/output.css --watch"
+css-build = "tailwindcss-extra -i ./eventfully/static/input.css -o ./eventfully/static/output.css"
 
 [tool.hatch.metadata]
 allow-direct-references = true
