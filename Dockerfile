@@ -1,24 +1,17 @@
-FROM oven/bun:1.1-alpine AS build
-
-WORKDIR /build
-
-COPY package.json tailwind.config.js ./
-COPY eventfully/ eventfully/
-
-RUN bun install
-RUN bun run build
-
-FROM python:3.11-alpine AS run
+FROM python:3.11-alpine
 
 WORKDIR /app
 
 # Install dependencies
 COPY requirements.lock ./
-RUN sed '/-e/d' requirements.lock > requirements.txt && \
-    pip install -r requirements.txt
+RUN pip install -r requirements.lock
 
-COPY --from=build /build/eventfully/ eventfully/
 COPY tests/ tests/
+COPY eventfully/ eventfully/
+COPY tailwind.config.js ./
+
+# Build CSS Styles
+RUN tailwindcss-extra -i ./eventfully/static/input.css -o ./eventfully/static/output.css
 
 EXPOSE 8000
 
