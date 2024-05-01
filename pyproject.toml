@@ -24,6 +24,7 @@ dependencies = [
     "goodtools>=0.3",
     "niquests==3.*",
     "beautifulsoup4==4.*",
+    "pytailwindcss-extra==0.*",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
@@ -40,12 +41,15 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.rye]
+virtual = true  # necessary for docker
 managed = true
 dev-dependencies = []
 
 [tool.rye.scripts]
-dev = "python3 -m eventfully.main"
+serve = "python3 -m eventfully.main"
 main = "python3 startup.py"
+css-gen = "tailwindcss-extra -i ./eventfully/static/input.css -o ./eventfully/static/output.css --watch"
+css-build = "tailwindcss-extra -i ./eventfully/static/input.css -o ./eventfully/static/output.css"
 
 [tool.hatch.metadata]
 allow-direct-references = true
