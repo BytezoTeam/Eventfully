@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Install dependencies
 COPY requirements.lock ./
-RUN pip install -r requirements.lock
+RUN PYTHONDONTWRITEBYTECODE=1 pip install --no-cache-dir -r requirements.lock
 
 COPY tests/ tests/
 COPY eventfully/ eventfully/
