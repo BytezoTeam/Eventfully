@@ -11,18 +11,18 @@ from eventfully.database import models, schemas, database
 # General
 @database.db.connection_context()
 def create_tables():
-    database.db.create_tables([
-        models.AccountData,
-        models.SearchCache,
-        models.UnprocessedEvent,
-        models.like_data
-    ])
+    database.db.create_tables(
+        [models.User, models.SearchCache, models.UnprocessedEvent, models.Likes]
+    )
 
 
 # Event Like
 @database.db.connection_context()
-def like_event(user_id, event_id):
-    models.like_data.create(user_liked=user_id, liked_event_id=event_id)
+@beartype
+def like_event(user_id: str, event_id: str):
+    user = models.User.get(models.User.id == user_id)
+
+    models.Likes.create(user=user, event_id=event_id)
 
     return event_id
 
@@ -30,39 +30,43 @@ def like_event(user_id, event_id):
 @beartype
 @database.db.connection_context()
 def unlike_event(user_id: str, event_id: str) -> None:
-    models.like_data.delete().where(
-        models.like_data.user_liked == user_id,
-        models.like_data.liked_event_id == event_id
+    user = models.User.get(models.User.id == user_id)
+
+    models.Likes.delete().where(
+        models.Likes.user == user, models.Likes.event_id == event_id
     ).execute()
 
 
 @beartype
 @database.db.connection_context()
 def get_liked_event_ids_by_user_id(user_id: str) -> list[str]:
-    liked_events = models.like_data.select().where(models.like_data.user_liked == user_id)
-    events_list = [event.liked_event_id for event in liked_events]
+    user = models.User.get(models.User.id == user_id)
+
+    liked_events = models.Likes.select().where(models.Likes.user == user)
+    events_list = [event.event_id for event in liked_events]
 
     return events_list
 
 
 # Account
 # TODO: Add check to look if email is real
+@beartype
 @database.db.connection_context()
-def add_account(username, password, userid, email, event_organiser=False):
-    models.AccountData.create(
-        userId=userid,
+def create_account(username: str, password: str, user_id: str, email: str, event_organiser: bool = False) -> str:
+    models.User.create(
+        id=user_id,
         email=email,
-        username=username,
+        name=username,
         password=password,
         event_organiser=event_organiser,
     )
-    return userid
+    return user_id
 
 
 @database.db.connection_context()
 def delete_account(user_id):
     try:
-        account = models.AccountData.get(models.AccountData.userId == user_id)
+        account = models.User.get(models.User.id == user_id)
         account.delete_instance()
         print(f"Account with userId {user_id} was successfully deleted.")
     except DoesNotExist:
@@ -72,7 +76,7 @@ def delete_account(user_id):
 @database.db.connection_context()
 def get_user_data(user_id):
     try:
-        account = models.AccountData.get(models.AccountData.userId == user_id)
+        account = models.User.get(models.User.id == user_id)
         return model_to_dict(account)
     except DoesNotExist:
         print(f"No account found with userId {user_id}.")
@@ -82,23 +86,19 @@ def get_user_data(user_id):
 @database.db.connection_context()
 def authenticate_user(username, password):
     try:
-        user = models.AccountData.get(
-            (models.AccountData.username == username)
-            & (models.AccountData.password == password)
+        user = models.User.get(
+            (models.User.name == username) & (models.User.password == password)
         )
-        return user.userId
+        return user.id
     except DoesNotExist:
         print("User not found or incorrect password.")
         return False
 
 
+@beartype
 @database.db.connection_context()
-def check_user_exists(user_id: str):
-    try:
-        models.AccountData.get(models.AccountData.userId == user_id)
-        return True
-    except DoesNotExist:
-        return False
+def check_user_exists(user_id: str | None):
+    return models.User.select().where(models.User.id == user_id).exists()
 
 
 # Events
@@ -138,11 +138,7 @@ def create_search_cache(search_hash: str):
 @beartype
 @database.db.connection_context()
 def in_search_cache(search_hash: str) -> bool:
-    return (
-        models.SearchCache.select()
-        .where(models.SearchCache.search_hash == search_hash)
-        .exists()
-    )
+    return models.SearchCache.select().where(models.SearchCache.search_hash == search_hash).exists()
 
 
 # Unprocessed events

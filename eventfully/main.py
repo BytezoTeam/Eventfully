@@ -19,6 +19,7 @@ log.info("Starting Server ...")
 
 crud.create_tables()
 
+
 class Config:
     SCHEDULER_API_ENABLED = True
 
@@ -47,17 +48,15 @@ def internal_error_server_error(error):
 @app.route("/", methods=["GET"])
 def index():
     user_id = request.cookies.get("user_id")
-    if not user_id:
-        log.info("No user is logged in")
-        return render_template("index.html", logged_in=False)
 
-    if not crud.check_user_exists(user_id):
-        log.error(f"User with user_id '{user_id}' is not in the database")
-        return render_template("index.html", logged_in=False)
+    is_signed_in = crud.check_user_exists(user_id)
+    if is_signed_in:
+        user = crud.get_user_data(user_id)
+        username = user["name"]
+    else:
+        username = None
 
-    user = crud.get_user_data(user_id)
-    log.info("Cookie found")
-    return render_template("index.html", logged_in=True, username=user.get("username"))
+    return render_template("index.html", logged_in=is_signed_in, username=username)
 
 
 @app.route("/api/toggle_event_like")
@@ -68,7 +67,7 @@ def toggle_event_like():
     if not user_id:
         return "", 401
 
-    log.debug(f"Event '{event_id}' liked toggled for '{user_id}'")
+    log.debug(f"Event '{event_id}' like toggled for '{user_id}'")
     liked_events = crud.get_liked_event_ids_by_user_id(user_id)
     if event_id not in liked_events:
         crud.like_event(user_id, event_id)
@@ -90,12 +89,8 @@ def delete_account():
 
 
 class SignUpForm(FlaskForm):
-    username = StringField(
-        "Username", validators=[DataRequired(), Length(min=4, max=20)]
-    )
-    password = PasswordField(
-        "Password", validators=[DataRequired(), Length(min=8, max=64)]
-    )
+    username = StringField("Username", validators=[DataRequired(), Length(min=4, max=20)])
+    password = PasswordField("Password", validators=[DataRequired(), Length(min=8, max=64)])
     email = StringField("Email", validators=[DataRequired()])
 
 
@@ -106,7 +101,7 @@ def signup_account():
         return form.errors, HTTPStatus.BAD_REQUEST
 
     user_id = str(uuid4())
-    crud.add_account(form.username.data, form.password.data, user_id, form.email.data)
+    crud.create_account(form.username.data, form.password.data, user_id, form.email.data)
 
     response = make_response()
     expire_date = datetime.now() + timedelta(days=30)
@@ -154,10 +149,7 @@ def get_events():
 
     user_id = request.cookies.get("user_id")
 
-    if user_id:
-        liked_events = crud.get_liked_event_ids_by_user_id(user_id)
-    else:
-        liked_events = []
+    liked_events = crud.get_liked_event_ids_by_user_id(user_id) if crud.check_user_exists(user_id) else []
 
     result = search(therm, datetime.today(), datetime.today(), city)
 

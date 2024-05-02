@@ -7,8 +7,7 @@ log = logging.getLogger("eventfully")
 log.setLevel(logging.DEBUG)
 
 _formatter = logging.Formatter(
-    "[%(asctime)s] [%(module)s/%(process)d/%(levelname)s]: %(message)s",
-    datefmt="%d-%m-%y %H:%M:%S"
+    "[%(asctime)s] [%(module)s/%(process)d/%(levelname)s]: %(message)s", datefmt="%d-%m-%y %H:%M:%S"
 )
 
 _LEVEL = logging.DEBUG

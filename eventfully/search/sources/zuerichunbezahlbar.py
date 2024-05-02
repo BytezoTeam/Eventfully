@@ -41,15 +41,17 @@ def search(therm: str, min_date: datetime, max_date: datetime) -> set[schemas.Ev
         raw_event_date = raw_event.find("time", class_="poster__date").get("datetime")
         event_datetime = datetime.strptime(raw_event_date, "%Y-%m-%d")
 
-        events.add(schemas.Event(
-            web_link=link,
-            start_time=event_datetime,
-            end_time=event_datetime,
-            source="zuerichunbezahlbar",
-            title=title,
-            image_link=image_link,
-            city="Zürich"   # This source is only for Zürich
-        ))
+        events.add(
+            schemas.Event(
+                web_link=link,
+                start_time=event_datetime,
+                end_time=event_datetime,
+                source="zuerichunbezahlbar",
+                title=title,
+                image_link=image_link,
+                city="Zürich",  # This source is only for Zürich
+            )
+        )
 
     return events
 

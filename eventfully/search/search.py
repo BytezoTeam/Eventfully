@@ -40,13 +40,14 @@ def _search_db(therm: str, min_date: datetime, max_date: datetime, city: str) ->
     if city:
         filters.append(f"city = '{city}'")
     filter_string = " AND ".join(filters)
-    print("Filter string:", filter_string)
 
     return crud.search_events(therm, filter_string)
 
 
 @beartype
-def _search_web(therm: str, min_date: datetime, max_date: datetime, city: str) -> set[schemas.Event]:
+def _search_web(
+    therm: str, min_date: datetime, max_date: datetime, city: str
+) -> set[schemas.Event]:
     events: set[schemas.Event] = set()
 
     if city in ["Zürich", ""]:  # This source is only for Zürich

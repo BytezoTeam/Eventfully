@@ -28,10 +28,11 @@ def main():
 
 @beartype
 def _post_process():
-    log.debug("Running post processing ...")
-
     processed_events = set()
     unprocessed_events = crud.get_unprocessed_events()
+    if unprocessed_events:
+        log.debug("Running post processing ...")
+
     for unprocessed_event in unprocessed_events:
         try:
             processed_event = SOURCES[unprocessed_event.source](unprocessed_event)
