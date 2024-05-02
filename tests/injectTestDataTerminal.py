@@ -34,7 +34,7 @@ def inject(test_data):
         create_events(test_data)
         print("Success", "Test data has been injected")
     except Exception as error:
-        print(f"Your .json input is not valid and has errors \n" f"{error}")
+        print(f"Your .json input is not valid and has errors \n {error}")
 
 
 path_to_json = input("Enter the path to the .json file:  [Default: tests/test_data.json]: ")

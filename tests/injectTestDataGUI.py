@@ -35,7 +35,7 @@ def inject():
         create_events(data)
         gui.msg_box("Success", "Test data has been injected")
     except Exception as error:
-        gui.msg_box("Error", f"Your .json input is not valid and has errors \n" f"{error}")
+        gui.msg_box("Error", f"Your .json input is not valid and has errors \n {error}")
 
 
 gui.add_label("[Eventfully] Inject Test Data", font_size=30)
