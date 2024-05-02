@@ -149,7 +149,9 @@ def get_events():
 
     user_id = request.cookies.get("user_id")
 
-    liked_events = crud.get_liked_event_ids_by_user_id(user_id) if crud.check_user_exists(user_id) else []
+    liked_events = (
+        crud.get_liked_event_ids_by_user_id(user_id) if crud.check_user_exists(user_id) else []
+    )
 
     result = search(therm, datetime.today(), datetime.today(), city)
 

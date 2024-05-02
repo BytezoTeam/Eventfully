@@ -52,7 +52,9 @@ def get_liked_event_ids_by_user_id(user_id: str) -> list[str]:
 # TODO: Add check to look if email is real
 @beartype
 @database.db.connection_context()
-def create_account(username: str, password: str, user_id: str, email: str, event_organiser: bool = False) -> str:
+def create_account(
+    username: str, password: str, user_id: str, email: str, event_organiser: bool = False
+) -> str:
     models.User.create(
         id=user_id,
         email=email,
@@ -86,9 +88,7 @@ def get_user_data(user_id):
 @database.db.connection_context()
 def authenticate_user(username, password):
     try:
-        user = models.User.get(
-            (models.User.name == username) & (models.User.password == password)
-        )
+        user = models.User.get((models.User.name == username) & (models.User.password == password))
         return user.id
     except DoesNotExist:
         print("User not found or incorrect password.")
