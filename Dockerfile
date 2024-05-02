@@ -9,7 +9,8 @@ RUN addgroup nonroot && \
 
 # Install and setup dependencies
 COPY requirements.lock ./
-RUN PYTHONDONTWRITEBYTECODE=1 pip install --no-cache-dir -r requirements.lock
+RUN PYTHONDONTWRITEBYTECODE=1 pip install --no-cache-dir -r requirements.lock && \
+    tailwindcss-extra
 
 # Copy project files
 COPY tests/ tests/
