@@ -1,15 +1,14 @@
-# editor files
+# editor generated files
 .idea/
 .vscode/
 
-# python files
+# python generated files
 __pycache__/
 .venv/
 
-# node files
-node_modules/
+# program generated files
 output.css
+*.log
 
 # private files
 .env
-*.log
