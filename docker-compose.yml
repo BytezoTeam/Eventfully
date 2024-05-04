@@ -17,7 +17,6 @@ services:
     environment:
       MEILI_HOST: "http://meilisearch:7700"
       MEILI_KEY: "Moin"   # Change this to a secure value
-      OPENAI_API_KEY: ""    # Change this to your OpenAI API key
     depends_on:
       - "meilisearch"
 
