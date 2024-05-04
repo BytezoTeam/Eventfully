@@ -10,7 +10,7 @@ from eventfully.utils import get_hash_string
 
 
 @beartype
-def search(therm: str, min_date: datetime, max_date: datetime, city: str) -> set[schemas.Event]:
+def main(therm: str, min_date: datetime, max_date: datetime, city: str) -> set[schemas.Event]:
     events: set[schemas.Event] = set()
 
     db_events = _search_db(therm, min_date, max_date, city)
@@ -66,5 +66,5 @@ def _search_web(
 
 
 if __name__ == "__main__":
-    print(search("", datetime.today(), datetime.today(), "Zürich"))
+    print(main("", datetime.today(), datetime.today(), "Zürich"))
     # print(_search_db("", datetime.today(), datetime.today(), "Zürich"))

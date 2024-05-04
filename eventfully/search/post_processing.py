@@ -14,7 +14,7 @@ SOURCES: dict[str, Callable] = {
 
 
 @beartype
-def post_process():
+def main():
     processed_events = set()
     unprocessed_events = crud.get_unprocessed_events()
     if unprocessed_events:

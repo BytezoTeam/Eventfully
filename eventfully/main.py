@@ -10,8 +10,7 @@ from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Length
 
 from eventfully.database import crud
-from eventfully.search.post_processing import post_process
-from eventfully.search.search import search
+from eventfully.search import post_processing, search
 from eventfully.logger import log
 
 log.info("Starting Server ...")
@@ -31,7 +30,7 @@ scheduler = APScheduler()
 scheduler.init_app(app)
 atexit.register(lambda: scheduler.shutdown())
 
-scheduler.add_job("post_process", post_process, trigger="interval", seconds=60, max_instances=1)
+scheduler.add_job("post_process", post_processing.main, trigger="interval", seconds=60, max_instances=1)
 
 scheduler.start()
 
@@ -151,7 +150,7 @@ def get_events():
         crud.get_liked_event_ids_by_user_id(user_id) if crud.check_user_exists(user_id) else []
     )
 
-    result = search(therm, datetime.today(), datetime.today(), city)
+    result = search.main(therm, datetime.today(), datetime.today(), city)
 
     return render_template("api/events.html", events=result, liked_events=liked_events)
 
