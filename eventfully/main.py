@@ -10,7 +10,7 @@ from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Length
 
 from eventfully.database import crud
-from eventfully.search import post_processing, search
+from eventfully.search import post_processing, search, collect
 from eventfully.logger import log
 
 log.info("Starting Server ...")
@@ -31,6 +31,7 @@ scheduler.init_app(app)
 atexit.register(lambda: scheduler.shutdown())
 
 scheduler.add_job("post_process", post_processing.main, trigger="interval", seconds=60, max_instances=1)
+scheduler.add_job("collect", collect.main, trigger="cron", day="*", max_instances=1)
 
 scheduler.start()
 
