@@ -22,10 +22,7 @@ def collect() -> set[schemas.Event]:
         if "url" not in raw_event:
             continue
 
-        if "endDate" in raw_event:
-            end_time = _extract_datetime(raw_event["endDate"])
-        else:
-            end_time = start_time
+        end_time = _extract_datetime(raw_event["endDate"]) if "endDate" in raw_event else start_time
 
         events.add(schemas.Event(
             web_link=raw_event["url"],
