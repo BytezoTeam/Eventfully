@@ -36,4 +36,4 @@ def main():
 
 
 if __name__ == "__main__":
-    _post_process()
+    main()
