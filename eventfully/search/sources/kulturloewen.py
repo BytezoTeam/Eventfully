@@ -1,6 +1,5 @@
 import re
 from datetime import datetime, timedelta
-from http import HTTPStatus
 
 from beartype import beartype
 import niquests
@@ -10,7 +9,11 @@ from eventfully.database import schemas
 
 
 @beartype
-def search(therm: str, min_time: datetime, max_time: datetime) -> set[schemas.Event]:
+def search(therm: str, min_time: datetime, max_time: datetime, city: str) -> set[schemas.Event]:
+    # Skip if not in Velbert because kulturloewen only provides events in this city
+    if city.lower() not in ["", "velbert"]:
+        return set()
+
     events: set[schemas.Event] = set()
 
     search_time = min_time
@@ -19,8 +22,7 @@ def search(therm: str, min_time: datetime, max_time: datetime) -> set[schemas.Ev
         search_time_string = search_time.strftime("%Y.%m.%d")
         url = f"https://www.neanderticket.de/events/introJS=1;client=kulturloewen&what=date&show={search_time_string}"
         requests = niquests.get(url)
-        if requests.status_code != HTTPStatus.OK:
-            raise ConnectionError("Bad response")
+        requests.raise_for_status()
 
         soup = BeautifulSoup(requests.text, "html.parser")
         raw_events = soup.find_all("div", class_="klive-terminbox")
@@ -70,8 +72,7 @@ def search(therm: str, min_time: datetime, max_time: datetime) -> set[schemas.Ev
 @beartype
 def post_process(event: schemas.Event) -> schemas.Event:
     request = niquests.get(event.web_link)
-    if request.status_code != HTTPStatus.OK:
-        raise ConnectionError("Bad response")
+    request.raise_for_status()
 
     soup = BeautifulSoup(request.text, "html.parser")
 

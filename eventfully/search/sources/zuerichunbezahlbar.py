@@ -1,5 +1,4 @@
 from datetime import datetime
-from http import HTTPStatus
 
 import niquests
 from bs4 import BeautifulSoup
@@ -11,7 +10,11 @@ BASE_URL = "https://www.zuerichunbezahlbar.ch"
 
 
 @beartype
-def search(therm: str, min_date: datetime, max_date: datetime) -> set[schemas.Event]:
+def search(therm: str, min_date: datetime, max_date: datetime, city: str) -> set[schemas.Event]:
+    # Skip if not in Zürich because zuerichunbezahlbar only provides events in this city
+    if city.lower() not in ["", "zürich"]:
+        return set()
+
     min_date_str = min_date.strftime("%d-%m-%Y")
     max_date_str = max_date.strftime("%d-%m-%Y")
 
@@ -23,8 +26,7 @@ def search(therm: str, min_date: datetime, max_date: datetime) -> set[schemas.Ev
         "category": "",
     }
     request = niquests.get(f"{BASE_URL}/events", params, retries=3)
-    if request.status_code != HTTPStatus.OK:
-        raise ConnectionError("Bad response")
+    request.raise_for_status()
 
     soup = BeautifulSoup(request.text, "html.parser")
     raw_events = soup.find_all("article", class_="poster")

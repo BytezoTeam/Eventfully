@@ -1,12 +1,18 @@
 from datetime import datetime
+from typing import Callable
 
 from beartype import beartype
 
 from eventfully.database import schemas, crud
 from eventfully.logger import log
-from eventfully.search.sources.zuerichunbezahlbar import search as zuerichunbezahlbar_search
-from eventfully.search.sources.kulturloewen import search as kulturloewen_search
+from eventfully.search.sources import zuerichunbezahlbar, kulturloewen
 from eventfully.utils import get_hash_string
+
+
+SOURCES: list[Callable[[str, datetime, datetime, str], set[schemas.Event]]] = [
+    zuerichunbezahlbar.search,
+    kulturloewen.search
+]
 
 
 @beartype
@@ -50,17 +56,12 @@ def _search_web(
 ) -> set[schemas.Event]:
     events: set[schemas.Event] = set()
 
-    if city in ["Zürich", ""]:  # This source is only for Zürich
+    for source in SOURCES:
         try:
-            events.update(zuerichunbezahlbar_search(therm, min_date, max_date))
-        except ConnectionError as e:
-            log.error("Problem with Zuerichunbezahlbar", exc_info=e)
-
-    if city in ["Velbert", ""]:
-        try:
-            events.update(kulturloewen_search(therm, min_date, max_date))
-        except ConnectionError as e:
-            log.error("Problem with Kulturloewen", exc_info=e)
+            source_events = source(therm, min_date, max_date, city)
+            events.update(source_events)
+        except Exception as e:
+            log.error(f"Could not collect events from {source}: {e}")
 
     return events
 
