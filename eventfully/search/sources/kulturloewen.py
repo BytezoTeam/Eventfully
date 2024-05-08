@@ -39,11 +39,13 @@ def search(therm: str, min_time: datetime, max_time: datetime, city: str) -> set
                 title_elements.append(raw_subtitle_element.text)
             title = " - ".join(title_elements)
 
-            time = search_time
             raw_time_long_text = raw_event.find("div", class_="klive-zeit").text
             raw_time_text = _extract_with_regex(raw_time_long_text, r"(\d+:\d+)")
             raw_time = datetime.strptime(raw_time_text, "%H:%M").time()
-            time.replace(hour=raw_time.hour, minute=raw_time.minute)
+            time = datetime(
+                year=search_time.year, month=search_time.month, day=search_time.day,
+                hour=raw_time.hour, minute=raw_time.minute
+            )
 
             raw_image_style = raw_event.find("div", class_="klive-foto").get("style")
             image_link = _extract_with_regex(raw_image_style, r"url\((.+)\)")
@@ -89,3 +91,9 @@ def _extract_with_regex(text: str, pattern: str) -> str:
         return search_match.group(1)
     else:
         raise ValueError("No match found")
+
+
+if __name__ == "__main__":
+    results = search("", datetime.today(), datetime.today() + timedelta(days=7), "velbert")
+    for result in results:
+        print(result)
