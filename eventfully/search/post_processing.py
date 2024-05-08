@@ -10,7 +10,7 @@ from eventfully.search.sources import zuerichunbezahlbar, kulturloewen, neandert
 SOURCES: dict[str, Callable] = {
     "zuerichunbezahlbar": zuerichunbezahlbar.post_process,
     "kulturloewen": kulturloewen.post_process,
-    "neanderticket": neanderticket.post_process
+    "neanderticket": neanderticket.post_process,
 }
 
 
@@ -25,9 +25,7 @@ def main():
         try:
             processed_event = SOURCES[unprocessed_event.source](unprocessed_event)
         except Exception as e:
-            log.warn(
-                f"Could not process event {unprocessed_event.id} from {unprocessed_event.source}: {e}"
-            )
+            log.warn(f"Could not process event {unprocessed_event.id} from {unprocessed_event.source}: {e}")
             continue
         processed_events.add(processed_event)
 

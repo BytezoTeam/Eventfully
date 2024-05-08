@@ -5,11 +5,14 @@ import pytest
 from eventfully.search.sources import kulturloewen, zuerichunbezahlbar, neanderticket
 
 
-@pytest.mark.parametrize("source,required_fields", [
-    (zuerichunbezahlbar, ["description", "address", "city", "operator_web_link"]),
-    (kulturloewen, ["description", "address", "city"]),
-    (neanderticket, ["description", "address"]),
-])
+@pytest.mark.parametrize(
+    "source,required_fields",
+    [
+        (zuerichunbezahlbar, ["description", "address", "city", "operator_web_link"]),
+        (kulturloewen, ["description", "address", "city"]),
+        (neanderticket, ["description", "address"]),
+    ],
+)
 def test_source_integration(source, required_fields: list[str]):
     raw_events = source.search("", datetime.today(), datetime.today(), "")
     assert len(raw_events) > 0

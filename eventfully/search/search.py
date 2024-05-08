@@ -12,7 +12,7 @@ from eventfully.utils import get_hash_string
 SOURCES: list[Callable[[str, datetime, datetime, str], set[schemas.Event]]] = [
     zuerichunbezahlbar.search,
     kulturloewen.search,
-    neanderticket.search
+    neanderticket.search,
 ]
 
 
@@ -52,9 +52,7 @@ def _search_db(therm: str, min_date: datetime, max_date: datetime, city: str) ->
 
 
 @beartype
-def _search_web(
-    therm: str, min_date: datetime, max_date: datetime, city: str
-) -> set[schemas.Event]:
+def _search_web(therm: str, min_date: datetime, max_date: datetime, city: str) -> set[schemas.Event]:
     events: set[schemas.Event] = set()
 
     for source in SOURCES:

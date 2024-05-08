@@ -24,18 +24,20 @@ def collect() -> set[schemas.Event]:
 
         end_time = _extract_datetime(raw_event["endDate"]) if "endDate" in raw_event else start_time
 
-        events.add(schemas.Event(
-            web_link=raw_event["url"],
-            start_time=start_time,
-            end_time=end_time,
-            source="boundicca",
-            title=raw_event.get("name"),
-            image_link=raw_event.get("pictureUrl"),
-            city=raw_event.get("location.city"),
-            description=raw_event.get("description"),
-            address=raw_event.get("location.address"),
-            operator_web_link=raw_event.get("location.url"),
-        ))
+        events.add(
+            schemas.Event(
+                web_link=raw_event["url"],
+                start_time=start_time,
+                end_time=end_time,
+                source="boundicca",
+                title=raw_event.get("name"),
+                image_link=raw_event.get("pictureUrl"),
+                city=raw_event.get("location.city"),
+                description=raw_event.get("description"),
+                address=raw_event.get("location.address"),
+                operator_web_link=raw_event.get("location.url"),
+            )
+        )
 
     log.debug(f"Got {len(events)} new events from Boundicca")
     return events

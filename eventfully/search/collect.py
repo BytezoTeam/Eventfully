@@ -7,9 +7,7 @@ from eventfully.logger import log
 from eventfully.search.sources import boundicca
 
 
-SOURCES: list[Callable] = [
-   boundicca.collect
-]
+SOURCES: list[Callable] = [boundicca.collect]
 
 
 def main():

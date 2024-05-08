@@ -43,8 +43,11 @@ def search(therm: str, min_time: datetime, max_time: datetime, city: str) -> set
             raw_time_text = _extract_with_regex(raw_time_long_text, r"(\d+:\d+)")
             raw_time = datetime.strptime(raw_time_text, "%H:%M").time()
             time = datetime(
-                year=search_time.year, month=search_time.month, day=search_time.day,
-                hour=raw_time.hour, minute=raw_time.minute
+                year=search_time.year,
+                month=search_time.month,
+                day=search_time.day,
+                hour=raw_time.hour,
+                minute=raw_time.minute,
             )
 
             raw_image_style = raw_event.find("div", class_="klive-foto").get("style")

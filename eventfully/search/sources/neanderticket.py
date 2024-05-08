@@ -38,12 +38,15 @@ def search(therm: str, min_time: datetime, max_time: datetime, city: str) -> set
 
             # Extract the start time from the html
             start_time_object = raw_event.find("div", class_="beginn")
-            if not start_time_object:   # Skip if there is no start time because its required
+            if not start_time_object:  # Skip if there is no start time because its required
                 continue
             raw_start_time = start_time_object.text.strip().split(":")
             start_time = datetime(
-                year=search_time.year, month=search_time.month, day=search_time.day,
-                hour=int(raw_start_time[0]), minute=int(raw_start_time[1])
+                year=search_time.year,
+                month=search_time.month,
+                day=search_time.day,
+                hour=int(raw_start_time[0]),
+                minute=int(raw_start_time[1]),
             )
 
             # Extract the end time from the html **if** there is one
@@ -53,8 +56,7 @@ def search(therm: str, min_time: datetime, max_time: datetime, city: str) -> set
                 h = int(raw_end_time[0])
                 m = int(raw_end_time[1])
                 end_time = datetime(
-                    year=search_time.year, month=search_time.month, day=search_time.day,
-                    hour=h, minute=m
+                    year=search_time.year, month=search_time.month, day=search_time.day, hour=h, minute=m
                 )
             else:
                 end_time = start_time
