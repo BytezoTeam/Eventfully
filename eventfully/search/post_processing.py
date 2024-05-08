@@ -4,12 +4,13 @@ from beartype import beartype
 
 from eventfully.logger import log
 from eventfully.database import crud
-from eventfully.search.sources import zuerichunbezahlbar, kulturloewen
+from eventfully.search.sources import zuerichunbezahlbar, kulturloewen, neanderticket
 
 
 SOURCES: dict[str, Callable] = {
     "zuerichunbezahlbar": zuerichunbezahlbar.post_process,
     "kulturloewen": kulturloewen.post_process,
+    "neanderticket": neanderticket.post_process
 }
 
 

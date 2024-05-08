@@ -5,13 +5,14 @@ from beartype import beartype
 
 from eventfully.database import schemas, crud
 from eventfully.logger import log
-from eventfully.search.sources import zuerichunbezahlbar, kulturloewen
+from eventfully.search.sources import zuerichunbezahlbar, kulturloewen, neanderticket
 from eventfully.utils import get_hash_string
 
 
 SOURCES: list[Callable[[str, datetime, datetime, str], set[schemas.Event]]] = [
     zuerichunbezahlbar.search,
-    kulturloewen.search
+    kulturloewen.search,
+    neanderticket.search
 ]
 
 
