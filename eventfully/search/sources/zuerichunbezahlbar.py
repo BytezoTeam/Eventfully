@@ -61,8 +61,7 @@ def search(therm: str, min_date: datetime, max_date: datetime, city: str) -> set
 @beartype
 def post_process(event: schemas.Event) -> schemas.Event:
     request = niquests.get(event.web_link)
-    if request.status_code != HTTPStatus.OK:
-        raise ConnectionError("Bad response")
+    request.raise_for_status()
 
     soup = BeautifulSoup(request.text, "html.parser")
 
