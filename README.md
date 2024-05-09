@@ -23,9 +23,11 @@ Eventfully is a python based web-application designed to process and show variou
 
 ## Our Sources
 
-- [Zuerichunbezahlbar](https://www.zuerichunbezahlbar.ch/events/): Events for Zürich in Switzerland
-- [Kulturlöwen](https://www.kulturloewen.de): Events in Velbert, a small City near Essen, Germany
-- [Boudicca](https://boudicca.events): An aggregated event database combining multiple smaller sources and laying a special focus on accessibility
+- [Zuerichunbezahlbar](https://www.zuerichunbezahlbar.ch/events/): events for Zürich in Switzerland
+- [Kulturlöwen](https://www.kulturloewen.de): events in Velbert, a small City near Essen, Germany
+- [Boudicca](https://boudicca.events): aggregated event database combining multiple smaller sources and laying a special focus on accessibility
+- [Neanderticket](https://www.neanderticket.de/): events for the North Rhine-Westphalia state in Germany
+- [bpb: Bundeszentrale für politische Bildung](https://www.bpb.de/veranstaltungen/): various political events in Germany
 
 ## [Development Setup](/docs/development-setup.md)
 
