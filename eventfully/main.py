@@ -31,7 +31,7 @@ scheduler.init_app(app)
 atexit.register(lambda: scheduler.shutdown())
 
 scheduler.add_job("post_process", post_processing.main, trigger="interval", seconds=60, max_instances=1)
-scheduler.add_job("collect", collect.main, trigger="cron", day="*", max_instances=1)
+scheduler.add_job("collect", crawl.main, trigger="cron", day="*", max_instances=1)
 
 scheduler.start()
 
