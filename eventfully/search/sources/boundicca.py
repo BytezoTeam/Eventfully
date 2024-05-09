@@ -7,7 +7,7 @@ from eventfully.database import schemas
 from eventfully.logger import log
 
 
-def collect() -> set[schemas.Event]:
+def crawl() -> set[schemas.Event]:
     request = niquests.get("https://eventdb.boudicca.events/entries")
     request.raise_for_status()
     raw_events = request.json()
@@ -56,4 +56,4 @@ def _extract_datetime(string: str) -> datetime:
 
 
 if __name__ == "__main__":
-    print(collect())
+    print(crawl())

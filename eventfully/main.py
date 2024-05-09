@@ -10,7 +10,7 @@ from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Length
 
 from eventfully.database import crud
-from eventfully.search import post_processing, search, collect
+from eventfully.search import post_processing, search, crawl
 from eventfully.logger import log
 
 log.info("Starting Server ...")
