@@ -29,9 +29,9 @@ def search(therm: str, min_time: datetime, max_time: datetime, city: str) -> set
         soup = BeautifulSoup(request.text, "html.parser")
         raw_events = soup.find_all("div", class_="kurz-rahmen")
         for raw_event in raw_events:
-            image_object = raw_event.find("div", class_="fancybox")
+            image_object = raw_event.find("a", class_="fancybox")
             if image_object:
-                image_path = raw_event.find("a", class_="fancybox").get("href")
+                image_path = image_object.get("href")
                 image_link = f"https://www.neanderticket.de{image_path}"
             else:
                 image_link = None
