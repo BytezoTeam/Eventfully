@@ -33,4 +33,4 @@ class Event(BaseModel):
 
     @field_serializer("start_time", "end_time")
     def serialize_start(self, time: datetime, _info):
-        return time.timestamp()
+        return int(time.timestamp())
