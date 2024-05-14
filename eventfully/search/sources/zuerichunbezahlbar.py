@@ -52,6 +52,7 @@ def search(therm: str, min_date: datetime, max_date: datetime, city: str) -> set
                 title=title,
                 image_link=image_link,
                 city="Zürich",  # This source is only for Zürich
+                price="kostenlos",
             )
         )
 

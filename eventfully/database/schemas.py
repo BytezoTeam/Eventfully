@@ -17,6 +17,7 @@ class Event(BaseModel):
     description: str | None = None
     address: str | None = None
     operator_web_link: str | None = None
+    price: str | None = None
 
     @computed_field()
     @property
