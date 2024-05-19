@@ -42,7 +42,7 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64/v8
           push: true
-          tags: ghcr.io/BytezoTeam/Eventfully:latest,ghcr.io/BytezoTeam/Eventfully:${{ github.ref_name }}
+          tags: ghcr.io/BytezoTeam/eventfully:latest,ghcr.io/BytezoTeam/eventfully:${{ github.ref_name }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
 
