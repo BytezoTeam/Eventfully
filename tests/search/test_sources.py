@@ -2,14 +2,13 @@ from datetime import datetime
 
 import pytest
 
-from eventfully.search.sources import kulturloewen, zuerichunbezahlbar, neanderticket, bpb, boundicca
+from eventfully.search.sources import zuerichunbezahlbar, neanderticket, bpb, boundicca
 
 
 @pytest.mark.parametrize(
     "source,required_fields",
     [
         (zuerichunbezahlbar, ["description", "address", "city", "operator_web_link", "image_link", "price", "category"]),
-        (kulturloewen, ["description", "address", "city", "image_link"]),
         (neanderticket, ["description", "address", "image_link", "category"]),
     ],
 )
