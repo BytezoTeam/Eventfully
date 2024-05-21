@@ -42,8 +42,7 @@ managed = true
 dev-dependencies = []
 
 [tool.rye.scripts]
-serve = "python3 -m eventfully.main"
-main = "python3 startup.py"
+dev = "python3 -m eventfully.main"
 css-gen = "tailwindcss-extra -i ./eventfully/static/input.css -o ./eventfully/static/output.css --watch"
 css-build = "tailwindcss-extra -i ./eventfully/static/input.css -o ./eventfully/static/output.css"
 
