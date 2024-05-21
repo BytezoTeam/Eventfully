@@ -8,9 +8,9 @@ from eventfully.search.sources import kulturloewen, zuerichunbezahlbar, neandert
 @pytest.mark.parametrize(
     "source,required_fields",
     [
-        (zuerichunbezahlbar, ["description", "address", "city", "operator_web_link", "image_link"]),
+        (zuerichunbezahlbar, ["description", "address", "city", "operator_web_link", "image_link", "price", "category"]),
         (kulturloewen, ["description", "address", "city", "image_link"]),
-        (neanderticket, ["description", "address", "image_link"]),
+        (neanderticket, ["description", "address", "image_link", "category"]),
     ],
 )
 def test_search_integration(source, required_fields: list[str]):
