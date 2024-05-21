@@ -24,18 +24,37 @@ def crawl() -> set[schemas.Event]:
 
         end_time = _extract_datetime(raw_event["endDate"]) if "endDate" in raw_event else start_time
 
+        raw_name = raw_event.get("name")
+        if raw_name:
+            tile = raw_name.strip()
+        else:
+            tile = raw_name
+
+        match raw_event.get("category"):
+            case "SPORT":
+                category = "sport"
+            case "ART":
+                category = "culture"
+            case "TECH":
+                category = "education"
+            case "MUSIC":
+                category = "culture"
+            case _:
+                category = None
+
         events.add(
             schemas.Event(
                 web_link=raw_event["url"],
                 start_time=start_time,
                 end_time=end_time,
                 source="boundicca",
-                title=raw_event.get("name"),
+                title=tile,
                 image_link=raw_event.get("pictureUrl"),
                 city=raw_event.get("location.city"),
                 description=raw_event.get("description"),
                 address=raw_event.get("location.address"),
                 operator_web_link=raw_event.get("location.url"),
+                category=category
             )
         )
 

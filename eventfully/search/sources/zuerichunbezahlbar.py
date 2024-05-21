@@ -70,6 +70,17 @@ def post_process(event: schemas.Event) -> schemas.Event:
     event.address = soup.find("address", class_="detailpost__address").text.strip()
     event.operator_web_link = soup.find("a", class_="detailpost__link").get("href")
 
+    match soup.find("a", class_="detailpost__taglink").text.strip():
+        case "Bildung":
+            category = "education"
+        case "Kultur & Nachtleben":
+            category = "culture"
+        case "Sport & Freizeit":
+            category = "sport"
+        case _:
+            category = None
+    event.category = category
+
     return event
 
 

@@ -75,6 +75,7 @@ def search(therm: str, min_time: datetime, max_time: datetime, city: str) -> set
                     title=title,
                     image_link=image_link,
                     city=city if city != "" else None,
+                    category="culture",
                 )
             )
 

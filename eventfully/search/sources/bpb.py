@@ -41,8 +41,8 @@ def crawl() -> set[Event]:
             end_time = datetime.fromtimestamp(event["extension"]["dates"]["endDate"])
 
             title = event["teaser"]["title"]
-            description = event["teaser"]["text"]
-            city = event["extension"]["address"]["city"]
+            description = event["teaser"]["text"].strip()
+            raw_city = event["extension"]["address"]["city"]
             image_link = base_url + event["teaser"]["image"]["sources"][0]["url"]
 
             events.add(
@@ -53,8 +53,9 @@ def crawl() -> set[Event]:
                     source="bpb",
                     title=title,
                     image_link=image_link,
-                    city=city,
+                    city=raw_city if raw_city else None,
                     description=description,
+                    category="politics",
                 )
             )
 
