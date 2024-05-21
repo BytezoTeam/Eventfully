@@ -25,10 +25,7 @@ def crawl() -> set[schemas.Event]:
         end_time = _extract_datetime(raw_event["endDate"]) if "endDate" in raw_event else start_time
 
         raw_name = raw_event.get("name")
-        if raw_name:
-            tile = raw_name.strip()
-        else:
-            tile = raw_name
+        tile = raw_name.strip() if raw_name else raw_name
 
         match raw_event.get("category"):
             case "SPORT":
