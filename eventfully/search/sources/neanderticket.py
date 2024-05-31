@@ -29,7 +29,7 @@ def search(therm: str, min_time: datetime, max_time: datetime, city: str) -> set
         soup = BeautifulSoup(request.text, "html.parser")
         raw_events = soup.find_all("div", class_="kurz-rahmen")
         for raw_event in raw_events:
-            if event := _extract_event_from_html(raw_event, search_time, city):
+            if event := _extract_event_from_html(raw_event, search_time):
                 events.add(event)
 
         search_time += timedelta(days=1)
@@ -38,7 +38,7 @@ def search(therm: str, min_time: datetime, max_time: datetime, city: str) -> set
 
 
 @beartype
-def _extract_event_from_html(raw_event: PageElement, search_time: datetime, city: str) -> schemas.Event | None:
+def _extract_event_from_html(raw_event: PageElement, search_time: datetime) -> schemas.Event | None:
     image_object = raw_event.find_next("a", class_="fancybox")
     if image_object:
         image_path = image_object.get("href")
@@ -76,6 +76,8 @@ def _extract_event_from_html(raw_event: PageElement, search_time: datetime, city
     event_id = raw_event.find_next("a", class_="aufklapplink").get("id").removeprefix("e")
     web_link = f"https://www.neanderticket.de/?{event_id}"
 
+    city = raw_event.find_next("span", class_="location").text.split("–")[1].strip()
+
     event = schemas.Event(
         web_link=web_link,
         start_time=start_time,
@@ -83,7 +85,7 @@ def _extract_event_from_html(raw_event: PageElement, search_time: datetime, city
         source="neanderticket",
         title=title,
         image_link=image_link,
-        city=city if city != "" else None,
+        city=city,
         category="culture",
     )
 

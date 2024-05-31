@@ -9,7 +9,7 @@ from eventfully.search.sources import zuerichunbezahlbar, neanderticket, bpb, bo
     "source,required_fields",
     [
         (zuerichunbezahlbar, ["description", "address", "city", "operator_web_link", "image_link", "price", "category"]),
-        (neanderticket, ["description", "address", "image_link", "category"]),
+        (neanderticket, ["description", "address", "image_link", "category", "city"]),
     ],
 )
 def test_search_integration(source, required_fields: list[str]):
