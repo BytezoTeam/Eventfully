@@ -32,3 +32,7 @@ class SearchCache(_DBBaseModel):
 
 class UnprocessedEvent(_DBBaseModel):
     event_id = TextField(primary_key=True)
+
+
+class PossibleCities(_DBBaseModel):
+    city = TextField(primary_key=True)

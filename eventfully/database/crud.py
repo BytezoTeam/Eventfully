@@ -12,7 +12,7 @@ from eventfully.database import models, schemas, database
 @database.db.connection_context()
 def create_tables():
     database.db.create_tables(
-        [models.User, models.SearchCache, models.UnprocessedEvent, models.Likes]
+        [models.User, models.SearchCache, models.UnprocessedEvent, models.Likes, models.PossibleCities]
     )
 
 
@@ -102,11 +102,18 @@ def check_user_exists(user_id: str | None):
 
 
 # Events
+@database.db.connection_context()
 def add_events(events: Iterable[schemas.Event]):
     if not events:
         return
+
     events_dicts = [event.model_dump() for event in events]
     models.event_index.add_documents(events_dicts)
+
+    # Keep track of cities so we know for what we can search
+    cities = set([event.city for event in events if event.city])
+    city_dict = [{"city": city} for city in cities]
+    models.PossibleCities.insert_many(city_dict).on_conflict_ignore().execute()
 
 
 @beartype
@@ -172,3 +179,11 @@ def delete_unprocessed_events(event_ids: Iterable[str]):
             models.UnprocessedEvent.delete().where(
                 models.UnprocessedEvent.event_id == event_id
             ).execute()
+
+
+# Other
+@beartype
+@database.db.connection_context()
+def get_possible_cities() -> list[str]:
+    cities = models.PossibleCities.select()
+    return [city.city for city in cities]

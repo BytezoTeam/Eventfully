@@ -54,7 +54,9 @@ def index():
     else:
         username = None
 
-    return render_template("index.html", logged_in=is_signed_in, username=username)
+    cities = crud.get_possible_cities()
+
+    return render_template("index.html", logged_in=is_signed_in, username=username, cities=cities)
 
 
 @app.route("/api/toggle_event_like")

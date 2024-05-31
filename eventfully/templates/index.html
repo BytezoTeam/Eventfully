@@ -102,8 +102,9 @@
             />
             <input type="" class="input" name="city" id="city" list="cities">
             <datalist id="cities">
-              <option value="Zürich">Zürich</option>
-              <option value="Velbert">Velbert</option>
+              {% for city in cities %}
+                <option value="{{ city }}">{{ city }}</option>
+              {% endfor %}
             </datalist>
             <button type="submit" class="btn btn-primary">Search</button>
           </form>
