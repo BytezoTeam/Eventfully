@@ -87,7 +87,7 @@
           <!-- Event Search -->
           <h2>Event Search</h2>
           <form
-            class="flex flex-row justify-start gap-4"
+            class="flex flex-row flex-wrap justify-start gap-4"
             hx-get="/api/search"
             hx-target="#event-search-result"
             hx-trigger="submit,load"
@@ -100,7 +100,7 @@
               type="search"
               placeholder="Search for events..."
             />
-            <input type="" class="input" name="city" id="city" list="cities">
+            <input type="" class="input" placeholder="City" name="city" id="city" list="cities">
             <datalist id="cities">
               {% for city in cities %}
                 <option value="{{ city }}">{{ city }}</option>
