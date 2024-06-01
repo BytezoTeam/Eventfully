@@ -8,7 +8,10 @@ from eventfully.search.sources import zuerichunbezahlbar, neanderticket, bpb, bo
 @pytest.mark.parametrize(
     "source,required_fields",
     [
-        (zuerichunbezahlbar, ["description", "address", "city", "operator_web_link", "image_link", "price", "category"]),
+        (
+            zuerichunbezahlbar,
+            ["description", "address", "city", "operator_web_link", "image_link", "price", "category"],
+        ),
         (neanderticket, ["description", "address", "image_link", "category", "city"]),
     ],
 )
@@ -30,7 +33,7 @@ def test_search_integration(source, required_fields: list[str]):
     [
         (bpb, ["source", "title", "image_link", "description", "category"]),
         (boundicca, ["source", "title"]),
-    ]
+    ],
 )
 def test_crawl(source, required_fields: list[str]):
     events = source.crawl()

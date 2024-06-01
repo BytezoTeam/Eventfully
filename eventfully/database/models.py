@@ -16,13 +16,15 @@ class User(_DBBaseModel):
     name = TextField()
     email = TextField()
 
-class groups(_DBBaseModel):
+
+class Groups(_DBBaseModel):
     group_id = TextField(primary_key=True)
     group_name = TextField()
 
-class group_members(_DBBaseModel):
+
+class GroupMembers(_DBBaseModel):
     user_id = TextField()
-    group = ForeignKeyField(groups)
+    group = ForeignKeyField(Groups)
     invited = BooleanField()
     admin = BooleanField()
 
@@ -33,7 +35,7 @@ class group_members(_DBBaseModel):
 class Likes(_DBBaseModel):
     user = ForeignKeyField(User)
     event_id = TextField()
-    group_id = ForeignKeyField(groups, null=True)
+    group_id = ForeignKeyField(Groups, null=True)
 
     class Meta:
         primary_key = CompositeKey("user", "event_id", "group_id")

@@ -65,9 +65,7 @@ def _extract_event_from_html(raw_event: PageElement, search_time: datetime) -> s
         raw_end_time = end_time_object.text.strip().split(": ")[1].split(":")
         h = int(raw_end_time[0])
         m = int(raw_end_time[1])
-        end_time = datetime(
-            year=search_time.year, month=search_time.month, day=search_time.day, hour=h, minute=m
-        )
+        end_time = datetime(year=search_time.year, month=search_time.month, day=search_time.day, hour=h, minute=m)
     else:
         end_time = start_time
 

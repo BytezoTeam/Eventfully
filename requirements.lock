@@ -21,16 +21,11 @@ certifi==2024.2.2
     # via requests
 cffi==1.16.0
     # via cryptography
-    # via trio
 charset-normalizer==3.3.2
     # via niquests
     # via requests
 click==8.1.7
     # via flask
-colorama==0.4.6
-    # via click
-    # via pytest
-    # via tqdm
 cryptography==42.0.5
     # via qh3
 flask==3.0.3
@@ -80,8 +75,6 @@ pydantic==2.7.0
 pydantic-core==2.18.1
     # via pydantic
 pyjwt==2.8.0
-pysocks==1.7.1
-    # via urllib3
 pytailwindcss-extra==0.1.0
 pytest==8.1.1
 python-dateutil==2.9.0.post0
@@ -99,26 +92,13 @@ six==1.16.0
 soupsieve==2.5
     # via beautifulsoup4
 sqids==0.4.1
-tenacity==8.2.3
-tqdm==4.66.2
-    # via openai
-trio==0.25.0
-    # via selenium
-    # via trio-websocket
-trio-websocket==0.11.1
-    # via selenium
 typing-extensions==4.11.0
     # via pydantic
     # via pydantic-core
-    # via selenium
-tzdata==2024.1
-    # via tzlocal
 tzlocal==5.2
     # via apscheduler
 urllib3==2.2.1
     # via requests
-    # via selenium
-    # via urllib3
 urllib3-future==2.7.903
     # via niquests
 wassima==1.1.0

@@ -51,7 +51,7 @@ def crawl() -> set[schemas.Event]:
                 description=raw_event.get("description"),
                 address=raw_event.get("location.address"),
                 operator_web_link=raw_event.get("location.url"),
-                category=category
+                category=category,
             )
         )
 

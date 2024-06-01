@@ -2,39 +2,35 @@ import atexit
 from datetime import datetime, timedelta
 from http import HTTPStatus
 from os import getenv
-from uuid import uuid4
-from sqids import Sqids
 from random import randint
+from uuid import uuid4
 
+import jwt
+from dotenv import load_dotenv
 from flask import Flask, render_template, request, make_response
 from flask_apscheduler import APScheduler
 from flask_wtf import FlaskForm
+from sqids import Sqids
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Length
-import jwt
-from dotenv import load_dotenv
 
 from eventfully.database import crud
-from eventfully.search import post_processing, search, crawl
 from eventfully.logger import log
-from eventfully.database import crud
+from eventfully.search import post_processing, search, crawl
 
 log.info("Starting Server ...")
 
-crud.create_tables()
-
-class Config:
-    SCHEDULER_API_ENABLED = True
-
 load_dotenv()
-_JWT_KEY = getenv("MEILI_KEY")
-
+JWT_KEY = getenv("MEILI_KEY")
 ID_EXPIRE_TIME = 7
+
+crud.create_tables()
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = uuid4().hex
 app.config["WTF_CSRF_ENABLED"] = False
 
+# Background tasks
 scheduler = APScheduler()
 scheduler.init_app(app)
 atexit.register(lambda: scheduler.shutdown())
@@ -57,12 +53,11 @@ def index():
     user_id = request.cookies.get("user_id")
     jwt_token = request.cookies.get("jwt_token")
 
-    load_dotenv()
-    _JWT_KEY = getenv("JWT_KEY")
-
     if jwt_token:
-        try: encoded_jwt = jwt.decode(jwt_token, _JWT_KEY, algorithms=["HS256"])
-        except: return "", HTTPStatus.UNAUTHORIZED
+        try:
+            encoded_jwt = jwt.decode(jwt_token, JWT_KEY, algorithms=["HS256"])
+        except Exception:
+            return "", HTTPStatus.UNAUTHORIZED
 
         if datetime.fromtimestamp(encoded_jwt["expire_date"]) <= datetime.now() - timedelta(days=ID_EXPIRE_TIME):
             log.debug("Deleting JWT")
@@ -131,12 +126,13 @@ def create_group():
     group_name = request.args.get("group_name")
 
     if user_id:
-        id = Sqids().encode([randint(0, 1e15)])
-        crud.add_group(user_id, id, group_name)
+        cool_id = Sqids().encode([randint(0, int(1e15))])
+        crud.add_group(user_id, cool_id, group_name)
 
         return "", HTTPStatus.OK
 
     return "", HTTPStatus.BAD_REQUEST
+
 
 @app.route("/api/group/share")
 def share_to_group():
@@ -180,7 +176,6 @@ class SignUpForm(FlaskForm):
 @app.route("/api/account/signup", methods=["POST"])
 def signup_account():
     load_dotenv()
-    _JWT_KEY = getenv("JWT_KEY")
 
     form = SignUpForm()
     if not form.validate():
@@ -193,7 +188,11 @@ def signup_account():
     expire_date = datetime.now() + timedelta(days=ID_EXPIRE_TIME)
     response.set_cookie("user_id", user_id, httponly=True, expires=expire_date)
     expire_date = datetime.timestamp(datetime.now() + timedelta(days=ID_EXPIRE_TIME))
-    response.set_cookie("jwt_token", jwt.encode({"user_id": user_id, "expire_date": expire_date}, _JWT_KEY, algorithm="HS256"), httponly=True)
+    response.set_cookie(
+        "jwt_token",
+        jwt.encode({"user_id": user_id, "expire_date": expire_date}, JWT_KEY, algorithm="HS256"),
+        httponly=True,
+    )
 
     log.info(f"User '{form.username.data}' signed up with user_id '{user_id}'")
 
@@ -207,9 +206,6 @@ class SignInForm(FlaskForm):
 
 @app.route("/api/account/signin", methods=["POST"])
 def signin_account():
-    load_dotenv()
-    _JWT_KEY = getenv("JWT_KEY")
-
     form = SignInForm()
     if not form.validate():
         return form.errors, HTTPStatus.BAD_REQUEST
@@ -223,7 +219,11 @@ def signin_account():
     expire_date = datetime.now() + timedelta(days=ID_EXPIRE_TIME)
     response.set_cookie("user_id", user_id, httponly=True, expires=expire_date)
     expire_date = datetime.timestamp(datetime.now() + timedelta(days=ID_EXPIRE_TIME))
-    response.set_cookie("jwt_token", jwt.encode({"user_id": user_id, "expire_date": expire_date}, _JWT_KEY, algorithm="HS256"), httponly=True)
+    response.set_cookie(
+        "jwt_token",
+        jwt.encode({"user_id": user_id, "expire_date": expire_date}, JWT_KEY, algorithm="HS256"),
+        httponly=True,
+    )
     return response, HTTPStatus.OK
 
 
@@ -243,24 +243,21 @@ def get_events():
 
     user_id = request.cookies.get("user_id")
 
+    liked_events = crud.get_liked_event_ids_by_user_id(user_id) if crud.check_user_exists(user_id) else []
 
-    liked_events = (
-        crud.get_liked_event_ids_by_user_id(user_id) if crud.check_user_exists(user_id) else []
-    )
-
-    groups = (
-        crud.get_groups_of_member(user_id) if crud.check_user_exists(user_id) else {}
-    )
+    groups = crud.get_groups_of_member(user_id) if crud.check_user_exists(user_id) else {}
 
     share_events = {}
 
     for group in groups:
-           share_events[groups[group]] = crud.get_shared_events(group)
-
+        share_events[groups[group]] = crud.get_shared_events(group)
 
     result = search.main(therm, datetime.today(), datetime.today(), city)
 
-    return render_template("api/events.html", events=result, liked_events=liked_events, groups=groups, shared_events=share_events)
+    return render_template(
+        "api/events.html", events=result, liked_events=liked_events, groups=groups, shared_events=share_events
+    )
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

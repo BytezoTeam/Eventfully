@@ -1,12 +1,10 @@
-from typing import Iterable
 from datetime import datetime
+from typing import Iterable
 
+from beartype import beartype
 from peewee import DoesNotExist
 from playhouse.shortcuts import model_to_dict
-from beartype import beartype
-import json
 
-from eventfully.logger import log
 from eventfully.database import models, schemas, database
 
 
@@ -14,27 +12,34 @@ from eventfully.database import models, schemas, database
 @database.db.connection_context()
 def create_tables():
     database.db.create_tables(
-        [models.User, models.SearchCache, models.UnprocessedEvent, models.Likes, models.PossibleCities, models.groups, models.group_members]
+        [
+            models.User,
+            models.SearchCache,
+            models.UnprocessedEvent,
+            models.Likes,
+            models.PossibleCities,
+            models.Groups,
+            models.GroupMembers,
+        ]
     )
 
 
 # Event Like
 @database.db.connection_context()
-def like_event(user_id: str, event_id: str, group_id = None):
+def like_event(user_id: str, event_id: str, group_id=None):
     user = models.User.get(models.User.id == user_id)
 
     models.Likes.create(user=user, event_id=event_id, group_id=group_id)
 
     return event_id
 
+
 @beartype
 @database.db.connection_context()
 def unlike_event(user_id: str, event_id: str) -> None:
     user = models.User.get(models.User.id == user_id)
 
-    models.Likes.delete().where(
-        models.Likes.user == user, models.Likes.event_id == event_id
-    ).execute()
+    models.Likes.delete().where(models.Likes.user == user, models.Likes.event_id == event_id).execute()
 
 
 @beartype
@@ -47,56 +52,47 @@ def get_liked_event_ids_by_user_id(user_id: str) -> list[str]:
 
     return events_list
 
+
 @beartype
 @database.db.connection_context()
 def add_group(admin_id, g_id, g_name):
+    models.Groups.create(group_id=g_id, group_name=g_name)
 
-    models.groups.create(
-        group_id=g_id,
-        group_name=g_name
-    )
-
-    models.group_members.create(
-        user_id = admin_id,
-        group = g_id,
-        invited = False,
-        admin = True
-    )
+    models.GroupMembers.create(user_id=admin_id, group=g_id, invited=False, admin=True)
 
     return g_id
+
 
 @beartype
 @database.db.connection_context()
 def add_member_to_group(member_user_id: str, g_id: str, admin_user: bool):
-    group = models.groups.get(models.groups.group_id == g_id)
+    group = models.Groups.get(models.Groups.group_id == g_id)
 
-    models.group_members.create(
-        user_id = member_user_id,
-        group = group,
-        invited = True,
-        admin = admin_user
-    )
+    models.GroupMembers.create(user_id=member_user_id, group=group, invited=True, admin=admin_user)
 
     return member_user_id
 
 
 @database.db.connection_context()
 def member_is_admin(member_id, group_id):
-    group = models.groups.get(models.groups.group_id == group_id)
-    user = models.group_members.select().where(models.group_members.user_id == member_id,
-                                                models.group_members.admin == 1,
-                                                models.group_members.group == group).exists()
+    group = models.Groups.get(models.Groups.group_id == group_id)
+    user = (
+        models.GroupMembers.select()
+        .where(
+            models.GroupMembers.user_id == member_id, models.GroupMembers.admin == 1, models.GroupMembers.group == group
+        )
+        .exists()
+    )
 
     return user
 
 
-
 @database.db.connection_context()
 def get_members_of_group(group_id):
-    group = models.groups.get(models.groups.group_id == group_id)
+    group = models.Groups.get(models.Groups.group_id == group_id)
     group_user_ids = []
 
-    members = models.group_members.select().where((models.group_members.group == group))
+    members = models.GroupMembers.select().where((models.GroupMembers.group == group))
 
     for member in members:
         group_user_ids.append(member.user_id)
@@ -107,13 +103,13 @@ def get_members_of_group(group_id):
 @database.db.connection_context()
 def get_groups_of_member(user_id):
     group_ids = {}
-    groups = models.group_members.select().where((models.group_members.user_id == user_id))
-
+    groups = models.GroupMembers.select().where((models.GroupMembers.user_id == user_id))
 
     for group in groups:
         group_ids[group.group] = group.group.group_name
 
     return group_ids
+
 
 def get_shared_events(group_id):
     shared_events = {}
@@ -129,9 +125,7 @@ def get_shared_events(group_id):
 # TODO: Add check to look if email is real
 @beartype
 @database.db.connection_context()
-def create_account(
-    username: str, password: str, user_id: str, email: str, event_organiser: bool = False
-) -> str:
+def create_account(username: str, password: str, user_id: str, email: str, event_organiser: bool = False) -> str:
     models.User.create(
         id=user_id,
         email=email,
@@ -188,7 +182,7 @@ def add_events(events: Iterable[schemas.Event]):
     models.event_index.add_documents(events_dicts)
 
     # Keep track of cities so we know for what we can search
-    cities = set([event.city for event in events if event.city])
+    cities = {event.city for event in events if event.city}
     city_dict = [{"city": city} for city in cities]
     models.PossibleCities.insert_many(city_dict).on_conflict_ignore().execute()
 
@@ -253,9 +247,7 @@ def get_unprocessed_events() -> set[schemas.Event]:
 def delete_unprocessed_events(event_ids: Iterable[str]):
     with database.db.atomic():
         for event_id in event_ids:
-            models.UnprocessedEvent.delete().where(
-                models.UnprocessedEvent.event_id == event_id
-            ).execute()
+            models.UnprocessedEvent.delete().where(models.UnprocessedEvent.event_id == event_id).execute()
 
 
 # Other
