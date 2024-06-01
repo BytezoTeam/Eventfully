@@ -2,13 +2,15 @@
   {% for item in events %}
 
   <div class="cool-card w-full static" style="padding: 0 !important">
-    <div class="absolute m-4">
-      {% if item.id in liked_events %}
-        {% include 'components/liked-true-button.html' %}
-      {% else %}
-        {% include 'components/liked-false-button.html' %}
-      {% endif %}
-    </div>
+    {% if signed_in %}
+      <div class="absolute m-4">
+        {% if item.id in liked_events %}
+          {% include 'components/liked-true-button.html' %}
+        {% else %}
+          {% include 'components/liked-false-button.html' %}
+        {% endif %}
+      </div>
+    {% endif %}
 
     <figure class="pt-8 px-8">
       <img src="{{ item.image_link }}" loading="lazy" class="rounded-xl" />

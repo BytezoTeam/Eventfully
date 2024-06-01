@@ -227,7 +227,7 @@ def signin_account():
 
 @app.route("/api/account/signout", methods=["POST"])
 @jwt_check(deny_unauthenticated=True)
-def signout_account():
+def signout_account(user_id: str):
     response = make_response()
     response.delete_cookie("jwt_token")
 
@@ -248,8 +248,11 @@ def get_events(user_id: str):
 
     result = search.main(therm, datetime.today(), datetime.today(), city)
 
+    signed_in = True if user_id else False
+
     return render_template(
-        "api/events.html", events=result, liked_events=liked_events, groups=groups, shared_events=share_events
+        "api/events.html",
+        events=result, liked_events=liked_events, groups=groups, shared_events=share_events, signed_in=signed_in
     )
 
 
