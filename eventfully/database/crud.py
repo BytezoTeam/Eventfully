@@ -4,7 +4,9 @@ from datetime import datetime
 from peewee import DoesNotExist
 from playhouse.shortcuts import model_to_dict
 from beartype import beartype
+import json
 
+from eventfully.logger import log
 from eventfully.database import models, schemas, database
 
 
@@ -12,20 +14,18 @@ from eventfully.database import models, schemas, database
 @database.db.connection_context()
 def create_tables():
     database.db.create_tables(
-        [models.User, models.SearchCache, models.UnprocessedEvent, models.Likes, models.PossibleCities]
+        [models.User, models.SearchCache, models.UnprocessedEvent, models.Likes, models.PossibleCities, models.groups, models.group_members]
     )
 
 
 # Event Like
 @database.db.connection_context()
-@beartype
-def like_event(user_id: str, event_id: str):
+def like_event(user_id: str, event_id: str, group_id = None):
     user = models.User.get(models.User.id == user_id)
 
-    models.Likes.create(user=user, event_id=event_id)
+    models.Likes.create(user=user, event_id=event_id, group_id=group_id)
 
     return event_id
-
 
 @beartype
 @database.db.connection_context()
@@ -46,6 +46,83 @@ def get_liked_event_ids_by_user_id(user_id: str) -> list[str]:
     events_list = [event.event_id for event in liked_events]
 
     return events_list
+
+@beartype
+@database.db.connection_context()
+def add_group(admin_id, g_id, g_name):
+
+    models.groups.create(
+        group_id=g_id,
+        group_name=g_name
+    )
+
+    models.group_members.create(
+        user_id = admin_id,
+        group = g_id,
+        invited = False,
+        admin = True
+    )
+
+    return g_id
+
+@beartype
+@database.db.connection_context()
+def add_member_to_group(member_user_id: str, g_id: str, admin_user: bool):
+    group = models.groups.get(models.groups.group_id == g_id)
+
+    models.group_members.create(
+        user_id = member_user_id,
+        group = group,
+        invited = True,
+        admin = admin_user
+    )
+
+    return member_user_id
+
+
+@database.db.connection_context()
+def member_is_admin(member_id, group_id):
+    group = models.groups.get(models.groups.group_id == group_id)
+    user = models.group_members.select().where(models.group_members.user_id == member_id,
+                                                models.group_members.admin == 1,
+                                                models.group_members.group == group).exists()
+
+    return user
+
+
+
+@database.db.connection_context()
+def get_members_of_group(group_id):
+    group = models.groups.get(models.groups.group_id == group_id)
+    group_user_ids = []
+
+    members = models.group_members.select().where((models.group_members.group == group))
+
+    for member in members:
+        group_user_ids.append(member.user_id)
+
+    return group_user_ids
+
+
+@database.db.connection_context()
+def get_groups_of_member(user_id):
+    group_ids = {}
+    groups = models.group_members.select().where((models.group_members.user_id == user_id))
+
+
+    for group in groups:
+        group_ids[group.group] = group.group.group_name
+
+    return group_ids
+
+def get_shared_events(group_id):
+    shared_events = {}
+    shared = models.Likes.select().where(models.Likes.group_id == group_id)
+
+    for shared_event in shared:
+        shared_events[shared_event.event_id] = shared_event.user_id
+
+    return shared_events
 
 
 # Account

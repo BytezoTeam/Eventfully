@@ -1,4 +1,4 @@
-from peewee import TextField, DateTimeField, CompositeKey, ForeignKeyField
+from peewee import TextField, DateTimeField, CompositeKey, ForeignKeyField, BooleanField
 
 from eventfully.database.database import _DBBaseModel, ms_client
 
@@ -16,13 +16,27 @@ class User(_DBBaseModel):
     name = TextField()
     email = TextField()
 
+class groups(_DBBaseModel):
+    group_id = TextField(primary_key=True)
+    group_name = TextField()
+
+class group_members(_DBBaseModel):
+    user_id = TextField()
+    group = ForeignKeyField(groups)
+    invited = BooleanField()
+    admin = BooleanField()
+
+    class Meta:
+        primary_key = CompositeKey("user_id", "group")
+
 
 class Likes(_DBBaseModel):
     user = ForeignKeyField(User)
     event_id = TextField()
+    group_id = ForeignKeyField(groups, null=True)
 
     class Meta:
-        primary_key = CompositeKey("user", "event_id")
+        primary_key = CompositeKey("user", "event_id", "group_id")
 
 
 class SearchCache(_DBBaseModel):

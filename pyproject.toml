@@ -20,6 +20,8 @@ dependencies = [
     "niquests==3.*",
     "beautifulsoup4==4.*",
     "pytailwindcss-extra==0.*",
+    "sqids>=0.4.1",
+    "pyjwt>=2.8.0",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
