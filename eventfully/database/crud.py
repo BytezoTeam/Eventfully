@@ -4,6 +4,7 @@ from typing import Iterable
 from beartype import beartype
 from peewee import DoesNotExist
 from playhouse.shortcuts import model_to_dict
+from cachetools import cached, TTLCache
 
 from eventfully.database import models, schemas, database
 
@@ -251,7 +252,7 @@ def delete_unprocessed_events(event_ids: Iterable[str]):
 
 
 # Other
-@beartype
+@cached(cache=TTLCache(maxsize=2, ttl=60 * 60 * 12))
 @database.db.connection_context()
 def get_possible_cities() -> list[str]:
     cities = models.PossibleCities.select()

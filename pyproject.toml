@@ -22,6 +22,7 @@ dependencies = [
     "pytailwindcss-extra==0.*",
     "sqids>=0.4.1",
     "pyjwt>=2.8.0",
+    "cachetools==5.*",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
