@@ -3,13 +3,11 @@
 
   <div class="cool-card w-full static" style="padding: 0 !important">
     {% if signed_in %}
-      <div class="absolute m-4">
-        {% if item.id in liked_events %}
-          {% include 'components/liked-true-button.html' %}
-        {% else %}
-          {% include 'components/liked-false-button.html' %}
-        {% endif %}
-      </div>
+    <div class="absolute m-4">
+      {% if item.id in liked_events %} {% include
+      'components/liked-true-button.html' %} {% else %} {% include
+      'components/liked-false-button.html' %} {% endif %}
+    </div>
     {% endif %}
 
     <figure class="pt-8 px-8">
@@ -26,21 +24,29 @@
       <p>When?: {{ item.start_time }}-{{ item.end_time }}</p>
       <p>Where?: {{ item.address }}</p>
 
+      <div class="dropdown">
+        <div tabindex="0" role="button" class="btn btn-ghost btn-active">
+          Share with groups
+        </div>
+        <ul
+          tabindex="0"
+          class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+        >
+          {% for id, name in groups.items() %} {% if not item.id in
+          shared_events[name] %}
+          <li>
+            <a
+              class="btn m-1"
+              hx-get="/api/group/share?event_id={{item.id}}&group_id={{id}}"
+              hx-swap="outerHTML"
+            >
+              '{{ name }}' group
+            </a>
+          </li>
 
-    <div class="dropdown">
-      <div tabindex="0" role="button" class="btn btn-ghost btn-active">Share with groups</div>
-      <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-      {% for id, name in groups.items() %}
-      {% if not item.id in shared_events[name] %}
-        <li><a class="btn m-1" hx-get="/api/group/share?event_id={{item.id}}&group_id={{id}}" hx-swap="outerHTML">
-          '{{ name }}' group
-        </a></li>
-
-      {% endif %}
-      {% endfor %}
-      </ul>
-    </div>
-
+          {% endif %} {% endfor %}
+        </ul>
+      </div>
     </div>
   </div>
 

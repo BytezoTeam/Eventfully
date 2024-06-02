@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html
   lang="de"
   x-data="{ darkMode: localStorage.getItem('dark') === 'true' }"
@@ -29,7 +29,9 @@
     <!-- Main Container - No Modals -->
     <div class="container mx-auto p-8">
       <!-- Head -->
-      <header class="cool-card mb-8 flex flex-row items-center justify-between max-w-full">
+      <header
+        class="cool-card mb-8 flex flex-row items-center justify-between max-w-full"
+      >
         <h1>Eventfully</h1>
         <div class="flex flex-row items-center gap-6">
           <!-- Account -->
@@ -64,7 +66,6 @@
             {% endif %}
           </div>
 
-
           <!-- Theme Switch -->
           <label class="swap swap-rotate">
             <input
@@ -72,9 +73,7 @@
               type="checkbox"
               x-bind:checked="!darkMode"
             />
-            <div class="swap-on">
-              {% include 'components/icons/sun.html' %}
-            </div>
+            <div class="swap-on">{% include 'components/icons/sun.html' %}</div>
             <div class="swap-off">
               {% include 'components/icons/moon.html' %}
             </div>
@@ -101,10 +100,17 @@
               type="search"
               placeholder="Search for events..."
             />
-            <input type="" class="input" placeholder="City" name="city" id="city" list="cities">
+            <input
+              type=""
+              class="input"
+              placeholder="City"
+              name="city"
+              id="city"
+              list="cities"
+            />
             <datalist id="cities">
               {% for city in cities %}
-                <option value="{{ city }}">{{ city }}</option>
+              <option value="{{ city }}">{{ city }}</option>
               {% endfor %}
             </datalist>
             <button type="submit" class="btn btn-primary">Search</button>
@@ -114,7 +120,9 @@
         <!-- Event Results -->
         <div class="htmx-indicator" id="event-search-result"></div>
         <div class="flex justify-center items-center">
-          <span class="htmx-indicator center loading loading-spinner loading-lg mt-16"></span>
+          <span
+            class="htmx-indicator center loading loading-spinner loading-lg mt-16"
+          ></span>
         </div>
       </main>
     </div>
@@ -131,13 +139,11 @@
           hx-post="/api/account/signin"
           hx-trigger="submit"
         >
-
-
           <!-- Username -->
           <label class="input input-bordered flex items-center gap-2">
             <input
               name="username"
-              id="username"
+              id="signin-username"
               type="text"
               class="grow"
               placeholder="Username"
@@ -148,27 +154,22 @@
           <label class="input input-bordered flex items-center gap-2">
             <input
               name="password"
-              id="password"
+              id="signin-password"
               type="password"
               class="grow"
               placeholder="Password"
             />
           </label>
 
-        <div class="w-full flex flex-row justify-center gap-8">
-          <button type="submit" class="btn btn-primary">
-            Login
-          </button>
-
-        </div>
-
+          <div class="w-full flex flex-row justify-center gap-8">
+            <button type="submit" class="btn btn-primary">Login</button>
+          </div>
         </form>
       </div>
       <form method="dialog" class="modal-backdrop">
         <button>Close</button>
       </form>
     </dialog>
-
 
     <!-- Register Modal -->
     <dialog id="RegisterModal" class="modal">
@@ -182,13 +183,11 @@
           hx-post="/api/account/signup"
           hx-trigger="submit"
         >
-
-
           <!-- Username -->
           <label class="input input-bordered flex items-center gap-2">
             <input
               name="username"
-              id="username"
+              id="signup-username"
               type="text"
               class="grow"
               placeholder="Username"
@@ -199,7 +198,7 @@
           <label class="input input-bordered flex items-center gap-2">
             <input
               name="email"
-              id="email"
+              id="signup-email"
               type="email"
               class="grow"
               placeholder="Email"
@@ -210,7 +209,7 @@
           <label class="input input-bordered flex items-center gap-2">
             <input
               name="password"
-              id="password"
+              id="signup-password"
               type="password"
               class="grow"
               placeholder="Password"
@@ -218,16 +217,13 @@
           </label>
 
           <div class="w-full flex flex-row justify-center gap-8">
-            <button type="submit" class="btn btn-primary">
-              Register
-            </button>
-
+            <button type="submit" class="btn btn-primary">Register</button>
           </div>
-
         </form>
-      <form method="dialog" class="modal-backdrop">
-        <button>Close</button>
-      </form>
+        <form method="dialog" class="modal-backdrop">
+          <button>Close</button>
+        </form>
+      </div>
     </dialog>
   </body>
 </html>
