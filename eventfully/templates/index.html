@@ -8,8 +8,8 @@
     <div class="flex flex-row items-center gap-6">
       <!-- Account -->
       <div class="flex flex-row items-center gap-3">
-        {%if logged_in %}
-        <span class="mr-2">{{ username }}</span>
+        {%if user %}
+        <span class="mr-2">{{ user["name"] }}</span>
         <button
           onclick="window.location.href='/profile'"
           class="bg-blue-500 rounded p-2"

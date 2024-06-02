@@ -2,7 +2,7 @@
   {% for item in events %}
 
   <div class="cool-card w-full static" style="padding: 0 !important">
-    {% if signed_in %}
+    {% if user %}
     <div class="absolute m-4">
       {% if item.id in liked_events %} {% include
       'components/liked-true-button.html' %} {% else %} {% include
@@ -24,7 +24,7 @@
       <p>When?: {{ item.start_time }}-{{ item.end_time }}</p>
       <p>Where?: {{ item.address }}</p>
 
-      {% if signed_in %}
+      {% if user %}
       <div class="dropdown">
         <div tabindex="0" role="button" class="btn btn-ghost btn-active">
           Share with groups

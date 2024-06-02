@@ -91,6 +91,15 @@ def add_jwt_cookie_to_response(response: Response, user_id: str) -> Response:
     return response
 
 
+def render_index_template(base: bool = False, user_id: str | None = None) -> str:
+    cities = crud.get_possible_cities()
+
+    user = crud.get_user_data(user_id) if user_id else None
+
+    template = "index_base.html" if base else "index.html"
+    return render_template(template, user=user, cities=cities)
+
+
 @app.errorhandler(500)
 def internal_error_server_error(error):
     log.error("Internal Server Error: " + str(error))
@@ -102,12 +111,9 @@ def internal_error_server_error(error):
 @jwt_check()
 def index(user_id: str):
     if not user_id:
-        return render_template("index_base.html", logged_in=False, cities=crud.get_possible_cities())
+        return render_index_template(base=True)
 
-    user = crud.get_user_data(user_id)
-    username = user["name"]
-
-    return render_template("index_base.html", logged_in=True, username=username, cities=crud.get_possible_cities())
+    return render_index_template(base=True, user_id=user_id)
 
 
 @app.route("/api/toggle_event_like")
@@ -195,12 +201,7 @@ def signup_account():
     user_id = str(uuid4())
     crud.create_account(form.username.data, form.password.data, user_id, form.email.data)
 
-    response = make_response(render_template(
-        "index.html",
-        logged_in=True,
-        username=form.username.data,
-        cities=crud.get_possible_cities(),
-    ))
+    response = make_response(render_index_template(user_id=user_id))
     response = add_jwt_cookie_to_response(response, user_id)
 
     log.info(f"User '{form.username.data}' signed up with user_id '{user_id}'")
@@ -224,12 +225,7 @@ def signin_account():
     if not user_id:
         return make_response(), HTTPStatus.UNAUTHORIZED
 
-    response = make_response(render_template(
-        "index.html",
-        logged_in=True,
-        username=form.username.data,
-        cities=crud.get_possible_cities(),
-    ))
+    response = make_response(render_index_template(base=False, user_id=user_id))
     response = add_jwt_cookie_to_response(response, user_id)
 
     return response, HTTPStatus.OK
@@ -238,11 +234,7 @@ def signin_account():
 @app.route("/api/account/signout", methods=["POST"])
 @jwt_check(deny_unauthenticated=True)
 def signout_account(user_id: str):
-    response = make_response(render_template(
-        "index.html",
-        logged_in=False,
-        cities=crud.get_possible_cities(),
-    ))
+    response = make_response(render_index_template())
     response.delete_cookie("jwt_token")
 
     return response, HTTPStatus.OK
@@ -254,17 +246,21 @@ def get_events(user_id: str):
     therm = request.args.get("therm", "")
     city = request.args.get("city", "")
 
-    liked_events = crud.get_liked_event_ids_by_user_id(user_id) if crud.check_user_exists(user_id) else []
-    groups = crud.get_groups_of_member(user_id) if crud.check_user_exists(user_id) else {}
+    result = search.main(therm, datetime.today(), datetime.today(), city)
+
+    if not user_id:
+        return render_template("components/events.html", events=result, cities=crud.get_possible_cities())
+
+    user = crud.get_user_data(user_id)
+    liked_events = crud.get_liked_event_ids_by_user_id(user_id)
+    groups = crud.get_groups_of_member(user_id)
     share_events = {}
     for group in groups:
         share_events[groups[group]] = crud.get_shared_events(group)
 
-    result = search.main(therm, datetime.today(), datetime.today(), city)
-
     return render_template(
         "components/events.html",
-        events=result, liked_events=liked_events, groups=groups, shared_events=share_events, signed_in=bool(user_id)
+        events=result, liked_events=liked_events, groups=groups, shared_events=share_events, user=user
     )
 
 
