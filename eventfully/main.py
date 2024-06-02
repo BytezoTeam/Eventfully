@@ -101,15 +101,13 @@ def internal_error_server_error(error):
 @app.route("/", methods=["GET"])
 @jwt_check()
 def index(user_id: str):
-    cities = crud.get_possible_cities()
-
     if not user_id:
-        return render_template("index.html", logged_in=False, cities=crud.get_possible_cities())
+        return render_template("index_base.html", logged_in=False, cities=crud.get_possible_cities())
 
     user = crud.get_user_data(user_id)
     username = user["name"]
 
-    return render_template("index.html", logged_in=True, username=username, cities=cities)
+    return render_template("index_base.html", logged_in=True, username=username, cities=crud.get_possible_cities())
 
 
 @app.route("/api/toggle_event_like")
@@ -197,7 +195,13 @@ def signup_account():
     user_id = str(uuid4())
     crud.create_account(form.username.data, form.password.data, user_id, form.email.data)
 
-    response = add_jwt_cookie_to_response(make_response(), user_id)
+    response = make_response(render_template(
+        "index.html",
+        logged_in=True,
+        username=form.username.data,
+        cities=crud.get_possible_cities(),
+    ))
+    response = add_jwt_cookie_to_response(response, user_id)
 
     log.info(f"User '{form.username.data}' signed up with user_id '{user_id}'")
 
@@ -220,7 +224,13 @@ def signin_account():
     if not user_id:
         return make_response(), HTTPStatus.UNAUTHORIZED
 
-    response = add_jwt_cookie_to_response(make_response(), user_id)
+    response = make_response(render_template(
+        "index.html",
+        logged_in=True,
+        username=form.username.data,
+        cities=crud.get_possible_cities(),
+    ))
+    response = add_jwt_cookie_to_response(response, user_id)
 
     return response, HTTPStatus.OK
 
@@ -228,7 +238,11 @@ def signin_account():
 @app.route("/api/account/signout", methods=["POST"])
 @jwt_check(deny_unauthenticated=True)
 def signout_account(user_id: str):
-    response = make_response()
+    response = make_response(render_template(
+        "index.html",
+        logged_in=False,
+        cities=crud.get_possible_cities(),
+    ))
     response.delete_cookie("jwt_token")
 
     return response, HTTPStatus.OK

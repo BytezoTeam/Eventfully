@@ -1,229 +1,197 @@
-<!DOCTYPE html>
-<html
-  lang="de"
-  x-data="{ darkMode: localStorage.getItem('dark') === 'true' }"
-  x-init="$watch('darkMode', val => localStorage.setItem('dark', val))"
-  x-bind:class="darkMode ? 'dark' : ''"
-  x-bind:data-theme="darkMode ? 'dark' : 'light'"
-  class="dark:bg-gray-900 bg-gray-200"
->
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Eventfully</title>
-    <link rel="stylesheet" href="/static/output.css" />
-    <script
-      src="https://unpkg.com/htmx.org@1.9.10"
-      integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.10/dist/cdn.min.js"
-      integrity="sha384-XBJ5+bq4ga1+0s+J4sl6njqQ9C/YIfKeQw18HypSuGEaPm1g/VWaNdsQ5d3sE1qi"
-      crossorigin="anonymous"
-    ></script>
-  </head>
+<!-- Main Container - No Modals -->
+<div class="container mx-auto p-8">
+  <!-- Head -->
+  <header
+    class="cool-card mb-8 flex flex-row items-center justify-between max-w-full"
+  >
+    <h1>Eventfully</h1>
+    <div class="flex flex-row items-center gap-6">
+      <!-- Account -->
+      <div class="flex flex-row items-center gap-3">
+        {%if logged_in %}
+        <span class="mr-2">{{ username }}</span>
+        <button
+          onclick="window.location.href='/profile'"
+          class="bg-blue-500 rounded p-2"
+        >
+          Profile
+        </button>
+        <form hx-post="/api/account/signout" hx-target="body" \>
+          <button type="submit" class="bg-red-500 rounded p-2">Logout</button>
+        </form>
+        {% else %}
+        <button
+          class="btn btn-ghost btn-active"
+          @click="loginModal.showModal()"
+        >
+          Login
+        </button>
 
-  <body>
-    <!-- Main Container - No Modals -->
-    <div class="container mx-auto p-8">
-      <!-- Head -->
-      <header
-        class="cool-card mb-8 flex flex-row items-center justify-between max-w-full"
-      >
-        <h1>Eventfully</h1>
-        <div class="flex flex-row items-center gap-6">
-          <!-- Account -->
-          <div class="flex flex-row items-center gap-3">
-            {%if logged_in %}
-            <span class="mr-2">{{ username }}</span>
-            <button
-              onclick="window.location.href='/profile'"
-              class="bg-blue-500 rounded p-2"
-            >
-              Profile
-            </button>
-            <form hx-post="/api/account/signout" hx-swap="none">
-              <button type="submit" class="bg-red-500 rounded p-2">
-                Logout
-              </button>
-            </form>
-            {% else %}
-            <button
-              class="btn btn-ghost btn-active"
-              @click="loginModal.showModal()"
-            >
-              Login
-            </button>
+        <button
+          class="btn btn-ghost btn-active"
+          @click="RegisterModal.showModal()"
+        >
+          Register
+        </button>
+        {% endif %}
+      </div>
 
-            <button
-              class="btn btn-ghost btn-active"
-              @click="RegisterModal.showModal()"
-            >
-              Register
-            </button>
-            {% endif %}
-          </div>
-
-          <!-- Theme Switch -->
-          <label class="swap swap-rotate">
-            <input
-              @click="darkMode = !darkMode"
-              type="checkbox"
-              x-bind:checked="!darkMode"
-            />
-            <div class="swap-on">{% include 'components/icons/sun.html' %}</div>
-            <div class="swap-off">
-              {% include 'components/icons/moon.html' %}
-            </div>
-          </label>
-        </div>
-      </header>
-
-      <!-- Main -->
-      <main class="flex flex-col gap-8">
-        <section class="sticky top-8 z-10 cool-card">
-          <!-- Event Search -->
-          <h2>Event Search</h2>
-          <form
-            class="flex flex-row flex-wrap justify-start gap-4"
-            hx-get="/api/search"
-            hx-target="#event-search-result"
-            hx-trigger="submit,load"
-            hx-indicator=".htmx-indicator"
-          >
-            <input
-              name="therm"
-              id="therm"
-              class="input input-bordered"
-              type="search"
-              placeholder="Search for events..."
-            />
-            <input
-              type=""
-              class="input"
-              placeholder="City"
-              name="city"
-              id="city"
-              list="cities"
-            />
-            <datalist id="cities">
-              {% for city in cities %}
-              <option value="{{ city }}">{{ city }}</option>
-              {% endfor %}
-            </datalist>
-            <button type="submit" class="btn btn-primary">Search</button>
-          </form>
-        </section>
-
-        <!-- Event Results -->
-        <div class="htmx-indicator" id="event-search-result"></div>
-        <div class="flex justify-center items-center">
-          <span
-            class="htmx-indicator center loading loading-spinner loading-lg mt-16"
-          ></span>
-        </div>
-      </main>
+      <!-- Theme Switch -->
+      <label class="swap swap-rotate">
+        <input
+          @click="darkMode = !darkMode"
+          type="checkbox"
+          x-bind:checked="!darkMode"
+        />
+        <div class="swap-on">{% include 'components/icons/sun.html' %}</div>
+        <div class="swap-off">{% include 'components/icons/moon.html' %}</div>
+      </label>
     </div>
+  </header>
 
-    <!-- Login Modal -->
-    <dialog id="loginModal" class="modal">
-      <div
-        class="modal-box dark:bg-gray-800 bg-gray-100 flex flex-col items-center gap-4"
+  <!-- Main -->
+  <main class="flex flex-col gap-8">
+    <section class="sticky top-8 z-10 cool-card">
+      <!-- Event Search -->
+      <h2>Event Search</h2>
+      <form
+        class="flex flex-row flex-wrap justify-start gap-4"
+        hx-get="/api/search"
+        hx-target="#event-search-result"
+        hx-trigger="submit,load"
+        hx-indicator=".htmx-indicator"
       >
-        <!-- Login Form -->
-        <h1>Login</h1>
-        <form
-          class="flex flex-col items-center gap-4"
-          hx-post="/api/account/signin"
-          hx-trigger="submit"
-        >
-          <!-- Username -->
-          <label class="input input-bordered flex items-center gap-2">
-            <input
-              name="username"
-              id="signin-username"
-              type="text"
-              class="grow"
-              placeholder="Username"
-            />
-          </label>
-
-          <!-- Password -->
-          <label class="input input-bordered flex items-center gap-2">
-            <input
-              name="password"
-              id="signin-password"
-              type="password"
-              class="grow"
-              placeholder="Password"
-            />
-          </label>
-
-          <div class="w-full flex flex-row justify-center gap-8">
-            <button type="submit" class="btn btn-primary">Login</button>
-          </div>
-        </form>
-      </div>
-      <form method="dialog" class="modal-backdrop">
-        <button>Close</button>
+        <input
+          name="therm"
+          id="therm"
+          class="input input-bordered"
+          type="search"
+          placeholder="Search for events..."
+        />
+        <input
+          type=""
+          class="input"
+          placeholder="City"
+          name="city"
+          id="city"
+          list="cities"
+        />
+        <datalist id="cities">
+          {% for city in cities %}
+          <option value="{{ city }}">{{ city }}</option>
+          {% endfor %}
+        </datalist>
+        <button type="submit" class="btn btn-primary">Search</button>
       </form>
-    </dialog>
+    </section>
 
-    <!-- Register Modal -->
-    <dialog id="RegisterModal" class="modal">
-      <div
-        class="modal-box dark:bg-gray-800 bg-gray-100 flex flex-col items-center gap-4"
-      >
-        <!-- Register Form -->
-        <h1>Register</h1>
-        <form
-          class="flex flex-col items-center gap-4"
-          hx-post="/api/account/signup"
-          hx-trigger="submit"
-        >
-          <!-- Username -->
-          <label class="input input-bordered flex items-center gap-2">
-            <input
-              name="username"
-              id="signup-username"
-              type="text"
-              class="grow"
-              placeholder="Username"
-            />
-          </label>
+    <!-- Event Results -->
+    <div class="htmx-indicator" id="event-search-result"></div>
+    <div class="flex justify-center items-center">
+      <span
+        class="htmx-indicator center loading loading-spinner loading-lg mt-16"
+      ></span>
+    </div>
+  </main>
+</div>
 
-          <!-- Email -->
-          <label class="input input-bordered flex items-center gap-2">
-            <input
-              name="email"
-              id="signup-email"
-              type="email"
-              class="grow"
-              placeholder="Email"
-            />
-          </label>
+<!-- Login Modal -->
+<dialog id="loginModal" class="modal">
+  <div
+    class="modal-box dark:bg-gray-800 bg-gray-100 flex flex-col items-center gap-4"
+  >
+    <!-- Login Form -->
+    <h1>Login</h1>
+    <form
+      class="flex flex-col items-center gap-4"
+      hx-post="/api/account/signin"
+      hx-trigger="submit"
+      hx-target="body"
+    >
+      <!-- Username -->
+      <label class="input input-bordered flex items-center gap-2">
+        <input
+          name="username"
+          id="signin-username"
+          type="text"
+          class="grow"
+          placeholder="Username"
+        />
+      </label>
 
-          <!-- Password -->
-          <label class="input input-bordered flex items-center gap-2">
-            <input
-              name="password"
-              id="signup-password"
-              type="password"
-              class="grow"
-              placeholder="Password"
-            />
-          </label>
+      <!-- Password -->
+      <label class="input input-bordered flex items-center gap-2">
+        <input
+          name="password"
+          id="signin-password"
+          type="password"
+          class="grow"
+          placeholder="Password"
+        />
+      </label>
 
-          <div class="w-full flex flex-row justify-center gap-8">
-            <button type="submit" class="btn btn-primary">Register</button>
-          </div>
-        </form>
-        <form method="dialog" class="modal-backdrop">
-          <button>Close</button>
-        </form>
+      <div class="w-full flex flex-row justify-center gap-8">
+        <button type="submit" class="btn btn-primary">Login</button>
       </div>
-    </dialog>
-  </body>
-</html>
+    </form>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>Close</button>
+  </form>
+</dialog>
+
+<!-- Register Modal -->
+<dialog id="RegisterModal" class="modal">
+  <div
+    class="modal-box dark:bg-gray-800 bg-gray-100 flex flex-col items-center gap-4"
+  >
+    <!-- Register Form -->
+    <h1>Register</h1>
+    <form
+      class="flex flex-col items-center gap-4"
+      hx-post="/api/account/signup"
+      hx-trigger="submit"
+      hx-target="body"
+    >
+      <!-- Username -->
+      <label class="input input-bordered flex items-center gap-2">
+        <input
+          name="username"
+          id="signup-username"
+          type="text"
+          class="grow"
+          placeholder="Username"
+        />
+      </label>
+
+      <!-- Email -->
+      <label class="input input-bordered flex items-center gap-2">
+        <input
+          name="email"
+          id="signup-email"
+          type="email"
+          class="grow"
+          placeholder="Email"
+        />
+      </label>
+
+      <!-- Password -->
+      <label class="input input-bordered flex items-center gap-2">
+        <input
+          name="password"
+          id="signup-password"
+          type="password"
+          class="grow"
+          placeholder="Password"
+        />
+      </label>
+
+      <div class="w-full flex flex-row justify-center gap-8">
+        <button type="submit" class="btn btn-primary">Register</button>
+      </div>
+    </form>
+    <form method="dialog" class="modal-backdrop">
+      <button>Close</button>
+    </form>
+  </div>
+</dialog>
