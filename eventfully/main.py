@@ -251,7 +251,7 @@ def get_events(user_id: str):
     signed_in = True if user_id else False
 
     return render_template(
-        "api/events.html",
+        "components/events.html",
         events=result, liked_events=liked_events, groups=groups, shared_events=share_events, signed_in=signed_in
     )
 
