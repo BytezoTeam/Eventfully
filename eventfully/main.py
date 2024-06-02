@@ -262,11 +262,9 @@ def get_events(user_id: str):
 
     result = search.main(therm, datetime.today(), datetime.today(), city)
 
-    signed_in = True if user_id else False
-
     return render_template(
         "components/events.html",
-        events=result, liked_events=liked_events, groups=groups, shared_events=share_events, signed_in=signed_in
+        events=result, liked_events=liked_events, groups=groups, shared_events=share_events, signed_in=bool(user_id)
     )
 
 
