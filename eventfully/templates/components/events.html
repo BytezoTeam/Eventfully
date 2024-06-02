@@ -24,6 +24,7 @@
       <p>When?: {{ item.start_time }}-{{ item.end_time }}</p>
       <p>Where?: {{ item.address }}</p>
 
+      {% if signed_in %}
       <div class="dropdown">
         <div tabindex="0" role="button" class="btn btn-ghost btn-active">
           Share with groups
@@ -47,6 +48,7 @@
           {% endif %} {% endfor %}
         </ul>
       </div>
+      {% endif %}
     </div>
   </div>
 
