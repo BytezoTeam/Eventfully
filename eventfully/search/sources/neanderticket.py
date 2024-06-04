@@ -6,24 +6,27 @@ import niquests
 from bs4 import BeautifulSoup, PageElement
 
 from eventfully.database import schemas
+from eventfully.types import SearchContent
 
 
 @beartype
-def search(therm: str, min_time: datetime, max_time: datetime, city: str, category: str) -> set[schemas.Event]:
-    if category not in ["culture", ""]:
+def search(search_content: SearchContent) -> set[schemas.Event]:
+    if search_content.category not in ["culture", ""]:
         return set()
 
     supported_cities = ["", "wuppertal", "solingen", "remscheid", "bergisch"]
     # Throw an error if the city is not supported
-    if city.lower() not in supported_cities:
+    if search_content.city.lower() not in supported_cities:
         return set()
-    city_search_string = f"{city.lower()},neanderticket" if city != "" else "neanderticket"
+    city_search_string = (
+        f"{search_content.city.lower()},neanderticket" if search_content.city != "" else "neanderticket"
+    )
 
     events: set[schemas.Event] = set()
 
-    search_time = min_time
+    search_time = search_content.min_time
     # we have to cycle through days because the "api" only returns events for one day
-    while search_time <= max_time:
+    while search_time <= search_content.max_time:
         search_time_string = search_time.strftime("%Y.%m.%d")
         url = f"https://www.neanderticket.de/events/mode=utf8;client=;what=date;show={search_time_string};shop=0;cal={city_search_string}"
         request = niquests.get(url)

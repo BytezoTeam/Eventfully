@@ -5,20 +5,21 @@ from bs4 import BeautifulSoup
 from beartype import beartype
 
 from eventfully.database import schemas
+from eventfully.types import SearchContent
 
 BASE_URL = "https://www.zuerichunbezahlbar.ch"
 
 
 @beartype
-def search(therm: str, min_date: datetime, max_date: datetime, city: str, category: str) -> set[schemas.Event]:
+def search(search_content: SearchContent) -> set[schemas.Event]:
     # Skip if not in Zürich because zuerichunbezahlbar only provides events in this city
-    if city.lower() not in ["", "zürich"]:
+    if search_content.city.lower() not in ["", "zürich"]:
         return set()
 
-    min_date_str = min_date.strftime("%d-%m-%Y")
-    max_date_str = max_date.strftime("%d-%m-%Y")
+    min_date_str = search_content.min_time.strftime("%d-%m-%Y")
+    max_date_str = search_content.max_time.strftime("%d-%m-%Y")
 
-    match category:
+    match search_content.category:
         case "education":
             raw_category = "bildung"
         case "culture":
@@ -31,7 +32,7 @@ def search(therm: str, min_date: datetime, max_date: datetime, city: str, catego
             raw_category = ""
 
     params = {
-        "search": therm,
+        "search": search_content.query,
         "rendering": "grid",
         "datarange": f"{min_date_str},{max_date_str}",
         "plz": "",

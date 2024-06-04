@@ -18,6 +18,7 @@ from wtforms.validators import DataRequired, Length
 from eventfully.database import crud
 from eventfully.logger import log
 from eventfully.search import post_processing, search, crawl
+from eventfully.types import SearchContent
 
 log.info("Starting Server ...")
 
@@ -247,7 +248,8 @@ def get_events(user_id: str):
     city = request.args.get("city", "")
     category = request.args.get("category", "")
 
-    result = search.main(therm, datetime.today(), datetime.today(), city, category)
+    search_content = SearchContent(query=therm, min_time=datetime.today(), max_time=datetime.today(), city=city, category=category)
+    result = search.main(search_content)
 
     if not user_id:
         return render_template("components/events.html", events=result, cities=crud.get_possible_cities())
