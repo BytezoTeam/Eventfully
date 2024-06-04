@@ -10,7 +10,7 @@ BASE_URL = "https://www.zuerichunbezahlbar.ch"
 
 
 @beartype
-def search(therm: str, min_date: datetime, max_date: datetime, city: str) -> set[schemas.Event]:
+def search(therm: str, min_date: datetime, max_date: datetime, city: str, category: str) -> set[schemas.Event]:
     # Skip if not in Zürich because zuerichunbezahlbar only provides events in this city
     if city.lower() not in ["", "zürich"]:
         return set()
@@ -18,12 +18,24 @@ def search(therm: str, min_date: datetime, max_date: datetime, city: str) -> set
     min_date_str = min_date.strftime("%d-%m-%Y")
     max_date_str = max_date.strftime("%d-%m-%Y")
 
+    match category:
+        case "education":
+            raw_category = "bildung"
+        case "culture":
+            raw_category = "kultur-nachtleben"
+        case "sport":
+            raw_category = "sport-freizeit"
+        case "politics":
+            return set()
+        case _:
+            raw_category = ""
+
     params = {
         "search": therm,
         "rendering": "grid",
         "datarange": f"{min_date_str},{max_date_str}",
         "plz": "",
-        "category": "",
+        "category": raw_category,
     }
     request = niquests.get(f"{BASE_URL}/events", params, retries=3)
     request.raise_for_status()

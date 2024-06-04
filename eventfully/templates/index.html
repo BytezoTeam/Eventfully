@@ -68,9 +68,10 @@
           type="search"
           placeholder="Search for events..."
         />
+
         <input
-          type=""
-          class="input"
+          type="text"
+          class="input input-bordered"
           placeholder="City"
           name="city"
           id="city"
@@ -81,6 +82,19 @@
           <option value="{{ city }}">{{ city }}</option>
           {% endfor %}
         </datalist>
+
+        <select
+          name="category"
+          id="category"
+          class="select select-bordered"
+        >
+          <option value="">All</option>
+          <option value="culture">Culture</option>
+          <option value="education">Education</option>
+          <option value="sport">Sport</option>
+          <option value="politics">Politics</option>
+        </select>
+
         <button type="submit" class="btn btn-primary">Search</button>
       </form>
     </section>

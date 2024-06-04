@@ -9,7 +9,10 @@ from eventfully.database import schemas
 
 
 @beartype
-def search(therm: str, min_time: datetime, max_time: datetime, city: str) -> set[schemas.Event]:
+def search(therm: str, min_time: datetime, max_time: datetime, city: str, category: str) -> set[schemas.Event]:
+    if category not in ["culture", ""]:
+        return set()
+
     supported_cities = ["", "wuppertal", "solingen", "remscheid", "bergisch"]
     # Throw an error if the city is not supported
     if city.lower() not in supported_cities:

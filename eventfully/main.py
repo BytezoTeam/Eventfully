@@ -245,8 +245,9 @@ def signout_account(user_id: str):
 def get_events(user_id: str):
     therm = request.args.get("therm", "")
     city = request.args.get("city", "")
+    category = request.args.get("category", "")
 
-    result = search.main(therm, datetime.today(), datetime.today(), city)
+    result = search.main(therm, datetime.today(), datetime.today(), city, category)
 
     if not user_id:
         return render_template("components/events.html", events=result, cities=crud.get_possible_cities())
@@ -260,7 +261,11 @@ def get_events(user_id: str):
 
     return render_template(
         "components/events.html",
-        events=result, liked_events=liked_events, groups=groups, shared_events=share_events, user=user
+        events=result,
+        liked_events=liked_events,
+        groups=groups,
+        shared_events=share_events,
+        user=user,
     )
 
 
