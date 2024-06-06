@@ -16,10 +16,10 @@ def search(search_content: SearchContent) -> set[schemas.Event]:
 
     supported_cities = ["", "wuppertal", "solingen", "remscheid", "bergisch"]
     # Throw an error if the city is not supported
-    if search_content.city.lower() not in supported_cities:
+    if search_content.city not in supported_cities:
         return set()
     city_search_string = (
-        f"{search_content.city.lower()},neanderticket" if search_content.city != "" else "neanderticket"
+        f"{search_content.city},neanderticket" if search_content.city != "" else "neanderticket"
     )
 
     events: set[schemas.Event] = set()

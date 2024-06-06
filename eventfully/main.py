@@ -245,7 +245,7 @@ def signout_account(user_id: str):
 @jwt_check()
 def get_events(user_id: str):
     therm = request.args.get("therm", "")
-    city = request.args.get("city", "")
+    city = request.args.get("city", "").strip().lower()
     category = request.args.get("category", "")
 
     search_content = SearchContent(query=therm, min_time=datetime.today(), max_time=datetime.today(), city=city, category=category)

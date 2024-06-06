@@ -13,7 +13,7 @@ BASE_URL = "https://www.zuerichunbezahlbar.ch"
 @beartype
 def search(search_content: SearchContent) -> set[schemas.Event]:
     # Skip if not in Zürich because zuerichunbezahlbar only provides events in this city
-    if search_content.city.lower() not in ["", "zürich"]:
+    if search_content.city not in ["", "zürich"]:
         return set()
 
     min_date_str = search_content.min_time.strftime("%d-%m-%Y")
