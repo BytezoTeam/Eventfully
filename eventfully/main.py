@@ -248,7 +248,9 @@ def get_events(user_id: str):
     city = request.args.get("city", "").strip().lower()
     category = request.args.get("category", "")
 
-    search_content = SearchContent(query=therm, min_time=datetime.today(), max_time=datetime.today(), city=city, category=category)
+    search_content = SearchContent(
+        query=therm, min_time=datetime.today(), max_time=datetime.today(), city=city, category=category
+    )
     result = search.main(search_content)
 
     if not user_id:
