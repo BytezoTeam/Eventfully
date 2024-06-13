@@ -1,46 +1,22 @@
 from datetime import datetime
-from typing import Callable
 
 from beartype import beartype
 
 from eventfully.database import schemas, crud
-from eventfully.logger import log
-from eventfully.search.sources import zuerichunbezahlbar, neanderticket, berlin
+from eventfully.search import post_processing
 from eventfully.utils import get_hash_string
 from eventfully.types import SearchContent
 
 
-SOURCES_WITH_POST_PROCESS: list[Callable[[SearchContent], set[schemas.Event]]] = [
-    zuerichunbezahlbar.search,
-    neanderticket.search,
-]
-SOURCES_WITHOUT_POST_PROCESS: list[Callable[[SearchContent], set[schemas.Event]]] = [
-    berlin.search,
-]
-
-
 @beartype
-# def main(therm: str, min_date: datetime, max_date: datetime, city: str, category: str) -> set[schemas.Event]:
 def main(search_content: SearchContent) -> set[schemas.Event]:
-    events: set[schemas.Event] = set()
+    events = _search_db(search_content)
 
-    db_events = _search_db(search_content)
-    events.update(db_events)
-
-    # Skip if this search has been performed before and the events are already in the database
+    # Skip this step if this search has been performed before and the events are already in the database
     combined_search_string = search_content.get_hash_string()
     search_hash = get_hash_string(combined_search_string)
     if not crud.in_search_cache(search_hash):
-        web_events = _search_web(search_content, SOURCES_WITH_POST_PROCESS)
-        # Store references for the new events in the db, so we know which ones we need to process with AI
-        crud.create_unprocessed_events(web_events)
-
-        web_events.update(_search_web(search_content, SOURCES_WITHOUT_POST_PROCESS))
-
-        # Add the new events to the database
-        crud.add_events(web_events)
-
-        events.update(web_events)
+        post_processing.process_queue.put(search_content)
 
         crud.create_search_cache(search_hash)
 
@@ -57,22 +33,6 @@ def _search_db(search: SearchContent) -> set[schemas.Event]:
     filter_string = " AND ".join(filters)
 
     return crud.search_events(search.query, filter_string)
-
-
-@beartype
-def _search_web(
-    search: SearchContent, sources: list[Callable[[SearchContent], set[schemas.Event]]]
-) -> set[schemas.Event]:
-    events: set[schemas.Event] = set()
-
-    for source in sources:
-        try:
-            source_events = source(search)
-            events.update(source_events)
-        except Exception as e:
-            log.error(f"Could not collect events from {source}: {e}")
-
-    return events
 
 
 if __name__ == "__main__":

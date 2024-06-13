@@ -16,7 +16,6 @@ def create_tables():
         [
             models.User,
             models.SearchCache,
-            models.UnprocessedEvent,
             models.Likes,
             models.PossibleCities,
             models.Groups,
@@ -219,36 +218,6 @@ def create_search_cache(search_hash: str):
 @database.db.connection_context()
 def in_search_cache(search_hash: str) -> bool:
     return models.SearchCache.select().where(models.SearchCache.search_hash == search_hash).exists()
-
-
-# Unprocessed events
-@beartype
-@database.db.connection_context()
-def create_unprocessed_events(events: Iterable[schemas.Event]):
-    with database.db.atomic():
-        for event in events:
-            models.UnprocessedEvent.get_or_create(event_id=event.id)
-
-
-@beartype
-@database.db.connection_context()
-def get_unprocessed_events() -> set[schemas.Event]:
-    raw_unprocessed_events = models.UnprocessedEvent.select()
-
-    unprocessed_events = set()
-    for raw_unprocessed_event in raw_unprocessed_events:
-        unprocessed_event = get_event_by_id(raw_unprocessed_event.event_id)
-        unprocessed_events.add(unprocessed_event)
-
-    return unprocessed_events
-
-
-@beartype
-@database.db.connection_context()
-def delete_unprocessed_events(event_ids: Iterable[str]):
-    with database.db.atomic():
-        for event_id in event_ids:
-            models.UnprocessedEvent.delete().where(models.UnprocessedEvent.event_id == event_id).execute()
 
 
 # Other
