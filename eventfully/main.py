@@ -7,10 +7,12 @@ from random import randint
 from uuid import uuid4
 
 import jwt
+from cachetools import cached, TTLCache
 from dotenv import load_dotenv
-from flask import Flask, render_template, request, make_response, Response
+from flask import Flask, render_template, request, make_response, Response, jsonify
 from flask_apscheduler import APScheduler
 from flask_wtf import FlaskForm
+from pydantic import ValidationError
 from sqids import Sqids
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Length
@@ -271,6 +273,25 @@ def get_events(user_id: str):
         shared_events=share_events,
         user=user,
     )
+
+
+@app.route("/api/v1/search", methods=["GET"])
+@cached(cache=TTLCache(maxsize=64, ttl=60 * 60))
+def search_api():
+    raw_content = request.get_json()
+
+    if not raw_content:
+        return "", HTTPStatus.BAD_REQUEST
+
+    try:
+        search_content = SearchContent(**raw_content)
+    except ValidationError as e:
+        log.debug(e)
+        return f"Required Fields: {SearchContent.__fields__}", HTTPStatus.BAD_REQUEST
+
+    result = search.search_db(search_content)
+    formatted_result = [event.dict() for event in result]
+    return jsonify(formatted_result)
 
 
 if __name__ == "__main__":

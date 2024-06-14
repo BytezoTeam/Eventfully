@@ -10,7 +10,7 @@ from eventfully.types import SearchContent
 
 @beartype
 def main(search_content: SearchContent) -> set[schemas.Event]:
-    events = _search_db(search_content)
+    events = search_db(search_content)
 
     # Skip this step if this search has been performed before and the events are already in the database
     combined_search_string = search_content.get_hash_string()
@@ -24,7 +24,7 @@ def main(search_content: SearchContent) -> set[schemas.Event]:
 
 
 @beartype
-def _search_db(search: SearchContent) -> set[schemas.Event]:
+def search_db(search: SearchContent) -> set[schemas.Event]:
     filters = []
     if search.city:
         filters.append(f"city = '{search.city}'")
