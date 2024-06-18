@@ -52,7 +52,7 @@ iniconfig==2.0.0
 itsdangerous==2.1.2
     # via flask
     # via flask-wtf
-jinja2==3.1.3
+jinja2==3.1.4
     # via flask
 kiss-headers==2.4.3
     # via niquests
@@ -98,13 +98,13 @@ typing-extensions==4.11.0
     # via pydantic-core
 tzlocal==5.2
     # via apscheduler
-urllib3==2.2.1
+urllib3==2.2.2
     # via requests
 urllib3-future==2.7.903
     # via niquests
 wassima==1.1.0
     # via niquests
-werkzeug==3.0.2
+werkzeug==3.0.3
     # via flask
 wtforms==3.1.2
     # via flask-wtf
