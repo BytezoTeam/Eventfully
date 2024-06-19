@@ -1,6 +1,6 @@
 # Eventfully
 
-![sqlite batch](https://img.shields.io/badge/Sqlite-003B57?style=for-the-badge&logo=sqlite&logoColor=white) 
+![sqlite batch](https://img.shields.io/badge/Sqlite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
 ![tailwindcss batch](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![flask batch](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
 ![pyhton batch](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue)
@@ -28,9 +28,12 @@ Eventfully is a python based web-application designed to process and show variou
 - [Neanderticket](https://www.neanderticket.de/): events for the North Rhine-Westphalia state in Germany
 - [bpb: Bundeszentrale für politische Bildung](https://www.bpb.de/veranstaltungen/): various political events in Germany
 
-## [Development Setup](/docs/development-setup.md)
+## Documentation
 
-## [Running In Production](/docs/running-in-production.md) (Docker)
+- [Development Setup](/docs/development-setup.md)
+- [Running In Production](/docs/running-in-production.md) (Docker)
+- [Architecture](/docs/architecture.md)
+- [Use Case](/docs/use-case.md)
 
 ## License
 
