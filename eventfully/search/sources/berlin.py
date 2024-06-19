@@ -3,7 +3,7 @@ from datetime import datetime
 
 import niquests
 from beartype import beartype
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, PageElement
 
 from eventfully.database import schemas
 from eventfully.types import SearchContent
@@ -65,50 +65,55 @@ def search(search_con: SearchContent) -> set[schemas.Event]:
 
     soup = BeautifulSoup(request.text, "html.parser")
     for raw_event in soup.find_all("article"):
-        image_url = raw_event.find_next("img").get("src")
-        title = raw_event.find("h3").text.strip()
-        description = raw_event.find("p", class_="text").text.strip()
-        web_link = raw_event.find("a").get("href")
-
-        raw_arguments = {key.text: value for key, value in zip(raw_event.find_all("dt"), raw_event.find_all("dd"))}
-
-        price = raw_arguments["Preis:"].text if raw_arguments else None
-        address = raw_arguments["Adresse:"].text if raw_arguments else None
-
-        time = search_con.min_time
-        if raw_arguments:
-            raw_time_string = raw_arguments["Termin:"].find_next("a").text.strip()
-            time = _extract_date(raw_time_string)
-
-        if search_con.category != "":
-            category = search_con.category
-        else:
-            raw_category_object = raw_event.find_next("ul", class_="categories")
-            if not raw_category_object:
-                continue
-            raw_category = raw_category_object.find_next("a").text
-            category_option = [category for category in CATEGORIES if raw_category in CATEGORIES[category]]
-            if not category_option:
-                continue
-            category = category_option[0]
-
-        events.add(
-            schemas.Event(
-                web_link=web_link,
-                start_time=time,
-                end_time=time,
-                source="berlin",
-                title=title,
-                image_link=image_url,
-                description=description,
-                city="berlin",
-                category=category,
-                price=price,
-                address=address,
-            )
-        )
+        if processed_event := _extract_event(raw_event, search_con):
+            events.add(processed_event)
 
     return events
+
+
+@beartype
+def _extract_event(raw_event: PageElement, search_con: SearchContent) -> schemas.Event | None:
+    image_url = raw_event.find_next("img").get("src")
+    title = raw_event.find_next("h3").text.strip()
+    description = raw_event.find_next("p", class_="text").text.strip()
+    web_link = raw_event.find_next("a").get("href")
+
+    raw_arguments = {key.text: value for key, value in zip(raw_event.find_all_next("dt"), raw_event.find_next("dd"))}
+
+    # FIXME: sometimes there is no price
+    price = raw_arguments["Preis:"].text if raw_arguments else None
+    address = raw_arguments["Adresse:"].text if raw_arguments else None
+
+    time = search_con.min_time
+    if raw_arguments:
+        raw_time_string = raw_arguments["Termin:"].find_next("a").text.strip()
+        time = _extract_date(raw_time_string)
+
+    if search_con.category != "":
+        category = search_con.category
+    else:
+        raw_category_object = raw_event.find_next("ul", class_="categories")
+        if not raw_category_object:
+            return
+        raw_category = raw_category_object.find_next("a").text
+        category_option = [category for category in CATEGORIES if raw_category in CATEGORIES[category]]
+        if not category_option:
+            return
+        category = category_option[0]
+
+    return schemas.Event(
+        web_link=web_link,
+        start_time=time,
+        end_time=time,
+        source="berlin",
+        title=title,
+        image_link=image_url,
+        description=description,
+        city="berlin",
+        category=category,
+        price=price,
+        address=address,
+    )
 
 
 def _extract_date(raw_date: str) -> datetime:

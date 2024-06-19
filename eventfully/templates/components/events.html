@@ -11,7 +11,7 @@
     {% endif %}
 
     <figure class="pt-8 px-8">
-      <img src="{{ item.image_link }}" loading="lazy" class="rounded-xl" />
+      <img src="{{ item.image_link }}" loading="lazy" class="rounded-xl" alt="Event Cover" />
     </figure>
     <div class="card-body">
       <h2 class="card-title flex-gap-1">
@@ -27,9 +27,8 @@
 
       {% if user %}
       <div class="dropdown">
-        <div tabindex="0" role="button" class="btn btn-ghost btn-active">
-          Share with groups
-        </div>
+        <button tabindex="0" class="btn btn-ghost btn-active">Share With Groups</button>
+
         <ul
           tabindex="0"
           class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"

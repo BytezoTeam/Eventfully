@@ -5,7 +5,6 @@ from pydantic import BaseModel, computed_field, field_serializer
 from eventfully.utils import get_hash_string
 
 
-# TODO: categories
 class Event(BaseModel):
     web_link: str
     start_time: datetime

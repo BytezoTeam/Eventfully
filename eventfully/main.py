@@ -68,8 +68,11 @@ def jwt_check(deny_unauthenticated=False):
                 else:
                     return func(None, *args, **kwargs)
 
-            # FIXME: Probably needs a try/except
-            content = jwt.decode(jwt_token, JWT_KEY, algorithms=["HS256"])
+            try:
+                content = jwt.decode(jwt_token, JWT_KEY, algorithms=["HS256"])
+            except Exception as e:
+                log.warn(f"Problamatic token: {e}")
+                return "", HTTPStatus.UNAUTHORIZED
 
             # Token is too old and should be deleted
             expire_date = datetime.fromtimestamp(content["expire_date"])
@@ -216,6 +219,7 @@ class SignUpForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired()])
 
 
+# TODO: Add check to look if email is real
 @app.route("/api/account/signup", methods=["POST"])
 def signup_account():
     form = SignUpForm()

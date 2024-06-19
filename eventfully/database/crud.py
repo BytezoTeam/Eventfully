@@ -122,7 +122,6 @@ def get_shared_events(group_id):
 
 
 # Account
-# TODO: Add check to look if email is real
 @beartype
 @database.db.connection_context()
 def create_account(username: str, password: str, user_id: str, email: str, event_organiser: bool = False) -> str:
