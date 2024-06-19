@@ -1,0 +1,17 @@
+de:
+  search: "Suche"
+  profile: "Profile"
+  login: "Einloggen"
+  register: "Registrieren"
+  logout: "Abmelden"
+  password: "Passwort"
+  username: "Benutzername"
+  email: "E-Mail"
+  search_placeholder: "Events Durchsuchen"
+  city: "Stadt"
+  category:
+    all: "Alle"
+    culture: "Kultur"
+    politics: "Politik"
+    sport: "Sport"
+    education: "Bildung"
