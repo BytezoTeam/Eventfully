@@ -5,7 +5,7 @@
 ![flask batch](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
 ![pyhton batch](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue)
 ![html batch](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white) <br>
-![closed issues batch](https://img.shields.io/github/issues-search/BytezoTeam/Eventfully?query=is%3Aissue%20is%3Aclosed%20&style=flat-square&label=Closed%20Issues)
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/BytezoTeam/Eventfully)
 ![Sonar Quality Gate](https://img.shields.io/sonar/quality_gate/BytezoTeam_Eventfully?server=https%3A%2F%2Fsonarcloud.io&style=flat-square)
 ![repo size](https://img.shields.io/github/repo-size/BytezoTeam/Eventfully?style=flat-square)
 ![commit activity](https://img.shields.io/github/commit-activity/m/BytezoTeam/Eventfully?style=flat-square)
