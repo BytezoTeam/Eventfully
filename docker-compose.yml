@@ -1,10 +1,8 @@
----
-
 services:
   meilisearch:
     image: "getmeili/meilisearch:v1.7"
     environment:
-      MEILI_MASTER_KEY: "Moin"  # Change this to a secure value
+      MEILI_MASTER_KEY: "Moin" # Change this to a secure value
     volumes:
       - "meilisearch-data:/meili_data"
 
@@ -16,7 +14,7 @@ services:
       - "sqlite-data:/app/database/sqlite"
     environment:
       MEILI_HOST: "http://meilisearch:7700"
-      MEILI_KEY: "Moin"   # Change this to a secure value
+      MEILI_KEY: "Moin" # Change this to a secure value
     depends_on:
       - "meilisearch"
 
