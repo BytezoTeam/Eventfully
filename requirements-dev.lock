@@ -65,6 +65,7 @@ pydantic==2.7.4
     # via camel-converter
 pydantic-core==2.18.4
     # via pydantic
+pyi18n-v2==1.2.1
 pyjwt==2.8.0
 pytailwindcss-extra==0.1.0
 pytest==8.2.2
@@ -73,6 +74,8 @@ python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 pytz==2024.1
     # via apscheduler
+pyyaml==6.0.1
+    # via pyi18n-v2
 qh3==1.0.8
     # via urllib3-future
 requests==2.32.3

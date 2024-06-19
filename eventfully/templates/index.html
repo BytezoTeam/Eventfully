@@ -14,7 +14,7 @@
           onclick="window.location.href='/profile'"
           class="bg-blue-500 rounded p-2"
         >
-          Profile
+          {{ t("profile") }}
         </button>
         <form hx-post="/api/account/signout" hx-target="body" \>
           <button type="submit" class="bg-red-500 rounded p-2">Logout</button>
@@ -24,14 +24,14 @@
           class="btn btn-ghost btn-active"
           @click="loginModal.showModal()"
         >
-          Login
+          {{ t("login") }}
         </button>
 
         <button
           class="btn btn-ghost btn-active"
           @click="RegisterModal.showModal()"
         >
-          Register
+          {{ t("register") }}
         </button>
         {% endif %}
       </div>
@@ -53,7 +53,7 @@
   <main class="flex flex-col gap-8">
     <section class="sticky top-8 z-10 cool-card">
       <!-- Event Search -->
-      <h2>Event Search</h2>
+      <h2>{{ t("search") }}</h2>
       <form
         class="flex flex-row flex-wrap justify-start gap-4"
         hx-get="/api/search"
@@ -66,13 +66,13 @@
           id="therm"
           class="input input-bordered"
           type="search"
-          placeholder="Search for events..."
+          placeholder="{{ t('search_placeholder') }}"
         />
 
         <input
           type="text"
           class="input input-bordered"
-          placeholder="City"
+          placeholder="{{ t('city') }}"
           name="city"
           id="city"
           list="cities"
@@ -88,14 +88,14 @@
           id="category"
           class="select select-bordered"
         >
-          <option value="">All</option>
-          <option value="culture">Culture</option>
-          <option value="education">Education</option>
-          <option value="sport">Sport</option>
-          <option value="politics">Politics</option>
+          <option value="">{{ t("category.all") }}</option>
+          <option value="culture">{{ t("category.culture") }}</option>
+          <option value="education">{{ t("category.education") }}</option>
+          <option value="sport">{{ t("category.sport") }}</option>
+          <option value="politics">{{ t("category.politics") }}</option>
         </select>
 
-        <button type="submit" class="btn btn-primary">Search</button>
+        <button type="submit" class="btn btn-primary">{{ t("search") }}</button>
       </form>
     </section>
 
@@ -115,7 +115,7 @@
     class="modal-box dark:bg-gray-800 bg-gray-100 flex flex-col items-center gap-4"
   >
     <!-- Login Form -->
-    <h1>Login</h1>
+    <h1>{{ t("login") }}</h1>
     <form
       class="flex flex-col items-center gap-4"
       hx-post="/api/account/signin"
@@ -129,7 +129,7 @@
           id="signin-username"
           type="text"
           class="grow"
-          placeholder="Username"
+          placeholder="{{ t('username') }}"
         />
       </label>
 
@@ -140,12 +140,12 @@
           id="signin-password"
           type="password"
           class="grow"
-          placeholder="Password"
+          placeholder="{{ t('password') }}"
         />
       </label>
 
       <div class="w-full flex flex-row justify-center gap-8">
-        <button type="submit" class="btn btn-primary">Login</button>
+        <button type="submit" class="btn btn-primary">{{ t("login") }}</button>
       </div>
     </form>
   </div>
@@ -160,7 +160,7 @@
     class="modal-box dark:bg-gray-800 bg-gray-100 flex flex-col items-center gap-4"
   >
     <!-- Register Form -->
-    <h1>Register</h1>
+    <h1>{{ t("register") }}</h1>
     <form
       class="flex flex-col items-center gap-4"
       hx-post="/api/account/signup"
@@ -174,7 +174,7 @@
           id="signup-username"
           type="text"
           class="grow"
-          placeholder="Username"
+          placeholder="{{ t('username') }}"
         />
       </label>
 
@@ -185,7 +185,7 @@
           id="signup-email"
           type="email"
           class="grow"
-          placeholder="Email"
+          placeholder="{{ t('email') }}"
         />
       </label>
 
@@ -196,16 +196,16 @@
           id="signup-password"
           type="password"
           class="grow"
-          placeholder="Password"
+          placeholder="{{ t('password') }}"
         />
       </label>
 
       <div class="w-full flex flex-row justify-center gap-8">
-        <button type="submit" class="btn btn-primary">Register</button>
+        <button type="submit" class="btn btn-primary">{{ t("register") }}</button>
       </div>
     </form>
     <form method="dialog" class="modal-backdrop">
-      <button>Close</button>
+      <button>{{ t("cancel") }}</button>
     </form>
   </div>
 </dialog>

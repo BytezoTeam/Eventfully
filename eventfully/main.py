@@ -1,4 +1,5 @@
 import atexit
+from typing import Callable
 from datetime import datetime, timedelta
 from functools import wraps
 from http import HTTPStatus
@@ -16,6 +17,7 @@ from pydantic import ValidationError
 from sqids import Sqids
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Length
+from pyi18n import PyI18n
 
 from eventfully.database import crud
 from eventfully.logger import log
@@ -33,6 +35,9 @@ crud.create_tables()
 app = Flask(__name__)
 app.config["SECRET_KEY"] = uuid4().hex
 app.config["WTF_CSRF_ENABLED"] = False
+
+LANGUAGES = ("en", "de")
+i18n = PyI18n(LANGUAGES)
 
 # Background tasks
 scheduler = APScheduler()
@@ -94,13 +99,29 @@ def add_jwt_cookie_to_response(response: Response, user_id: str) -> Response:
     return response
 
 
+def translation_provider() -> Callable[[str], str]:
+    language_header = request.headers.get("Accept-Language", "en")
+    accepted_languages = language_header.split(",")
+
+    lang_code = "en"
+    for lang in LANGUAGES:
+        if lang in accepted_languages:
+            lang_code = lang
+            break
+
+    def translate(text: str):
+        return i18n.gettext(lang_code, text)
+
+    return translate
+
+
 def render_index_template(base: bool = False, user_id: str | None = None) -> str:
     cities = crud.get_possible_cities()
 
     user = crud.get_user_data(user_id) if user_id else None
 
     template = "index_base.html" if base else "index.html"
-    return render_template(template, user=user, cities=cities)
+    return render_template(template, user=user, cities=cities, t=translation_provider())
 
 
 @app.errorhandler(500)
@@ -272,6 +293,7 @@ def get_events(user_id: str):
         groups=groups,
         shared_events=share_events,
         user=user,
+        t=translation_provider(),
     )
 
 
