@@ -1,5 +1,14 @@
 FROM python:3.11-alpine
 
+# Add Tini
+ENV TINI_VERSION v0.19.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
+ENTRYPOINT ["/tini", "--"]
+
+# Run your program under Tini
+CMD ["./docker-entrypoint.sh"]
+
 WORKDIR /app
 
 # Actions for running eventfully without root with gosu
@@ -23,5 +32,3 @@ RUN tailwindcss-extra -i ./eventfully/static/input.css -o ./eventfully/static/ou
 
 # The server runs on port 8000
 EXPOSE 8000
-
-ENTRYPOINT ./docker-entrypoint.sh
