@@ -1,6 +1,6 @@
 services:
   meilisearch:
-    image: "getmeili/meilisearch:v1.7"
+    image: "docker.io/getmeili/meilisearch:v1.7"
     environment:
       MEILI_MASTER_KEY: "Moin" # Change this to a secure value
     volumes:
