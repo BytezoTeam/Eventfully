@@ -183,6 +183,8 @@ def create_event():
 
     crud.add_events(event)
 
+    return "", HTTPStatus.OK
+
 
 @app.route("/api/group/share")
 @jwt_check(deny_unauthenticated=True)
