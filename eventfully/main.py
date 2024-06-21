@@ -19,7 +19,7 @@ from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Length
 from pyi18n import PyI18n
 
-from eventfully.database import crud
+from eventfully.database import crud, schemas
 from eventfully.logger import log
 from eventfully.search import post_processing, search, crawl
 from eventfully.types import SearchContent
@@ -156,6 +156,32 @@ def toggle_event_like(user_id: str):
     else:
         crud.unlike_event(user_id, event_id)
         return render_template("components/liked-false-button.html", item={"id": event_id})
+
+class EventForm(FlaskForm):
+    title = StringField("Event Title", validators=[DataRequired()])
+    description = StringField("Description", validators=[DataRequired()])
+    start_time = StringField("Start Time", validators=[DataRequired()])
+    end_time = StringField("End Time", validators=[DataRequired()])
+    price = StringField("Price", validators=[DataRequired()])
+    web_link= StringField("Web Link")
+    address = StringField("Address", validators=[DataRequired()])
+
+@app.route("/api/event/create")
+@jwt_check(deny_unauthenticated=True)
+def create_event():
+    form = EventForm()
+    if not form.validate():
+        return form.errors, HTTPStatus.BAD_REQUEST
+
+    event = schemas.Event(
+        web_link=form.web_link.data,
+        start_time=form.start_time.data,
+        end_time=form.end_time.data,
+        title=form.title.data,
+        address=form.address.data,
+    )
+
+    crud.add_events(event)
 
 
 @app.route("/api/group/share")
