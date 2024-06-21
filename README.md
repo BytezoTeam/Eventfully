@@ -35,6 +35,23 @@ Eventfully is a python based web-application designed to process and show variou
 - [Architecture](/docs/architecture.md)
 - [Use Case](/docs/use-case.md)
 
+## Contributors
+- **2mal3:** Developed the backend server, Found Sources and implemented those to Eventfully, Lead of Algorithm
+- **LuisSchuimer:** Developed the backend server, Chef of Server-Management, Found Sources and implemented those to Eventfully
+- **BlitzBenedikt:** Designed the Frontend of Eventfully, Head of Advertisement
+- **ainYona:** Found Sources, Head of Idea, Lead Lawyer
+- **aehtorod:** Planning of Eventfully, Head of Teambuilding
+
+### Original Team (Jugend Hackt Köln 2023): 
+- **2mal3**
+- **tulinkletti**
+- **LuisSchuimer**
+- **BlitzBenedikt**
+- **ainYona**
+- **oemre200**
+- **aehtorod**
+
+
 ## License
 
 [GPL-3.0](/LICENSE.txt)
