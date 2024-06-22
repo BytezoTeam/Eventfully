@@ -24,6 +24,7 @@ RUN PYTHONDONTWRITEBYTECODE=1 pip install --no-cache-dir -r requirements.lock &&
 # Copy project files
 COPY tests/ tests/
 COPY eventfully/ eventfully/
+COPY locales/ locales/
 COPY tailwind.config.js docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
 
