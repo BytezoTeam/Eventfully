@@ -10,7 +10,7 @@
 ![repo size](https://img.shields.io/github/repo-size/BytezoTeam/Eventfully?style=flat-square)
 ![commit activity](https://img.shields.io/github/commit-activity/m/BytezoTeam/Eventfully?style=flat-square)
 
-Eventfully is a python based web-application designed to process and show various events in your area
+Eventfully is a software to find and explore new events in your area and learn more about culture, technology and more from one website. It combines many different event sites in one and there are many events in your area and in Europe. Plus, you can connect with people and make new friends and have an exprerience you never had before. Eventfully eliminates the hard search for events on the Internet and it has many different events so that everyone can find the event they are looking for.
 
 ## Techstack
 
