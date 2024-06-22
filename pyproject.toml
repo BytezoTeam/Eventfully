@@ -3,7 +3,9 @@ name = "eventfully"
 version = "0.1.0"
 description = "Add your description here"
 authors = [
-    { name = "2mal3", email = "56305732+2mal3@users.noreply.github.com" }
+    { name = "2mal3", email = "56305732+2mal3@users.noreply.github.com" },
+    { name = "Luis Schuimer", email = "85784931+LuisSchuimer@users.noreply.github.com" },
+    { name = "BlitzBenedikt", email = "117511666+BlitzBenedikt@users.noreply.github.com" }
 ]
 dependencies = [
     "flask==3.*",
