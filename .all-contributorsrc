@@ -80,7 +80,8 @@
       "contributions": [
         "code",
         "ideas",
-        "projectManagement"
+        "projectManagement",
+        "data"
       ]
     },
     {
@@ -111,7 +112,9 @@
       "contributions": [
         "code",
         "data",
-        "ideas"
+        "ideas",
+        "design",
+        "platform"
       ]
     }
   ],
