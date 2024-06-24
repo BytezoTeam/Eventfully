@@ -35,7 +35,7 @@ Contains all the logic to get the events from our sources in our own format with
 
 - `post_process`: more detailed analysis of events found by search that couldn't be fully fetched due to speed requirements.
 
-### eventful/static
+### eventfully/static
 
 Static, mostly binary files for the site that don't change often, including images or css.  
 
