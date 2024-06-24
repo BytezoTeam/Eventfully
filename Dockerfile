@@ -35,6 +35,8 @@ RUN chmod +x docker-entrypoint.sh
 # The server runs on port 8000
 EXPOSE 8000
 
+VOLUME [ "/app/database/sqlite" ]
+
 # Run your program under Tini
 ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["./docker-entrypoint.sh"]
