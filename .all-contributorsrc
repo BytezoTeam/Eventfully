@@ -21,7 +21,6 @@
         "doc",
         "ideas",
         "infra",
-        "maintenance",
         "projectManagement",
         "promotion"
       ]
@@ -39,9 +38,7 @@
         "doc",
         "ideas",
         "infra",
-        "maintenance",
         "projectManagement",
-        "test",
         "tool",
         "translation",
         "platform"
@@ -69,7 +66,8 @@
       "contributions": [
         "fundingFinding",
         "ideas",
-        "promotion"
+        "promotion",
+        "data"
       ]
     },
     {
