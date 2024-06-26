@@ -4,15 +4,19 @@
   <div class="cool-card w-full static" style="padding: 0 !important">
     {% if user %}
     <div class="absolute m-4">
-      {% if item.id in liked_events %} {% include
-      'components/liked-true-button.html' %} {% else %} {% include
-      'components/liked-false-button.html' %} {% endif %}
+      {% if item.id in liked_events %}
+        {% include 'components/liked-true-button.html' %}
+      {% else %}
+      {% include
+        'components/liked-false-button.html' %}
+      {% endif %}
     </div>
     {% endif %}
 
-    <figure class="pt-8 px-8">
-      <img src="{{ item.image_link }}" loading="lazy" class="rounded-xl" alt="Event Cover" />
+    <figure class="pt-8 px-8 w-full h-72 rounded-xl">
+      <img src="{{ item.image_link }}" loading="lazy" class="object-cover object-center size-full" alt="Event Cover" style="border-radius: inherit;" />
     </figure>
+
     <div class="card-body">
       <h2 class="card-title flex-gap-1">
         <a href="{{ item.web_link }}" target="_blank" rel="noopener"
