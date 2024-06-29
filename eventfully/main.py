@@ -143,6 +143,16 @@ def index(user_id: str):
     return render_index_template(base=True, user_id=user_id)
 
 
+@app.route("/groups", methods=["GET"])
+def groups():
+    return render_template("groups.html", t=translation_provider())
+
+
+@app.route("/create-event", methods=["GET"])
+def create_event_route():
+    return render_template("create-event.html", t=translation_provider())
+
+
 @app.route("/api/toggle_event_like")
 @jwt_check()
 def toggle_event_like(user_id: str):
