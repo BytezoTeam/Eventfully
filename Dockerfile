@@ -40,3 +40,5 @@ VOLUME [ "/app/database/sqlite" ]
 # Run your program under Tini
 ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["./docker-entrypoint.sh"]
+
+HEALTHCHECK CMD wget --spider -q http://127.0.0.1:8000 || exit 1
