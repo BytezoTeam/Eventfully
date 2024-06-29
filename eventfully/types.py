@@ -1,3 +1,9 @@
+"""
+Some Python "types" for representing complex data structures that reduce unnecessary boilerplate and code repetition,
+and prevent accidental errors.
+"""
+
+
 from datetime import datetime
 from typing import Literal
 
@@ -7,6 +13,10 @@ from eventfully.utils import get_hash_string
 
 
 class SearchContent(BaseModel):
+    """
+    Represents a search query.
+    """
+
     query: str
     min_time: datetime
     max_time: datetime

@@ -1,4 +1,6 @@
-# Logic for collecting all events from some event sources once a day and integrating them into the database
+"""
+Some event sources directly return most the events so whe can pre crawl them ahead of searching.
+"""
 
 from typing import Callable
 

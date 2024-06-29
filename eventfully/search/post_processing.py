@@ -1,3 +1,8 @@
+"""
+This module processes new web searches in the background one at a time so the server can do other things a stays stable under high load.
+Some search won't return all event information directly so whe need to fetch them seperately (a.k.a. post processing).
+"""
+
 from typing import Callable
 import queue
 

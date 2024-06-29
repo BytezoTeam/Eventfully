@@ -1,3 +1,8 @@
+"""
+Some functions that are used in many places in the project.
+"""
+
+
 from hashlib import sha256
 
 

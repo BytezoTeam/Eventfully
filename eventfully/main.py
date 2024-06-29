@@ -28,6 +28,7 @@ log.info("Starting Server ...")
 
 load_dotenv()
 JWT_KEY = getenv("MEILI_KEY")
+# Time in days until a jwt token expires to prevent old tokens from being used to improve security
 ID_EXPIRE_TIME = 7
 
 crud.create_tables()
@@ -39,7 +40,7 @@ app.config["WTF_CSRF_ENABLED"] = False
 LANGUAGES = ("en", "de")
 i18n = PyI18n(LANGUAGES)
 
-# Background tasks
+# Background tasks mainly for searching for events
 scheduler = APScheduler()
 scheduler.init_app(app)
 atexit.register(lambda: scheduler.shutdown())
@@ -50,12 +51,10 @@ scheduler.add_job("collect", crawl.main, trigger="cron", day="*", max_instances=
 scheduler.start()
 
 
-# The main http routes / flask logic
 def jwt_check(deny_unauthenticated=False):
     """
-    Checks if a valid jwt token is present in the request cookies.
-    Aborts the request if the token is not valid or expired and deny_unauthenticated is True.
-    If the token is valid, the function is called with the user_id as a string for the first argument.
+    Runs before certain routes to identify the user to allow retrieval of user-specific data or to block some routes for unauthenticated users.
+    It uses a JWT token stored in a cookie.
     """
 
     def decorator(func):
@@ -103,6 +102,10 @@ def add_jwt_cookie_to_response(response: Response, user_id: str) -> Response:
 
 
 def translation_provider() -> Callable[[str], str]:
+    """
+    Tries to find the best language for a given request and returns function that is used in the html templates to translate text.
+    """
+
     language_header = request.headers.get("Accept-Language", "en")
     accepted_languages = language_header.split(",")
 
@@ -129,6 +132,10 @@ def render_index_template(base: bool = False, user_id: str | None = None) -> str
 
 @app.errorhandler(500)
 def internal_error_server_error(error):
+    """
+    When something goes wrong on the server side, this error is returned.
+    """
+
     log.error("Internal Server Error: " + str(error))
     return make_response(), HTTPStatus.INTERNAL_SERVER_ERROR
 
@@ -146,6 +153,11 @@ def index(user_id: str):
 @app.route("/api/toggle_event_like")
 @jwt_check()
 def toggle_event_like(user_id: str):
+    """
+    When a logged in user clicks on a like button of an event. Stores links the event and the user in the database and
+    returns the the now liked or unliked button to update the website.
+    """
+
     event_id = request.args.get("id")
 
     log.debug(f"Event '{event_id}' like toggled for '{user_id}'")
@@ -157,6 +169,7 @@ def toggle_event_like(user_id: str):
         crud.unlike_event(user_id, event_id)
         return render_template("components/liked-false-button.html", item={"id": event_id})
 
+
 class EventForm(FlaskForm):
     title = StringField("Event Title", validators=[DataRequired()])
     description = StringField("Description", validators=[DataRequired()])
@@ -166,9 +179,14 @@ class EventForm(FlaskForm):
     web_link= StringField("Web Link")
     address = StringField("Address", validators=[DataRequired()])
 
+
 @app.route("/api/event/create")
 @jwt_check(deny_unauthenticated=True)
 def create_event():
+    """
+    Enables normal users to create their own events.
+    """
+
     form = EventForm()
     if not form.validate():
         return form.errors, HTTPStatus.BAD_REQUEST
@@ -189,6 +207,10 @@ def create_event():
 @app.route("/api/group/share")
 @jwt_check(deny_unauthenticated=True)
 def share_event(user_id: str):
+    """
+    A user shares an event a group he is in.
+    """
+
     event_id = request.args.get("event_id")
     group_id = request.args.get("group_id")
 
@@ -223,6 +245,10 @@ def share_to_group(user_id: str):
 @app.route("/api/group/add_member")
 @jwt_check(deny_unauthenticated=True)
 def add_member(user_id: str):
+    """
+    Group admins can add other users to the group.
+    """
+
     group_id = request.args.get("group_id")
 
     if crud.member_is_admin(user_id, group_id=group_id):
@@ -299,6 +325,11 @@ def signout_account(user_id: str):
 @app.route("/api/search", methods=["GET"])
 @jwt_check()
 def get_events(user_id: str):
+    """
+    When a user searches for events.
+    Calls the search module and returns the pre rendered events with optional account features if the user is logged in.
+    """
+
     therm = request.args.get("therm", "")
     city = request.args.get("city", "").strip().lower()
     category = request.args.get("category", "")
@@ -332,6 +363,10 @@ def get_events(user_id: str):
 @app.route("/api/v1/search", methods=["GET"])
 @cached(cache=TTLCache(maxsize=64, ttl=60 * 60))
 def search_api():
+    """
+    And easy to use API for searching for events in the local database.
+    """
+
     raw_content = request.get_json()
 
     if not raw_content:

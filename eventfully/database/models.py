@@ -42,9 +42,17 @@ class Likes(_DBBaseModel):
 
 
 class SearchCache(_DBBaseModel):
+    """
+    Stores the hashes of the last search queries so that we don't need to crawl the web again an can just use the local database.
+    """
+
     search_hash = TextField(primary_key=True)
     time = DateTimeField()
 
 
 class PossibleCities(_DBBaseModel):
+    """
+    Stores all cities that are found in the processed events to show the user what cities to search for.
+    """
+
     city = TextField(primary_key=True)
