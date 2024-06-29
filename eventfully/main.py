@@ -381,18 +381,19 @@ def get_events(user_id: str):
 
     user = crud.get_user_data(user_id)
     liked_events = crud.get_liked_event_ids_by_user_id(user_id)
-    groups = {}
+    user_groups = {}
     share_events = {}
-    if crud.is_user_invited(user_id):
-        groups = crud.get_groups_of_member(user_id)
-        for group in groups:
+    groups = crud.get_groups_of_member(user_id)
+    for group in groups:
+        if crud.is_user_invited(user_id, group):
             share_events[groups[group]] = crud.get_shared_events(group)
+            user_groups[group] = groups[group]
 
     return render_template(
         "components/events.html",
         events=result,
         liked_events=liked_events,
-        groups=groups,
+        groups=user_groups,
         shared_events=share_events,
         user=user,
         t=translation_provider(),
