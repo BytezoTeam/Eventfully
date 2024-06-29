@@ -42,4 +42,4 @@ ENTRYPOINT ["/sbin/tini", "--"]
 
 CMD ["./docker-entrypoint.sh"]
 
-HEALTHCHECK CMD wget --spider -q http://localhost:8000 || exit 1
+HEALTHCHECK CMD wget --spider -q http://127.0.0.1:8000 || exit 1
