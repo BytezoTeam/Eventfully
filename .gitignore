@@ -6,6 +6,12 @@
 __pycache__/
 .venv/
 
+# nodejs
+node_modules/
+package.json
+package-lock.json
+bun.lockb
+
 # program generated files
 output.css
 *.log
