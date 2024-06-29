@@ -214,22 +214,6 @@ def create_event():
     return "", HTTPStatus.OK
 
 
-@app.route("/api/group/share")
-@jwt_check(deny_unauthenticated=True)
-def share_event(user_id: str):
-    """
-    A user shares an event a group he is in.
-    """
-
-    event_id = request.args.get("event_id")
-    group_id = request.args.get("group_id")
-
-    crud.like_event(user_id, event_id, group_id)
-    log.debug(f"Event {event_id} shared to {group_id} by {user_id}")
-
-    return "", HTTPStatus.OK
-
-
 @app.route("/api/group/create")
 @jwt_check(deny_unauthenticated=True)
 def create_group(user_id: str):
@@ -244,7 +228,7 @@ def create_group(user_id: str):
 @app.route("/api/group/share")
 @jwt_check(deny_unauthenticated=True)
 def share_to_group(user_id: str):
-    event_id = request.args.get("id")
+    event_id = request.args.get("event_id")
     group_id = request.args.get("group_id")
 
     crud.like_event(user_id, event_id, group_id)
@@ -252,7 +236,7 @@ def share_to_group(user_id: str):
     return "", HTTPStatus.OK
 
 
-@app.route("/api/group/add_member")
+@app.route("/api/group/request/invite")
 @jwt_check(deny_unauthenticated=True)
 def add_member(user_id: str):
     """
@@ -261,10 +245,42 @@ def add_member(user_id: str):
 
     group_id = request.args.get("group_id")
 
-    if crud.member_is_admin(user_id, group_id=group_id):
-        crud.add_member_to_group(user_id, group_id, False)
+    crud.add_member_to_group(user_id, group_id, False)
 
     return "", 200
+
+@app.route("/api/group/invite/accept")
+@jwt_check(deny_unauthenticated=True)
+def accept_user_invite(user_id: str):
+    """
+    Accepts a requested invite from a user
+    """
+    group_id = request.args.get("group_id")
+    member_user_id = request.args.get("member_user_id")
+
+    if crud.member_is_admin(user_id, group_id):
+        crud.accept_invite(member_user_id, group_id)
+
+        return "", HTTPStatus.OK
+
+    return "", HTTPStatus.METHOD_NOT_ALLOWED
+
+@app.route("/api/group/invite/deny")
+@jwt_check(deny_unauthenticated=True)
+def deny_user_invite(user_id: str):
+    """
+    Deny a requested invite from a user
+    """
+
+    group_id = request.args.get("group_id")
+    member_user_id = request.args.get("member_user_id")
+
+    if crud.member_is_admin(user_id, group_id):
+        crud.remove_user_from_group(member_user_id, group_id)
+
+        return "", HTTPStatus.OK
+    
+    return "", HTTPStatus.METHOD_NOT_ALLOWED
 
 
 @app.route("/api/account/delete", methods=["POST"])
@@ -354,10 +370,12 @@ def get_events(user_id: str):
 
     user = crud.get_user_data(user_id)
     liked_events = crud.get_liked_event_ids_by_user_id(user_id)
-    groups = crud.get_groups_of_member(user_id)
+    groups = {}
     share_events = {}
-    for group in groups:
-        share_events[groups[group]] = crud.get_shared_events(group)
+    if crud.is_user_invited(user_id):
+        groups = crud.get_groups_of_member(user_id)
+        for group in groups:
+            share_events[groups[group]] = crud.get_shared_events(group)
 
     return render_template(
         "components/events.html",

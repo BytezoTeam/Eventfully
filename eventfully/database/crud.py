@@ -72,6 +72,38 @@ def add_member_to_group(member_user_id: str, g_id: str, admin_user: bool):
 
     return member_user_id
 
+@beartype
+@database.db.connection_context()
+def accept_invite(member_user_id: str, g_id: str) -> bool:
+    query = models.GroupMembers.update({models.GroupMembers.invited: False}).where(
+        (models.GroupMembers.user_id == member_user_id) & 
+        (models.GroupMembers.group == g_id)
+    )
+
+    query.execute()
+    return True
+
+@beartype
+@database.db.connection_context()
+def is_user_invited(member_user_id: str, g_id: str) -> bool:
+    member = models.GroupMembers.get(
+        (models.GroupMembers.user_id == member_user_id) & 
+        (models.GroupMembers.group == g_id)
+    )
+    return member.invited
+
+@beartype
+@database.db.connection_context()
+def remove_user_from_group(member_user_id: str, g_id: str) -> bool:
+    query = models.GroupMembers.delete().where(
+        (models.GroupMembers.user_id == member_user_id) & 
+        (models.GroupMembers.group == g_id)
+    )
+
+    query.execute()
+    return True
+
+
 
 @database.db.connection_context()
 def member_is_admin(member_id, group_id):
