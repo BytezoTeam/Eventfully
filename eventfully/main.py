@@ -18,6 +18,7 @@ from sqids import Sqids
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Length
 from pyi18n import PyI18n
+from peewee import DoesNotExist
 
 from eventfully.database import crud, schemas
 from eventfully.logger import log
@@ -80,6 +81,16 @@ def jwt_check(deny_unauthenticated=False):
                     response = make_response()
                     response.delete_cookie("jwt_token")
                     return response, HTTPStatus.UNAUTHORIZED
+                else:
+                    return func(None, *args, **kwargs)
+
+
+            # Check if user exists
+            try:
+                crud.get_user(content["user_id"])
+            except DoesNotExist:
+                if deny_unauthenticated:
+                    return "", HTTPStatus.UNAUTHORIZED
                 else:
                     return func(None, *args, **kwargs)
 
