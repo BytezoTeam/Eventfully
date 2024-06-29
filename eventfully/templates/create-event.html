@@ -1,103 +1,147 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" data-theme="light" 
+x-data="{ darkMode: localStorage.getItem('dark') === 'true' }"
+  x-init="$watch('darkMode', val => localStorage.setItem('dark', val))"
+  x-bind:class="darkMode ? 'dark' : ''"
+  x-bind:data-theme="darkMode ? 'dark' : 'light'">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ t("event.create_title") }}</title>
-    <style>
-         body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-        }
-        form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        input[type="text"],
-        input[type="url"],
-        input[type="datetime-local"],
-        input[type="number"],
-        textarea,
-        select {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        input[type="submit"] {
-            background-color: #3498db;
-            color: #fff;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 20px;
-        }
-        input[type="submit"]:hover {
-            background-color: #2980b9;
-        }
-    </style>
+    <title>{{ t("platform.title") }}</title>
+	<link rel="stylesheet" href="/static/output.css" />
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.0"></script>
 </head>
 <body>
-    <h1>{{ t("event.create_heading") }}</h1>
-    <form>
-        <label for="website">{{ t("event.website_link") }}</label>
-        <input type="url" id="website" name="website" required>
+    <div class="container mx-auto p-4">
+        <header class="cool-card my-8 flex flex-row items-center justify-between max-w-full">
+            <h1 class="text-2xl font-bold">Eventfully</h1>
+            <div class="flex flex-row items-center gap-6">
+                <!-- Account -->
+                <div class="flex flex-row items-center gap-3">
+                    {% if user %}
+                    <span class="mr-2">{{ user["name"] }}</span>
+                    <button
+                        onclick="window.location.href='/profile'"
+                        class="btn btn-primary"
+                    >
+                        {{ t("profile") }}
+                    </button>
+                    <form hx-post="/api/account/signout" hx-target="body">
+                        <button type="submit" class="btn btn-error">{{ t("logout") }}</button>
+                    </form>
+                    {% else %}
+                    <button
+                        class="btn btn-ghost btn-active"
+                        @click="loginModal.showModal()"
+                    >
+                        {{ t("login") }}
+                    </button>
+                    <button
+                        class="btn btn-ghost btn-active"
+                        @click="RegisterModal.showModal()"
+                    >
+                        {{ t("register") }}
+                    </button>
+                    {% endif %}
+                </div>
+                <!-- Theme Switch -->
+                <label class="swap swap-rotate">
+                    <input
+                        @click="darkMode = !darkMode"
+                        type="checkbox"
+                        x-bind:checked="!darkMode"
+                    />
+                    <div class="swap-on">{% include 'components/icons/sun.html' %}</div>
+                    <div class="swap-off">{% include 'components/icons/moon.html' %}</div>
+                </label>
+            </div>
+        </header>
+<body class="bg-base-200">
+    <div class="container mx-auto p-4">
+        <h1 class="text-3xl font-bold text-center mb-8">{{ t("event.create_heading") }}</h1>
+        <form class="bg-base-100 shadow-xl rounded-box p-8">
+            <div class="form-control">
+                <label class="label" for="website">
+                    <span class="label-text">{{ t("event.website_link") }}</span>
+                </label>
+                <input type="url" id="website" name="website" class="input input-bordered" required>
+            </div>
 
-        <label for="start">{{ t("event.start_time") }}</label>
-        <input type="datetime-local" id="start" name="start" required>
+            <div class="form-control">
+                <label class="label" for="start">
+                    <span class="label-text">{{ t("event.start_time") }}</span>
+                </label>
+                <input type="datetime-local" id="start" name="start" class="input input-bordered" required>
+            </div>
 
-        <label for="end">{{ t("event.end_time") }}</label>
-        <input type="datetime-local" id="end" name="end" required>
+            <div class="form-control">
+                <label class="label" for="end">
+                    <span class="label-text">{{ t("event.end_time") }}</span>
+                </label>
+                <input type="datetime-local" id="end" name="end" class="input input-bordered" required>
+            </div>
 
-        <label for="title">{{ t("event.title") }}</label>
-        <input type="text" id="title" name="title" required>
+            <div class="form-control">
+                <label class="label" for="title">
+                    <span class="label-text">{{ t("event.title") }}</span>
+                </label>
+                <input type="text" id="title" name="title" class="input input-bordered" required>
+            </div>
 
-        <label for="image">{{ t("event.image_link") }}</label>
-        <input type="url" id="image" name="image" required>
+            <div class="form-control">
+                <label class="label" for="image">
+                    <span class="label-text">{{ t("event.image_link") }}</span>
+                </label>
+                <input type="url" id="image" name="image" class="input input-bordered" required>
+            </div>
 
-        <label for="city">{{ t("event.city") }}</label>
-        <input type="text" id="city" name="city" required>
+            <div class="form-control">
+                <label class="label" for="city">
+                    <span class="label-text">{{ t("event.city") }}</span>
+                </label>
+                <input type="text" id="city" name="city" class="input input-bordered" required>
+            </div>
 
-        <label for="address">{{ t("event.address") }}</label>
-        <input type="text" id="address" name="address" required>
+            <div class="form-control">
+                <label class="label" for="address">
+                    <span class="label-text">{{ t("event.address") }}</span>
+                </label>
+                <input type="text" id="address" name="address" class="input input-bordered" required>
+            </div>
 
-        <label for="description">{{ t("event.description") }}</label>
-        <textarea id="description" name="description" rows="4" required></textarea>
+            <div class="form-control">
+                <label class="label" for="description">
+                    <span class="label-text">{{ t("event.description") }}</span>
+                </label>
+                <textarea id="description" name="description" class="textarea textarea-bordered h-24" required></textarea>
+            </div>
 
-        <label for="price">{{ t("event.price") }}</label>
-        <input type="number" id="price" name="price" min="0" step="0.01" required>
+            <div class="form-control">
+                <label class="label" for="price">
+                    <span class="label-text">{{ t("event.price") }}</span>
+                </label>
+                <input type="number" id="price" name="price" min="0" step="0.01" class="input input-bordered" required>
+            </div>
 
-        <label for="category">{{ t("event.category") }}</label>
-        <select id="category" name="category" required>
-            <option value="">{{ t("category.choose") }}</option>
-            <option value="sport">{{ t("category.sport") }}</option>
-            <option value="kultur">{{ t("category.culture") }}</option>
-            <option value="bildung">{{ t("category.education") }}</option>
-            <option value="politik">{{ t("category.politics") }}</option>
-            <option value="sonstiges">{{ t("category.other") }}</option>
-        </select>
+            <div class="form-control">
+                <label class="label" for="category">
+                    <span class="label-text">{{ t("event.category") }}</span>
+                </label>
+                <select id="category" name="category" class="select select-bordered" required>
+                    <option value="">{{ t("category.choose") }}</option>
+                    <option value="sport">{{ t("category.sport") }}</option>
+                    <option value="kultur">{{ t("category.culture") }}</option>
+                    <option value="bildung">{{ t("category.education") }}</option>
+                    <option value="politik">{{ t("category.politics") }}</option>
+                    <option value="sonstiges">{{ t("category.other") }}</option>
+                </select>
+            </div>
 
-        <input type="submit" value="{{ t('event.create_button') }}">
-    </form>
+            <div class="form-control mt-6">
+                <button type="submit" class="btn btn-primary">{{ t('event.create_button') }}</button>
+            </div>
+        </form>
+    </div>
 </body>
 </html>
