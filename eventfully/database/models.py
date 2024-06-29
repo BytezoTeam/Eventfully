@@ -23,13 +23,13 @@ class Groups(_DBBaseModel):
 
 
 class GroupMembers(_DBBaseModel):
-    user_id = TextField()
+    user = ForeignKeyField(User, backref="members")
     group = ForeignKeyField(Groups)
     invited = BooleanField()
     admin = BooleanField()
 
     class Meta:
-        primary_key = CompositeKey("user_id", "group")
+        primary_key = CompositeKey("user", "group")
 
 
 class Likes(_DBBaseModel):
