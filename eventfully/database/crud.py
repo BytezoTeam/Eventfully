@@ -168,6 +168,11 @@ def get_shared_events(group_id):
 
 
 # Account
+@database.db.connection_context()
+def get_user(user_id: str) -> models.User:
+    return models.User.get(models.User.id == user_id)
+
+
 @beartype
 @database.db.connection_context()
 def create_account(username: str, password: str, user_id: str, email: str, event_organiser: bool = False) -> str:
