@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="light" 
+x-data="{ darkMode: localStorage.getItem('dark') === 'true' }"
+  x-init="$watch('darkMode', val => localStorage.setItem('dark', val))"
+  x-bind:class="darkMode ? 'dark' : ''"
+  x-bind:data-theme="darkMode ? 'dark' : 'light'">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ t("platform.title") }}</title>
+	<link rel="stylesheet" href="/static/output.css" />
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.0"></script>
+</head>
+<body>
+    <div class="container mx-auto p-4">
+        <header class="cool-card my-8 flex flex-row items-center justify-between max-w-full">
+            <h1 class="text-2xl font-bold">Eventfully</h1>
+            <div class="flex flex-row items-center gap-6">
+                <!-- Account -->
+                <div class="flex flex-row items-center gap-3">
+                    {% if user %}
+                    <span class="mr-2">{{ user["name"] }}</span>
+                    <button
+                        onclick="window.location.href='/profile'"
+                        class="btn btn-primary"
+                    >
+                        {{ t("profile") }}
+                    </button>
+                    <form hx-post="/api/account/signout" hx-target="body">
+                        <button type="submit" class="btn btn-error">{{ t("logout") }}</button>
+                    </form>
+                    {% else %}
+                    <button
+                        class="btn btn-ghost btn-active"
+                        @click="loginModal.showModal()"
+                    >
+                        {{ t("login") }}
+                    </button>
+                    <button
+                        class="btn btn-ghost btn-active"
+                        @click="RegisterModal.showModal()"
+                    >
+                        {{ t("register") }}
+                    </button>
+                    {% endif %}
+                </div>
+                <!-- Theme Switch -->
+                <label class="swap swap-rotate">
+                    <input
+                        @click="darkMode = !darkMode"
+                        type="checkbox"
+                        x-bind:checked="!darkMode"
+                    />
+                    <div class="swap-on">{% include 'components/icons/sun.html' %}</div>
+                    <div class="swap-off">{% include 'components/icons/moon.html' %}</div>
+                </label>
+            </div>
+        </header>
+<body class="bg-base-200">
+    <div class="container mx-auto p-4">
+        <h1 class="text-3xl font-bold text-center mb-8">{{ t("event.create_heading") }}</h1>
+        <form class="bg-base-100 shadow-xl rounded-box p-8">
+            <div class="form-control">
+                <label class="label" for="website">
+                    <span class="label-text">{{ t("event.website_link") }}</span>
+                </label>
+                <input type="url" id="website" name="website" class="input input-bordered" required>
+            </div>
+
+            <div class="form-control">
+                <label class="label" for="start">
+                    <span class="label-text">{{ t("event.start_time") }}</span>
+                </label>
+                <input type="datetime-local" id="start" name="start" class="input input-bordered" required>
+            </div>
+
+            <div class="form-control">
+                <label class="label" for="end">
+                    <span class="label-text">{{ t("event.end_time") }}</span>
+                </label>
+                <input type="datetime-local" id="end" name="end" class="input input-bordered" required>
+            </div>
+
+            <div class="form-control">
+                <label class="label" for="title">
+                    <span class="label-text">{{ t("event.title") }}</span>
+                </label>
+                <input type="text" id="title" name="title" class="input input-bordered" required>
+            </div>
+
+            <div class="form-control">
+                <label class="label" for="image">
+                    <span class="label-text">{{ t("event.image_link") }}</span>
+                </label>
+                <input type="url" id="image" name="image" class="input input-bordered" required>
+            </div>
+
+            <div class="form-control">
+                <label class="label" for="city">
+                    <span class="label-text">{{ t("event.city") }}</span>
+                </label>
+                <input type="text" id="city" name="city" class="input input-bordered" required>
+            </div>
+
+            <div class="form-control">
+                <label class="label" for="address">
+                    <span class="label-text">{{ t("event.address") }}</span>
+                </label>
+                <input type="text" id="address" name="address" class="input input-bordered" required>
+            </div>
+
+            <div class="form-control">
+                <label class="label" for="description">
+                    <span class="label-text">{{ t("event.description") }}</span>
+                </label>
+                <textarea id="description" name="description" class="textarea textarea-bordered h-24" required></textarea>
+            </div>
+
+            <div class="form-control">
+                <label class="label" for="price">
+                    <span class="label-text">{{ t("event.price") }}</span>
+                </label>
+                <input type="number" id="price" name="price" min="0" step="0.01" class="input input-bordered" required>
+            </div>
+
+            <div class="form-control">
+                <label class="label" for="category">
+                    <span class="label-text">{{ t("event.category") }}</span>
+                </label>
+                <select id="category" name="category" class="select select-bordered" required>
+                    <option value="">{{ t("category.choose") }}</option>
+                    <option value="sport">{{ t("category.sport") }}</option>
+                    <option value="kultur">{{ t("category.culture") }}</option>
+                    <option value="bildung">{{ t("category.education") }}</option>
+                    <option value="politik">{{ t("category.politics") }}</option>
+                    <option value="sonstiges">{{ t("category.other") }}</option>
+                </select>
+            </div>
+
+            <div class="form-control mt-6">
+                <button type="submit" class="btn btn-primary">{{ t('event.create_button') }}</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
