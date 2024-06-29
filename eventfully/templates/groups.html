@@ -57,7 +57,7 @@
             <h3 class="card-title">{{ t("groups.sports_group.title") }}</h3>
             <p>{{ t("groups.sports_group.members") }}</p>
             <div class="card-actions justify-end">
-              <button class="btn btn-primary" @click="joinGroup('{{ t("groups.sports_group.title") }}')">{{ t("groups.join_button") }}</button>
+              <button class="btn btn-primary" @click="joinGroup('{{ t('groups.sports_group.title') }}')">{{ t("groups.join_button") }}</button>
             </div>
           </div>
         </div>
@@ -66,7 +66,7 @@
             <h3 class="card-title">{{ t("groups.book_club.title") }}</h3>
             <p>{{ t("groups.book_club.members") }}</p>
             <div class="card-actions justify-end">
-              <!-- <button class="btn btn-primary" @click="joinGroup('{{ t("groups.book_club.title") }}')">{{ t("groups.join_button") }}</button> -->
+               <button class="btn btn-primary" @click="joinGroup('{{ t('groups.book_club.title') }}')">{{ t("groups.join_button") }}</button>
             </div>
           </div>
         </div>
@@ -74,13 +74,13 @@
 
       <section id="MeineGruppen" class="tabcontent hidden">
         <h2 class="text-2xl font-bold mb-4">{{ t("my_groups.title") }}</h2>
-        <div class="card bg-base-100 shadow-xl mb-4 cursor-pointer" @click="showGroupEvents('{{ t("my_groups.photo_group.title") }}')">
+        <div class="card bg-base-100 shadow-xl mb-4 cursor-pointer" @click="showGroupEvents('{{ t('my_groups.photo_group.title') }}')">
           <div class="card-body">
               <h3 class="card-title">{{ t("my_groups.photo_group.title") }}</h3>
               <p>{{ t("my_groups.photo_group.member_since") }}</p>
           </div>
         </div>
-        <div class="card bg-base-100 shadow-xl mb-4 cursor-pointer" @click="showGroupEvents('{{ t("my_groups.hiking_group.title") }}')">
+        <div class="card bg-base-100 shadow-xl mb-4 cursor-pointer" @click="showGroupEvents('{{ t('my_groups.hiking_group.title') }}')">
           <div class="card-body">
             <h3 class="card-title">{{ t("my_groups.hiking_group.title") }}</h3>
             <p>{{ t("my_groups.hiking_group.member_since") }}</p>
