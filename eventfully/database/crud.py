@@ -58,8 +58,7 @@ def get_liked_event_ids_by_user_id(user_id: str) -> list[str]:
 def add_group(admin_id, g_id, g_name):
     models.Groups.create(group_id=g_id, group_name=g_name)
 
-    user = models.User.get(models.User.id == admin_id)
-    models.GroupMembers.create(user=user, group=g_id, invited=False, admin=True)
+    models.GroupMembers.create(user_id=admin_id, group=g_id, invited=False, admin=True)
 
     return g_id
 
@@ -69,66 +68,55 @@ def add_group(admin_id, g_id, g_name):
 def add_member_to_group(member_user_id: str, g_id: str, admin_user: bool):
     group = models.Groups.get(models.Groups.group_id == g_id)
 
-    user = models.User.get(models.User.id == member_user_id)
-    models.GroupMembers.create(user=user, group=group, invited=True, admin=admin_user)
+    models.GroupMembers.create(user_id=member_user_id, group=group, invited=True, admin=admin_user)
 
     return member_user_id
-
 
 @beartype
 @database.db.connection_context()
 def accept_invite(member_user_id: str, g_id: str) -> bool:
-    user = models.User.get(models.User.id == member_user_id)
-
     query = models.GroupMembers.update({models.GroupMembers.invited: False}).where(
-        (models.GroupMembers.user == user) &
+        (models.GroupMembers.user_id == member_user_id) & 
         (models.GroupMembers.group == g_id)
     )
 
     query.execute()
     return True
 
-
 @beartype
 @database.db.connection_context()
-def is_user_invited(member_user_id: str, g_id: str) -> bool:
-    user = models.User.get(models.User.id == member_user_id)
-
+def is_user_invited(member_user_id: str, g_id) -> bool:
     member = models.GroupMembers.get(
-        (models.GroupMembers.user == user) &
+        (models.GroupMembers.user_id == member_user_id) & 
         (models.GroupMembers.group == g_id)
     )
     return member.invited
 
-
 @beartype
 @database.db.connection_context()
 def remove_user_from_group(member_user_id: str, g_id: str) -> bool:
-    user = models.User.get(models.User.id == member_user_id)
-
     query = models.GroupMembers.delete().where(
-        (models.GroupMembers.user == user) &
+        (models.GroupMembers.user_id == member_user_id) & 
         (models.GroupMembers.group == g_id)
     )
 
     query.execute()
     return True
+
 
 
 @database.db.connection_context()
 def member_is_admin(member_id, group_id):
     group = models.Groups.get(models.Groups.group_id == group_id)
-    user = models.User.get(models.User.id == member_id)
-
-    is_admin = (
+    user = (
         models.GroupMembers.select()
         .where(
-            models.GroupMembers.user == user, models.GroupMembers.admin == 1, models.GroupMembers.group == group
+            models.GroupMembers.user_id == member_id, models.GroupMembers.admin == 1, models.GroupMembers.group == group
         )
         .exists()
     )
 
-    return is_admin
+    return user
 
 
 @database.db.connection_context()
@@ -146,10 +134,8 @@ def get_members_of_group(group_id):
 
 @database.db.connection_context()
 def get_groups_of_member(user_id):
-    user = models.User.get(models.User.id == user_id)
-
     group_ids = {}
-    groups = models.GroupMembers.select().where((models.GroupMembers.user == user))
+    groups = models.GroupMembers.select().where((models.GroupMembers.user_id == user_id))
 
     for group in groups:
         group_ids[group.group] = group.group.group_name

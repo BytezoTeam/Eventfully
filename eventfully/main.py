@@ -18,7 +18,6 @@ from sqids import Sqids
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Length
 from pyi18n import PyI18n
-from peewee import DoesNotExist
 
 from eventfully.database import crud, schemas
 from eventfully.logger import log
@@ -81,16 +80,6 @@ def jwt_check(deny_unauthenticated=False):
                     response = make_response()
                     response.delete_cookie("jwt_token")
                     return response, HTTPStatus.UNAUTHORIZED
-                else:
-                    return func(None, *args, **kwargs)
-
-
-            # Check if user exists
-            try:
-                crud.get_user(content["user_id"])
-            except DoesNotExist:
-                if deny_unauthenticated:
-                    return "", HTTPStatus.UNAUTHORIZED
                 else:
                     return func(None, *args, **kwargs)
 
@@ -381,18 +370,19 @@ def get_events(user_id: str):
 
     user = crud.get_user_data(user_id)
     liked_events = crud.get_liked_event_ids_by_user_id(user_id)
-    groups = {}
+    user_groups = {}
     share_events = {}
-    if crud.is_user_invited(user_id):
-        groups = crud.get_groups_of_member(user_id)
-        for group in groups:
+    groups = crud.get_groups_of_member(user_id)
+    for group in groups:
+        if crud.is_user_invited(user_id, group):
             share_events[groups[group]] = crud.get_shared_events(group)
+            user_groups[group] = groups[group]
 
     return render_template(
         "components/events.html",
         events=result,
         liked_events=liked_events,
-        groups=groups,
+        groups=user_groups,
         shared_events=share_events,
         user=user,
         t=translation_provider(),
