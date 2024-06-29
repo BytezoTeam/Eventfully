@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ t("platform.title") }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+        header {
+            background: #50b3a2;
+            color: white;
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: #e8491d 3px solid;
+        }
+        header h1 {
+            margin: 0;
+            text-align: center;
+        }
+        .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 17px;
+        }
+        .tab button:hover {
+            background-color: #ddd;
+        }
+        .tab button.active {
+            background-color: #50b3a2;
+            color: white;
+        }
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+            animation: fadeEffect 1s;
+        }
+        @keyframes fadeEffect {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+        .event, .group {
+            background: #e6e6e6;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .group {
+            cursor: pointer;
+        }
+        button {
+            background: #50b3a2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .back-button {
+            background: #333;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>{{ t("platform.header") }}</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="main-content">
+            <div class="tab">
+                <button class="tablinks" onclick="openTab(event, 'Events')" id="defaultOpen">{{ t("tab.events") }}</button>
+                <button class="tablinks" onclick="openTab(event, 'Gruppen')">{{ t("tab.groups_overview") }}</button>
+                <button class="tablinks" onclick="openTab(event, 'MeineGruppen')">{{ t("tab.my_groups") }}</button>
+            </div>
+
+            <div id="Events" class="tabcontent">
+                <h2>{{ t("events.title") }}</h2>
+                <div class="event">
+                    <h3>{{ t("events.summer_party.title") }}</h3>
+                    <p>{{ t("events.summer_party.date") }}</p>
+                    <p>{{ t("events.summer_party.location") }}</p>
+                </div>
+                <div class="event">
+                    <h3>{{ t("events.group_trip.title") }}</h3>
+                    <p>{{ t("events.group_trip.date") }}</p>
+                    <p>{{ t("events.group_trip.location") }}</p>
+                </div>
+            </div>
+
+            <div id="Gruppen" class="tabcontent">
+                <h2>{{ t("groups.overview_title") }}</h2>
+                <div class="group">
+                    <h3>{{ t("groups.sports_group.title") }}</h3>
+                    <p>{{ t("groups.sports_group.members") }}</p>
+                    <button onclick="joinGroup('{{ t("groups.sports_group.title") }}')">{{ t("groups.join_button") }}</button>
+                </div>
+                <div class="group">
+                    <h3>{{ t("groups.book_club.title") }}</h3>
+                    <p>{{ t("groups.book_club.members") }}</p>
+                    <button onclick="joinGroup('{{ t("groups.book_club.title") }}')">{{ t("groups.join_button") }}</button>
+                </div>
+            </div>
+
+            <div id="MeineGruppen" class="tabcontent">
+                <h2>{{ t("my_groups.title") }}</h2>
+                <div class="group" onclick="showGroupEvents('{{ t("my_groups.photo_group.title") }}')">
+                    <h3>{{ t("my_groups.photo_group.title") }}</h3>
+                    <p>{{ t("my_groups.photo_group.member_since") }}</p>
+                </div>
+                <div class="group" onclick="showGroupEvents('{{ t("my_groups.hiking_group.title") }}')">
+                    <h3>{{ t("my_groups.hiking_group.title") }}</h3>
+                    <p>{{ t("my_groups.hiking_group.member_since") }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="group-events" style="display: none;">
+            <a href="#" class="back-button" onclick="showMainContent()">{{ t("general.back_to_overview") }}</a>
+            <h2 id="group-name"></h2>
+            <div id="event-list"></div>
+        </div>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        document.getElementById("defaultOpen").click();
+
+        function joinGroup(groupName) {
+            alert('{{ t("alerts.join_group") }}'.replace('{groupName}', groupName));
+        }
+
+        function showGroupEvents(groupName) {
+            document.getElementById('main-content').style.display = 'none';
+            document.getElementById('group-events').style.display = 'block';
+            document.getElementById('group-name').innerText = groupName + ' {{ t("general.events") }}';
+            
+            var eventList = document.getElementById('event-list');
+            eventList.innerHTML = '';
+            
+            var events;
+            if (groupName === '{{ t("my_groups.photo_group.title") }}') {
+                events = [
+                    {name: '{{ t("my_groups.photo_group.event1.title") }}', date: '{{ t("my_groups.photo_group.event1.date") }}'},
+                    {name: '{{ t("my_groups.photo_group.event2.title") }}', date: '{{ t("my_groups.photo_group.event2.date") }}'}
+                ];
+            } else if (groupName === '{{ t("my_groups.hiking_group.title") }}') {
+                events = [
+                    {name: '{{ t("my_groups.hiking_group.event1.title") }}', date: '{{ t("my_groups.hiking_group.event1.date") }}'},
+                    {name: '{{ t("my_groups.hiking_group.event2.title") }}', date: '{{ t("my_groups.hiking_group.event2.date") }}'}
+                ];
+            }
+            
+            events.forEach(function(event) {
+                var eventDiv = document.createElement('div');
+                eventDiv.className = 'event';
+                eventDiv.innerHTML = '<h3>' + event.name + '</h3><p>{{ t("general.date") }}: ' + event.date + '</p>';
+                eventList.appendChild(eventDiv);
+            });
+        }
+
+        function showMainContent() {
+            document.getElementById('main-content').style.display = 'block';
+            document.getElementById('group-events').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

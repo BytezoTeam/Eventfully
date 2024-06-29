@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ t("event.create_title") }}</title>
+    <style>
+         body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="url"],
+        input[type="datetime-local"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        input[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ t("event.create_heading") }}</h1>
+    <form>
+        <label for="website">{{ t("event.website_link") }}</label>
+        <input type="url" id="website" name="website" required>
+
+        <label for="start">{{ t("event.start_time") }}</label>
+        <input type="datetime-local" id="start" name="start" required>
+
+        <label for="end">{{ t("event.end_time") }}</label>
+        <input type="datetime-local" id="end" name="end" required>
+
+        <label for="title">{{ t("event.title") }}</label>
+        <input type="text" id="title" name="title" required>
+
+        <label for="image">{{ t("event.image_link") }}</label>
+        <input type="url" id="image" name="image" required>
+
+        <label for="city">{{ t("event.city") }}</label>
+        <input type="text" id="city" name="city" required>
+
+        <label for="address">{{ t("event.address") }}</label>
+        <input type="text" id="address" name="address" required>
+
+        <label for="description">{{ t("event.description") }}</label>
+        <textarea id="description" name="description" rows="4" required></textarea>
+
+        <label for="price">{{ t("event.price") }}</label>
+        <input type="number" id="price" name="price" min="0" step="0.01" required>
+
+        <label for="category">{{ t("event.category") }}</label>
+        <select id="category" name="category" required>
+            <option value="">{{ t("category.choose") }}</option>
+            <option value="sport">{{ t("category.sport") }}</option>
+            <option value="kultur">{{ t("category.culture") }}</option>
+            <option value="bildung">{{ t("category.education") }}</option>
+            <option value="politik">{{ t("category.politics") }}</option>
+            <option value="sonstiges">{{ t("category.other") }}</option>
+        </select>
+
+        <input type="submit" value="{{ t('event.create_button') }}">
+    </form>
+</body>
+</html>
