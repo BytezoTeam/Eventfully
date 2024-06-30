@@ -40,7 +40,7 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = uuid4().hex
 app.config["WTF_CSRF_ENABLED"] = False
 
-LANGUAGES = ("en", "de")
+LANGUAGES = ("en", "de", "cze", "fr", "nl", "ru", "tr")
 i18n = PyI18n(LANGUAGES)
 
 # Background tasks mainly for searching for events
