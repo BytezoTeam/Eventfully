@@ -21,9 +21,6 @@
       <a class="tab" @click="openTab(event, 'Events')" id="defaultOpen">
         {{ t("tab.events") }}
       </a>
-      <a class="tab" @click="openTab(event, 'Gruppen')">
-        {{ t("tab.groups_overview") }}
-      </a>
       <a class="tab" @click="openTab(event, 'MeineGruppen')">
         {{ t("tab.my_groups") }}
       </a>
@@ -44,30 +41,6 @@
             <h3 class="card-title">{{ t("events.group_trip.title") }}</h3>
             <p>{{ t("events.group_trip.date") }}</p>
             <p>{{ t("events.group_trip.location") }}</p>
-          </div>
-        </div>
-      </section>
-
-      <section id="Gruppen" class="tabcontent hidden">
-        <h2 class="text-2xl font-bold mb-4">
-          {{ t("groups.overview_title") }}
-        </h2>
-        <div class="card bg-base-100 shadow-xl mb-4">
-          <div class="card-body">
-            <h3 class="card-title">{{ t("groups.sports_group.title") }}</h3>
-            <p>{{ t("groups.sports_group.members") }}</p>
-            <div class="card-actions justify-end">
-              <button class="btn btn-primary" @click="joinGroup('{{ t('groups.sports_group.title') }}')">{{ t("groups.join_button") }}</button>
-            </div>
-          </div>
-        </div>
-        <div class="card bg-base-100 shadow-xl mb-4">
-          <div class="card-body">
-            <h3 class="card-title">{{ t("groups.book_club.title") }}</h3>
-            <p>{{ t("groups.book_club.members") }}</p>
-            <div class="card-actions justify-end">
-               <button class="btn btn-primary" @click="joinGroup('{{ t('groups.book_club.title') }}')">{{ t("groups.join_button") }}</button>
-            </div>
           </div>
         </div>
       </section>
