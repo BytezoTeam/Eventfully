@@ -43,3 +43,5 @@ sv:
     groups: "Grupper"
     
   price: "Pris"
+  time: "tid"
+  to: "fram tills"

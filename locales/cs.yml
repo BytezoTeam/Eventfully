@@ -42,3 +42,5 @@ cs:
     home: "Domů"
     groups: "Skupiny"
   price: "Cena"
+  time: "čas"
+  to: "až do"

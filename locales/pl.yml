@@ -43,3 +43,5 @@ pl:
     groups: "Grupy"
     
   price: "Cena"
+  time: "Czas"
+  to: "Dopóki"
