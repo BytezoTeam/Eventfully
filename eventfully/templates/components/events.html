@@ -10,34 +10,69 @@
   <div class="cool-card w-full static" style="padding: 0 !important">
     {% if user %}
     <div class="absolute m-4">
-      {% if item.id in liked_events %}
-        {% include 'components/liked-true-button.html' %}
-      {% else %}
-      {% include
-        'components/liked-false-button.html' %}
-      {% endif %}
+      {% if item.id in liked_events %} {% include
+      'components/liked-true-button.html' %} {% else %} {% include
+      'components/liked-false-button.html' %} {% endif %}
     </div>
     {% endif %}
 
     <figure class="pt-8 px-8 w-full h-72 rounded-xl">
-      <img src="{{ item.image_link }}" loading="lazy" class="object-cover object-center size-full" alt="Event Cover" style="border-radius: inherit;" />
+      <img
+        src="{{ item.image_link }}"
+        loading="lazy"
+        class="object-cover object-center size-full"
+        alt="Event Cover"
+        style="border-radius: inherit"
+      />
     </figure>
 
-    <div class="card-body">
-      <h2 class="card-title flex-gap-1">
-        <a href="{{ item.web_link }}" target="_blank" rel="noopener"
-          >{{ item.title }}</a
-        >
-        {% include 'components/icons/external-link.html' %}
-      </h2>
+    <div class="card-body gap-4">
+      <div>
+        <!-- Category -->
+        <span class="badge badge-neutral capitalize">
+          {{ t("category." + item.category) }}
+        </span>
 
-      <p>When?: {{ item.start_time }}-{{ item.end_time }}</p>
-      <p>Where?: {{ item.address }}</p>
-      <p>Category?: {{ item.category }}</p>
+        <!-- Title -->
+        <h2 class="card-title flex-gap-1">
+          <a href="{{ item.web_link }}" target="_blank" rel="noopener">
+            {{ item.title }}
+          </a>
+          {% include 'components/icons/external-link.html' %}
+        </h2>
+      </div>
+
+      <p class="line-clamp-4 prose">{{ item.description }}</p>
+
+      <div class="flex flex-col gap-2">
+        <!-- Location -->
+        {% if item.address %}
+        <div class="flex flex-col">
+          <div class="flex gap-2">
+            {% include 'components/icons/map-pin.html' %}
+            <span class="font-bold">{{ t("location") }}</span>
+          </div>
+          <p class="prose">{{ item.address }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Price -->
+        {% if item.price %}
+        <div class="flex flex-col">
+          <div class="flex gap-2">
+            {% include 'components/icons/dollar-sign.html' %}
+            <span class="font-bold">{{ t("price") }}</span>
+          </div>
+          <p class="prose">{{ item.price }}</p>
+        </div>
+        {% endif %}
+      </div>
 
       {% if user %}
       <div class="dropdown">
-        <button tabindex="0" class="btn btn-ghost btn-active">Share With Groups</button>
+        <button tabindex="0" class="btn btn-ghost btn-active">
+          Share With Groups
+        </button>
 
         <ul
           tabindex="0"
