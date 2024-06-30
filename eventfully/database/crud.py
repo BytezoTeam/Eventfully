@@ -3,7 +3,6 @@ from typing import Iterable
 
 from beartype import beartype
 from peewee import DoesNotExist
-from playhouse.shortcuts import model_to_dict
 from cachetools import cached, TTLCache
 
 from eventfully.database import models, schemas, database

@@ -19,9 +19,8 @@ from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Length
 from pyi18n import PyI18n
 from peewee import DoesNotExist
-from beartype import beartype
 
-from eventfully.database import crud, schemas, models
+from eventfully.database import crud, schemas
 from eventfully.logger import log
 from eventfully.search import post_processing, search, crawl
 from eventfully.types import SearchContent
@@ -161,7 +160,6 @@ def index(user_id: str):
 @jwt_check(deny_unauthenticated=True)
 def groups(user_id: str):
     groups = crud.get_groups_of_member(user_id)
-    user = crud.get_user(user_id)
 
     events_by_group_ids = {}
     for group in groups:
