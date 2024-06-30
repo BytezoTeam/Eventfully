@@ -46,10 +46,10 @@ def unlike_event(user_id: str, event_id: str) -> None:
 @beartype
 @database.db.connection_context()
 def add_group(admin_id, group_id, group_name):
-    models.Groups.create(group_id=group_id, group_name=group_name)
+    group = models.Groups.create(id=group_id, name=group_name)
 
     user = models.User.get(models.User.id == admin_id)
-    models.GroupMembers.create(user=user, group=group_id, invited=False, admin=True)
+    models.GroupMembers.create(user=user, group=group, invited=False, admin=True)
 
     return group_id
 

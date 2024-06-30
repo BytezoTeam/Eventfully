@@ -227,13 +227,16 @@ def create_event():
     return "", HTTPStatus.OK
 
 
-@app.route("/api/group/create")
+@app.route("/api/group/create", methods=["POST"])
 @jwt_check(deny_unauthenticated=True)
 def create_group(user_id: str):
-    group_name = request.args.get("group_name")
+    name = request.form.get("name")
+
+    if not name:
+        return "", HTTPStatus.BAD_REQUEST
 
     cool_id = Sqids().encode([randint(0, int(1e15))])
-    crud.add_group(user_id, cool_id, group_name)
+    crud.add_group(user_id, cool_id, name)
 
     return "", HTTPStatus.OK
 
@@ -292,7 +295,7 @@ def deny_user_invite(user_id: str):
         crud.remove_user_from_group(member_user_id, group_id)
 
         return "", HTTPStatus.OK
-    
+
     return "", HTTPStatus.METHOD_NOT_ALLOWED
 
 
