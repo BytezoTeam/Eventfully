@@ -20,7 +20,6 @@ en:
     politics: "Politics"
     sport: "Sport"
     education: "Education"
-
   date:
       date: "Date"
       all: "All"
@@ -47,3 +46,5 @@ en:
     groups: "Groups"
   
   price: "Price"
+  time: "time"
+  to: "until"

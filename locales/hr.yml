@@ -43,3 +43,5 @@ hr:
     groups: "Grupe"
     
   price: "Cijena"
+  time: "vrijeme"
+  to: "do"

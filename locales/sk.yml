@@ -43,3 +43,5 @@ sk:
     groups: "Skupiny"
     
   price: "Cena"
+  time: "čas"
+  to: "kým"
