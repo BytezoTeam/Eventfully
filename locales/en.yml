@@ -10,6 +10,9 @@ en:
   email: "Email"
   search_placeholder: "Search Events"
   city: "City"
+  share_btn: "Share with group"
+  group: "Group"
+  
   category:
     all: "All"
     culture: "Culture"
@@ -30,4 +33,7 @@ en:
   events:
     title: "Group Events"
 
+  burger:
+    home: "Home"
+    groups: "Groups"
   

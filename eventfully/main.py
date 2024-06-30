@@ -384,7 +384,7 @@ def get_events(user_id: str):
     result = search.main(search_content)
 
     if not user_id:
-        return render_template("components/events.html", events=result, cities=crud.get_possible_cities())
+        return render_template("components/events.html", events=result, cities=crud.get_possible_cities(), t=translation_provider())
 
     user = crud.get_user(user_id)
     liked_event_ids = [like.event_id for like in user.liked_events]
@@ -405,7 +405,7 @@ def get_events(user_id: str):
         groups=groups,
         shared_event_ids=shared_event_ids,
         user=user,
-        t=translation_provider(),
+        t=translation_provider()
     )
 
 

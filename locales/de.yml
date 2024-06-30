@@ -4,14 +4,35 @@ de:
   login: "Einloggen"
   register: "Registrieren"
   logout: "Abmelden"
+  location: "Veanstaltungsort"
   password: "Passwort"
   username: "Benutzername"
   email: "E-Mail"
   search_placeholder: "Events Durchsuchen"
   city: "Stadt"
+  share_btn: "Mit Gruppe teilen"
+  group: "Gruppe"
   category:
     all: "Alle"
     culture: "Kultur"
     politics: "Politik"
     sport: "Sport"
     education: "Bildung"
+
+  groups:
+    create_group: "Gruppe erstellen"
+    group_name: "Gruppen-Name"
+
+  tab:
+    my_groups: "Meine Gruppen"
+    events: "Veranstaltungen"
+
+  my_groups:
+    title: "Meine Gruppen"
+
+  events:
+    title: "Gruppen-Veranstaltungen"
+
+  burger:
+    home: "Hauptseite"
+    groups: "Gruppen"
