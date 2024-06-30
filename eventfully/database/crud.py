@@ -106,7 +106,7 @@ def get_groups_of_member(user_id: str) -> list[models.Groups]:
 
 
 @database.db.connection_context()
-def get_shared_events(group_id):
+def get_shared_events(group_id: str) -> dict[str, str]:
     group = models.Groups.get(models.Groups.id == group_id)
 
     shared_events = {}
