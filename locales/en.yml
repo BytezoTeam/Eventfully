@@ -5,6 +5,7 @@ en:
   register: "Register"
   logout: "Logout"
   password: "Password"
+  location: "Event Location"
   username: "Username"
   email: "Email"
   search_placeholder: "Search Events"

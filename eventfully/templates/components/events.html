@@ -29,16 +29,20 @@
     <div class="card-body gap-4">
       <div>
         <!-- Category -->
+         {% if item.category %}
         <span class="badge badge-neutral capitalize">
           {{ t("category." + item.category) }}
         </span>
+        {% endif %}
 
         <!-- Title -->
         <h2 class="card-title flex-gap-1">
           <a href="{{ item.web_link }}" target="_blank" rel="noopener">
-            {{ item.title }}
+            {{ item.title }} 
           </a>
-          {% include 'components/icons/external-link.html' %}
+          <a href="{{ item.web_link }}" target="_blank" rel="noopener">
+            {% include 'components/icons/external-link.html' %}
+          </a>
         </h2>
       </div>
 
@@ -48,11 +52,13 @@
         <!-- Location -->
         {% if item.address %}
         <div class="flex flex-col">
+          <a href="https://www.google.de/maps/place/{{ item.address }}" target="_blank" rel="noopener noreferrer">
           <div class="flex gap-2">
             {% include 'components/icons/map-pin.html' %}
             <span class="font-bold">{{ t("location") }}</span>
           </div>
           <p class="prose">{{ item.address }}</p>
+        </a>
         </div>
         {% endif %}
 
