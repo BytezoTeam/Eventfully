@@ -162,8 +162,11 @@ def index(user_id: str):
 
 
 @app.route("/groups", methods=["GET"])
-def groups():
-    return render_template("groups.html", t=translation_provider())
+@jwt_check(deny_unauthenticated=True)
+def groups(user_id: str):
+    groups = crud.get_groups_of_member(user_id)
+
+    return render_template("groups.html", groups=groups, t=translation_provider())
 
 
 @app.route("/create-event", methods=["GET"])
@@ -240,7 +243,7 @@ def create_group(user_id: str):
 
     groups = crud.get_groups_of_member(user_id)
 
-    return render_template("components/groups.html", t=translation_provider()), HTTPStatus.OK
+    return render_template("components/groups.html", groups=groups, t=translation_provider()), HTTPStatus.OK
 
 
 @app.route("/api/group/share")
