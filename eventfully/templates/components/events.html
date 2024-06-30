@@ -1,8 +1,8 @@
 <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
   {% if not events %}
   <div class="center">
-    <p>t("errorMsg")</p>
-    <p>t("pleaseWait")</p>
+  ><p>{{ t("errorMsg") }}</p>
+    <p>{{ t("pleaseWait") }}</p>
   </div>
   {% endif %}
   {% for item in events %}
@@ -52,7 +52,7 @@
         <!-- Location -->
         {% if item.address %}
         <div class="flex flex-col">
-          <a href="https://www.google.de/maps/place/{{ item.address }}" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.google.de/maps/search/{{ item.address }}" target="_blank" rel="noopener noreferrer">
           <div class="flex gap-2">
             {% include 'components/icons/map-pin.html' %}
             <span class="font-bold">{{ t("location") }}</span>
