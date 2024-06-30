@@ -8,11 +8,12 @@ de:
   password: "Passwort"
   username: "Benutzername"
   email: "E-Mail"
-  search_placeholder: "Events Durchsuchen"
+  search_placeholder: "Stichwörter Suchen"
   city: "Stadt"
   share_btn: "Mit Gruppe teilen"
   group: "Gruppe"
   category:
+    name: "Kategorie"
     all: "Alle"
     culture: "Kultur"
     politics: "Politik"

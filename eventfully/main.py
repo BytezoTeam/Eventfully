@@ -343,9 +343,27 @@ def get_events(user_id: str):
     therm = request.args.get("therm", "")
     city = request.args.get("city", "").strip().lower()
     category = request.args.get("category", "")
+    date = request.args.get("date", "all")
+
+    match date:
+        case "today":
+            min_time = datetime.today()
+            max_time = datetime.today()
+        case "tomorrow":
+            min_time = datetime.today() + timedelta(days=1)
+            max_time = datetime.today() + timedelta(days=1)
+        case "week":
+            min_time = datetime.today()
+            max_time = datetime.today() + timedelta(days=7)
+        case "month":
+            min_time = datetime.today()
+            max_time = datetime.today() + timedelta(days=30)
+        case "all":
+            min_time = datetime.today()
+            max_time = datetime.today() + timedelta(days=365)
 
     search_content = SearchContent(
-        query=therm, min_time=datetime.today(), max_time=datetime.today(), city=city, category=category
+        query=therm, min_time=min_time, max_time=max_time, city=city, category=category
     )
     result = search.main(search_content)
 

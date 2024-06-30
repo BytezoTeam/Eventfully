@@ -8,12 +8,13 @@ en:
   location: "Event Location"
   username: "Username"
   email: "Email"
-  search_placeholder: "Search Events"
+  search_placeholder: "Search Keywords"
   city: "City"
   share_btn: "Share with group"
   group: "Group"
   
   category:
+    name: "Category"
     all: "All"
     culture: "Culture"
     politics: "Politics"
