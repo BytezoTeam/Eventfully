@@ -20,7 +20,8 @@ en:
     politics: "Politics"
     sport: "Sport"
     education: "Education"
-  Date:
+
+  date:
       date: "Date"
       all: "All"
       today: "Today"
