@@ -35,7 +35,7 @@ class GroupMembers(_DBBaseModel):
 class Likes(_DBBaseModel):
     user = ForeignKeyField(User, backref="liked_events")
     event_id = TextField()
-    group = ForeignKeyField(Groups, null=True)
+    group = ForeignKeyField(Groups, null=True, backref="liked_events")
 
     class Meta:
         primary_key = CompositeKey("user", "event_id", "group")
