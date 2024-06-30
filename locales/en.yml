@@ -46,3 +46,5 @@ en:
     groups: "Groups"
   
   price: "Price"
+  time: "time"
+  to: "until"

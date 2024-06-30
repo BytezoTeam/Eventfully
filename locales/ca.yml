@@ -43,3 +43,6 @@ ca:
     groups: "Grups"
     
   price: "Preu"
+  time: "temps"
+  to: "fins que"
+  

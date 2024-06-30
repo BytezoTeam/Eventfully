@@ -43,3 +43,5 @@ es:
     groups: "Grupos"
     
   price: "Precio"
+  time: "Tiempo"
+  to: "hasta"
