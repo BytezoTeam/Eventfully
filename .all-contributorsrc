@@ -1,0 +1,119 @@
+{
+  "projectName": "Eventfully",
+  "projectOwner": "BytezoTeam",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitConvention": "none",
+  "contributors": [
+    {
+      "login": "LuisSchuimer",
+      "name": "Luis Schuimer",
+      "avatar_url": "https://avatars.githubusercontent.com/u/85784931?v=4",
+      "profile": "https://github.com/LuisSchuimer",
+      "contributions": [
+        "bug",
+        "code",
+        "doc",
+        "ideas",
+        "infra",
+        "projectManagement",
+        "promotion"
+      ]
+    },
+    {
+      "login": "2mal3",
+      "name": "2mal3",
+      "avatar_url": "https://avatars.githubusercontent.com/u/56305732?v=4",
+      "profile": "https://github.com/2mal3",
+      "contributions": [
+        "bug",
+        "code",
+        "data",
+        "design",
+        "doc",
+        "ideas",
+        "infra",
+        "projectManagement",
+        "tool",
+        "translation",
+        "platform"
+      ]
+    },
+    {
+      "login": "BlitzBenedikt",
+      "name": "BlitzBenedikt",
+      "avatar_url": "https://avatars.githubusercontent.com/u/117511666?v=4",
+      "profile": "https://github.com/BlitzBenedikt",
+      "contributions": [
+        "bug",
+        "design",
+        "ideas",
+        "infra",
+        "projectManagement",
+        "promotion"
+      ]
+    },
+    {
+      "login": "ainYona",
+      "name": "ainYona",
+      "avatar_url": "https://avatars.githubusercontent.com/u/146672622?v=4",
+      "profile": "https://github.com/ainYona",
+      "contributions": [
+        "fundingFinding",
+        "ideas",
+        "promotion",
+        "data"
+      ]
+    },
+    {
+      "login": "aehtorod",
+      "name": "Dorothea",
+      "avatar_url": "https://avatars.githubusercontent.com/u/117511248?v=4",
+      "profile": "https://github.com/aehtorod",
+      "contributions": [
+        "code",
+        "ideas",
+        "projectManagement",
+        "data"
+      ]
+    },
+    {
+      "login": "tulinkletti",
+      "name": "tulinkletti",
+      "avatar_url": "https://avatars.githubusercontent.com/u/148628918?v=4",
+      "profile": "https://github.com/tulinkletti",
+      "contributions": [
+        "design",
+        "ideas"
+      ]
+    },
+    {
+      "login": "kaindlnetwork",
+      "name": "Kaindl Network",
+      "avatar_url": "https://avatars.githubusercontent.com/u/82705244?v=4",
+      "profile": "https://github.com/kaindlnetwork",
+      "contributions": [
+        "doc",
+        "platform"
+      ]
+    },
+    {
+      "login": "unibara",
+      "name": "anastasios",
+      "avatar_url": "https://avatars.githubusercontent.com/u/100425671?v=4",
+      "profile": "https://github.com/unibara",
+      "contributions": [
+        "code",
+        "ideas",
+        "platform"
+      ]
+    }
+  ],
+  "contributorsPerLine": 5,
+  "linkToUsage": false
+}

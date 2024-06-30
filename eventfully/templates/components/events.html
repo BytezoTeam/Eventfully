@@ -1,6 +1,12 @@
-<section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-  {% for item in events %}
+{% if not events %}
+<div class="flex justify-center align-middle h-full">
+  <h2>{{ t("please_wait") }}</h2>
+</div>
+{% endif %}
 
+<section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+  <!-- Event list -->
+  {% for item in events %}
   <div class="cool-card w-full static" style="padding: 0 !important">
     {% if user %}
     <div class="absolute m-4">
@@ -10,38 +16,103 @@
     </div>
     {% endif %}
 
-    <figure class="pt-8 px-8">
-      <img src="{{ item.image_link }}" loading="lazy" class="rounded-xl" alt="Event Cover" />
+    <figure class="pt-8 px-8 w-full h-72 rounded-xl">
+      <img
+        src="{{ item.image_link }}"
+        loading="lazy"
+        class="object-cover object-center size-full"
+        alt="Event Cover"
+        style="border-radius: inherit"
+      />
     </figure>
-    <div class="card-body">
-      <h2 class="card-title flex-gap-1">
-        <a href="{{ item.web_link }}" target="_blank" rel="noopener"
-          >{{ item.title }}</a
-        >
-        {% include 'components/icons/external-link.html' %}
-      </h2>
 
-      <p>When?: {{ item.start_time }}-{{ item.end_time }}</p>
-      <p>Where?: {{ item.address }}</p>
-      <p>Category?: {{ item.category }}</p>
+    <div class="card-body gap-4">
+      <div>
+        <!-- Category -->
+        {% if item.category %}
+        <span class="badge badge-neutral capitalize">
+          {{ t("category." + item.category) }}
+        </span>
+        {% endif %}
+
+        <!-- Title -->
+        <a
+          class="card-title flex-gap-1"
+          href="{{ item.web_link }}"
+          target="_blank"
+          rel="noopener"
+        >
+          <h2 class="line-clamp-3">{{ item.title }}</h2>
+          <div class="flex-1">
+            {% include 'components/icons/external-link.html' %}
+          </div>
+        </a>
+      </div>
+
+      <div class="flex flex-col gap-4">
+        <p class="line-clamp-4 prose">{{ item.description }}</p>
+
+        <!-- Time -->
+        <div class="flex flex-col">
+          <div class="flex gap-2">
+            {% include 'components/icons/calendar.html' %}
+            <span class="font-bold">{{ t("time") }}</span>
+          </div>
+          <p class="prose">
+            {{ item.start_time.strftime("%d.%m.%Y") }} |
+            {{ item.start_time.strftime("%H:%M") }}
+            {{ t("to") }}
+            {{ item.end_time.strftime("%H:%M") }}
+          </p>
+        </div>
+
+        <!-- Location -->
+        {% if item.address %}
+        <div class="flex flex-col">
+          <a
+            href="https://www.google.de/maps/search/{{ item.address }}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div class="flex gap-2">
+              {% include 'components/icons/map-pin.html' %}
+              <span class="font-bold">{{ t("location") }}</span>
+            </div>
+            <p class="prose">{{ item.address }}</p>
+          </a>
+        </div>
+        {% endif %}
+
+        <!-- Price -->
+        {% if item.price %}
+        <div class="flex flex-col">
+          <div class="flex gap-2">
+            {% include 'components/icons/dollar-sign.html' %}
+            <span class="font-bold">{{ t("price") }}</span>
+          </div>
+          <p class="prose">{{ item.price }}</p>
+        </div>
+        {% endif %}
+      </div>
 
       {% if user %}
       <div class="dropdown">
-        <button tabindex="0" class="btn btn-ghost btn-active">Share With Groups</button>
+        <button tabindex="0" class="btn btn-ghost btn-active">
+          {{ t("share_btn") }}
+        </button>
 
         <ul
           tabindex="0"
           class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
         >
-          {% for id, name in groups.items() %} {% if not item.id in
-          shared_events[name] %}
+          {% for group in groups %} {% if not group.id in shared_event_ids %}
           <li>
             <a
               class="btn m-1"
-              hx-get="/api/group/share?event_id={{item.id}}&group_id={{id}}"
+              hx-get="/api/group/share?event_id={{item.id}}&group_id={{group.id}}"
               hx-swap="outerHTML"
             >
-              '{{ name }}' group
+              '{{ group.name }}' {{ t("group") }}
             </a>
           </li>
 

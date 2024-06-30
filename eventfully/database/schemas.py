@@ -6,6 +6,12 @@ from eventfully.utils import get_hash_string
 
 
 class Event(BaseModel):
+    """
+    Represents an event in the no sql meilisearch database.
+    The web_link, start_time and end_time attributes are mandatory because we need something for a primary key (the hash) and
+    these attributes are reasonably unique and also provided by most sources.
+    """
+
     web_link: str
     start_time: datetime
     end_time: datetime
@@ -34,4 +40,7 @@ class Event(BaseModel):
 
     @field_serializer("start_time", "end_time")
     def serialize_start(self, time: datetime, _info):
+        """
+        Store all time attributes as numbers in the database because it can't store pythons datetime objects.
+        """
         return int(time.timestamp())

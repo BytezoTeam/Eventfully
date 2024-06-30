@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html
+  lang="de"
+  data-theme="light"
+  x-data="{ darkMode: localStorage.getItem('dark') === 'true' }"
+  x-init="$watch('darkMode', val => localStorage.setItem('dark', val))"
+  x-bind:class="darkMode ? 'dark' : ''"
+  x-bind:data-theme="darkMode ? 'dark' : 'light'"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ t("platform.title") }}</title>
+    {% include "components/head_links.html" %}
+  </head>
+
+  <body class="container mx-auto p-4">
+    {% include "components/navbar.html" %}
+
+    <main class="flex flex-col gap-8">
+      <section class="cool-card">
+        <h2 class="text-2xl font-bold mb-4">{{ t("events.title") }}</h2>
+
+        <form
+          class="flex gap-2"
+          hx-post="/api/group/create"
+          hx-target="#group-list"
+        >
+          <input
+            name="name"
+            class="input input-bordered input-primary"
+            type="text"
+            placeholder="{{ t('groups.group_name') }}"
+            required
+          />
+
+          <button class="btn btn-primary">
+            {{ t("groups.create_group") }}
+          </button>
+        </form>
+      </section>
+
+      <section id="group-list" class="flex flex-col gap-4">
+        {% include "components/groups.html" %}
+      </section>
+    </main>
+  </body>
+</html>

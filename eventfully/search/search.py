@@ -10,6 +10,11 @@ from eventfully.types import SearchContent
 
 @beartype
 def main(search_content: SearchContent) -> set[schemas.Event]:
+    """
+    Searches for events in the database and returns them.
+    If the search has not been performed before it will add them to the processing queue to be processed later in the background so we can directly return a response.
+    """
+
     events = search_db(search_content)
 
     # Skip this step if this search has been performed before and the events are already in the database

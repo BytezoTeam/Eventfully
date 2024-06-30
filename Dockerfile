@@ -1,34 +1,44 @@
-FROM python:3.11-alpine
-
-# Add Tini
-RUN apk add --no-cache tini
-# Tini is now available at /sbin/tini
-ENTRYPOINT ["/sbin/tini", "--"]
-
-# Run your program under Tini
-CMD ["./docker-entrypoint.sh"]
+FROM python:3.11-alpine AS build
 
 WORKDIR /app
 
-# Actions for running eventfully without root with gosu
-RUN addgroup nonroot && \
+COPY eventfully/ eventfully/
+COPY tailwind.config.js ./
+# Build CSS Styles
+RUN pip install --no-cache-dir pytailwindcss-extra && \
+    tailwindcss-extra && \
+    tailwindcss-extra -i ./eventfully/static/input.css -o ./eventfully/static/output.css
+
+
+FROM python:3.11-alpine AS run
+
+WORKDIR /app
+
+# Add Tini
+RUN apk add --no-cache tini && \
+# Running eventfully without root with gosu
+    addgroup nonroot && \
     adduser --system -G nonroot --disabled-password nonroot && \
     apk add --no-cache gosu --repository https://dl-cdn.alpinelinux.org/alpine/edge/testing/
 
 # Install and setup dependencies
 COPY requirements.lock ./
-RUN PYTHONDONTWRITEBYTECODE=1 pip install --no-cache-dir -r requirements.lock && \
-    tailwindcss-extra
+RUN PYTHONDONTWRITEBYTECODE=1 pip install --no-cache-dir -r requirements.lock
 
 # Copy project files
+COPY --from=build /app/eventfully/ eventfully/
 COPY tests/ tests/
-COPY eventfully/ eventfully/
 COPY locales/ locales/
 COPY tailwind.config.js docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
 
-# Build CSS Styles
-RUN tailwindcss-extra -i ./eventfully/static/input.css -o ./eventfully/static/output.css
-
 # The server runs on port 8000
 EXPOSE 8000
+
+VOLUME [ "/app/database/sqlite" ]
+
+# Run your program under Tini
+ENTRYPOINT ["/sbin/tini", "--"]
+CMD ["./docker-entrypoint.sh"]
+
+HEALTHCHECK CMD wget --spider -q http://127.0.0.1:8000 || exit 1

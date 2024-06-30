@@ -6,6 +6,7 @@
 #   features: []
 #   all-features: false
 #   with-sources: false
+#   generate-hashes: false
 
 annotated-types==0.7.0
     # via pydantic
@@ -56,7 +57,7 @@ markupsafe==2.1.5
     # via werkzeug
     # via wtforms
 meilisearch==0.31.3
-niquests==3.6.6
+niquests==3.7.0
     # via pytailwindcss-extra
 packaging==24.1
     # via gunicorn
@@ -68,7 +69,7 @@ pydantic==2.7.4
     # via camel-converter
 pydantic-core==2.18.4
     # via pydantic
-pyi18n-v2==1.2.1
+pyi18n-v2==1.2.2
 pyjwt==2.8.0
 pytailwindcss-extra==0.1.0
 pytest==8.2.2
@@ -98,7 +99,7 @@ tzlocal==5.2
     # via apscheduler
 urllib3==2.2.2
     # via requests
-urllib3-future==2.7.914
+urllib3-future==2.8.901
     # via niquests
 wassima==1.1.1
     # via niquests

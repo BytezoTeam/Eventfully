@@ -1,3 +1,8 @@
+"""
+This module processes new web searches in the background one at a time so the server can do other things a stays stable under high load.
+Some search won't return all event information directly so whe need to fetch them seperately (a.k.a. post processing).
+"""
+
 from typing import Callable
 import queue
 
@@ -72,6 +77,7 @@ def _search_web(
 
     for source in sources:
         try:
+            log.debug(f"Collecting events from {source.__name__}")
             source_events = source(search)
             events.update(source_events)
         except Exception as e:
