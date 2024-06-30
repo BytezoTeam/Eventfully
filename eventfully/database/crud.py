@@ -49,7 +49,7 @@ def add_group(admin_id, group_id, group_name):
     group = models.Groups.create(id=group_id, name=group_name)
 
     user = models.User.get(models.User.id == admin_id)
-    models.GroupMembers.create(user=user, group=group, invited=False, admin=True)
+    models.GroupMembers.create(user=user, group=group, admin=True)
 
     return group_id
 
@@ -60,22 +60,9 @@ def add_member_to_group(member_user_id: str, group_id: str, admin_user: bool):
     group = models.Groups.get(models.Groups.id == group_id)
     user = models.User.get(models.User.id == member_user_id)
 
-    models.GroupMembers.create(user=user, group=group, invited=False, admin=admin_user)
+    models.GroupMembers.create(user=user, group=group, admin=admin_user)
 
     return member_user_id
-
-
-@beartype
-@database.db.connection_context()
-def is_user_invited(member_user_id: str, g_id: str) -> bool:
-    user = models.User.get(models.User.id == member_user_id)
-    group = models.Groups.get(models.Groups.id == g_id)
-
-    member = models.GroupMembers.get(
-        (models.GroupMembers.user == user) &
-        (models.GroupMembers.group == group)
-    )
-    return member.invited
 
 
 @beartype

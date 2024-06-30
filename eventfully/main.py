@@ -359,9 +359,6 @@ def get_events(user_id: str):
 
     shared_event_ids: list[str] = []
     for group in groups:
-        if crud.is_user_invited(user_id, group.id):
-            continue
-
         shared_event_ids += list([like.event_id for like in group.liked_events])
 
     return render_template(

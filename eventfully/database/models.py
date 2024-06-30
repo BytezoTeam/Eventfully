@@ -25,7 +25,6 @@ class Groups(_DBBaseModel):
 class GroupMembers(_DBBaseModel):
     user = ForeignKeyField(User, backref="members")
     group = ForeignKeyField(Groups)
-    invited = BooleanField()
     admin = BooleanField()
 
     class Meta:
