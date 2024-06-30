@@ -15,3 +15,18 @@ en:
     politics: "Politics"
     sport: "Sport"
     education: "Education"
+  groups:
+    create_group: "Create Group"
+    group_name: "Group Name"
+  
+  tab:
+    my_groups: "My Groups"
+    events: "Events"
+
+  my_groups:
+    title: "My Groups"
+
+  events:
+    title: "Group Events"
+
+  
