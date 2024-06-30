@@ -20,7 +20,7 @@ from wtforms.validators import DataRequired, Length
 from pyi18n import PyI18n
 from peewee import DoesNotExist
 
-from eventfully.database import crud, schemas
+from eventfully.database import crud, schemas, models
 from eventfully.logger import log
 from eventfully.search import post_processing, search, crawl
 from eventfully.types import SearchContent
@@ -238,7 +238,9 @@ def create_group(user_id: str):
     cool_id = Sqids().encode([randint(0, int(1e15))])
     crud.add_group(user_id, cool_id, name)
 
-    return "", HTTPStatus.OK
+    groups = crud.get_groups_of_member(user_id)
+
+    return render_template("components/groups.html", t=translation_provider()), HTTPStatus.OK
 
 
 @app.route("/api/group/share")
@@ -387,20 +389,21 @@ def get_events(user_id: str):
     user = crud.get_user(user_id)
     liked_event_ids = [like.event_id for like in user.liked_events]
 
-    user_groups = {}
-    share_events = {}
     groups = crud.get_groups_of_member(user_id)
+
+    shared_event_ids: list[str] = []
     for group in groups:
-        if crud.is_user_invited(user_id, group):
-            share_events[groups[group]] = crud.get_shared_events(group)
-            user_groups[group] = groups[group]
+        if crud.is_user_invited(user_id, group.id):
+            continue
+
+        shared_event_ids += list([like.event_id for like in group.liked_events])
 
     return render_template(
         "components/events.html",
         events=result,
         liked_events=liked_event_ids,
-        groups=user_groups,
-        shared_events=share_events,
+        groups=groups,
+        shared_event_ids=shared_event_ids,
         user=user,
         t=translation_provider(),
     )

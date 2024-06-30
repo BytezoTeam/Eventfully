@@ -125,16 +125,12 @@ def member_is_admin(member_id: str, group_id: str):
 
 
 @database.db.connection_context()
-def get_groups_of_member(user_id):
+def get_groups_of_member(user_id: str) -> Iterable[models.Groups]:
     user = models.User.get(models.User.id == user_id)
 
-    group_ids = {}
-    groups = models.GroupMembers.select().where((models.GroupMembers.user == user))
+    groups = models.Groups.select().join(models.GroupMembers).where(models.GroupMembers.user == user)
 
-    for group in groups:
-        group_ids[group.group] = group.group.name
-
-    return group_ids
+    return groups
 
 
 @database.db.connection_context()

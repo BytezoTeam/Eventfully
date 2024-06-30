@@ -37,15 +37,14 @@
           tabindex="0"
           class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
         >
-          {% for id, name in groups.items() %} {% if not item.id in
-          shared_events[name] %}
+          {% for group in groups %} {% if not group.id in shared_event_ids %}
           <li>
             <a
               class="btn m-1"
               hx-get="/api/group/share?event_id={{item.id}}&group_id={{id}}"
               hx-swap="outerHTML"
             >
-              '{{ name }}' group
+              '{{ group.name }}' group
             </a>
           </li>
 
