@@ -20,7 +20,7 @@ ru:
     politics: "Политика"
     sport: "Спорт"
     education: "Образование"
-  Date:
+  date:
     date: "Дата"
     all: "Все"
     today: "Сегодня"
@@ -41,3 +41,4 @@ ru:
   burger:
     home: "Главная"
     groups: "Группы"
+  price: "Цена"

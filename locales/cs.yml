@@ -41,3 +41,4 @@ cs:
   burger:
     home: "Domů"
     groups: "Skupiny"
+  price: "Cena"

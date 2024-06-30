@@ -20,7 +20,7 @@ nl:
     politics: "Politiek"
     sport: "Sport"
     education: "Onderwijs"
-  Date:
+  date:
     date: "Datum"
     all: "Alle"
     today: "Vandaag"
@@ -41,3 +41,4 @@ nl:
   burger:
     home: "Startpagina"
     groups: "Groepen"
+  price: "Prijs"
