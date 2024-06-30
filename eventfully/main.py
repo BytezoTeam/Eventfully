@@ -19,11 +19,13 @@ from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Length
 from pyi18n import PyI18n
 from peewee import DoesNotExist
+from beartype import beartype
 
 from eventfully.database import crud, schemas, models
 from eventfully.logger import log
 from eventfully.search import post_processing, search, crawl
 from eventfully.types import SearchContent
+from eventfully import utils
 
 log.info("Starting Server ...")
 
@@ -117,14 +119,8 @@ def translation_provider() -> Callable[[str], str]:
     Tries to find the best language for a given request and returns function that is used in the html templates to translate text.
     """
 
-    language_header = request.headers.get("Accept-Language", "en")
-    accepted_languages = language_header.split(",")
-
-    lang_code = "en"
-    for lang in LANGUAGES:
-        if lang in accepted_languages:
-            lang_code = lang
-            break
+    language_header = request.headers.get("Accept-Language")
+    lang_code = utils.extract_language_from_language_header(language_header, LANGUAGES)
 
     def translate(text: str):
         return i18n.gettext(lang_code, text)
