@@ -1,11 +1,11 @@
 <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
   {% if not events %}
   <div class="center">
-  ><p>{{ t("errorMsg") }}</p>
+    >
+    <p>{{ t("errorMsg") }}</p>
     <p>{{ t("pleaseWait") }}</p>
   </div>
-  {% endif %}
-  {% for item in events %}
+  {% endif %} {% for item in events %}
 
   <div class="cool-card w-full static" style="padding: 0 !important">
     {% if user %}
@@ -29,19 +29,24 @@
     <div class="card-body gap-4">
       <div>
         <!-- Category -->
-         {% if item.category %}
+        {% if item.category %}
         <span class="badge badge-neutral capitalize">
           {{ t("category." + item.category) }}
         </span>
         {% endif %}
 
         <!-- Title -->
-        <h2 class="card-title flex-gap-1 line-clamp-3">
-          <a href="{{ item.web_link }}" target="_blank" rel="noopener">
-            {{ item.title }}
+        <a
+          class="card-title flex-gap-1"
+          href="{{ item.web_link }}"
+          target="_blank"
+          rel="noopener"
+        >
+          <h2 class="line-clamp-3 border">{{ item.title }}</h2>
+          <div class="flex-1">
             {% include 'components/icons/external-link.html' %}
-          </a>
-        </h2>
+          </div>
+        </a>
       </div>
 
       <p class="line-clamp-4 prose">{{ item.description }}</p>
@@ -50,13 +55,17 @@
         <!-- Location -->
         {% if item.address %}
         <div class="flex flex-col">
-          <a href="https://www.google.de/maps/search/{{ item.address }}" target="_blank" rel="noopener noreferrer">
-          <div class="flex gap-2">
-            {% include 'components/icons/map-pin.html' %}
-            <span class="font-bold">{{ t("location") }}</span>
-          </div>
-          <p class="prose">{{ item.address }}</p>
-        </a>
+          <a
+            href="https://www.google.de/maps/search/{{ item.address }}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <div class="flex gap-2">
+              {% include 'components/icons/map-pin.html' %}
+              <span class="font-bold">{{ t("location") }}</span>
+            </div>
+            <p class="prose">{{ item.address }}</p>
+          </a>
         </div>
         {% endif %}
 
