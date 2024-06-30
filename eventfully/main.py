@@ -165,8 +165,9 @@ def index(user_id: str):
 @jwt_check(deny_unauthenticated=True)
 def groups(user_id: str):
     groups = crud.get_groups_of_member(user_id)
+    user = crud.get_user(user_id)
 
-    return render_template("groups.html", groups=groups, t=translation_provider())
+    return render_template("groups.html", groups=groups, user=user, t=translation_provider())
 
 
 @app.route("/create-event", methods=["GET"])
