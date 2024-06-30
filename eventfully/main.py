@@ -267,40 +267,6 @@ def add_member(user_id: str):
 
     return "", 200
 
-@app.route("/api/group/invite/accept")
-@jwt_check(deny_unauthenticated=True)
-def accept_user_invite(user_id: str):
-    """
-    Accepts a requested invite from a user
-    """
-    group_id = request.args.get("group_id")
-    member_user_id = request.args.get("member_user_id")
-
-    if crud.member_is_admin(user_id, group_id):
-        crud.accept_invite(member_user_id, group_id)
-
-        return "", HTTPStatus.OK
-
-    return "", HTTPStatus.METHOD_NOT_ALLOWED
-
-@app.route("/api/group/invite/deny")
-@jwt_check(deny_unauthenticated=True)
-def deny_user_invite(user_id: str):
-    """
-    Deny a requested invite from a user
-    """
-
-    group_id = request.args.get("group_id")
-    member_user_id = request.args.get("member_user_id")
-
-    if crud.member_is_admin(user_id, group_id):
-        crud.remove_user_from_group(member_user_id, group_id)
-
-        return "", HTTPStatus.OK
-
-    return "", HTTPStatus.METHOD_NOT_ALLOWED
-
-
 @app.route("/api/account/delete", methods=["POST"])
 @jwt_check(deny_unauthenticated=True)
 def delete_account(user_id: str):

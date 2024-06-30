@@ -60,24 +60,9 @@ def add_member_to_group(member_user_id: str, group_id: str, admin_user: bool):
     group = models.Groups.get(models.Groups.id == group_id)
     user = models.User.get(models.User.id == member_user_id)
 
-    models.GroupMembers.create(user=user, group=group, invited=True, admin=admin_user)
+    models.GroupMembers.create(user=user, group=group, invited=False, admin=admin_user)
 
     return member_user_id
-
-
-@beartype
-@database.db.connection_context()
-def accept_invite(member_user_id: str, g_id: str) -> bool:
-    user = models.User.get(models.User.id == member_user_id)
-    group = models.Groups.get(models.Groups.id == g_id)
-
-    query = models.GroupMembers.update({models.GroupMembers.invited: False}).where(
-        (models.GroupMembers.user == user) &
-        (models.GroupMembers.group == group)
-    )
-
-    query.execute()
-    return True
 
 
 @beartype
