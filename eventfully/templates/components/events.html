@@ -49,9 +49,23 @@
         </a>
       </div>
 
-      <p class="line-clamp-4 prose">{{ item.description }}</p>
+      <div class="flex flex-col gap-4">
+        <p class="line-clamp-4 prose">{{ item.description }}</p>
 
-      <div class="flex flex-col gap-2">
+        <!-- Time -->
+        <div class="flex flex-col">
+          <div class="flex gap-2">
+            {% include 'components/icons/calendar.html' %}
+            <span class="font-bold">{{ t("time") }}</span>
+          </div>
+          <p class="prose">
+            {{ item.start_time.strftime("%d.%m.%Y") }} |
+            {{ item.start_time.strftime("%H:%M") }}
+            {{ t("to") }}
+            {{ item.end_time.strftime("%H:%M") }}
+          </p>
+        </div>
+
         <!-- Location -->
         {% if item.address %}
         <div class="flex flex-col">
