@@ -35,6 +35,10 @@ Eventfully is a software to find and explore new events in your area and learn m
 - [Architecture](/docs/architecture.md)
 - [Use Case](/docs/use-case.md)
 
+##Communication and Social Media
+
+  - Discord : https://discord.gg/NQXpSuq2wp
+
 ## Contributors
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
