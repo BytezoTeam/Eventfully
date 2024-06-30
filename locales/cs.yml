@@ -20,7 +20,7 @@ cs:
     politics: "Politika"
     sport: "Sport"
     education: "Vzdělávání"
-  Date:
+  date:
     date: "Datum"
     all: "Všechny"
     today: "Dnes"
