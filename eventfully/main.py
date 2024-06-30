@@ -163,7 +163,15 @@ def groups(user_id: str):
     groups = crud.get_groups_of_member(user_id)
     user = crud.get_user(user_id)
 
-    return render_template("groups.html", groups=groups, user=user, t=translation_provider())
+    events_by_group_ids = {}
+    for group in groups:
+        events_by_group_ids[group.id] = []
+        liked_event_ids = [like.event_id for like in group.liked_events]
+        for event_id in liked_event_ids:
+            event = crud.get_event_by_id(event_id)
+            events_by_group_ids[group.id].append(event)
+
+    return render_template("groups.html", groups=groups, events_by_group_ids=events_by_group_ids, t=translation_provider())
 
 
 @app.route("/create-event", methods=["GET"])
@@ -240,7 +248,15 @@ def create_group(user_id: str):
 
     groups = crud.get_groups_of_member(user_id)
 
-    return render_template("components/groups.html", groups=groups, t=translation_provider()), HTTPStatus.OK
+    events_by_group_ids = {}
+    for group in groups:
+        events_by_group_ids[group.id] = []
+        liked_event_ids = [like.event_id for like in group.liked_events]
+        for event_id in liked_event_ids:
+            event = crud.get_event_by_id(event_id)
+            events_by_group_ids[group.id].append(event)
+
+    return render_template("components/groups.html", groups=groups, events_by_group_ids=events_by_group_ids, t=translation_provider())
 
 
 @app.route("/api/group/share")

@@ -1,5 +1,13 @@
 {% for group in groups %}
   <div class="cool-card">
-    <h1>{{ group.name }}</h1>
+    <h2>{{ group.name }}</h2>
+  </div>
+
+  <div class="grid grid-cols-3 gap-8">
+    {% for event in events_by_group_ids[group.id] %}
+    <div class="cool-card">
+      {{ event.title }}
+    </div>
+    {% endfor %}
   </div>
 {% endfor %}
