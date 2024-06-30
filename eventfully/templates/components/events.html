@@ -1,4 +1,10 @@
 <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+  {% if not events %}
+  <div class="center">
+    <p>t("errorMsg")</p>
+    <p>t("pleaseWait")</p>
+  </div>
+  {% endif %}
   {% for item in events %}
 
   <div class="cool-card w-full static" style="padding: 0 !important">
