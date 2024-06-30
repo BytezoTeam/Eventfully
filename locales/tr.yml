@@ -20,7 +20,7 @@ tr:
     politics: "Siyaset"
     sport: "Spor"
     education: "Eğitim"
-  Date:
+  date:
     date: "Tarih"
     all: "Tümü"
     today: "Bugün"

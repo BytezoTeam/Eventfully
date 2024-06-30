@@ -20,7 +20,7 @@ fr:
     politics: "Politique"
     sport: "Sport"
     education: "Éducation"
-  Date:
+  date:
     date: "Date"
     all: "Toutes"
     today: "Aujourd'hui"
