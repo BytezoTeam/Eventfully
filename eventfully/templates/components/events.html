@@ -1,12 +1,12 @@
-<section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-  {% if not events %}
-  <div class="center">
-    >
-    <p>{{ t("errorMsg") }}</p>
-    <p>{{ t("pleaseWait") }}</p>
-  </div>
-  {% endif %} {% for item in events %}
+{% if not events %}
+<div class="flex justify-center align-middle h-full">
+  <h2>{{ t("please_wait") }}</h2>
+</div>
+{% endif %}
 
+<section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+  <!-- Event list -->
+  {% for item in events %}
   <div class="cool-card w-full static" style="padding: 0 !important">
     {% if user %}
     <div class="absolute m-4">
@@ -49,9 +49,23 @@
         </a>
       </div>
 
-      <p class="line-clamp-4 prose">{{ item.description }}</p>
+      <div class="flex flex-col gap-4">
+        <p class="line-clamp-4 prose">{{ item.description }}</p>
 
-      <div class="flex flex-col gap-2">
+        <!-- Time -->
+        <div class="flex flex-col">
+          <div class="flex gap-2">
+            {% include 'components/icons/calendar.html' %}
+            <span class="font-bold">{{ t("time") }}</span>
+          </div>
+          <p class="prose">
+            {{ item.start_time.strftime("%d.%m.%Y") }} |
+            {{ item.start_time.strftime("%H:%M") }}
+            {{ t("to") }}
+            {{ item.end_time.strftime("%H:%M") }}
+          </p>
+        </div>
+
         <!-- Location -->
         {% if item.address %}
         <div class="flex flex-col">
