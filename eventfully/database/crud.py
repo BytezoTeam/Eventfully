@@ -45,17 +45,6 @@ def unlike_event(user_id: str, event_id: str) -> None:
 
 @beartype
 @database.db.connection_context()
-def get_liked_event_ids_by_user_id(user_id: str) -> list[str]:
-    user = models.User.get(models.User.id == user_id)
-
-    liked_events = models.Likes.select().where(models.Likes.user == user)
-    events_list = [event.event_id for event in liked_events]
-
-    return events_list
-
-
-@beartype
-@database.db.connection_context()
 def add_group(admin_id, group_id, group_name):
     models.Groups.create(group_id=group_id, group_name=group_name)
 
@@ -136,19 +125,6 @@ def member_is_admin(member_id: str, group_id: str):
 
 
 @database.db.connection_context()
-def get_members_of_group(group_id: str):
-    group = models.Groups.get(models.Groups.id == group_id)
-    group_user_ids = []
-
-    members = models.GroupMembers.select().where((models.GroupMembers.group == group))
-
-    for member in members:
-        group_user_ids.append(member.user_id)
-
-    return group_user_ids
-
-
-@database.db.connection_context()
 def get_groups_of_member(user_id):
     user = models.User.get(models.User.id == user_id)
 
@@ -200,16 +176,6 @@ def delete_account(user_id):
         print(f"Account with userId {user_id} was successfully deleted.")
     except DoesNotExist:
         print(f"No account found with userId {user_id}.")
-
-
-@database.db.connection_context()
-def get_user_data(user_id):
-    try:
-        account = models.User.get(models.User.id == user_id)
-        return model_to_dict(account)
-    except DoesNotExist:
-        print(f"No account found with userId {user_id}.")
-        return None
 
 
 @database.db.connection_context()

@@ -33,7 +33,7 @@ class GroupMembers(_DBBaseModel):
 
 
 class Likes(_DBBaseModel):
-    user = ForeignKeyField(User)
+    user = ForeignKeyField(User, backref="liked_events")
     event_id = TextField()
     group = ForeignKeyField(Groups, null=True)
 

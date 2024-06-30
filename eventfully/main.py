@@ -135,7 +135,7 @@ def translation_provider() -> Callable[[str], str]:
 def render_index_template(base: bool = False, user_id: str | None = None) -> str:
     cities = crud.get_possible_cities()
 
-    user = crud.get_user_data(user_id) if user_id else None
+    user = crud.get_user(user_id) if user_id else None
 
     template = "index_base.html" if base else "index.html"
     return render_template(template, user=user, cities=cities, t=translation_provider())
@@ -178,11 +178,13 @@ def toggle_event_like(user_id: str):
     When a logged in user clicks on a like button of an event. Stores links the event and the user in the database and
     returns the the now liked or unliked button to update the website.
     """
-
     event_id = request.args.get("id")
 
     log.debug(f"Event '{event_id}' like toggled for '{user_id}'")
-    liked_events = crud.get_liked_event_ids_by_user_id(user_id)
+
+    user = crud.get_user(user_id)
+    liked_events = [like.event_id for like in user.liked_events]
+
     if event_id not in liked_events:
         crud.like_event(user_id, event_id)
         return render_template("components/liked-true-button.html", item={"id": event_id})
@@ -379,8 +381,9 @@ def get_events(user_id: str):
     if not user_id:
         return render_template("components/events.html", events=result, cities=crud.get_possible_cities())
 
-    user = crud.get_user_data(user_id)
-    liked_events = crud.get_liked_event_ids_by_user_id(user_id)
+    user = crud.get_user(user_id)
+    liked_event_ids = [like.event_id for like in user.liked_events]
+
     user_groups = {}
     share_events = {}
     groups = crud.get_groups_of_member(user_id)
@@ -392,7 +395,7 @@ def get_events(user_id: str):
     return render_template(
         "components/events.html",
         events=result,
-        liked_events=liked_events,
+        liked_events=liked_event_ids,
         groups=user_groups,
         shared_events=share_events,
         user=user,
