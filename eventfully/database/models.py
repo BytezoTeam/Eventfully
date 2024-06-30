@@ -18,14 +18,13 @@ class User(_DBBaseModel):
 
 
 class Groups(_DBBaseModel):
-    group_id = TextField(primary_key=True)
-    group_name = TextField()
+    id = TextField(primary_key=True)
+    name = TextField()
 
 
 class GroupMembers(_DBBaseModel):
     user_id = TextField(User)
     group = ForeignKeyField(Groups)
-    invited = BooleanField()
     admin = BooleanField()
 
     class Meta:
@@ -33,12 +32,12 @@ class GroupMembers(_DBBaseModel):
 
 
 class Likes(_DBBaseModel):
-    user = ForeignKeyField(User)
+    user = ForeignKeyField(User, backref="liked_events")
     event_id = TextField()
-    group_id = ForeignKeyField(Groups, null=True)
+    group = ForeignKeyField(Groups, null=True, backref="liked_events")
 
     class Meta:
-        primary_key = CompositeKey("user", "event_id", "group_id")
+        primary_key = CompositeKey("user", "event_id", "group")
 
 
 class SearchCache(_DBBaseModel):

@@ -26,10 +26,11 @@ def create_tables():
 
 # Event Like
 @database.db.connection_context()
-def like_event(user_id: str, event_id: str, group_id=None):
+def like_event(user_id: str, event_id: str, group_id: str | None = None):
     user = models.User.get(models.User.id == user_id)
+    group = models.Groups.get(models.Groups.id == group_id) if group_id else None
 
-    models.Likes.create(user=user, event_id=event_id, group_id=group_id)
+    models.Likes.create(user=user, event_id=event_id, group=group)
 
     return event_id
 
@@ -44,60 +45,34 @@ def unlike_event(user_id: str, event_id: str) -> None:
 
 @beartype
 @database.db.connection_context()
-def get_liked_event_ids_by_user_id(user_id: str) -> list[str]:
-    user = models.User.get(models.User.id == user_id)
+def add_group(admin_id, group_id, group_name):
+    group = models.Groups.create(id=group_id, name=group_name)
 
-    liked_events = models.Likes.select().where(models.Likes.user == user)
-    events_list = [event.event_id for event in liked_events]
+    user = models.User.get(models.User.id == admin_id)
+    models.GroupMembers.create(user=user, group=group, admin=True)
 
-    return events_list
-
-
-@beartype
-@database.db.connection_context()
-def add_group(admin_id, g_id, g_name):
-    models.Groups.create(group_id=g_id, group_name=g_name)
-
-    models.GroupMembers.create(user_id=admin_id, group=g_id, invited=False, admin=True)
-
-    return g_id
+    return group_id
 
 
 @beartype
 @database.db.connection_context()
-def add_member_to_group(member_user_id: str, g_id: str, admin_user: bool):
-    group = models.Groups.get(models.Groups.group_id == g_id)
+def add_member_to_group(member_user_id: str, group_id: str, admin_user: bool):
+    group = models.Groups.get(models.Groups.id == group_id)
+    user = models.User.get(models.User.id == member_user_id)
 
-    models.GroupMembers.create(user_id=member_user_id, group=group, invited=True, admin=admin_user)
+    models.GroupMembers.create(user=user, group=group, admin=admin_user)
 
     return member_user_id
 
 @beartype
 @database.db.connection_context()
-def accept_invite(member_user_id: str, g_id: str) -> bool:
-    query = models.GroupMembers.update({models.GroupMembers.invited: False}).where(
-        (models.GroupMembers.user_id == member_user_id) & 
-        (models.GroupMembers.group == g_id)
-    )
-
-    query.execute()
-    return True
-
-@beartype
-@database.db.connection_context()
-def is_user_invited(member_user_id: str, g_id) -> bool:
-    member = models.GroupMembers.get(
-        (models.GroupMembers.user_id == member_user_id) & 
-        (models.GroupMembers.group == g_id)
-    )
-    return member.invited
-
-@beartype
-@database.db.connection_context()
 def remove_user_from_group(member_user_id: str, g_id: str) -> bool:
+    user = models.User.get(models.User.id == member_user_id)
+    group = models.Groups.get(models.Groups.id == g_id)
+
     query = models.GroupMembers.delete().where(
-        (models.GroupMembers.user_id == member_user_id) & 
-        (models.GroupMembers.group == g_id)
+        (models.GroupMembers.user == user) &
+        (models.GroupMembers.group == group)
     )
 
     query.execute()
@@ -106,9 +81,11 @@ def remove_user_from_group(member_user_id: str, g_id: str) -> bool:
 
 
 @database.db.connection_context()
-def member_is_admin(member_id, group_id):
-    group = models.Groups.get(models.Groups.group_id == group_id)
-    user = (
+def member_is_admin(member_id: str, group_id: str):
+    group = models.Groups.get(models.Groups.id == group_id)
+    user = models.User.get(models.User.id == member_id)
+
+    is_admin = (
         models.GroupMembers.select()
         .where(
             models.GroupMembers.user_id == member_id, models.GroupMembers.admin == 1, models.GroupMembers.group == group
@@ -120,32 +97,20 @@ def member_is_admin(member_id, group_id):
 
 
 @database.db.connection_context()
-def get_members_of_group(group_id):
-    group = models.Groups.get(models.Groups.group_id == group_id)
-    group_user_ids = []
+def get_groups_of_member(user_id: str) -> list[models.Groups]:
+    user = models.User.get(models.User.id == user_id)
 
-    members = models.GroupMembers.select().where((models.GroupMembers.group == group))
+    groups = list(models.Groups.select().join(models.GroupMembers).where(models.GroupMembers.user == user))
 
-    for member in members:
-        group_user_ids.append(member.user_id)
-
-    return group_user_ids
+    return groups
 
 
 @database.db.connection_context()
-def get_groups_of_member(user_id):
-    group_ids = {}
-    groups = models.GroupMembers.select().where((models.GroupMembers.user_id == user_id))
+def get_shared_events(group_id: str) -> dict[str, str]:
+    group = models.Groups.get(models.Groups.id == group_id)
 
-    for group in groups:
-        group_ids[group.group] = group.group.group_name
-
-    return group_ids
-
-
-def get_shared_events(group_id):
     shared_events = {}
-    shared = models.Likes.select().where(models.Likes.group_id == group_id)
+    shared = models.Likes.select().where(models.Likes.group == group)
 
     for shared_event in shared:
         shared_events[shared_event.event_id] = shared_event.user_id
@@ -154,6 +119,11 @@ def get_shared_events(group_id):
 
 
 # Account
+@database.db.connection_context()
+def get_user(user_id: str) -> models.User:
+    return models.User.get(models.User.id == user_id)
+
+
 @beartype
 @database.db.connection_context()
 def create_account(username: str, password: str, user_id: str, email: str, event_organiser: bool = False) -> str:
@@ -175,16 +145,6 @@ def delete_account(user_id):
         print(f"Account with userId {user_id} was successfully deleted.")
     except DoesNotExist:
         print(f"No account found with userId {user_id}.")
-
-
-@database.db.connection_context()
-def get_user_data(user_id):
-    try:
-        account = models.User.get(models.User.id == user_id)
-        return model_to_dict(account)
-    except DoesNotExist:
-        print(f"No account found with userId {user_id}.")
-        return None
 
 
 @database.db.connection_context()

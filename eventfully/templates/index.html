@@ -1,20 +1,21 @@
-<!-- Main Container - No Modals -->
-<div class="container mx-auto">
-  <!-- Head -->
-  {% include "components/navbar.html" %}
+<!-- Head -->
+{% include "components/navbar.html" %}
 
-  <!-- Main -->
-  <main class="flex flex-col gap-8">
-    <section class="sticky top-8 z-10 cool-card">
-      <!-- Event Search -->
-      <h2>{{ t("search") }}</h2>
-      <form
-        class="flex flex-row flex-wrap justify-start gap-4"
-        hx-get="/api/search"
-        hx-target="#event-search-result"
-        hx-trigger="submit,load"
-        hx-indicator=".htmx-indicator"
-      >
+<!-- Main -->
+<main class="flex flex-col gap-8">
+  <!-- Event Search -->
+  <section class="sticky top-8 z-10 cool-card">
+    <form
+      class="flex flex-row items-end flex-wrap justify-start gap-4"
+      hx-get="/api/search"
+      hx-target="#event-search-result"
+      hx-trigger="submit,load"
+      hx-indicator=".htmx-indicator"
+    >
+      <label class="form-control">
+        <div class="label">
+          <span class="label-text">{{ t("search_placeholder") }}</span>
+        </div>
         <input
           name="therm"
           id="therm"
@@ -22,7 +23,12 @@
           type="search"
           placeholder="{{ t('search_placeholder') }}"
         />
+      </label>
 
+      <label class="form-control">
+        <div class="label">
+          <span class="label-text">{{ t("city") }}</span>
+        </div>
         <input
           type="text"
           class="input input-bordered"
@@ -36,120 +42,43 @@
           <option value="{{ city }}">{{ city }}</option>
           {% endfor %}
         </datalist>
+      </label>
 
-        <select
-          name="category"
-          id="category"
-          class="select select-bordered"
-        >
+      <label class="form-control">
+        <div class="label">
+          <span class="label-text">{{ t("category.name") }}</span>
+        </div>
+        <select name="category" id="category" class="select select-bordered">
           <option value="">{{ t("category.all") }}</option>
           <option value="culture">{{ t("category.culture") }}</option>
           <option value="education">{{ t("category.education") }}</option>
           <option value="sport">{{ t("category.sport") }}</option>
           <option value="politics">{{ t("category.politics") }}</option>
         </select>
+      </label>
 
-        <button type="submit" class="btn btn-primary">{{ t("search") }}</button>
-      </form>
-    </section>
+      <label class="form-control">
+        <div class="label">
+          <span class="label-text">{{ t("date.date") }}</span>
+        </div>
+        <select name="date" id="date" class="select select-bordered">
+          <option value="all">{{ t("date.all") }}</option>
+          <option value="today">{{ t("date.today") }}</option>
+          <option value="tomorrow">{{ t("date.tomorrow") }}</option>
+          <option value="week">{{ t("date.week") }}</option>
+          <option value="month">{{ t("date.month") }}</option>
+        </select>
+      </label>
 
-    <!-- Event Results -->
-    <div class="htmx-indicator" id="event-search-result"></div>
-    <div class="flex justify-center items-center">
-      <span
-        class="htmx-indicator center loading loading-spinner loading-lg mt-16"
-      ></span>
-    </div>
-  </main>
-</div>
-
-<!-- Login Modal -->
-<dialog id="loginModal" class="modal">
-  <div
-    class="modal-box dark:bg-gray-800 bg-gray-100 flex flex-col items-center gap-4"
-  >
-    <!-- Login Form -->
-    <h1>{{ t("login") }}</h1>
-    <form
-      class="flex flex-col items-center gap-4"
-      hx-post="/api/account/signin"
-      hx-trigger="submit"
-      hx-target="body"
-    >
-      <!-- Username -->
-      <input
-        name="username"
-        id="signin-username"
-        type="text"
-        class="grow input input-bordered"
-        placeholder="{{ t('username') }}"
-      />
-
-      <!-- Password -->
-      <input
-        name="password"
-        id="signin-password"
-        type="password"
-        class="grow input input-bordered"
-        placeholder="{{ t('password') }}"
-      />
-
-      <div class="w-full flex flex-row justify-center gap-8">
-        <button type="submit" class="btn btn-primary">{{ t("login") }}</button>
-      </div>
+      <button type="submit" class="btn btn-primary">{{ t("search") }}</button>
     </form>
+  </section>
+
+  <!-- Event Results -->
+  <div class="htmx-indicator" id="event-search-result"></div>
+  <div class="flex justify-center items-center">
+    <span
+      class="htmx-indicator center loading loading-spinner loading-lg mt-16"
+    ></span>
   </div>
-  <form method="dialog" class="modal-backdrop">
-    <button>Close</button>
-  </form>
-</dialog>
-
-<!-- Register Modal -->
-<dialog id="RegisterModal" class="modal">
-  <div
-    class="modal-box dark:bg-gray-800 bg-gray-100 flex flex-col items-center gap-4"
-  >
-    <!-- Register Form -->
-    <h1>{{ t("register") }}</h1>
-    <form
-      class="flex flex-col items-center gap-4"
-      hx-post="/api/account/signup"
-      hx-trigger="submit"
-      hx-target="body"
-    >
-      <!-- Username -->
-      <input
-        name="username"
-        id="signup-username"
-        type="text"
-        class="grow input input-bordered"
-        placeholder="{{ t('username') }}"
-      />
-
-      <!-- Email -->
-      <input
-        name="email"
-        id="signup-email"
-        type="email"
-        class="grow input input-bordered"
-        placeholder="{{ t('email') }}"
-      />
-
-      <!-- Password -->
-      <input
-        name="password"
-        id="signup-password"
-        type="password"
-        class="grow input input-bordered"
-        placeholder="{{ t('password') }}"
-      />
-
-      <div class="w-full flex flex-row justify-center gap-8">
-        <button type="submit" class="btn btn-primary">{{ t("register") }}</button>
-      </div>
-    </form>
-    <form method="dialog" class="modal-backdrop">
-      <button>{{ t("cancel") }}</button>
-    </form>
-  </div>
-</dialog>
+</main>

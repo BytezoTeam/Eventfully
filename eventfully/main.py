@@ -18,11 +18,14 @@ from sqids import Sqids
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Length
 from pyi18n import PyI18n
+from peewee import DoesNotExist
+from beartype import beartype
 
-from eventfully.database import crud, schemas
+from eventfully.database import crud, schemas, models
 from eventfully.logger import log
 from eventfully.search import post_processing, search, crawl
 from eventfully.types import SearchContent
+from eventfully import utils
 
 log.info("Starting Server ...")
 
@@ -37,7 +40,7 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = uuid4().hex
 app.config["WTF_CSRF_ENABLED"] = False
 
-LANGUAGES = ("en", "de")
+LANGUAGES = ("en", "de", "cze", "fr", "nl", "ru", "tr")
 i18n = PyI18n(LANGUAGES)
 
 # Background tasks mainly for searching for events
@@ -106,14 +109,8 @@ def translation_provider() -> Callable[[str], str]:
     Tries to find the best language for a given request and returns function that is used in the html templates to translate text.
     """
 
-    language_header = request.headers.get("Accept-Language", "en")
-    accepted_languages = language_header.split(",")
-
-    lang_code = "en"
-    for lang in LANGUAGES:
-        if lang in accepted_languages:
-            lang_code = lang
-            break
+    language_header = request.headers.get("Accept-Language")
+    lang_code = utils.extract_language_from_language_header(language_header, LANGUAGES)
 
     def translate(text: str):
         return i18n.gettext(lang_code, text)
@@ -124,7 +121,7 @@ def translation_provider() -> Callable[[str], str]:
 def render_index_template(base: bool = False, user_id: str | None = None) -> str:
     cities = crud.get_possible_cities()
 
-    user = crud.get_user_data(user_id) if user_id else None
+    user = crud.get_user(user_id) if user_id else None
 
     template = "index_base.html" if base else "index.html"
     return render_template(template, user=user, cities=cities, t=translation_provider())
@@ -151,8 +148,20 @@ def index(user_id: str):
 
 
 @app.route("/groups", methods=["GET"])
-def groups():
-    return render_template("groups.html", t=translation_provider())
+@jwt_check(deny_unauthenticated=True)
+def groups(user_id: str):
+    groups = crud.get_groups_of_member(user_id)
+    user = crud.get_user(user_id)
+
+    events_by_group_ids = {}
+    for group in groups:
+        events_by_group_ids[group.id] = []
+        liked_event_ids = [like.event_id for like in group.liked_events]
+        for event_id in liked_event_ids:
+            event = crud.get_event_by_id(event_id)
+            events_by_group_ids[group.id].append(event)
+
+    return render_template("groups.html", groups=groups, events_by_group_ids=events_by_group_ids, t=translation_provider())
 
 
 @app.route("/create-event", methods=["GET"])
@@ -167,11 +176,13 @@ def toggle_event_like(user_id: str):
     When a logged in user clicks on a like button of an event. Stores links the event and the user in the database and
     returns the the now liked or unliked button to update the website.
     """
-
     event_id = request.args.get("id")
 
     log.debug(f"Event '{event_id}' like toggled for '{user_id}'")
-    liked_events = crud.get_liked_event_ids_by_user_id(user_id)
+
+    user = crud.get_user(user_id)
+    liked_events = [like.event_id for like in user.liked_events]
+
     if event_id not in liked_events:
         crud.like_event(user_id, event_id)
         return render_template("components/liked-true-button.html", item={"id": event_id})
@@ -214,15 +225,28 @@ def create_event():
     return "", HTTPStatus.OK
 
 
-@app.route("/api/group/create")
+@app.route("/api/group/create", methods=["POST"])
 @jwt_check(deny_unauthenticated=True)
 def create_group(user_id: str):
-    group_name = request.args.get("group_name")
+    name = request.form.get("name")
+
+    if not name:
+        return "", HTTPStatus.BAD_REQUEST
 
     cool_id = Sqids().encode([randint(0, int(1e15))])
-    crud.add_group(user_id, cool_id, group_name)
+    crud.add_group(user_id, cool_id, name)
 
-    return "", HTTPStatus.OK
+    groups = crud.get_groups_of_member(user_id)
+
+    events_by_group_ids = {}
+    for group in groups:
+        events_by_group_ids[group.id] = []
+        liked_event_ids = [like.event_id for like in group.liked_events]
+        for event_id in liked_event_ids:
+            event = crud.get_event_by_id(event_id)
+            events_by_group_ids[group.id].append(event)
+
+    return render_template("components/groups.html", groups=groups, events_by_group_ids=events_by_group_ids, t=translation_provider())
 
 
 @app.route("/api/group/share")
@@ -248,40 +272,6 @@ def add_member(user_id: str):
     crud.add_member_to_group(user_id, group_id, False)
 
     return "", 200
-
-@app.route("/api/group/invite/accept")
-@jwt_check(deny_unauthenticated=True)
-def accept_user_invite(user_id: str):
-    """
-    Accepts a requested invite from a user
-    """
-    group_id = request.args.get("group_id")
-    member_user_id = request.args.get("member_user_id")
-
-    if crud.member_is_admin(user_id, group_id):
-        crud.accept_invite(member_user_id, group_id)
-
-        return "", HTTPStatus.OK
-
-    return "", HTTPStatus.METHOD_NOT_ALLOWED
-
-@app.route("/api/group/invite/deny")
-@jwt_check(deny_unauthenticated=True)
-def deny_user_invite(user_id: str):
-    """
-    Deny a requested invite from a user
-    """
-
-    group_id = request.args.get("group_id")
-    member_user_id = request.args.get("member_user_id")
-
-    if crud.member_is_admin(user_id, group_id):
-        crud.remove_user_from_group(member_user_id, group_id)
-
-        return "", HTTPStatus.OK
-    
-    return "", HTTPStatus.METHOD_NOT_ALLOWED
-
 
 @app.route("/api/account/delete", methods=["POST"])
 @jwt_check(deny_unauthenticated=True)
@@ -359,33 +349,50 @@ def get_events(user_id: str):
     therm = request.args.get("therm", "")
     city = request.args.get("city", "").strip().lower()
     category = request.args.get("category", "")
+    date = request.args.get("date", "all")
+
+    match date:
+        case "today":
+            min_time = datetime.today()
+            max_time = datetime.today()
+        case "tomorrow":
+            min_time = datetime.today() + timedelta(days=1)
+            max_time = datetime.today() + timedelta(days=1)
+        case "week":
+            min_time = datetime.today()
+            max_time = datetime.today() + timedelta(days=7)
+        case "month":
+            min_time = datetime.today()
+            max_time = datetime.today() + timedelta(days=30)
+        case "all":
+            min_time = datetime.today()
+            max_time = datetime.today() + timedelta(days=365)
 
     search_content = SearchContent(
-        query=therm, min_time=datetime.today(), max_time=datetime.today(), city=city, category=category
+        query=therm, min_time=min_time, max_time=max_time, city=city, category=category
     )
     result = search.main(search_content)
 
     if not user_id:
-        return render_template("components/events.html", events=result, cities=crud.get_possible_cities())
+        return render_template("components/events.html", events=result, cities=crud.get_possible_cities(), t=translation_provider())
 
-    user = crud.get_user_data(user_id)
-    liked_events = crud.get_liked_event_ids_by_user_id(user_id)
-    user_groups = {}
-    share_events = {}
+    user = crud.get_user(user_id)
+    liked_event_ids = [like.event_id for like in user.liked_events]
+
     groups = crud.get_groups_of_member(user_id)
+
+    shared_event_ids: list[str] = []
     for group in groups:
-        if crud.is_user_invited(user_id, group):
-            share_events[groups[group]] = crud.get_shared_events(group)
-            user_groups[group] = groups[group]
+        shared_event_ids += list([like.event_id for like in group.liked_events])
 
     return render_template(
         "components/events.html",
         events=result,
-        liked_events=liked_events,
-        groups=user_groups,
-        shared_events=share_events,
+        liked_events=liked_event_ids,
+        groups=groups,
+        shared_event_ids=shared_event_ids,
         user=user,
-        t=translation_provider(),
+        t=translation_provider()
     )
 
 

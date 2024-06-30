@@ -17,158 +17,32 @@
   <body class="container mx-auto p-4">
     {% include "components/navbar.html" %}
 
-    <div class="tabs tabs-boxed mb-4">
-      <a class="tab" @click="openTab(event, 'Events')" id="defaultOpen">
-        {{ t("tab.events") }}
-      </a>
-      <a class="tab" @click="openTab(event, 'Gruppen')">
-        {{ t("tab.groups_overview") }}
-      </a>
-      <a class="tab" @click="openTab(event, 'MeineGruppen')">
-        {{ t("tab.my_groups") }}
-      </a>
-    </div>
-
-    <main id="main-content">
-      <section id="Events" class="tabcontent hidden">
+    <main class="flex flex-col gap-8">
+      <section class="cool-card">
         <h2 class="text-2xl font-bold mb-4">{{ t("events.title") }}</h2>
-        <div class="card bg-base-100 shadow-xl mb-4">
-          <div class="card-body">
-            <h3 class="card-title">{{ t("events.summer_party.title") }}</h3>
-            <p>{{ t("events.summer_party.date") }}</p>
-            <p>{{ t("events.summer_party.location") }}</p>
-          </div>
-        </div>
-        <div class="card bg-base-100 shadow-xl mb-4">
-          <div class="card-body">
-            <h3 class="card-title">{{ t("events.group_trip.title") }}</h3>
-            <p>{{ t("events.group_trip.date") }}</p>
-            <p>{{ t("events.group_trip.location") }}</p>
-          </div>
-        </div>
+
+        <form
+          class="flex gap-2"
+          hx-post="/api/group/create"
+          hx-target="#group-list"
+        >
+          <input
+            name="name"
+            class="input input-bordered input-primary"
+            type="text"
+            placeholder="{{ t('groups.group_name') }}"
+            required
+          />
+
+          <button class="btn btn-primary">
+            {{ t("groups.create_group") }}
+          </button>
+        </form>
       </section>
 
-      <section id="Gruppen" class="tabcontent hidden">
-        <h2 class="text-2xl font-bold mb-4">
-          {{ t("groups.overview_title") }}
-        </h2>
-        <div class="card bg-base-100 shadow-xl mb-4">
-          <div class="card-body">
-            <h3 class="card-title">{{ t("groups.sports_group.title") }}</h3>
-            <p>{{ t("groups.sports_group.members") }}</p>
-            <div class="card-actions justify-end">
-              <button class="btn btn-primary" @click="joinGroup('{{ t('groups.sports_group.title') }}')">{{ t("groups.join_button") }}</button>
-            </div>
-          </div>
-        </div>
-        <div class="card bg-base-100 shadow-xl mb-4">
-          <div class="card-body">
-            <h3 class="card-title">{{ t("groups.book_club.title") }}</h3>
-            <p>{{ t("groups.book_club.members") }}</p>
-            <div class="card-actions justify-end">
-               <button class="btn btn-primary" @click="joinGroup('{{ t('groups.book_club.title') }}')">{{ t("groups.join_button") }}</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="MeineGruppen" class="tabcontent hidden">
-        <h2 class="text-2xl font-bold mb-4">{{ t("my_groups.title") }}</h2>
-        <div class="card bg-base-100 shadow-xl mb-4 cursor-pointer" @click="showGroupEvents('{{ t('my_groups.photo_group.title') }}')">
-          <div class="card-body">
-              <h3 class="card-title">{{ t("my_groups.photo_group.title") }}</h3>
-              <p>{{ t("my_groups.photo_group.member_since") }}</p>
-          </div>
-        </div>
-        <div class="card bg-base-100 shadow-xl mb-4 cursor-pointer" @click="showGroupEvents('{{ t('my_groups.hiking_group.title') }}')">
-          <div class="card-body">
-            <h3 class="card-title">{{ t("my_groups.hiking_group.title") }}</h3>
-            <p>{{ t("my_groups.hiking_group.member_since") }}</p>
-          </div>
-        </div>
+      <section id="group-list" class="flex flex-col gap-4">
+        {% include "components/groups.html" %}
       </section>
     </main>
-
-    <div id="group-events" class="hidden">
-      <button class="btn btn-primary mb-4" @click="showMainContent()">
-        {{ t("general.back_to_overview") }}
-      </button>
-      <h2 id="group-name" class="text-2xl font-bold mb-4"></h2>
-      <div id="event-list"></div>
-    </div>
-
-    <script>
-      function openTab(evt, tabName) {
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-          tabcontent[i].classList.add("hidden");
-        }
-        tablinks = document.getElementsByClassName("tab");
-        for (i = 0; i < tablinks.length; i++) {
-          tablinks[i].classList.remove("tab-active");
-        }
-        document.getElementById(tabName).classList.remove("hidden");
-        evt.currentTarget.classList.add("tab-active");
-      }
-
-      document.getElementById("defaultOpen").click();
-
-      function joinGroup(groupName) {
-        alert('{{ t("alerts.join_group") }}'.replace("{groupName}", groupName));
-      }
-
-      function showGroupEvents(groupName) {
-        document.getElementById("main-content").classList.add("hidden");
-        document.getElementById("group-events").classList.remove("hidden");
-        document.getElementById("group-name").innerText =
-          groupName + ' {{ t("general.events") }}';
-
-        var eventList = document.getElementById("event-list");
-        eventList.innerHTML = "";
-
-        var events;
-        if (groupName === '{{ t("my_groups.photo_group.title") }}') {
-          events = [
-            {
-              name: '{{ t("my_groups.photo_group.event1.title") }}',
-              date: '{{ t("my_groups.photo_group.event1.date") }}',
-            },
-            {
-              name: '{{ t("my_groups.photo_group.event2.title") }}',
-              date: '{{ t("my_groups.photo_group.event2.date") }}',
-            },
-          ];
-        } else if (groupName === '{{ t("my_groups.hiking_group.title") }}') {
-          events = [
-            {
-              name: '{{ t("my_groups.hiking_group.event1.title") }}',
-              date: '{{ t("my_groups.hiking_group.event1.date") }}',
-            },
-            {
-              name: '{{ t("my_groups.hiking_group.event2.title") }}',
-              date: '{{ t("my_groups.hiking_group.event2.date") }}',
-            },
-          ];
-        }
-
-        events.forEach(function (event) {
-          var eventDiv = document.createElement("div");
-          eventDiv.className = "card bg-base-100 shadow-xl mb-4";
-          eventDiv.innerHTML = `
-                    <div class="card-body">
-                        <h3 class="card-title">${event.name}</h3>
-                        <p>{{ t("general.date") }}: ${event.date}</p>
-                    </div>
-                `;
-          eventList.appendChild(eventDiv);
-        });
-      }
-
-      function showMainContent() {
-        document.getElementById("main-content").classList.remove("hidden");
-        document.getElementById("group-events").classList.add("hidden");
-      }
-    </script>
   </body>
 </html>

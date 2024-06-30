@@ -1,0 +1,47 @@
+sv:
+  search: "Sök"
+  profile: "Profil"
+  login: "Logga in"
+  register: "Registrera"
+  logout: "Logga ut"
+  password: "Lösenord"
+  location: "Evenemangsplats"
+  username: "Användarnamn"
+  email: "E-post"
+  search_placeholder: "Sök nyckelord"
+  city: "Stad"
+  share_btn: "Dela med grupp"
+  group: "Grupp"
+  
+  category:
+    name: "Kategori"
+    all: "Alla"
+    culture: "Kultur"
+    politics: "Politik"
+    sport: "Sport"
+    education: "Utbildning"
+  date:
+    date: "Datum"
+    all: "Alla"
+    today: "Idag"
+    tomorrow: "Imorgon"
+    week: "Vecka"
+    month: "Månad"
+  groups:
+    create_group: "Skapa grupp"
+    group_name: "Gruppnamn"
+  
+  tab:
+    my_groups: "Mina grupper"
+    events: "Evenemang"
+  my_groups:
+    title: "Mina grupper"
+  events:
+    title: "Gruppevenemang"
+  burger:
+    home: "Hem"
+    groups: "Grupper"
+    
+  price: "Pris"
+  time: "tid"
+  to: "fram tills"

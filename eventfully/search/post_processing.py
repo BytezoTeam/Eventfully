@@ -77,6 +77,7 @@ def _search_web(
 
     for source in sources:
         try:
+            log.debug(f"Collecting events from {source.__name__}")
             source_events = source(search)
             events.update(source_events)
         except Exception as e:

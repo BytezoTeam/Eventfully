@@ -1,0 +1,47 @@
+es:
+  search: "Buscar"
+  profile: "Perfil"
+  login: "Iniciar sesión"
+  register: "Registrarse"
+  logout: "Cerrar sesión"
+  password: "Contraseña"
+  location: "Lugar del evento"
+  username: "Nombre de usuario"
+  email: "Correo electrónico"
+  search_placeholder: "Buscar palabras clave"
+  city: "Ciudad"
+  share_btn: "Compartir con grupo"
+  group: "Grupo"
+  
+  category:
+    name: "Categoría"
+    all: "Todas"
+    culture: "Cultura"
+    politics: "Política"
+    sport: "Deporte"
+    education: "Educación"
+  date:
+    date: "Fecha"
+    all: "Todas"
+    today: "Hoy"
+    tomorrow: "Mañana"
+    week: "Semana"
+    month: "Mes"
+  groups:
+    create_group: "Crear grupo"
+    group_name: "Nombre del grupo"
+  
+  tab:
+    my_groups: "Mis grupos"
+    events: "Eventos"
+  my_groups:
+    title: "Mis grupos"
+  events:
+    title: "Eventos del grupo"
+  burger:
+    home: "Inicio"
+    groups: "Grupos"
+    
+  price: "Precio"
+  time: "Tiempo"
+  to: "hasta"
