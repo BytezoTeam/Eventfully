@@ -137,6 +137,7 @@ def get_groups_of_member(user_id):
     return group_ids
 
 
+@database.db.connection_context()
 def get_shared_events(group_id):
     group = models.Groups.get(models.Groups.id == group_id)
 
