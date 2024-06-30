@@ -20,6 +20,13 @@ en:
     politics: "Politics"
     sport: "Sport"
     education: "Education"
+  Date:
+      date: "Date"
+      all: "All"
+      today: "Today"
+      tomorrow: "Tomorrow"
+      week: "Week"
+      month: "Month"
   groups:
     create_group: "Create Group"
     group_name: "Group Name"

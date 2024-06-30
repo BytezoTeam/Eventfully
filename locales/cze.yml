@@ -1,0 +1,43 @@
+cs:
+  search: "Hledat"
+  profile: "Profil"
+  login: "Přihlásit se"
+  register: "Registrovat se"
+  logout: "Odhlásit se"
+  password: "Heslo"
+  location: "Místo konání"
+  username: "Uživatelské jméno"
+  email: "E-mail"
+  search_placeholder: "Hledat klíčová slova"
+  city: "Město"
+  share_btn: "Sdílet se skupinou"
+  group: "Skupina"
+  
+  category:
+    name: "Kategorie"
+    all: "Všechny"
+    culture: "Kultura"
+    politics: "Politika"
+    sport: "Sport"
+    education: "Vzdělávání"
+  Date:
+    date: "Datum"
+    all: "Všechny"
+    today: "Dnes"
+    tomorrow: "Zítra"
+    week: "Týden"
+    month: "Měsíc"
+  groups:
+    create_group: "Vytvořit skupinu"
+    group_name: "Název skupiny"
+  
+  tab:
+    my_groups: "Moje skupiny"
+    events: "Události"
+  my_groups:
+    title: "Moje skupiny"
+  events:
+    title: "Události skupiny"
+  burger:
+    home: "Domů"
+    groups: "Skupiny"

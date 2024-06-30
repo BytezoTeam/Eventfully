@@ -1,0 +1,43 @@
+ru:
+  search: "Поиск"
+  profile: "Профиль"
+  login: "Войти"
+  register: "Зарегистрироваться"
+  logout: "Выйти"
+  password: "Пароль"
+  location: "Место проведения"
+  username: "Имя пользователя"
+  email: "Электронная почта"
+  search_placeholder: "Поиск по ключевым словам"
+  city: "Город"
+  share_btn: "Поделиться с группой"
+  group: "Группа"
+  
+  category:
+    name: "Категория"
+    all: "Все"
+    culture: "Культура"
+    politics: "Политика"
+    sport: "Спорт"
+    education: "Образование"
+  Date:
+    date: "Дата"
+    all: "Все"
+    today: "Сегодня"
+    tomorrow: "Завтра"
+    week: "Неделя"
+    month: "Месяц"
+  groups:
+    create_group: "Создать группу"
+    group_name: "Название группы"
+  
+  tab:
+    my_groups: "Мои группы"
+    events: "События"
+  my_groups:
+    title: "Мои группы"
+  events:
+    title: "События группы"
+  burger:
+    home: "Главная"
+    groups: "Группы"

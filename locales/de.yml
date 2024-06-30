@@ -1,17 +1,18 @@
 de:
   search: "Suche"
-  profile: "Profile"
+  profile: "Profil"
   login: "Einloggen"
   register: "Registrieren"
   logout: "Abmelden"
-  location: "Veanstaltungsort"
   password: "Passwort"
+  location: "Veranstaltungsort"
   username: "Benutzername"
   email: "E-Mail"
-  search_placeholder: "Stichwörter Suchen"
+  search_placeholder: "Stichwörter suchen"
   city: "Stadt"
   share_btn: "Mit Gruppe teilen"
   group: "Gruppe"
+  
   category:
     name: "Kategorie"
     all: "Alle"
@@ -19,21 +20,24 @@ de:
     politics: "Politik"
     sport: "Sport"
     education: "Bildung"
-
+  Date:
+    date: "Datum"
+    all: "Alle"
+    today: "Heute"
+    tomorrow: "Morgen"
+    week: "Woche"
+    month: "Monat"
   groups:
     create_group: "Gruppe erstellen"
     group_name: "Gruppen-Name"
-
+  
   tab:
     my_groups: "Meine Gruppen"
     events: "Veranstaltungen"
-
   my_groups:
     title: "Meine Gruppen"
-
   events:
     title: "Gruppen-Veranstaltungen"
-
   burger:
     home: "Hauptseite"
     groups: "Gruppen"
