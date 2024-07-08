@@ -30,6 +30,7 @@ log.info("Starting Server ...")
 
 load_dotenv()
 JWT_KEY = getenv("MEILI_KEY")
+ANALYTICS_URL = getenv("ANALYTICS_URL")
 # Time in days until a jwt token expires to prevent old tokens from being used to improve security
 ID_EXPIRE_TIME = 7
 
@@ -132,8 +133,16 @@ def render_index_template(base: bool = False, user_id: str | None = None) -> str
 
     user = crud.get_user(user_id) if user_id else None
 
-    template = "index_base.html" if base else "index.html"
-    return render_template(template, user=user, cities=cities, t=translation_provider())
+    if base:
+        return render_template(
+            "index_base.html",
+            user=user,
+            cities=cities,
+            t=translation_provider(),
+            analytics_url=ANALYTICS_URL
+        )
+    else:
+        return render_template("index.html", user=user, cities=cities, t=translation_provider())
 
 
 @app.errorhandler(500)
