@@ -13,7 +13,7 @@ def get_hash_string(input_string):
 
 
 @beartype
-def extract_language_from_language_header(header: str, supported_languages: tuple) -> str:
+def extract_language_from_language_header(header: str | None, supported_languages: tuple) -> str:
     if not header:
         return "en"
 
