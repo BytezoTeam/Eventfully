@@ -2,7 +2,6 @@ import locale
 from datetime import datetime
 
 import niquests
-from beartype import beartype
 from bs4 import BeautifulSoup, PageElement
 
 from eventfully.database import schemas
@@ -44,7 +43,6 @@ CATEGORIES = {
 }
 
 
-@beartype
 def search(search_con: SearchContent) -> set[schemas.Event]:
     if search_con.category not in ["culture", "education", "sport", ""]:
         return set()
@@ -71,7 +69,6 @@ def search(search_con: SearchContent) -> set[schemas.Event]:
     return events
 
 
-@beartype
 def _extract_event(raw_event: PageElement, search_con: SearchContent) -> schemas.Event | None:
     image_url = raw_event.find_next("img").get("src")
     title = raw_event.find_next("h3").text.strip()

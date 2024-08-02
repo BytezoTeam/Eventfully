@@ -122,8 +122,12 @@ def translation_provider() -> Callable[[str], str]:
     language_header = request.headers.get("Accept-Language")
     lang_code = utils.extract_language_from_language_header(language_header, LANGUAGES)
 
-    def translate(text: str):
-        return i18n.gettext(lang_code, text)
+    def translate(text: str) -> str:
+        translation = i18n.gettext(lang_code, text)
+        if translation is str:
+            return translation
+        else:
+            return f"Error: {text}"
 
     return translate
 
@@ -173,7 +177,7 @@ def groups(user_id: str):
     events_by_group_ids = {}
     for group in groups:
         events_by_group_ids[group.id] = []
-        liked_event_ids = [like.event_id for like in group.liked_events]
+        liked_event_ids = [like.event_id for like in group.liked_events]    # pyright: ignore
         for event_id in liked_event_ids:
             event = crud.get_event_by_id(event_id)
             events_by_group_ids[group.id].append(event)
@@ -194,11 +198,13 @@ def toggle_event_like(user_id: str):
     returns the the now liked or unliked button to update the website.
     """
     event_id = request.args.get("id")
+    if event_id is None:
+        return "", HTTPStatus.BAD_REQUEST
 
     log.debug(f"Event '{event_id}' like toggled for '{user_id}'")
 
     user = crud.get_user(user_id)
-    liked_events = [like.event_id for like in user.liked_events]
+    liked_events = [like.event_id for like in user.liked_events]    # pyright: ignore
 
     if event_id not in liked_events:
         crud.like_event(user_id, event_id)
@@ -235,9 +241,10 @@ def create_event():
         end_time=form.end_time.data,
         title=form.title.data,
         address=form.address.data,
+        source="manual",
     )
 
-    crud.add_events(event)
+    crud.add_events([event])
 
     return "", HTTPStatus.OK
 
@@ -258,7 +265,7 @@ def create_group(user_id: str):
     events_by_group_ids = {}
     for group in groups:
         events_by_group_ids[group.id] = []
-        liked_event_ids = [like.event_id for like in group.liked_events]
+        liked_event_ids = [like.event_id for like in group.liked_events]    # pyright: ignore
         for event_id in liked_event_ids:
             event = crud.get_event_by_id(event_id)
             events_by_group_ids[group.id].append(event)
@@ -270,6 +277,8 @@ def create_group(user_id: str):
 @jwt_check(deny_unauthenticated=True)
 def share_to_group(user_id: str):
     event_id = request.args.get("event_id")
+    if event_id is None:
+        return "", HTTPStatus.BAD_REQUEST
     group_id = request.args.get("group_id")
 
     crud.like_event(user_id, event_id, group_id)
@@ -289,6 +298,7 @@ def add_member(user_id: str):
     crud.add_member_to_group(user_id, group_id, False)
 
     return "", 200
+
 
 @app.route("/api/account/delete", methods=["POST"])
 @jwt_check(deny_unauthenticated=True)
@@ -368,6 +378,9 @@ def get_events(user_id: str):
     category = request.args.get("category", "")
     date = request.args.get("date", "all")
 
+    if category not in ["", "sport", "culture", "education", "politics"]:
+        return "", HTTPStatus.BAD_REQUEST
+    
     match date:
         case "today":
             min_time = datetime.today()
@@ -384,6 +397,9 @@ def get_events(user_id: str):
         case "all":
             min_time = datetime.today()
             max_time = datetime.today() + timedelta(days=365)
+        case _:
+            min_time = datetime.today()
+            max_time = datetime.today()
 
     search_content = SearchContent(
         query=therm, min_time=min_time, max_time=max_time, city=city, category=category
@@ -394,13 +410,13 @@ def get_events(user_id: str):
         return render_template("components/events.html", events=result, cities=crud.get_possible_cities(), t=translation_provider())
 
     user = crud.get_user(user_id)
-    liked_event_ids = [like.event_id for like in user.liked_events]
+    liked_event_ids = [like.event_id for like in user.liked_events]    # pyright: ignore
 
     groups = crud.get_groups_of_member(user_id)
 
     shared_event_ids: list[str] = []
     for group in groups:
-        shared_event_ids += list([like.event_id for like in group.liked_events])
+        shared_event_ids += list([like.event_id for like in group.liked_events])    # pyright: ignore
 
     return render_template(
         "components/events.html",

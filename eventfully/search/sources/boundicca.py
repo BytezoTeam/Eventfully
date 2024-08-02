@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 
 import niquests
-from beartype import beartype
 
 from eventfully.database import schemas
 from eventfully.logger import log
@@ -59,7 +58,6 @@ def crawl() -> set[schemas.Event]:
     return events
 
 
-@beartype
 def _extract_datetime(string: str) -> datetime:
     format_strings = ["%Y-%m-%dT%H:%M:%SZ", "%Y-%m-%dT%H:%M:%S%zZ", "%Y-%m-%dT%H:%M:%S%z"]
     for format_string in format_strings:
