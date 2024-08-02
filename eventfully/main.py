@@ -86,16 +86,6 @@ def jwt_check(deny_unauthenticated=False):
                 else:
                     return func(None, *args, **kwargs)
 
-
-            # Check if user exists
-            try:
-                crud.get_user(content["user_id"])
-            except DoesNotExist:
-                if deny_unauthenticated:
-                    return "", HTTPStatus.UNAUTHORIZED
-                else:
-                    return func(None, *args, **kwargs)
-
             return func(content["user_id"], *args, **kwargs)
 
         return wrapper

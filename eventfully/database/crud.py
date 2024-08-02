@@ -63,7 +63,6 @@ def add_member_to_group(member_user_id: str, group_id: str, admin_user: bool):
 
     return member_user_id
 
-
 @beartype
 @database.db.connection_context()
 def remove_user_from_group(member_user_id: str, g_id: str) -> bool:
@@ -79,6 +78,7 @@ def remove_user_from_group(member_user_id: str, g_id: str) -> bool:
     return True
 
 
+
 @database.db.connection_context()
 def member_is_admin(member_id: str, group_id: str):
     group = models.Groups.get(models.Groups.id == group_id)
@@ -87,12 +87,12 @@ def member_is_admin(member_id: str, group_id: str):
     is_admin = (
         models.GroupMembers.select()
         .where(
-            models.GroupMembers.user == user, models.GroupMembers.admin == 1, models.GroupMembers.group == group
+            models.GroupMembers.user_id == member_id, models.GroupMembers.admin == 1, models.GroupMembers.group == group
         )
         .exists()
     )
 
-    return is_admin
+    return user
 
 
 @database.db.connection_context()
