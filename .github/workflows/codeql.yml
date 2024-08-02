@@ -15,6 +15,7 @@ on:
       - "**.py"
       - "**.html"
       - "**.toml"
+      - "**Dockerfile"
   schedule:
     - cron: '29 19 * * 5'
 
@@ -51,3 +52,20 @@ jobs:
 
       - name: Run Ruff
         run: ruff check --output-format=github
+
+  pyright:
+    name: Pyright
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          cache: pip
+      - name: Install Dependencies
+        run: pip install -r requirements.lock
+
+      - name: Run Pyright
+        uses: jakebailey/pyright-action@v2
