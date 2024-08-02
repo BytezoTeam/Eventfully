@@ -2,7 +2,6 @@ from datetime import datetime
 
 import niquests
 from bs4 import BeautifulSoup
-from beartype import beartype
 
 from eventfully.database import schemas
 from eventfully.types import SearchContent
@@ -10,7 +9,6 @@ from eventfully.types import SearchContent
 BASE_URL = "https://www.zuerichunbezahlbar.ch"
 
 
-@beartype
 def search(search_content: SearchContent) -> set[schemas.Event]:
     # Skip if not in Zürich because zuerichunbezahlbar only provides events in this city
     if search_content.city not in ["", "zürich"]:
@@ -72,7 +70,6 @@ def search(search_content: SearchContent) -> set[schemas.Event]:
     return events
 
 
-@beartype
 def post_process(event: schemas.Event) -> schemas.Event:
     request = niquests.get(event.web_link)
     request.raise_for_status()
