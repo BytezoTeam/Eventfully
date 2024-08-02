@@ -5,6 +5,15 @@ services:
       MEILI_MASTER_KEY: "Moin" # Change this to a secure value
     volumes:
       - "meilisearch-data:/meili_data"
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - '--no-verbose'
+        - '--spider'
+        - 'http://localhost:7700/health'
+      retries: 3
+      timeout: 5s
 
   web:
     build: .
@@ -15,9 +24,10 @@ services:
     environment:
       MEILI_HOST: "http://meilisearch:7700"
       MEILI_KEY: "Moin" # Change this to a secure value
+      TZ: "Europe/Berlin"
     depends_on:
-      - "meilisearch"
-
+      meilisearch:
+        condition: service_healthy
 volumes:
   meilisearch-data:
   sqlite-data:
