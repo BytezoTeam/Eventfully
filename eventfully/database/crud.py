@@ -59,6 +59,10 @@ def add_member_to_group(member_user_id: str, group_id: str, admin_user: bool):
 
     return member_user_id
 
+@database.db.connection_context()
+def group_exists(group_id: str) -> bool:
+    return models.Groups.select().where(models.Groups.id == group_id).exists()
+
 
 @database.db.connection_context()
 def remove_user_from_group(member_user_id: str, g_id: str) -> bool:

@@ -14,7 +14,7 @@ from flask import Flask, render_template, request, make_response, Response, json
 from flask_apscheduler import APScheduler
 from flask_wtf import FlaskForm
 from pydantic import ValidationError
-from sqids import Sqids
+from sqids.sqids import Sqids
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Length
 from pyi18n import PyI18n
@@ -289,6 +289,8 @@ def add_member(user_id: str):
     """
 
     group_id = request.args.get("group_id")
+    if not group_id or not crud.group_exists(group_id):
+        return "", HTTPStatus.BAD_REQUEST
 
     crud.add_member_to_group(user_id, group_id, False)
 
@@ -397,7 +399,7 @@ def get_events(user_id: str):
             max_time = datetime.today()
 
     search_content = SearchContent(
-        query=therm, min_time=min_time, max_time=max_time, city=city, category=category
+        query=therm, min_time=min_time, max_time=max_time, city=city, category=category     # pyright: ignore
     )
     result = search.main(search_content)
 
