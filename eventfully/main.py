@@ -64,37 +64,32 @@ def jwt_check(deny_unauthenticated=False):
         @wraps(func)
         def wrapper(*args, **kwargs):
             jwt_token = request.cookies.get("jwt_token")
+            # Check if the jwt cookie is present
             if not jwt_token:
                 if deny_unauthenticated:
                     return "", HTTPStatus.UNAUTHORIZED
                 else:
                     return func(None, *args, **kwargs)
 
+            # Try to decode the jwt token
             try:
                 content = jwt.decode(jwt_token, JWT_KEY, algorithms=["HS256"])
             except Exception as e:
                 log.warn(f"Problamatic token: {e}")
                 return "", HTTPStatus.UNAUTHORIZED
 
-            # Token is too old and should be deleted
+            # Check if the token is expired
             expire_date = datetime.fromtimestamp(content["expire_date"])
             if expire_date <= datetime.now() - timedelta(days=ID_EXPIRE_TIME):
-                if deny_unauthenticated:
-                    response = make_response()
-                    response.delete_cookie("jwt_token")
-                    return response, HTTPStatus.UNAUTHORIZED
-                else:
-                    return func(None, *args, **kwargs)
-
+                response = make_response()
+                response.delete_cookie("jwt_token")
+                return response, HTTPStatus.UNAUTHORIZED
 
             # Check if user exists
             try:
                 crud.get_user(content["user_id"])
             except DoesNotExist:
-                if deny_unauthenticated:
-                    return "", HTTPStatus.UNAUTHORIZED
-                else:
-                    return func(None, *args, **kwargs)
+                return "", HTTPStatus.UNAUTHORIZED
 
             return func(content["user_id"], *args, **kwargs)
 
@@ -380,7 +375,7 @@ def get_events(user_id: str):
 
     if category not in ["", "sport", "culture", "education", "politics"]:
         return "", HTTPStatus.BAD_REQUEST
-    
+
     match date:
         case "today":
             min_time = datetime.today()
@@ -416,7 +411,7 @@ def get_events(user_id: str):
 
     shared_event_ids: list[str] = []
     for group in groups:
-        shared_event_ids += list([like.event_id for like in group.liked_events])    # pyright: ignore
+        shared_event_ids += [like.event_id for like in group.liked_events]    # pyright: ignore
 
     return render_template(
         "components/events.html",

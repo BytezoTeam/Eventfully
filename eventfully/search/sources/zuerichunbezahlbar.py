@@ -95,5 +95,6 @@ def post_process(event: schemas.Event) -> schemas.Event:
 
 
 if __name__ == "__main__":
-    print(search("", datetime.today(), datetime.today()))
-    print(post_process(schemas.Event()))
+    results = search(SearchContent(query="", min_time=datetime.today(), max_time=datetime.today(), city="wuppertal", category="culture"))
+    for result in results:
+        print(result)

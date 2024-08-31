@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from eventfully.database import schemas, crud
 from eventfully.search import post_processing
 from eventfully.utils import get_hash_string
