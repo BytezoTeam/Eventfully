@@ -1,7 +1,6 @@
 from datetime import datetime
 from typing import Iterable
 
-from beartype import beartype
 from peewee import DoesNotExist
 from cachetools import cached, TTLCache
 
@@ -34,7 +33,6 @@ def like_event(user_id: str, event_id: str, group_id: str | None = None):
     return event_id
 
 
-@beartype
 @database.db.connection_context()
 def unlike_event(user_id: str, event_id: str) -> None:
     user = models.User.get(models.User.id == user_id)
@@ -42,7 +40,6 @@ def unlike_event(user_id: str, event_id: str) -> None:
     models.Likes.delete().where(models.Likes.user == user, models.Likes.event_id == event_id).execute()
 
 
-@beartype
 @database.db.connection_context()
 def add_group(admin_id, group_id, group_name):
     group = models.Groups.create(id=group_id, name=group_name)
@@ -53,7 +50,6 @@ def add_group(admin_id, group_id, group_name):
     return group_id
 
 
-@beartype
 @database.db.connection_context()
 def add_member_to_group(member_user_id: str, group_id: str, admin_user: bool):
     group = models.Groups.get(models.Groups.id == group_id)
@@ -63,8 +59,11 @@ def add_member_to_group(member_user_id: str, group_id: str, admin_user: bool):
 
     return member_user_id
 
+@database.db.connection_context()
+def group_exists(group_id: str) -> bool:
+    return models.Groups.select().where(models.Groups.id == group_id).exists()
 
-@beartype
+
 @database.db.connection_context()
 def remove_user_from_group(member_user_id: str, g_id: str) -> bool:
     user = models.User.get(models.User.id == member_user_id)
@@ -123,7 +122,6 @@ def get_user(user_id: str) -> models.User:
     return models.User.get(models.User.id == user_id)
 
 
-@beartype
 @database.db.connection_context()
 def create_account(username: str, password: str, user_id: str, email: str, event_organiser: bool = False) -> str:
     models.User.create(
@@ -156,7 +154,6 @@ def authenticate_user(username, password):
         return False
 
 
-@beartype
 @database.db.connection_context()
 def check_user_exists(user_id: str | None):
     return models.User.select().where(models.User.id == user_id).exists()
@@ -177,7 +174,6 @@ def add_events(events: Iterable[schemas.Event]):
     models.PossibleCities.insert_many(city_dict).on_conflict_ignore().execute()
 
 
-@beartype
 def search_events(therm: str, filter_string: str) -> set[schemas.Event]:
     raw = models.event_index.search(
         therm,
@@ -190,7 +186,6 @@ def search_events(therm: str, filter_string: str) -> set[schemas.Event]:
     return set(events)
 
 
-@beartype
 def get_event_by_id(event_id: str) -> schemas.Event:
     raw_events = models.event_index.search("", {"filter": f"id = {event_id}"})
     events = [schemas.Event(**raw_event) for raw_event in raw_events["hits"]]
@@ -198,13 +193,11 @@ def get_event_by_id(event_id: str) -> schemas.Event:
 
 
 # Search cache
-@beartype
 @database.db.connection_context()
 def create_search_cache(search_hash: str):
     models.SearchCache.create(search_hash=search_hash, time=datetime.now())
 
 
-@beartype
 @database.db.connection_context()
 def in_search_cache(search_hash: str) -> bool:
     return models.SearchCache.select().where(models.SearchCache.search_hash == search_hash).exists()

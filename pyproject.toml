@@ -14,7 +14,6 @@ dependencies = [
     "meilisearch==0.*",
     "pydantic==2.*",
     "Flask-APScheduler==1.*",
-    "beartype==0.*",
     "gunicorn==22.*",
     "pytest==8.*",
     "get-project-root==0.*",

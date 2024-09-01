@@ -6,8 +6,6 @@ Some search won't return all event information directly so whe need to fetch the
 from typing import Callable
 import queue
 
-from beartype import beartype
-
 from eventfully.types import SearchContent
 from eventfully.logger import log
 from eventfully.database import crud, schemas
@@ -28,7 +26,6 @@ POST_PROCESSORS: dict[str, Callable[[schemas.Event], schemas.Event]] = {
 process_queue = queue.Queue()
 
 
-@beartype
 def main():
     while True:
         if process_queue.empty():
@@ -43,7 +40,6 @@ def main():
             _process_event(item)
 
 
-@beartype
 def _process_search(search_content: SearchContent):
     try:
         events = _search_web(search_content, SOURCES)
@@ -59,7 +55,6 @@ def _process_search(search_content: SearchContent):
     crud.add_events(events_without_post_processing)
 
 
-@beartype
 def _process_event(event: schemas.Event):
     try:
         event = POST_PROCESSORS[event.source](event)
@@ -69,7 +64,6 @@ def _process_event(event: schemas.Event):
     crud.add_events({event})
 
 
-@beartype
 def _search_web(
     search: SearchContent, sources: list[Callable[[SearchContent], set[schemas.Event]]]
 ) -> set[schemas.Event]:

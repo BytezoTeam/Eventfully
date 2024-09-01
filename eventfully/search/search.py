@@ -1,14 +1,9 @@
-from datetime import datetime
-
-from beartype import beartype
-
 from eventfully.database import schemas, crud
 from eventfully.search import post_processing
 from eventfully.utils import get_hash_string
 from eventfully.types import SearchContent
 
 
-@beartype
 def main(search_content: SearchContent) -> set[schemas.Event]:
     """
     Searches for events in the database and returns them.
@@ -28,7 +23,6 @@ def main(search_content: SearchContent) -> set[schemas.Event]:
     return events
 
 
-@beartype
 def search_db(search: SearchContent) -> set[schemas.Event]:
     filters = []
     if search.city:
@@ -38,8 +32,3 @@ def search_db(search: SearchContent) -> set[schemas.Event]:
     filter_string = " AND ".join(filters)
 
     return crud.search_events(search.query, filter_string)
-
-
-if __name__ == "__main__":
-    print(main("", datetime.today(), datetime.today(), "Zürich"))
-    # print(_search_db("", datetime.today(), datetime.today(), "Zürich"))

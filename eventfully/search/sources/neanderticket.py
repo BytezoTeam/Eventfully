@@ -1,7 +1,6 @@
 import re
 from datetime import datetime, timedelta
 
-from beartype import beartype
 import niquests
 from bs4 import BeautifulSoup, PageElement
 
@@ -9,7 +8,6 @@ from eventfully.database import schemas
 from eventfully.types import SearchContent
 
 
-@beartype
 def search(search_content: SearchContent) -> set[schemas.Event]:
     if search_content.category not in ["culture", ""]:
         return set()
@@ -41,7 +39,6 @@ def search(search_content: SearchContent) -> set[schemas.Event]:
     return events
 
 
-@beartype
 def _extract_event_from_html(raw_event: PageElement, search_time: datetime) -> schemas.Event | None:
     image_object = raw_event.find_next("a", class_="fancybox")
     if image_object:
@@ -94,7 +91,6 @@ def _extract_event_from_html(raw_event: PageElement, search_time: datetime) -> s
     return event
 
 
-@beartype
 def post_process(event: schemas.Event) -> schemas.Event:
     request = niquests.get(event.web_link)
     request.raise_for_status()
@@ -107,7 +103,6 @@ def post_process(event: schemas.Event) -> schemas.Event:
     return event
 
 
-@beartype
 def _extract_with_regex(text: str, pattern: str) -> str:
     search_match = re.search(pattern, text)
     if search_match:
@@ -117,6 +112,6 @@ def _extract_with_regex(text: str, pattern: str) -> str:
 
 
 if __name__ == "__main__":
-    results = search("", datetime.today(), datetime.today(), "wuppertal")
+    results = search(SearchContent(query="", min_time=datetime.today(), max_time=datetime.today(), city="wuppertal", category="culture"))
     for result in results:
         print(result)

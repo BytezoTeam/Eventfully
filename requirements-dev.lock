@@ -7,12 +7,12 @@
 #   all-features: false
 #   with-sources: false
 #   generate-hashes: false
+#   universal: false
 
 annotated-types==0.7.0
     # via pydantic
 apscheduler==3.10.4
     # via flask-apscheduler
-beartype==0.18.5
 beautifulsoup4==4.12.3
 blinker==1.8.2
     # via flask
@@ -26,9 +26,6 @@ charset-normalizer==3.3.2
     # via requests
 click==8.1.7
     # via flask
-colorama==0.4.6
-    # via click
-    # via pytest
 flask==3.0.3
     # via flask-apscheduler
     # via flask-wtf
@@ -93,8 +90,6 @@ sqids==0.4.1
 typing-extensions==4.12.2
     # via pydantic
     # via pydantic-core
-tzdata==2024.1
-    # via tzlocal
 tzlocal==5.2
     # via apscheduler
 urllib3==2.2.2
