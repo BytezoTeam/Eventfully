@@ -2,7 +2,7 @@ services:
   meilisearch:
     image: "docker.io/getmeili/meilisearch:v1.7"
     environment:
-      MEILI_MASTER_KEY: "Moin" # Change this to a secure value
+      MEILI_MASTER_KEY: ${MELLISEARCH_KEY:-r2Lr7e68Yf3y-GekSB7pz6IWNpg0G-lFpJYTG4VUqB4}
     volumes:
       - "meilisearch-data:/meili_data"
 
@@ -14,7 +14,7 @@ services:
       - "sqlite-data:/app/database/sqlite"
     environment:
       MEILI_HOST: "http://meilisearch:7700"
-      MEILI_KEY: "Moin" # Change this to a secure value
+      MEILI_MASTER_KEY: ${MELLISEARCH_KEY:-r2Lr7e68Yf3y-GekSB7pz6IWNpg0G-lFpJYTG4VUqB4}
     depends_on:
       - "meilisearch"
 

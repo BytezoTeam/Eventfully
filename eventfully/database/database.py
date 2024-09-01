@@ -11,15 +11,15 @@ from playhouse.shortcuts import ThreadSafeDatabaseMetadata
 
 load_dotenv()
 _MEILI_HOST = getenv("MEILI_HOST")
-_MEILI_KEY = getenv("MEILI_KEY")
+_MEILI_MASTER_KEY = getenv("MEILI_MASTER_KEY")
 _SQL_DB_PATH = path.join(root_path(ignore_cwd=True), "database", "sqlite", "database.db")
-if not _MEILI_KEY:
+if not _MEILI_MASTER_KEY:
     raise ValueError("No MeiliSearch key provided. Please set MEILI_KEY in .env file.")
 if not _MEILI_HOST:
     raise ValueError("No MeiliSearch host provided. Please set MEILI_HOST in .env file.")
 
 # Meilisearch
-ms_client = ms.Client(_MEILI_HOST, _MEILI_KEY)
+ms_client = ms.Client(_MEILI_HOST, _MEILI_MASTER_KEY)
 if not ms_client.is_healthy():
     FUNNY_ERRORS = [
         "Oh, trying to connect to Meilisearch, are we? Did you make sure it's not on a coffee break? Check if it's running and the .env file isn't just a decorative piece.",
