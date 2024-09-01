@@ -16,7 +16,7 @@ The file must be named `.env` and should be located in the root of the project (
 It should contain this information (replace values with yours):
 
 ```env
-MEILI_KEY="<meilisearch master key>"
+MEILI_MASTER_KEY="<meilisearch master key>"
 MEILI_HOST="<address of the meilisearch server e.g. http://localhost:7700>"
 ```
 
