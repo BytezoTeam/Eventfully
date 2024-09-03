@@ -1,25 +1,19 @@
-<!DOCTYPE html>
-<html
-  lang="de"
-  x-data="{ darkMode: localStorage.getItem('dark') === 'true' }"
-  x-init="$watch('darkMode', val => localStorage.setItem('dark', val))"
-  x-bind:class="darkMode ? 'dark' : ''"
-  x-bind:data-theme="darkMode ? 'dark' : 'light'"
-  class="dark:bg-gray-900 bg-gray-200"
->
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Eventfully</title>
-    {% include "components/head_links.html" %} {% if analytics_url %}
-    <style>
-      body:hover {
-        border-image: url("{{ analytics_url }}");
-      }
-    </style>
-    {% endif %}
-  </head>
+{% extends "base.html" %}
 
+{% block head %}
+  <title>Eventfully</title>
+  {% include "components/head_links.html" %}
+
+  {% if analytics_url %}
+  <style>
+    body:hover {
+      border-image: url("{{ analytics_url }}");
+    }
+  </style>
+  {% endif %}
+{% endblock %}
+
+{% block body %}
   <body class="container mx-auto">
     {% include 'index.html' %}
 
@@ -34,4 +28,4 @@
       </aside>
     </footer>
   </body>
-</html>
+{% endblock %}
