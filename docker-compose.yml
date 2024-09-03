@@ -15,6 +15,7 @@ services:
     environment:
       MEILI_HOST: "http://meilisearch:7700"
       MEILI_MASTER_KEY: ${MELLISEARCH_KEY:-r2Lr7e68Yf3y-GekSB7pz6IWNpg0G-lFpJYTG4VUqB4}
+      IMPRINT: ""
     depends_on:
       - "meilisearch"
 

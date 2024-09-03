@@ -1,4 +1,5 @@
 import atexit
+from re import A
 from typing import Callable
 from datetime import datetime, timedelta
 from functools import wraps
@@ -31,6 +32,7 @@ log.info("Starting Server ...")
 load_dotenv()
 JWT_KEY = getenv("MEILI_KEY")
 ANALYTICS_URL = getenv("ANALYTICS_URL")
+IMPRINT = getenv("IMPRINT")
 # Time in days until a jwt token expires to prevent old tokens from being used to improve security
 ID_EXPIRE_TIME = 7
 
@@ -138,7 +140,8 @@ def render_index_template(base: bool = False, user_id: str | None = None) -> str
             user=user,
             cities=cities,
             t=translation_provider(),
-            analytics_url=ANALYTICS_URL
+            analytics_url=ANALYTICS_URL,
+            imprint=IMPRINT,
         )
     else:
         return render_template("index.html", user=user, cities=cities, t=translation_provider())
@@ -162,6 +165,14 @@ def index(user_id: str):
         return render_index_template(base=True)
 
     return render_index_template(base=True, user_id=user_id)
+
+
+@app.route("/imprint", methods=["GET"])
+def imprint():
+    if not IMPRINT:
+        return "", HTTPStatus.NOT_FOUND
+
+    return render_template("imprint.html", t=translation_provider(), imprint=IMPRINT)
 
 
 @app.route("/groups", methods=["GET"])
