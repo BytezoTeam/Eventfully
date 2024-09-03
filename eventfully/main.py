@@ -1,5 +1,4 @@
 import atexit
-from re import A
 from typing import Callable
 from datetime import datetime, timedelta
 from functools import wraps
