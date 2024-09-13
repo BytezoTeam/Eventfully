@@ -1,28 +1,31 @@
-<!DOCTYPE html>
-<html
-  lang="de"
-  x-data="{ darkMode: localStorage.getItem('dark') === 'true' }"
-  x-init="$watch('darkMode', val => localStorage.setItem('dark', val))"
-  x-bind:class="darkMode ? 'dark' : ''"
-  x-bind:data-theme="darkMode ? 'dark' : 'light'"
-  class="dark:bg-gray-900 bg-gray-200"
->
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Eventfully</title>
-    {% include "components/head_links.html" %}
+{% extends "base.html" %}
 
-    {% if analytics_url %}
-    <style>
-      body:hover {
-        border-image: url("{{ analytics_url }}");
-      }
-    </style>
-    {% endif %}
-  </head>
+{% block head %}
+  <title>Eventfully</title>
+  {% include "components/head_links.html" %}
 
+  {% if analytics_url %}
+  <style>
+    body:hover {
+      border-image: url("{{ analytics_url }}");
+    }
+  </style>
+  {% endif %}
+{% endblock %}
+
+{% block body %}
   <body class="container mx-auto">
     {% include 'index.html' %}
+
+    <footer
+      class="absolute left-0 w-screen footer items-center mt-4 p-6 bg-neutral text-neutral-content text-base"
+    >
+      <aside class="grid-flow-col gap-4 items-center">
+        <p class="font-semibold">Eventfully</p>
+        {% if imprint %}
+        <a class="border-l pl-4 link" href="/imprint">Imprint</a>
+        {% endif %}
+      </aside>
+    </footer>
   </body>
-</html>
+{% endblock %}

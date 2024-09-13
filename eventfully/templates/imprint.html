@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block head %}
+  <title>Eventfully Imprint</title>
+  {% include "components/head_links.html" %}
+
+  {% if analytics_url %}
+  <style>
+    body:hover {
+      border-image: url("{{ analytics_url }}?action=imprint");
+    }
+  </style>
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+  <body class="container mx-auto">
+    {% include "components/navbar.html" %}
+
+    <section class="cool-card mt-8">
+      <h1 class="mb-4">Imprint</h1>
+
+      <p class="prose whitespace-pre-line">{{ imprint }}</p>
+    </section>
+  </body>
+{% endblock %}
