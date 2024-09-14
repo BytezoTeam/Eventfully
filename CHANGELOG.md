@@ -1,10 +1,10 @@
 
-## v0.2.1 - 2024-07-08
+## v0.2.2 - 14.09.2024
 
 ### Added
 
-- option to use lightweight analaytics
+- option to provide an imprint on the website via an environment variable
 
 ### Fixed
 
-- server side 500 crash when Accept-Language-Header not set
+- give the actual referrer to the analytics
