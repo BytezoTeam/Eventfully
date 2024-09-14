@@ -7,7 +7,7 @@
   {% if analytics_url %}
   <style>
     body:hover {
-      border-image: url("{{ analytics_url }}");
+      border-image: url("{{ analytics_url }}?referrer={{ request.referrer }}");
     }
   </style>
   {% endif %}
