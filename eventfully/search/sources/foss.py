@@ -118,9 +118,9 @@ def _normalize_foss_event(raw_event: FossEvent) -> schemas.Event:
         image_link=None,
         city=raw_event.city,
         description=raw_event.self_description,
-        address=None,
+        address=raw_event.venue,
         price=raw_event.entrance_fee,
-        category=None,    # TODO: set category
+        category="education",
     )
 
 
