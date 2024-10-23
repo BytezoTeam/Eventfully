@@ -120,10 +120,10 @@ def translation_provider() -> Callable[[str], str]:
 
     def translate(text: str) -> str:
         translation = i18n.gettext(lang_code, text)
-        if translation is str:
+        if isinstance(translation, str):
             return translation
         else:
-            return f"Error: {text}"
+            return text
 
     return translate
 
