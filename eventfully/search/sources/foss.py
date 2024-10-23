@@ -61,7 +61,7 @@ class FossEvent(BaseModel):
     matrix: Optional[str]
 
     @field_validator("lat", "lon", mode="before")
-    def convert_empty_string_to_none(cls, value: str):
+    def convert_empty_string_to_none(self, value: str):
         if value == "":
             return None
         if not value.isnumeric():
@@ -73,7 +73,7 @@ class FossEvent(BaseModel):
         return value
 
     @field_validator("date_start", "date_end", mode="before")
-    def normalize_dates(cls, value: str):
+    def normalize_dates(self, value: str):
         if value == "None":
             raise MissingImportantFieldError("Date is None")
 
