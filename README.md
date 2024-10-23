@@ -27,6 +27,7 @@ Eventfully is a software to find and explore new events in your area and learn m
 - [Boudicca](https://boudicca.events): aggregated event database combining multiple smaller sources and laying a special focus on accessibility
 - [Neanderticket](https://www.neanderticket.de/): events for the North Rhine-Westphalia state in Germany
 - [bpb: Bundeszentrale für politische Bildung](https://www.bpb.de/veranstaltungen/): various political events in Germany
+- [foss.events](https://foss.events): collection of Free, Libre and/or Open Source Software events happening in Europe and online
 
 ## Documentation
 
