@@ -105,10 +105,7 @@ def _is_event_happening(event: FossEvent) -> bool:
     if event.cancelled:
         return False
 
-    if event.date_start < datetime.now():
-        return False
-
-    return True
+    return event.date_start > datetime.now()
 
 
 def _normalize_foss_event(raw_event: FossEvent) -> schemas.Event:
