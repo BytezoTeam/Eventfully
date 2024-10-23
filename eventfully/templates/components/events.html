@@ -16,15 +16,17 @@
     </div>
     {% endif %}
 
-    <figure class="pt-8 px-8 w-full h-72 rounded-xl">
-      <img
-        src="{{ item.image_link }}"
-        loading="lazy"
-        class="object-cover object-center size-full"
-        alt="Event Cover"
-        style="border-radius: inherit"
-      />
-    </figure>
+    {% if item.image_link %}
+      <figure class="pt-8 px-8 w-full h-72 rounded-xl">
+        <img
+                src="{{ item.image_link }}"
+                loading="lazy"
+                class="object-cover object-center size-full"
+                alt="Event Cover"
+                style="border-radius: inherit"
+        />
+      </figure>
+    {% endif %}
 
     <div class="card-body gap-4">
       <div>
