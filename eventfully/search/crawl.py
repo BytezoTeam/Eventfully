@@ -6,10 +6,10 @@ from typing import Callable
 
 from eventfully.database import schemas, crud
 from eventfully.logger import log
-from eventfully.search.sources import boundicca, bpb
+from eventfully.search.sources import boundicca, bpb, foss
 
 
-SOURCES: list[Callable] = [boundicca.crawl, bpb.crawl]
+SOURCES: list[Callable] = [boundicca.crawl, bpb.crawl, foss.crawl]
 
 
 def main():
