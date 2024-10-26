@@ -9,7 +9,7 @@ from eventfully.logger import log
 from eventfully.search.sources import boundicca, bpb, foss
 
 
-SOURCES: list[Callable] = [boundicca.crawl, bpb.crawl, foss.crawl]
+SOURCES: list[Callable] = [foss.crawl]
 
 
 def main():
