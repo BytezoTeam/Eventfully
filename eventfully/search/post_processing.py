@@ -13,8 +13,13 @@ from eventfully.search.sources import zuerichunbezahlbar, neanderticket, berlin
 
 
 SOURCES: list[Callable[[SearchContent], set[schemas.Event]]] = [
+    zuerichunbezahlbar.search,
+    neanderticket.search,
+    berlin.search,
 ]
 POST_PROCESSORS: dict[str, Callable[[schemas.Event], schemas.Event]] = {
+    "zuerichunbezahlbar": zuerichunbezahlbar.post_process,
+    "neanderticket": neanderticket.post_process,
 }
 
 
