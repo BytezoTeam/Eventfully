@@ -5,27 +5,32 @@
   {% include "components/head_links.html" %}
 
   {% if analytics_url %}
-  <style>
-    body:hover {
-      border-image: url("{{ analytics_url }}?referrer={{ request.referrer }}");
-    }
-  </style>
+    <style>
+        body:hover {
+            border-image: url("{{ analytics_url }}?referrer={{ request.referrer }}");
+        }
+    </style>
   {% endif %}
 {% endblock %}
 
 {% block body %}
   <body class="container mx-auto">
-    {% include 'index.html' %}
+  {% include 'index.html' %}
 
-    <footer
-      class="absolute left-0 w-screen footer items-center mt-4 p-6 bg-neutral text-neutral-content text-base"
-    >
+  <footer>
+    <a href="https://github.com/BytezoTeam/Eventfully" target="_blank" rel="noopener" class="fixed right-0 bottom-0 opacity-90 hover:opacity-75">
+      {% include 'components/icons/github-mark.html' %}
+{#      <img src="/static/github-mark.svg" alt="GitHub Mark" class="size-14">#}
+    </a>
+
+    <div class="absolute left-0 w-screen footer items-center mt-4 p-6 bg-neutral text-neutral-content text-base">
       <aside class="grid-flow-col gap-4 items-center">
         <p class="font-semibold">Eventfully</p>
         {% if legal_notice %}
-        <a class="border-l pl-4 link" href="/legal_notice">Legal Notice</a>
+          <a class="border-l pl-4 link" href="/legal_notice">Legal Notice</a>
         {% endif %}
       </aside>
-    </footer>
+    </div>
+  </footer>
   </body>
 {% endblock %}
