@@ -31,7 +31,7 @@ log.info("Starting Server ...")
 load_dotenv()
 JWT_KEY = getenv("MEILI_KEY")
 ANALYTICS_URL = getenv("ANALYTICS_URL")
-IMPRINT = getenv("IMPRINT")
+LEGAL_NOTICE = getenv("EVENTFULLY_LEGAL_NOTICE")
 # Time in days until a jwt token expires to prevent old tokens from being used to improve security
 ID_EXPIRE_TIME = 7
 
@@ -140,7 +140,7 @@ def render_index_template(base: bool = False, user_id: str | None = None) -> str
             cities=cities,
             t=translation_provider(),
             analytics_url=ANALYTICS_URL,
-            imprint=IMPRINT,
+            legal_notice=LEGAL_NOTICE,
         )
     else:
         return render_template("index.html", user=user, cities=cities, t=translation_provider())
@@ -166,12 +166,12 @@ def index(user_id: str):
     return render_index_template(base=True, user_id=user_id)
 
 
-@app.route("/imprint", methods=["GET"])
-def imprint():
-    if not IMPRINT:
+@app.route("/legal_notice", methods=["GET"])
+def legal_notice():
+    if not LEGAL_NOTICE:
         return "", HTTPStatus.NOT_FOUND
 
-    return render_template("imprint.html", t=translation_provider(), imprint=IMPRINT)
+    return render_template("legal_notice.html", t=translation_provider(), legal_notice=LEGAL_NOTICE)
 
 
 @app.route("/groups", methods=["GET"])

@@ -13,13 +13,7 @@
 ### 3. Make a .env File
 
 The file must be named `.env` and should be located in the root of the project (the same file level as `README.md` file).
-It should contain this information (replace values with yours):
-
-```env
-MEILI_MASTER_KEY="<meilisearch master key>"
-MEILI_HOST="<address of the meilisearch server e.g. http://localhost:7700>"
-IMPRINT="<imprint (optional)>"
-```
+It should contain the information present in the [.env.example file](/docs/.env.example) .
 
 ### 4. Install Rye
 
