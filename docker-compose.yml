@@ -15,7 +15,9 @@ services:
     environment:
       MEILI_HOST: "http://meilisearch:7700"
       MEILI_MASTER_KEY: ${MELLISEARCH_KEY:-r2Lr7e68Yf3y-GekSB7pz6IWNpg0G-lFpJYTG4VUqB4}
-      IMPRINT: ""
+      EVENTFULLY_JWT_KEY: "<secret key for generating JWT tokens, put a secure random string here>"
+      EVENTFULLY_ANALYTICS_URL: "<url to an analytics service (optional)>"
+      EVENTFULLY_LEGAL_NOTICE: "<legal notice text, use \n for line breaks (optional)>"
     depends_on:
       - "meilisearch"
 
