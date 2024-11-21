@@ -15,27 +15,17 @@ bp = Blueprint('index', __name__)
 @bp.route("/", methods=["GET"])
 @jwt_check()
 def index(user_id: str):
-    if not user_id:
-        return render_index_template(base=True)
-
-    return render_index_template(base=True, user_id=user_id)
-
-
-def render_index_template(base: bool = False, user_id: str | None = None) -> str:
     cities = crud.get_possible_cities()
 
     user = crud.get_user(user_id) if user_id else None
 
-    if base:
-        return render_template(
-            "index_base.html",
-            user=user,
-            cities=cities,
-            t=translation_provider(),
-            CONFIG=CONFIG,
-        )
-    else:
-        return render_template("index.html", user=user, cities=cities, t=translation_provider())
+    return render_template(
+        "index.html",
+        user=user,
+        cities=cities,
+        t=translation_provider(),
+        CONFIG=CONFIG,
+    )
 
 
 @bp.route("/api/toggle_event_like")

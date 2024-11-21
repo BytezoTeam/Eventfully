@@ -42,7 +42,7 @@ def internal_error_server_error(error):
 app.register_blueprint(api.bp)
 app.register_blueprint(index.bp)
 app.register_blueprint(legal_notice.bp)
-# app.register_blueprint(account.bp)
+app.register_blueprint(account.bp)
 
 
 if __name__ == "__main__":
