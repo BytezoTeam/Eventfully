@@ -134,8 +134,7 @@ def render_index_template(base: bool = False, user_id: str | None = None) -> str
             user=user,
             cities=cities,
             t=translation_provider(),
-            analytics_url=CONFIG.EVENTFULLY_ANALYTICS_URL,
-            legal_notice=CONFIG.EVENTFULLY_LEGAL_NOTICE,
+            CONFIG=CONFIG,
         )
     else:
         return render_template("index.html", user=user, cities=cities, t=translation_provider())
@@ -166,7 +165,7 @@ def legal_notice():
     if not CONFIG.EVENTFULLY_LEGAL_NOTICE:
         return "", HTTPStatus.NOT_FOUND
 
-    return render_template("legal_notice.html", t=translation_provider(), legal_notice=CONFIG.EVENTFULLY_LEGAL_NOTICE)
+    return render_template("legal_notice.html", t=translation_provider(), CONFIG=CONFIG)
 
 
 @app.route("/groups", methods=["GET"])

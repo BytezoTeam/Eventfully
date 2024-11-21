@@ -7,7 +7,7 @@
   {% if analytics_url %}
     <style>
         body:hover {
-            border-image: url("{{ analytics_url }}?referrer={{ request.referrer }}");
+            border-image: url("{{ CONFIG.EVENTFULLY_ANALYTICS_URL }}?referrer={{ request.referrer }}");
         }
     </style>
   {% endif %}
@@ -26,7 +26,7 @@
     <div class="absolute left-0 w-screen footer items-center mt-4 p-6 bg-neutral text-neutral-content text-base">
       <aside class="grid-flow-col gap-4 items-center">
         <p class="font-semibold">Eventfully</p>
-        {% if legal_notice %}
+        {% if CONFIG.EVENTFULLY_LEGAL_NOTICE %}
           <a class="border-l pl-4 link" href="/legal_notice">Legal Notice</a>
         {% endif %}
       </aside>
