@@ -3,13 +3,11 @@ from typing import Callable
 from datetime import datetime, timedelta
 from functools import wraps
 from http import HTTPStatus
-from os import getenv
 from random import randint
 from uuid import uuid4
 
 import jwt
 from cachetools import cached, TTLCache
-from dotenv import load_dotenv
 from flask import Flask, render_template, request, make_response, Response, jsonify
 from flask_apscheduler import APScheduler
 from flask_wtf import FlaskForm
@@ -25,16 +23,9 @@ from eventfully.logger import log
 from eventfully.search import post_processing, search, crawl
 from eventfully.types import SearchContent
 from eventfully import utils
+from eventfully.config import CONFIG
 
 log.info("Starting Server ...")
-
-load_dotenv()
-JWT_KEY = getenv("MEILI_KEY")
-ANALYTICS_URL = getenv("ANALYTICS_URL")
-LEGAL_NOTICE = getenv("EVENTFULLY_LEGAL_NOTICE")
-# Time in days until a jwt token expires to prevent old tokens from being used to improve security
-ID_EXPIRE_TIME = 7
-
 crud.create_tables()
 
 app = Flask(__name__)
@@ -74,14 +65,14 @@ def jwt_check(deny_unauthenticated=False):
 
             # Try to decode the jwt token
             try:
-                content = jwt.decode(jwt_token, JWT_KEY, algorithms=["HS256"])
+                content = jwt.decode(jwt_token, CONFIG.EVENTFULLY_JWT_KEY, algorithms=["HS256"])
             except Exception as e:
                 log.warn(f"Problamatic token: {e}")
                 return "", HTTPStatus.UNAUTHORIZED
 
             # Check if the token is expired
             expire_date = datetime.fromtimestamp(content["expire_date"])
-            if expire_date <= datetime.now() - timedelta(days=ID_EXPIRE_TIME):
+            if expire_date <= datetime.now() - timedelta(days=CONFIG.JWT_TOKEN_EXPIRE_TIME_DAYS):
                 response = make_response()
                 response.delete_cookie("jwt_token")
                 return response, HTTPStatus.UNAUTHORIZED
@@ -100,10 +91,14 @@ def jwt_check(deny_unauthenticated=False):
 
 
 def add_jwt_cookie_to_response(response: Response, user_id: str) -> Response:
-    expire_date = datetime.now() + timedelta(days=ID_EXPIRE_TIME)
+    expire_date = datetime.now() + timedelta(days=CONFIG.JWT_TOKEN_EXPIRE_TIME_DAYS)
     response.set_cookie(
         "jwt_token",
-        jwt.encode({"user_id": user_id, "expire_date": datetime.timestamp(expire_date)}, JWT_KEY, algorithm="HS256"),
+        jwt.encode(
+            {"user_id": user_id, "expire_date": datetime.timestamp(expire_date)},
+            CONFIG.EVENTFULLY_JWT_KEY,
+            algorithm="HS256",
+        ),
         expires=expire_date,
         httponly=True,
     )
@@ -139,8 +134,8 @@ def render_index_template(base: bool = False, user_id: str | None = None) -> str
             user=user,
             cities=cities,
             t=translation_provider(),
-            analytics_url=ANALYTICS_URL,
-            legal_notice=LEGAL_NOTICE,
+            analytics_url=CONFIG.EVENTFULLY_ANALYTICS_URL,
+            legal_notice=CONFIG.EVENTFULLY_LEGAL_NOTICE,
         )
     else:
         return render_template("index.html", user=user, cities=cities, t=translation_provider())
@@ -168,10 +163,10 @@ def index(user_id: str):
 
 @app.route("/legal_notice", methods=["GET"])
 def legal_notice():
-    if not LEGAL_NOTICE:
+    if not CONFIG.EVENTFULLY_LEGAL_NOTICE:
         return "", HTTPStatus.NOT_FOUND
 
-    return render_template("legal_notice.html", t=translation_provider(), legal_notice=LEGAL_NOTICE)
+    return render_template("legal_notice.html", t=translation_provider(), legal_notice=CONFIG.EVENTFULLY_LEGAL_NOTICE)
 
 
 @app.route("/groups", methods=["GET"])
@@ -182,12 +177,14 @@ def groups(user_id: str):
     events_by_group_ids = {}
     for group in groups:
         events_by_group_ids[group.id] = []
-        liked_event_ids = [like.event_id for like in group.liked_events]    # pyright: ignore
+        liked_event_ids = [like.event_id for like in group.liked_events]  # pyright: ignore
         for event_id in liked_event_ids:
             event = crud.get_event_by_id(event_id)
             events_by_group_ids[group.id].append(event)
 
-    return render_template("groups.html", groups=groups, events_by_group_ids=events_by_group_ids, t=translation_provider())
+    return render_template(
+        "groups.html", groups=groups, events_by_group_ids=events_by_group_ids, t=translation_provider()
+    )
 
 
 @app.route("/create-event", methods=["GET"])
@@ -209,7 +206,7 @@ def toggle_event_like(user_id: str):
     log.debug(f"Event '{event_id}' like toggled for '{user_id}'")
 
     user = crud.get_user(user_id)
-    liked_events = [like.event_id for like in user.liked_events]    # pyright: ignore
+    liked_events = [like.event_id for like in user.liked_events]  # pyright: ignore
 
     if event_id not in liked_events:
         crud.like_event(user_id, event_id)
@@ -225,7 +222,7 @@ class EventForm(FlaskForm):
     start_time = StringField("Start Time", validators=[DataRequired()])
     end_time = StringField("End Time", validators=[DataRequired()])
     price = StringField("Price", validators=[DataRequired()])
-    web_link= StringField("Web Link")
+    web_link = StringField("Web Link")
     address = StringField("Address", validators=[DataRequired()])
 
 
@@ -270,12 +267,14 @@ def create_group(user_id: str):
     events_by_group_ids = {}
     for group in groups:
         events_by_group_ids[group.id] = []
-        liked_event_ids = [like.event_id for like in group.liked_events]    # pyright: ignore
+        liked_event_ids = [like.event_id for like in group.liked_events]  # pyright: ignore
         for event_id in liked_event_ids:
             event = crud.get_event_by_id(event_id)
             events_by_group_ids[group.id].append(event)
 
-    return render_template("components/groups.html", groups=groups, events_by_group_ids=events_by_group_ids, t=translation_provider())
+    return render_template(
+        "components/groups.html", groups=groups, events_by_group_ids=events_by_group_ids, t=translation_provider()
+    )
 
 
 @app.route("/api/group/share")
@@ -409,21 +408,27 @@ def get_events(user_id: str):
             max_time = datetime.today()
 
     search_content = SearchContent(
-        query=therm, min_time=min_time, max_time=max_time, city=city, category=category     # pyright: ignore
+        query=therm,
+        min_time=min_time,
+        max_time=max_time,
+        city=city,
+        category=category,  # pyright: ignore
     )
     result = search.main(search_content)
 
     if not user_id:
-        return render_template("components/events.html", events=result, cities=crud.get_possible_cities(), t=translation_provider())
+        return render_template(
+            "components/events.html", events=result, cities=crud.get_possible_cities(), t=translation_provider()
+        )
 
     user = crud.get_user(user_id)
-    liked_event_ids = [like.event_id for like in user.liked_events]    # pyright: ignore
+    liked_event_ids = [like.event_id for like in user.liked_events]  # pyright: ignore
 
     groups = crud.get_groups_of_member(user_id)
 
     shared_event_ids: list[str] = []
     for group in groups:
-        shared_event_ids += [like.event_id for like in group.liked_events]    # pyright: ignore
+        shared_event_ids += [like.event_id for like in group.liked_events]  # pyright: ignore
 
     return render_template(
         "components/events.html",
@@ -432,7 +437,7 @@ def get_events(user_id: str):
         groups=groups,
         shared_event_ids=shared_event_ids,
         user=user,
-        t=translation_provider()
+        t=translation_provider(),
     )
 
 
