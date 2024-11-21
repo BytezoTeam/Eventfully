@@ -2,7 +2,7 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
     paths:
       - "**.py"
       - "**.html"
@@ -10,14 +10,14 @@ on:
       - "**Dockerfile"
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: [ "main" ]
+    branches: ["main"]
     paths:
       - "**.py"
       - "**.html"
       - "**.toml"
       - "**Dockerfile"
   schedule:
-    - cron: '29 19 * * 5'
+    - cron: "29 19 * * 5"
 
 jobs:
   sonarcloud:
@@ -26,11 +26,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
       - name: Run SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   ruff:
@@ -69,3 +69,5 @@ jobs:
 
       - name: Run Pyright
         uses: jakebailey/pyright-action@v2
+        with:
+          version: 1.1.382
