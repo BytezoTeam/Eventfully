@@ -48,3 +48,5 @@ en:
   price: "Price"
   time: "Time"
   to: "until"
+
+  please_wait: "Please Wait a Few Minutes While We Search for New Events"
