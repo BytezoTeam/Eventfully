@@ -4,7 +4,7 @@ from random import randint
 from uuid import uuid4
 
 import jwt
-from flask import Blueprint, render_template, request, make_response, Response, redirect
+from flask import Blueprint, render_template, request, make_response, Response
 from flask_wtf import FlaskForm
 from sqids import Sqids
 from wtforms import StringField, PasswordField
@@ -111,7 +111,8 @@ def signup_account():
     user_id = str(uuid4())
     crud.create_account(form.username.data, form.password.data, user_id, form.email.data)
 
-    response = redirect("/")
+    response = make_response()
+    response.headers["HX-Redirect"] = "/"
     response = add_jwt_cookie_to_response(response, user_id)
 
     log.info(f"User '{form.username.data}' signed up with user_id '{user_id}'")
@@ -141,7 +142,8 @@ def signin_account():
     if not user_id:
         return make_response(), HTTPStatus.UNAUTHORIZED
 
-    response = redirect("/")
+    response = make_response()
+    response.headers["HX-Redirect"] = "/"
     response = add_jwt_cookie_to_response(response, user_id)
 
     return response, HTTPStatus.OK
@@ -150,7 +152,8 @@ def signin_account():
 @bp.route("/api/account/signout", methods=["POST"])
 @jwt_check(deny_unauthenticated=True)
 def signout_account(user_id: str):
-    response = redirect("/")
+    response = make_response()
+    response.headers["HX-Redirect"] = "/"
     response.delete_cookie("jwt_token")
 
     return response, HTTPStatus.OK
