@@ -4,7 +4,7 @@ If some critical configuration is missing, the app will exit and tell the user w
 """
 
 from os import environ
-from sys import exit
+import sys
 from typing import Optional
 
 from pydantic import BaseModel, ValidationError
@@ -30,4 +30,4 @@ try:
 except ValidationError as errors:
     for error in errors.errors():
         log.fatal(f"Missing environment variable: {error['loc'][0]}")
-    exit(1)
+    sys.exit(1)

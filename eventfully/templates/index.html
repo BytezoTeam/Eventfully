@@ -1,84 +1,124 @@
-<!-- Head -->
-{% include "components/navbar.html" %}
+{% extends "base.html" %}
 
-<!-- Main -->
-<main class="flex flex-col gap-8">
-  <!-- Event Search -->
-  <section class="sticky top-8 z-10 cool-card">
-    <form
-      class="flex flex-row items-end flex-wrap justify-start gap-4"
-      hx-get="/api/search"
-      hx-target="#event-search-result"
-      hx-trigger="submit,load"
-      hx-indicator=".htmx-indicator"
-    >
-      <label class="form-control">
-        <div class="label">
-          <span class="label-text">{{ t("search_placeholder") }}</span>
-        </div>
-        <input
-          name="therm"
-          id="therm"
-          class="input input-bordered"
-          type="search"
-          placeholder="{{ t('search_placeholder') }}"
-        />
-      </label>
+{% block head %}
+  <title>Eventfully</title>
+  {% include "components/head_links.html" %}
 
-      <label class="form-control">
-        <div class="label">
-          <span class="label-text">{{ t("city") }}</span>
-        </div>
-        <input
-          type="text"
-          class="input input-bordered"
-          placeholder="{{ t('city') }}"
-          name="city"
-          id="city"
-          list="cities"
-        />
-        <datalist id="cities">
-          {% for city in cities %}
-          <option value="{{ city }}">{{ city }}</option>
-          {% endfor %}
-        </datalist>
-      </label>
+  {% if analytics_url %}
+    <style>
+        body:hover {
+            border-image: url("{{ CONFIG.EVENTFULLY_ANALYTICS_URL }}?referrer={{ request.referrer }}");
+        }
+    </style>
+  {% endif %}
+{% endblock %}
 
-      <label class="form-control">
-        <div class="label">
-          <span class="label-text">{{ t("category.name") }}</span>
-        </div>
-        <select name="category" id="category" class="select select-bordered">
-          <option value="">{{ t("category.all") }}</option>
-          <option value="culture">{{ t("category.culture") }}</option>
-          <option value="education">{{ t("category.education") }}</option>
-          <option value="sport">{{ t("category.sport") }}</option>
-          <option value="politics">{{ t("category.politics") }}</option>
-        </select>
-      </label>
+{% block body %}
+  <body class="container mx-auto">
 
-      <label class="form-control">
-        <div class="label">
-          <span class="label-text">{{ t("date.date") }}</span>
-        </div>
-        <select name="date" id="date" class="select select-bordered">
-          <option value="all">{{ t("date.all") }}</option>
-          <option value="today">{{ t("date.today") }}</option>
-          <option value="tomorrow">{{ t("date.tomorrow") }}</option>
-          <option value="week">{{ t("date.week") }}</option>
-          <option value="month">{{ t("date.month") }}</option>
-        </select>
-      </label>
+  <!-- Head -->
+  {% include "components/navbar.html" %}
 
-      <button type="submit" class="btn btn-primary">{{ t("search") }}</button>
-    </form>
-  </section>
+  <!-- Main -->
+  <main class="flex flex-col gap-8">
+    <!-- Event Search -->
+    <section class="sticky top-8 z-10 cool-card">
+      <form
+              class="flex flex-row items-end flex-wrap justify-start gap-4"
+              hx-get="/api/search"
+              hx-target="#event-search-result"
+              hx-trigger="submit,load"
+              hx-indicator=".htmx-indicator"
+      >
+        <label class="form-control">
+          <div class="label">
+            <span class="label-text">{{ t("search_placeholder") }}</span>
+          </div>
+          <input
+                  name="therm"
+                  id="therm"
+                  class="input input-bordered"
+                  type="search"
+                  placeholder="{{ t('search_placeholder') }}"
+          />
+        </label>
 
-  <!-- Event Results -->
-  <div class="htmx-indicator" id="event-search-result"></div>
-  <div class="flex justify-center items-center">
+        <label class="form-control">
+          <div class="label">
+            <span class="label-text">{{ t("city") }}</span>
+          </div>
+          <input
+                  type="text"
+                  class="input input-bordered"
+                  placeholder="{{ t('city') }}"
+                  name="city"
+                  id="city"
+                  list="cities"
+          />
+          <datalist id="cities">
+            {% for city in cities %}
+              <option value="{{ city }}">{{ city }}</option>
+            {% endfor %}
+          </datalist>
+        </label>
+
+        <label class="form-control">
+          <div class="label">
+            <span class="label-text">{{ t("category.name") }}</span>
+          </div>
+          <select name="category" id="category" class="select select-bordered">
+            <option value="">{{ t("category.all") }}</option>
+            <option value="culture">{{ t("category.culture") }}</option>
+            <option value="education">{{ t("category.education") }}</option>
+            <option value="sport">{{ t("category.sport") }}</option>
+            <option value="politics">{{ t("category.politics") }}</option>
+          </select>
+        </label>
+
+        <label class="form-control">
+          <div class="label">
+            <span class="label-text">{{ t("date.date") }}</span>
+          </div>
+          <select name="date" id="date" class="select select-bordered">
+            <option value="all">{{ t("date.all") }}</option>
+            <option value="today">{{ t("date.today") }}</option>
+            <option value="tomorrow">{{ t("date.tomorrow") }}</option>
+            <option value="week">{{ t("date.week") }}</option>
+            <option value="month">{{ t("date.month") }}</option>
+          </select>
+        </label>
+
+        <button type="submit" class="btn btn-primary">{{ t("search") }}</button>
+      </form>
+    </section>
+
+    <!-- Event Results -->
+    <div class="htmx-indicator" id="event-search-result"></div>
+    <div class="flex justify-center items-center">
     <span
-      class="htmx-indicator center loading loading-spinner loading-lg mt-16"
+            class="htmx-indicator center loading loading-spinner loading-lg mt-16"
     ></span>
-  </div>
-</main>
+    </div>
+  </main>
+
+  {# Footer #}
+  <footer>
+    <a href="https://github.com/BytezoTeam/Eventfully" target="_blank" rel="noopener"
+       class="fixed right-0 bottom-0 opacity-90 hover:opacity-75">
+      {% include 'components/icons/github-mark.html' %}
+      {#      <img src="/static/github-mark.svg" alt="GitHub Mark" class="size-14">#}
+    </a>
+
+    <div class="absolute left-0 w-screen footer items-center mt-4 p-6 bg-neutral text-neutral-content text-base">
+      <aside class="grid-flow-col gap-4 items-center">
+        <p class="font-semibold">Eventfully</p>
+        {% if CONFIG.EVENTFULLY_LEGAL_NOTICE %}
+          <a class="border-l pl-4 link" href="/legal_notice">Legal Notice</a>
+        {% endif %}
+      </aside>
+    </div>
+  </footer>
+  </body>
+{% endblock %}
+
+
