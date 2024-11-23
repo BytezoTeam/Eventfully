@@ -42,7 +42,9 @@ def internal_error_server_error(error):
 
 app.register_blueprint(api.bp)
 app.register_blueprint(index.bp)
-app.register_blueprint(legal_notice.bp)
+
+if CONFIG.EVENTFULLY_LEGAL_NOTICE:
+    app.register_blueprint(legal_notice.bp)
 
 if CONFIG.EVENTFULLY_ACCOUNTS_ENABLED:
     app.register_blueprint(account.bp)
