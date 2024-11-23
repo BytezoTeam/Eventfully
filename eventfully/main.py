@@ -5,6 +5,7 @@ from uuid import uuid4
 from flask import Flask, make_response
 from flask_apscheduler import APScheduler
 
+from eventfully.config import CONFIG
 from eventfully.database import crud
 from eventfully.logger import log
 from eventfully.search import post_processing, crawl
@@ -42,7 +43,9 @@ def internal_error_server_error(error):
 app.register_blueprint(api.bp)
 app.register_blueprint(index.bp)
 app.register_blueprint(legal_notice.bp)
-app.register_blueprint(account.bp)
+
+if CONFIG.EVENTFULLY_ACCOUNTS_ENABLED:
+    app.register_blueprint(account.bp)
 
 
 if __name__ == "__main__":
