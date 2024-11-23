@@ -210,5 +210,6 @@ def add_jwt_cookie_to_response(response: Response, user_id: str) -> Response:
         ),
         expires=expire_date,
         httponly=True,
+        secure=(not CONFIG.EVENTFULLY_DEBUG)
     )
     return response

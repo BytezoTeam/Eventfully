@@ -20,10 +20,11 @@ class Config(BaseModel):
     EVENTFULLY_ANALYTICS_URL: Optional[str] = None
     EVENTFULLY_LEGAL_NOTICE: Optional[str] = None
     EVENTFULLY_ACCOUNTS_ENABLED: bool = False
+    EVENTFULLY_DEBUG: bool = False
 
     JWT_TOKEN_EXPIRE_TIME_DAYS: int = 7
 
-    @field_validator("EVENTFULLY_ACCOUNTS_ENABLED", mode="before")
+    @field_validator("EVENTFULLY_ACCOUNTS_ENABLED", "EVENTFULLY_DEBUG", mode="before")
     def convert_empty_string_to_none(cls, value: str):
         return text_is_true(value)
 
