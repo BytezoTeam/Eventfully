@@ -6,7 +6,7 @@ from uuid import uuid4
 import jwt
 from flask import Blueprint, render_template, request, make_response, Response
 from flask_wtf import FlaskForm
-from sqids import Sqids
+from sqids.sqids import Sqids
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Length
 
