@@ -7,7 +7,7 @@ from os import environ
 import sys
 from typing import Optional
 
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, ValidationError, field_validator
 from dotenv import load_dotenv
 
 from eventfully.logger import log
@@ -19,8 +19,25 @@ class Config(BaseModel):
     EVENTFULLY_JWT_KEY: str
     EVENTFULLY_ANALYTICS_URL: Optional[str] = None
     EVENTFULLY_LEGAL_NOTICE: Optional[str] = None
+    EVENTFULLY_ACCOUNTS_ENABLED: bool = False
 
     JWT_TOKEN_EXPIRE_TIME_DAYS: int = 7
+
+    @field_validator("EVENTFULLY_ACCOUNTS_ENABLED", mode="before")
+    def convert_empty_string_to_none(cls, value: str):
+        return text_is_true(value)
+
+
+def text_is_true(text: str) -> bool:
+    if text.lower() == "True":
+        return True
+    if text.lower() == "False":
+        return False
+
+    if text.isnumeric():
+        return bool(int(text))
+
+    raise ValueError(f"Invalid value: {text}")
 
 
 load_dotenv()
