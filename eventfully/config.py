@@ -30,9 +30,9 @@ class Config(BaseModel):
 
 
 def text_is_true(text: str) -> bool:
-    if text.lower() == "True":
+    if text.lower() == "true":
         return True
-    if text.lower() == "False":
+    if text.lower() == "false":
         return False
 
     if text.isnumeric():
