@@ -14,7 +14,7 @@ from eventfully.logger import log
 
 
 class Config(BaseModel):
-    MEILI_HOST: str
+    MEILI_HOST: str = "http://localhost:7700"
     MEILI_MASTER_KEY: Optional[str] = None
     EVENTFULLY_JWT_KEY: str
     EVENTFULLY_ANALYTICS_URL: Optional[str] = None
@@ -30,9 +30,9 @@ class Config(BaseModel):
 
 
 def text_is_true(text: str) -> bool:
-    if text.lower() == "True":
+    if text.lower() == "true":
         return True
-    if text.lower() == "False":
+    if text.lower() == "false":
         return False
 
     if text.isnumeric():
