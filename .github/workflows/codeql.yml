@@ -85,7 +85,7 @@ jobs:
         with:
           cache: pip
       - name: Install Dependencies
-        run: pip install -r requirements.lock
+        run: pip install -r requirements-dev.lock
 
       - name: Run Pyright
         uses: jakebailey/pyright-action@v2
