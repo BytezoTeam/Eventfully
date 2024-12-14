@@ -25,10 +25,16 @@ def main(search_content: SearchContent) -> set[schemas.Event]:
 
 def search_db(search: SearchContent) -> set[schemas.Event]:
     filters = []
+
     if search.city:
         filters.append(f"city = '{search.city}'")
+
     if search.category:
         filters.append(f"category = '{search.category}'")
+
+    filters.append(f"start_time >= '{int(search.min_time.timestamp())}'")
+    filters.append(f"end_time <= '{int(search.max_time.timestamp())}'")
+
     filter_string = " AND ".join(filters)
 
     return crud.search_events(search.query, filter_string)

@@ -179,7 +179,7 @@ def search_events(therm: str, filter_string: str) -> set[schemas.Event]:
         therm,
         {
             "filter": filter_string,
-            "sort": ["start_time:desc"],
+            "sort": ["start_time:asc"],
         },
     )
     events = [schemas.Event(**raw_event) for raw_event in raw["hits"]]
