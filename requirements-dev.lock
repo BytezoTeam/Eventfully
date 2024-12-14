@@ -69,7 +69,7 @@ pydantic-core==2.18.4
 pyi18n-v2==1.2.2
 pyjwt==2.8.0
 pytailwindcss-extra==0.1.0
-pytest==8.2.2
+pytest==8.3.4
 python-dateutil==2.9.0.post0
     # via flask-apscheduler
 python-dotenv==1.0.1

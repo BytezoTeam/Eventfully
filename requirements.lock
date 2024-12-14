@@ -38,8 +38,6 @@ h11==0.14.0
 idna==3.7
     # via niquests
     # via requests
-iniconfig==2.0.0
-    # via pytest
 itsdangerous==2.2.0
     # via flask
     # via flask-wtf
@@ -58,10 +56,7 @@ niquests==3.7.0
     # via pytailwindcss-extra
 packaging==24.1
     # via gunicorn
-    # via pytest
 peewee==3.17.5
-pluggy==1.5.0
-    # via pytest
 pydantic==2.7.4
     # via camel-converter
 pydantic-core==2.18.4
@@ -69,7 +64,6 @@ pydantic-core==2.18.4
 pyi18n-v2==1.2.2
 pyjwt==2.8.0
 pytailwindcss-extra==0.1.0
-pytest==8.2.2
 python-dateutil==2.9.0.post0
     # via flask-apscheduler
 python-dotenv==1.0.1

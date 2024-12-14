@@ -15,7 +15,6 @@ dependencies = [
     "pydantic==2.*",
     "Flask-APScheduler==1.*",
     "gunicorn==22.*",
-    "pytest==8.*",
     "get-project-root==0.*",
     "flask-wtf==1.*",
     "niquests==3.*",
@@ -49,7 +48,9 @@ build-backend = "hatchling.build"
 [tool.rye]
 virtual = true  # necessary for docker
 managed = true
-dev-dependencies = []
+dev-dependencies = [
+    "pytest>=8.3.4",
+]
 
 [tool.rye.scripts]
 dev = "python3 -m eventfully.main"
