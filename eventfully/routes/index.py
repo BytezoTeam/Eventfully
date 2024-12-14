@@ -85,8 +85,7 @@ def get_events(user_id: str):
             min_time = datetime.today()
             max_time = datetime.today() + timedelta(days=365)
         case _:
-            min_time = datetime.today()
-            max_time = datetime.today()
+            return "", HTTPStatus.BAD_REQUEST
 
     search_content = SearchContent(
         query=therm,
