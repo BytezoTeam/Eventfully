@@ -7,6 +7,7 @@ ms_client.create_index("events", {"primaryKey": "id"})
 event_index.update_searchable_attributes(["title", "web_link", "description", "source", "operator_web_link"])
 event_index.update_filterable_attributes(["id", "city", "category", "start_time", "end_time"])
 event_index.update_sortable_attributes(["start_time"])
+event_index.update_distinct_attribute("title")  # prevent two results for the same event at a different time
 
 
 class User(_DBBaseModel):
