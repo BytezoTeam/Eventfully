@@ -13,7 +13,6 @@ def create_tables():
     database.db.create_tables(
         [
             models.User,
-            models.SearchCache,
             models.Likes,
             models.PossibleCities,
             models.Groups,
@@ -188,17 +187,6 @@ def get_event_by_id(event_id: str) -> schemas.Event:
     raw_events = models.event_index.search("", {"filter": f"id = {event_id}"})
     events = [schemas.Event(**raw_event) for raw_event in raw_events["hits"]]
     return events[0]
-
-
-# Search cache
-@database.db.connection_context()
-def create_search_cache(search_hash: str):
-    models.SearchCache.create(search_hash=search_hash, time=datetime.now())
-
-
-@database.db.connection_context()
-def in_search_cache(search_hash: str) -> bool:
-    return models.SearchCache.select().where(models.SearchCache.search_hash == search_hash).exists()
 
 
 # Other

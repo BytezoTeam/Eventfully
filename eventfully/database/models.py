@@ -1,4 +1,4 @@
-from peewee import TextField, DateTimeField, CompositeKey, ForeignKeyField, BooleanField
+from peewee import TextField, CompositeKey, ForeignKeyField, BooleanField
 
 from eventfully.database.database import _DBBaseModel, ms_client
 
@@ -39,15 +39,6 @@ class Likes(_DBBaseModel):
 
     class Meta:  # pyright: ignore
         primary_key = CompositeKey("user", "event_id", "group")
-
-
-class SearchCache(_DBBaseModel):
-    """
-    Stores the hashes of the last search queries so that we don't need to crawl the web again an can just use the local database.
-    """
-
-    search_hash = TextField(primary_key=True)
-    time = DateTimeField()
 
 
 class PossibleCities(_DBBaseModel):

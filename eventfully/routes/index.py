@@ -89,8 +89,8 @@ def get_events(user_id: str):
 
     search_content = SearchContent(
         query=therm,
-        min_time=min_time,
-        max_time=max_time,
+        min_time=min_time.date(),
+        max_time=max_time.date(),
         city=city,
         category=category,  # pyright: ignore
     )

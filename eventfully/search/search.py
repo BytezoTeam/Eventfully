@@ -1,26 +1,28 @@
+from time import mktime
+
+from cachetools import cached, TTLCache
+
 from eventfully.database import schemas, crud
 from eventfully.search import post_processing
-from eventfully.utils import get_hash_string
 from eventfully.types import SearchContent
 
 
 def main(search_content: SearchContent) -> set[schemas.Event]:
     """
     Searches for events in the database and returns them.
-    If the search has not been performed before it will add them to the processing queue to be processed later in the background so we can directly return a response.
+    Also adds the search to the processing queue to fetch more up to date events later.
+    Gets cached to prevent unnecessary database queries.
     """
 
     events = search_db(search_content)
-
-    # Skip this step if this search has been performed before and the events are already in the database
-    combined_search_string = search_content.get_hash_string()
-    search_hash = get_hash_string(combined_search_string)
-    if not crud.in_search_cache(search_hash):
-        post_processing.process_queue.put(search_content)
-
-        crud.create_search_cache(search_hash)
+    _update_post_process_queue(search_content)
 
     return events
+
+
+@cached(cache=TTLCache(maxsize=1024, ttl=3600))
+def _update_post_process_queue(search_content: SearchContent):
+    post_processing.process_queue.put(search_content)
 
 
 def search_db(search: SearchContent) -> set[schemas.Event]:
@@ -32,8 +34,8 @@ def search_db(search: SearchContent) -> set[schemas.Event]:
     if search.category:
         filters.append(f"category = '{search.category}'")
 
-    filters.append(f"start_time >= '{int(search.min_time.timestamp())}'")
-    filters.append(f"end_time <= '{int(search.max_time.timestamp())}'")
+    filters.append(f"start_time >= '{int(mktime(search.min_time.timetuple()))}'")
+    filters.append(f"end_time <= '{int(mktime(search.max_time.timetuple()))}'")
 
     filter_string = " AND ".join(filters)
 

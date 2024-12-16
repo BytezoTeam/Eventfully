@@ -16,7 +16,7 @@ apscheduler==3.10.4
 beautifulsoup4==4.12.3
 blinker==1.9.0
     # via flask
-cachetools==5.3.3
+cachetools==5.5.0
 camel-converter==3.1.2
     # via meilisearch
 certifi==2024.6.2
