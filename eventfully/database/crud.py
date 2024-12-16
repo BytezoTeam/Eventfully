@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import Iterable
 
 from peewee import DoesNotExist
@@ -174,11 +173,7 @@ def add_events(events: Iterable[schemas.Event]):
 def search_events(therm: str, filter_string: str) -> set[schemas.Event]:
     raw = models.event_index.search(
         therm,
-        {
-            "filter": filter_string,
-            "sort": ["start_time:asc"],
-            "limit": 50
-        },
+        {"filter": filter_string, "sort": ["start_time:asc"], "limit": 50},
     )
     events = [schemas.Event(**raw_event) for raw_event in raw["hits"]]
     return set(events)

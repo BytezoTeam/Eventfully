@@ -21,6 +21,4 @@ class SearchContent(BaseModel):
     category: Literal["", "sport", "culture", "education", "politics"]
 
     def get_hash_string(self) -> str:
-        return get_hash_string(
-            self.query + str(self.min_time) + str(self.max_time) + self.city + self.category
-        )
+        return get_hash_string(self.query + str(self.min_time) + str(self.max_time) + self.city + self.category)

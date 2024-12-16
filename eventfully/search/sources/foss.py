@@ -89,7 +89,7 @@ def crawl() -> set[schemas.Event]:
     foss_events: list[FossEvent] = []
     for event in raw_events:
         try:
-            foss_event = FossEvent(**event) # type: ignore
+            foss_event = FossEvent(**event)  # type: ignore
         except MissingImportantFieldError:
             continue
         foss_events.append(foss_event)
