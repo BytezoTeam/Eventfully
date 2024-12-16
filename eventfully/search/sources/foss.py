@@ -1,13 +1,12 @@
-import niquests
-from pydantic import BaseModel, field_validator
 import csv
 import io
 from datetime import datetime
-from typing import Optional
+
+import niquests
+from pydantic import BaseModel, field_validator
 
 from eventfully.database import schemas
 from eventfully.database.schemas import Event
-
 
 EVENT_CSV_URL = "https://codeberg.org/foss.events/foss-events-website/raw/branch/main/data/events.csv"
 
@@ -23,42 +22,42 @@ class FossEvent(BaseModel):
     date_end: datetime
     label: str
     name: str
-    hashtag: Optional[str]
+    hashtag: str | None
     homepage: str
-    city: Optional[str]
-    country: Optional[str]
-    venue: Optional[str]
-    osm_link: Optional[str]
-    lat: Optional[float]
-    lon: Optional[float]
-    coc_link: Optional[str]
-    self_description: Optional[str]
-    cfp_date: Optional[str]
-    cfp_link: Optional[str]
-    type: Optional[str]
-    tags: Optional[str]
-    entrance_fee: Optional[str]
-    registration: Optional[str]
-    participants_last_time: Optional[str]
-    main_language: Optional[str]
-    presentation_form: Optional[str]
-    onlinebanner: Optional[str]
-    main_organiser: Optional[str]
-    specialities: Optional[str]
-    first_edition: Optional[str]
-    main_sponsors: Optional[str]
-    editions_topic: Optional[str]
-    technologies_in_use: Optional[str]
-    online_interactivity: Optional[str]
-    technical_liberties: Optional[str]
-    timezone: Optional[str]
-    mastodon: Optional[str]
-    cancelled: Optional[str]
-    replacement: Optional[str]
-    replaces: Optional[str]
-    cancellation_description: Optional[str]
-    logo: Optional[str]
-    matrix: Optional[str]
+    city: str | None
+    country: str | None
+    venue: str | None
+    osm_link: str | None
+    lat: float | None
+    lon: float | None
+    coc_link: str | None
+    self_description: str | None
+    cfp_date: str | None
+    cfp_link: str | None
+    type: str | None
+    tags: str | None
+    entrance_fee: str | None
+    registration: str | None
+    participants_last_time: str | None
+    main_language: str | None
+    presentation_form: str | None
+    onlinebanner: str | None
+    main_organiser: str | None
+    specialities: str | None
+    first_edition: str | None
+    main_sponsors: str | None
+    editions_topic: str | None
+    technologies_in_use: str | None
+    online_interactivity: str | None
+    technical_liberties: str | None
+    timezone: str | None
+    mastodon: str | None
+    cancelled: str | None
+    replacement: str | None
+    replaces: str | None
+    cancellation_description: str | None
+    logo: str | None
+    matrix: str | None
 
     @field_validator("lat", "lon", mode="before")
     def convert_empty_string_to_none(cls, value: str):
@@ -90,7 +89,7 @@ def crawl() -> set[schemas.Event]:
     foss_events: list[FossEvent] = []
     for event in raw_events:
         try:
-            foss_event = FossEvent(**event)
+            foss_event = FossEvent(**event) # type: ignore
         except MissingImportantFieldError:
             continue
         foss_events.append(foss_event)
