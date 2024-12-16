@@ -59,6 +59,7 @@ def add_member_to_group(member_user_id: str, group_id: str, admin_user: bool):
 
     return member_user_id
 
+
 @database.db.connection_context()
 def group_exists(group_id: str) -> bool:
     return models.Groups.select().where(models.Groups.id == group_id).exists()
@@ -70,8 +71,7 @@ def remove_user_from_group(member_user_id: str, g_id: str) -> bool:
     group = models.Groups.get(models.Groups.id == g_id)
 
     query = models.GroupMembers.delete().where(
-        (models.GroupMembers.user == user) &
-        (models.GroupMembers.group == group)
+        (models.GroupMembers.user == user) & (models.GroupMembers.group == group)
     )
 
     query.execute()
@@ -85,9 +85,7 @@ def member_is_admin(member_id: str, group_id: str):
 
     is_admin = (
         models.GroupMembers.select()
-        .where(
-            models.GroupMembers.user == user, models.GroupMembers.admin == 1, models.GroupMembers.group == group
-        )
+        .where(models.GroupMembers.user == user, models.GroupMembers.admin == 1, models.GroupMembers.group == group)
         .exists()
     )
 

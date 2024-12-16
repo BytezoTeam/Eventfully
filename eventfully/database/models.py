@@ -28,7 +28,7 @@ class GroupMembers(_DBBaseModel):
     group = ForeignKeyField(Groups)
     admin = BooleanField()
 
-    class Meta:     # pyright: ignore
+    class Meta:  # pyright: ignore
         primary_key = CompositeKey("user", "group")
 
 
@@ -37,7 +37,7 @@ class Likes(_DBBaseModel):
     event_id = TextField()
     group = ForeignKeyField(Groups, null=True, backref="liked_events")
 
-    class Meta:     # pyright: ignore
+    class Meta:  # pyright: ignore
         primary_key = CompositeKey("user", "event_id", "group")
 
 

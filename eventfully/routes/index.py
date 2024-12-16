@@ -9,7 +9,7 @@ from eventfully.routes.utils import translation_provider, jwt_check
 from eventfully.search import search
 from eventfully.types import SearchContent
 
-bp = Blueprint('index', __name__)
+bp = Blueprint("index", __name__)
 
 
 @bp.route("/", methods=["GET"])

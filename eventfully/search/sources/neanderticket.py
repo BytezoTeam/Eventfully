@@ -112,6 +112,10 @@ def _extract_with_regex(text: str, pattern: str) -> str:
 
 
 if __name__ == "__main__":
-    results = search(SearchContent(query="", min_time=datetime.today(), max_time=datetime.today(), city="wuppertal", category="culture"))
+    results = search(
+        SearchContent(
+            query="", min_time=datetime.today(), max_time=datetime.today(), city="wuppertal", category="culture"
+        )
+    )
     for result in results:
         print(result)

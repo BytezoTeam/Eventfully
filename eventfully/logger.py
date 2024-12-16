@@ -2,7 +2,6 @@
 Implements the logger to print nicely formatted status logs to the console to know what is going on and improve debugging better than normal print statements.
 """
 
-
 import logging
 
 log = logging.getLogger("eventfully")

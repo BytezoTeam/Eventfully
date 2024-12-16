@@ -3,7 +3,6 @@ Some Python "types" for representing complex data structures that reduce unneces
 and prevent accidental errors.
 """
 
-
 from datetime import datetime
 from typing import Literal
 
