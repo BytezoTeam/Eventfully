@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from http import HTTPStatus
+import pytz
 
 from flask import Blueprint, render_template, request
 from eventfully.database import crud
@@ -98,7 +99,11 @@ def get_events(user_id: str):
 
     if not user_id:
         return render_template(
-            "components/events.html", events=result, cities=crud.get_possible_cities(), t=translation_provider()
+            "components/events.html",
+            events=result,
+            cities=crud.get_possible_cities(),
+            t=translation_provider(),
+            tz=pytz.timezone("Europe/Berlin"),
         )
 
     user = crud.get_user(user_id)
@@ -118,4 +123,5 @@ def get_events(user_id: str):
         shared_event_ids=shared_event_ids,
         user=user,
         t=translation_provider(),
+        tz=pytz.timezone("Europe/Berlin"),
     )

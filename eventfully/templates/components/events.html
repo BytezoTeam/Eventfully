@@ -64,8 +64,8 @@
               <span class="font-bold">{{ t("time") }}</span>
             </div>
             <p class="prose">
-              {{ item.start_time.strftime("%d.%m.%Y") }} |
-              {{ item.start_time.strftime("%H:%M") }}
+              {{ item.start_time.astimezone(tz).strftime("%d.%m.%Y") }} |
+              {{ item.start_time.astimezone(tz).strftime("%H:%M") }}
               {{ t("to") }}
               {{ item.end_time.strftime("%H:%M") }}
             </p>
