@@ -10,8 +10,6 @@ from typing import Optional
 from pydantic import BaseModel, ValidationError, field_validator
 from dotenv import load_dotenv
 
-from eventfully.logger import log
-
 
 class Config(BaseModel):
     MEILI_HOST: str = "http://localhost:7700"
@@ -47,5 +45,5 @@ try:
     CONFIG = Config(**environ)  # type: ignore
 except ValidationError as errors:
     for error in errors.errors():
-        log.fatal(f"Missing environment variable: {error['loc'][0]}")
+        print(f"FATAL: Missing environment variable: {error['loc'][0]}")
     sys.exit(1)
