@@ -1,0 +1,53 @@
+{
+  "search": "Search",
+  "profile": "Profile",
+  "login": "Login",
+  "register": "Register",
+  "logout": "Logout",
+  "password": "Password",
+  "location": "Event Location",
+  "username": "Username",
+  "email": "Email",
+  "search_placeholder": "Search Keywords",
+  "city": "City",
+  "share_btn": "Share with group",
+  "group": "Group",
+  "category": {
+    "name": "Category",
+    "all": "All",
+    "culture": "Culture",
+    "politics": "Politics",
+    "sport": "Sport",
+    "education": "Education"
+  },
+  "date": {
+    "date": "Date",
+    "all": "All",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "week": "Week",
+    "month": "Month"
+  },
+  "groups": {
+    "create_group": "Create Group",
+    "group_name": "Group Name"
+  },
+  "tab": {
+    "my_groups": "My Groups",
+    "events": "Events"
+  },
+  "my_groups": {
+    "title": "My Groups"
+  },
+  "events": {
+    "title": "Group Events"
+  },
+  "burger": {
+    "home": "Home",
+    "groups": "Groups"
+  },
+  "price": "Price",
+  "time": "Time",
+  "to": "until",
+  "please_wait": "Please Wait a Few Minutes While We Search for New Events"
+}

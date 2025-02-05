@@ -6,7 +6,7 @@ from typing import Callable
 import jwt
 from flask import request, make_response
 from peewee import DoesNotExist
-from pyi18n import PyI18n
+from yai18n import Translator
 
 from eventfully import utils
 from eventfully.config import CONFIG
@@ -14,8 +14,7 @@ from eventfully.database import crud
 from eventfully.logger import log
 
 
-LANGUAGES = ("en", "de", "cze", "fr", "nl", "ru", "tr")
-i18n = PyI18n(LANGUAGES)
+translator = Translator("en")
 
 
 def translation_provider() -> Callable[[str], str]:
@@ -24,14 +23,15 @@ def translation_provider() -> Callable[[str], str]:
     """
 
     language_header = request.headers.get("Accept-Language")
-    lang_code = utils.extract_language_from_language_header(language_header, LANGUAGES)
+    supported_languages = ("en", "de", "cze", "fr", "nl", "ru", "tr")
+    lang_code = utils.extract_language_from_language_header(language_header, supported_languages)
 
     def translate(text: str) -> str:
-        translation = i18n.gettext(lang_code, text)
-        if isinstance(translation, str):
-            return translation
-        else:
-            return text
+        try:
+            translation = translator(text, lang_code)
+        except KeyError:
+            translation = text
+        return translation
 
     return translate
 

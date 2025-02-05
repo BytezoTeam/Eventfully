@@ -23,7 +23,7 @@ dependencies = [
     "sqids==0.*",
     "pyjwt==2.*",
     "cachetools==5.*",
-    "pyi18n-v2==1.*",
+    "yet-another-i18n==0.*",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
