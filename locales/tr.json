@@ -1,0 +1,54 @@
+{
+   "search":"Ara",
+   "to_search": "Search",
+  "more_options": "More Options",
+   "profile":"Profil",
+   "login":"Giriş yap",
+   "register":"Kayıt ol",
+   "logout":"Çıkış yap",
+   "password":"Şifre",
+   "location":"Etkinlik yeri",
+   "username":"Kullanıcı adı",
+   "email":"E-posta",
+   "search_placeholder":"Anahtar kelimeler ara",
+   "city":"Şehir",
+   "share_btn":"Grupla paylaş",
+   "group":"Grup",
+   "category":{
+      "name":"Kategori",
+      "all":"Tümü",
+      "culture":"Kültür",
+      "politics":"Siyaset",
+      "sport":"Spor",
+      "education":"Eğitim"
+   },
+   "date":{
+      "date":"Tarih",
+      "all":"Tümü",
+      "today":"Bugün",
+      "tomorrow":"Yarın",
+      "week":"Hafta",
+      "month":"Ay"
+   },
+   "groups":{
+      "create_group":"Grup oluştur",
+      "group_name":"Grup adı"
+   },
+   "tab":{
+      "my_groups":"Gruplarım",
+      "events":"Etkinlikler"
+   },
+   "my_groups":{
+      "title":"Gruplarım"
+   },
+   "events":{
+      "title":"Grup etkinlikleri"
+   },
+   "burger":{
+      "home":"Ana sayfa",
+      "groups":"Gruplar"
+   },
+   "price":"Fiyat",
+   "time":"Zaman",
+   "to":"değin"
+}

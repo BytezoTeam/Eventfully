@@ -1,0 +1,54 @@
+{
+  "search": "Rechercher",
+  "to_search": "Search",
+  "more_options": "More Options",
+  "profile": "Profil",
+  "login": "Se connecter",
+  "register": "S'inscrire",
+  "logout": "Se déconnecter",
+  "password": "Mot de passe",
+  "location": "Lieu de l'événement",
+  "username": "Nom d'utilisateur",
+  "email": "E-mail",
+  "search_placeholder": "Rechercher des mots-clés",
+  "city": "Ville",
+  "share_btn": "Partager avec le groupe",
+  "group": "Groupe",
+  "category": {
+    "name": "Catégorie",
+    "all": "Toutes",
+    "culture": "Culture",
+    "politics": "Politique",
+    "sport": "Sport",
+    "education": "Éducation"
+  },
+  "date": {
+    "date": "Date",
+    "all": "Toutes",
+    "today": "Aujourd'hui",
+    "tomorrow": "Demain",
+    "week": "Semaine",
+    "month": "Mois"
+  },
+  "groups": {
+    "create_group": "Créer un groupe",
+    "group_name": "Nom du groupe"
+  },
+  "tab": {
+    "my_groups": "Mes groupes",
+    "events": "Événements"
+  },
+  "my_groups": {
+    "title": "Mes groupes"
+  },
+  "events": {
+    "title": "Événements du groupe"
+  },
+  "burger": {
+    "home": "Accueil",
+    "groups": "Groupes"
+  },
+  "price": "Prix",
+  "time": "temps",
+  "to": "jusqu'à"
+}

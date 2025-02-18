@@ -1,0 +1,54 @@
+{
+  "search": "Pretraži",
+  "to_search": "Search",
+  "more_options": "More Options",
+  "profile": "Profil",
+  "login": "Prijava",
+  "register": "Registracija",
+  "logout": "Odjava",
+  "password": "Lozinka",
+  "location": "Mjesto događaja",
+  "username": "Korisničko ime",
+  "email": "E-pošta",
+  "search_placeholder": "Pretraži ključne riječi",
+  "city": "Grad",
+  "share_btn": "Podijeli s grupom",
+  "group": "Grupa",
+  "category": {
+    "name": "Kategorija",
+    "all": "Sve",
+    "culture": "Kultura",
+    "politics": "Politika",
+    "sport": "Sport",
+    "education": "Obrazovanje"
+  },
+  "date": {
+    "date": "Datum",
+    "all": "Svi",
+    "today": "Danas",
+    "tomorrow": "Sutra",
+    "week": "Tjedan",
+    "month": "Mjesec"
+  },
+  "groups": {
+    "create_group": "Stvori grupu",
+    "group_name": "Ime grupe"
+  },
+  "tab": {
+    "my_groups": "Moje grupe",
+    "events": "Događaji"
+  },
+  "my_groups": {
+    "title": "Moje grupe"
+  },
+  "events": {
+    "title": "Događaji grupe"
+  },
+  "burger": {
+    "home": "Početna",
+    "groups": "Grupe"
+  },
+  "price": "Cijena",
+  "time": "vrijeme",
+  "to": "do"
+}

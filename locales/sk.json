@@ -1,0 +1,54 @@
+{
+  "search": "Hľadať",
+  "to_search": "Search",
+  "more_options": "More Options",
+  "profile": "Profil",
+  "login": "Prihlásiť sa",
+  "register": "Registrovať sa",
+  "logout": "Odhlásiť sa",
+  "password": "Heslo",
+  "location": "Miesto konania",
+  "username": "Používateľské meno",
+  "email": "E-mail",
+  "search_placeholder": "Hľadať kľúčové slová",
+  "city": "Mesto",
+  "share_btn": "Zdieľať so skupinou",
+  "group": "Skupina",
+  "category": {
+    "name": "Kategória",
+    "all": "Všetky",
+    "culture": "Kultúra",
+    "politics": "Politika",
+    "sport": "Šport",
+    "education": "Vzdelávanie"
+  },
+  "date": {
+    "date": "Dátum",
+    "all": "Všetky",
+    "today": "Dnes",
+    "tomorrow": "Zajtra",
+    "week": "Týždeň",
+    "month": "Mesiac"
+  },
+  "groups": {
+    "create_group": "Vytvoriť skupinu",
+    "group_name": "Názov skupiny"
+  },
+  "tab": {
+    "my_groups": "Moje skupiny",
+    "events": "Udalosti"
+  },
+  "my_groups": {
+    "title": "Moje skupiny"
+  },
+  "events": {
+    "title": "Udalosti skupiny"
+  },
+  "burger": {
+    "home": "Domov",
+    "groups": "Skupiny"
+  },
+  "price": "Cena",
+  "time": "čas",
+  "to": "kým"
+}

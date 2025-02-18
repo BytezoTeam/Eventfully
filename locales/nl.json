@@ -1,0 +1,54 @@
+{
+  "search": "Zoeken",
+  "to_search": "Search",
+  "more_options": "More Options",
+  "profile": "Profiel",
+  "login": "Inloggen",
+  "register": "Registreren",
+  "logout": "Uitloggen",
+  "password": "Wachtwoord",
+  "location": "Evenementlocatie",
+  "username": "Gebruikersnaam",
+  "email": "E-mail",
+  "search_placeholder": "Zoek trefwoorden",
+  "city": "Stad",
+  "share_btn": "Delen met groep",
+  "group": "Groep",
+  "category": {
+    "name": "Categorie",
+    "all": "Alle",
+    "culture": "Cultuur",
+    "politics": "Politiek",
+    "sport": "Sport",
+    "education": "Onderwijs"
+  },
+  "date": {
+    "date": "Datum",
+    "all": "Alle",
+    "today": "Vandaag",
+    "tomorrow": "Morgen",
+    "week": "Week",
+    "month": "Maand"
+  },
+  "groups": {
+    "create_group": "Groep aanmaken",
+    "group_name": "Groepsnaam"
+  },
+  "tab": {
+    "my_groups": "Mijn groepen",
+    "events": "Evenementen"
+  },
+  "my_groups": {
+    "title": "Mijn groepen"
+  },
+  "events": {
+    "title": "Groepsevenementen"
+  },
+  "burger": {
+    "home": "Startpagina",
+    "groups": "Groepen"
+  },
+  "price": "Prijs",
+  "time": "Tijd",
+  "to": "tot"
+}

@@ -1,5 +1,6 @@
 {
   "search": "Search",
+  "more_options": "More Options",
   "profile": "Profile",
   "login": "Login",
   "register": "Register",
@@ -49,5 +50,5 @@
   "price": "Price",
   "time": "Time",
   "to": "until",
-  "please_wait": "Please Wait a Few Minutes While We Search for New Events"
+  "please_wait": "Please Wait a few minutes while we search for new events"
 }
