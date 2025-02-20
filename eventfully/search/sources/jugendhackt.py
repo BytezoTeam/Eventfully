@@ -28,11 +28,13 @@ def _extract_event_from_html(raw_event: PageElement) -> schemas.Event | None:
 
     if not "/lab/" in web_link: return None # Filter out events that already happened
 
-    title = raw_event.find_next("div", class_="event-teaser-list-meta fg").find_next("h3", "mb-0 mt-0").text
-    address = raw_event.find_next("div", class_="event-teaser-list-meta fg").find_next("div", class_="c-uppercase-title mb-1").text.strip().replace(" ", "")
+    event_teaser_object = raw_event.find_next("div", class_="event-teaser-list-meta fg")
+
+    title = event_teaser_object.find_next("h3", "mb-0 mt-0").text
+    address = event_teaser_object.find_next("div", class_="c-uppercase-title mb-1").text.strip().replace(" ", "")
     _, city = address.split(":")
 
-    time = raw_event.find_next("div", class_="event-teaser-list-meta fg").find_next("p", class_="mt-1 fw-b").find_next("time").text.replace(" ", "").strip()
+    time = event_teaser_object.find_next("p", class_="mt-1 fw-b").find_next("time").text.replace(" ", "").strip()
 
     # Get description
     request = niquests.get(web_link)
