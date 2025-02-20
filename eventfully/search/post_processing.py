@@ -9,13 +9,13 @@ import queue
 from eventfully.types import SearchContent
 from eventfully.logger import log
 from eventfully.database import crud, schemas
-from eventfully.search.sources import zuerichunbezahlbar, neanderticket, berlin
+from eventfully.search.sources import jugendhackt, zuerichunbezahlbar, neanderticket, boundicca
 
 
 SOURCES: list[Callable[[SearchContent], set[schemas.Event]]] = [
     zuerichunbezahlbar.search,
-    neanderticket.search,
-    berlin.search,
+    jugendhackt.search,
+    neanderticket.search
 ]
 POST_PROCESSORS: dict[str, Callable[[schemas.Event], schemas.Event]] = {
     "zuerichunbezahlbar": zuerichunbezahlbar.post_process,
@@ -74,7 +74,7 @@ def _search_web(
             log.debug(f"Collecting events from {source.__name__}")
             source_events = source(search)
             events.update(source_events)
-        except Exception as e:
+        except Exception as e: 
             log.error(f"Could not collect events from {source}: {e}")
 
     return events
