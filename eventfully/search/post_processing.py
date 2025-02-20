@@ -9,7 +9,7 @@ import queue
 from eventfully.types import SearchContent
 from eventfully.logger import log
 from eventfully.database import crud, schemas
-from eventfully.search.sources import jugendhackt, zuerichunbezahlbar, neanderticket, boundicca
+from eventfully.search.sources import jugendhackt, zuerichunbezahlbar, neanderticket
 
 
 SOURCES: list[Callable[[SearchContent], set[schemas.Event]]] = [
