@@ -20,11 +20,11 @@
       {% endif %}
 
       {% if item.image_link %}
-        <figure class="pt-8 px-8 w-full h-72 rounded-xl">
+        <figure class="pt-4 px-4 w-full h-72 rounded-xl">
           <img
                   src="{{ item.image_link }}"
                   loading="lazy"
-                  class="object-cover object-center size-full"
+                  class="object-cover object-center size-full "
                   alt="Event Cover"
                   style="border-radius: inherit"
           />
@@ -68,6 +68,17 @@
               {{ item.start_time.astimezone(tz).strftime("%H:%M") }}
               {{ t("to") }}
               {{ item.end_time.strftime("%H:%M") }}
+              <add-to-calendar-button
+              name="{{ item.title }}"
+              options="'Apple','Google'"
+              description="{{  item.description }}"
+              location="{{ item.address }}"
+              startDate="{{ item.start_time.astimezone(tz).strftime("%Y-%m-%d") }}"
+              endDate="{{ item.start_time.astimezone(tz).strftime("%Y-%m-%d") }}"
+              startTime="{{ item.start_time.astimezone(tz).strftime("%H:%M") }}"
+              endTime="{{ item.end_time.strftime("%H:%M") }}"
+              timeZone="Europe/Berlin"
+            ></add-to-calendar-button>
             </p>
           </div>
 

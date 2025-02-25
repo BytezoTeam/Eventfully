@@ -5,6 +5,7 @@ from datetime import datetime, date
 from eventfully.database import schemas
 from eventfully.types import SearchContent
 
+
 def search(search_content: SearchContent) -> set[schemas.Event]:
     events: set[schemas.Event] = set()
 
@@ -19,14 +20,16 @@ def search(search_content: SearchContent) -> set[schemas.Event]:
 
     return events
 
+
 def _extract_event_from_html(raw_event: PageElement) -> schemas.Event | None:
     image_object = raw_event.find_next("picture", class_="events-list-image-2")
     if image_object:
         image_path = image_object.find_next("img").get("src")
-    
+
     web_link = raw_event.find_next("a").get("href")
 
-    if not "/lab/" in web_link: return None # Filter out events that already happened
+    if "/lab/" not in web_link:
+        return None  # Filter out events that already happened
 
     event_teaser_object = raw_event.find_next("div", class_="event-teaser-list-meta fg")
 
@@ -43,8 +46,9 @@ def _extract_event_from_html(raw_event: PageElement) -> schemas.Event | None:
 
     raw_events = soup.find_all("div", class_="event-teaser-list-item")
     event_item: PageElement = None
-    for item in raw_events: 
-        if title == item.find_next("h3", class_="mb-0").text: event_item = item
+    for item in raw_events:
+        if title == item.find_next("h3", class_="mb-0").text:
+            event_item = item
 
     description: str = ""
 
@@ -58,7 +62,8 @@ def _extract_event_from_html(raw_event: PageElement) -> schemas.Event | None:
     raw_date = time.split("|")
 
     #! TODO: Implement multiple date support
-    if len(raw_date) != 2: return None # Ignore the events with multiple dates for now
+    if len(raw_date) != 2:
+        return None  # Ignore the events with multiple dates for now
 
     time = raw_date[1].split("–")
     start_hour, start_minute = time[0].split(":")
@@ -80,7 +85,6 @@ def _extract_event_from_html(raw_event: PageElement) -> schemas.Event | None:
         hour=int(end_hour),
         minute=int(end_minute),
     )
-    
 
     event = schemas.Event(
         web_link=web_link,
@@ -99,10 +103,12 @@ def _extract_event_from_html(raw_event: PageElement) -> schemas.Event | None:
 
 
 if __name__ == "__main__":
-    search(SearchContent(
-        query="",
-        min_time=date(year=2025, month=2, day=1),
-        max_time=date(year=2025, month=2, day=1),
-        city="",
-        category=""
-    ))
+    search(
+        SearchContent(
+            query="",
+            min_time=date(year=2025, month=2, day=1),
+            max_time=date(year=2025, month=2, day=1),
+            city="",
+            category="",
+        )
+    )

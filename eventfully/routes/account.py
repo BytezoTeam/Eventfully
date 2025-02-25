@@ -32,7 +32,7 @@ def groups(user_id: str):
             events_by_group_ids[group.id].append(event)
 
     return render_template(
-        "groups.html", groups=groups, events_by_group_ids=events_by_group_ids, t=translation_provider()
+        "groups.html", groups=groups, events_by_group_ids=events_by_group_ids, t=translation_provider(), CONFIG=CONFIG
     )
 
 
