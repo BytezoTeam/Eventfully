@@ -5,7 +5,7 @@ import niquests
 from bs4 import BeautifulSoup, PageElement
 
 from eventfully.database import schemas
-from eventfully.types import SearchContent
+from eventfully.search_content import SearchContent
 
 CATEGORIES = {
     "education": ["Wissenschaft", "Messen & Kongresse", "Bildung & Vorträge", "Kochkurse", "Literatur"],

@@ -3,7 +3,7 @@ from datetime import datetime
 import pytest
 
 from eventfully.search.sources import zuerichunbezahlbar, neanderticket, bpb, boundicca, berlin
-from eventfully.types import SearchContent
+from eventfully.search_content import SearchContent
 
 
 @pytest.mark.parametrize(

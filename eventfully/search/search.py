@@ -4,7 +4,7 @@ from cachetools import cached, TTLCache
 
 from eventfully.database import schemas, crud
 from eventfully.search import post_processing
-from eventfully.types import SearchContent
+from eventfully.search_content import SearchContent
 
 
 def main(search_content: SearchContent) -> set[schemas.Event]:

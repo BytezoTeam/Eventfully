@@ -8,7 +8,7 @@ from eventfully.config import CONFIG
 from eventfully.logger import log
 from eventfully.routes.utils import translation_provider, jwt_check
 from eventfully.search import search
-from eventfully.types import SearchContent
+from eventfully.search_content import SearchContent
 
 bp = Blueprint("index", __name__)
 

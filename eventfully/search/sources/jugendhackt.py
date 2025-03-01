@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup, PageElement
 from datetime import datetime, date
 
 from eventfully.database import schemas
-from eventfully.types import SearchContent
+from eventfully.search_content import SearchContent
 
 
 def search(search_content: SearchContent) -> set[schemas.Event]:

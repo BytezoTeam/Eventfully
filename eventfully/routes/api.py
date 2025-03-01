@@ -6,7 +6,7 @@ from pydantic import ValidationError
 
 from eventfully.logger import log
 from eventfully.search import search
-from eventfully.types import SearchContent
+from eventfully.search_content import SearchContent
 
 bp = Blueprint("api", __name__)
 

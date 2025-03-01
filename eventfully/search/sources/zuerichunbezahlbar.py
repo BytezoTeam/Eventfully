@@ -4,7 +4,7 @@ import niquests
 from bs4 import BeautifulSoup
 
 from eventfully.database import schemas
-from eventfully.types import SearchContent
+from eventfully.search_content import SearchContent
 
 BASE_URL = "https://www.zuerichunbezahlbar.ch"
 

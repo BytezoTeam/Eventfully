@@ -6,7 +6,7 @@ Some search won't return all event information directly so whe need to fetch the
 from typing import Callable
 import queue
 
-from eventfully.types import SearchContent
+from eventfully.search_content import SearchContent
 from eventfully.logger import log
 from eventfully.database import crud, schemas
 from eventfully.search.sources import jugendhackt, zuerichunbezahlbar, neanderticket
