@@ -15,7 +15,7 @@ class Config(BaseModel):
     MEILI_HOST: str = "http://localhost:7700"
     MEILI_MASTER_KEY: Optional[str] = None
     EVENTFULLY_JWT_KEY: str
-    EVENTFULLY_PORT: int
+    EVENTFULLY_PORT: int = 5000
     EVENTFULLY_ANALYTICS_URL: Optional[str] = None
     EVENTFULLY_LEGAL_NOTICE: Optional[str] = None
     EVENTFULLY_ACCOUNTS_ENABLED: bool = False
