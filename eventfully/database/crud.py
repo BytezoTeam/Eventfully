@@ -10,13 +10,7 @@ from eventfully.database import models, schemas, database
 @database.db.connection_context()
 def create_tables():
     database.db.create_tables(
-        [
-            models.User,
-            models.Likes,
-            models.PossibleCities,
-            models.Groups,
-            models.GroupMembers,
-        ]
+        [models.User, models.Likes, models.PossibleCities, models.Groups, models.GroupMembers, models.EventShare]
     )
 
 
@@ -24,11 +18,27 @@ def create_tables():
 @database.db.connection_context()
 def like_event(user_id: str, event_id: str, group_id: str | None = None):
     user = models.User.get(models.User.id == user_id)
-    group = models.Groups.get(models.Groups.id == group_id) if group_id else None
+    # group = models.Groups.get(models.Groups.id == group_id) if group_id else None
 
-    models.Likes.create(user=user, event_id=event_id, group=group)
+    models.Likes.create(user=user, event_id=event_id)
 
     return event_id
+
+
+def share_event(user_id: str, event_id: str, group_id: str):
+    user = models.User.get(models.User.id == user_id)
+    group = models.Groups.get(models.Groups.id == group_id)
+
+    models.EventShare.create(user=user, event_id=event_id, group=group)
+
+
+def unshare_event(user_id: str, event_id: str, group_id: str):
+    user = models.User.get(models.User.id == user_id)
+    group = models.Groups.get(models.Groups.id == group_id)
+
+    models.EventShare.delete().where(
+        models.EventShare.user == user, models.EventShare.event_id == event_id, models.EventShare.group == group
+    ).execute()
 
 
 @database.db.connection_context()
@@ -104,7 +114,7 @@ def get_shared_events(group_id: str) -> dict[str, str]:
     group = models.Groups.get(models.Groups.id == group_id)
 
     shared_events = {}
-    shared = models.Likes.select().where(models.Likes.group == group)
+    shared = models.EventShare.select().where(models.EventShare.group == group)
 
     for shared_event in shared:
         shared_events[shared_event.event_id] = shared_event.user_id
@@ -113,7 +123,7 @@ def get_shared_events(group_id: str) -> dict[str, str]:
 
 
 # Account
-@database.db.connection_context()
+# @database.db.connection_context()
 def get_user(user_id: str) -> models.User:
     return models.User.get(models.User.id == user_id)
 
@@ -179,6 +189,7 @@ def search_events(therm: str, filter_string: str) -> set[schemas.Event]:
     return set(events)
 
 
+@database.db.connection_context()
 def get_event_by_id(event_id: str) -> schemas.Event:
     raw_events = models.event_index.search("", {"filter": f"id = {event_id}"})
     events = [schemas.Event(**raw_event) for raw_event in raw_events["hits"]]

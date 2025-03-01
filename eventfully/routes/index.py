@@ -65,6 +65,9 @@ def get_events(user_id: str):
     city = request.args.get("city", "").strip().lower()
     category = request.args.get("category", "")
     date = request.args.get("date", "all")
+    show = request.args.get("show", "")
+
+    print(show)
 
     if category not in ["", "sport", "culture", "education", "politics"]:
         return "", HTTPStatus.BAD_REQUEST
@@ -114,11 +117,19 @@ def get_events(user_id: str):
 
     shared_event_ids: list[str] = []
     for group in groups:
-        shared_event_ids += [like.event_id for like in group.liked_events]  # pyright: ignore
+        shared_event_ids += [like.event_id for like in group.shared_events]  # pyright: ignore
+
+    filtered = result.copy()
+    if show is not "":
+        for event in result:
+            if show == "liked" and event.id not in liked_event_ids:
+                filtered.discard(event)
+            if show == "shared" and event.id not in shared_event_ids:
+                filtered.discard(event)
 
     return render_template(
         "components/events.html",
-        events=result,
+        events=filtered,
         CONFIG=CONFIG,
         liked_events=liked_event_ids,
         groups=groups,

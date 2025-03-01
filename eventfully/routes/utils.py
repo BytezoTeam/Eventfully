@@ -71,7 +71,9 @@ def jwt_check(deny_unauthenticated=False):
             try:
                 crud.get_user(content["user_id"])
             except DoesNotExist:
-                return "", HTTPStatus.UNAUTHORIZED
+                response = make_response()
+                response.delete_cookie("jwt_token")
+                return response, HTTPStatus.UNAUTHORIZED
 
             return func(content["user_id"], *args, **kwargs)
 

@@ -4,6 +4,36 @@
   </div>
 {% endif %}
 
+<div role="alert" id="alert-success-banner" class="hidden alert alert-success fixed bottom-4 left-4 p-4 flex items-center gap-2 rounded-lg shadow-lg z-50 w-auto max-w-xs">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="h-6 w-6 shrink-0 stroke-current"
+    fill="none"
+    viewBox="0 0 24 24">
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+  <span id="alert-success-message">{{ t("task_success") }}</span>
+</div>
+
+<div role="alert" id="alert-fail-banner" class="hidden alert alert-error fixed bottom-4 left-4 p-4 flex items-center gap-2 rounded-lg shadow-lg z-50 w-auto max-w-xs">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="h-6 w-6 shrink-0 stroke-current"
+    fill="none"
+    viewBox="0 0 24 24">
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+  <span id="alert-fail-message">{{ t("task_fail") }}</span>
+</div>
+
 <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
   <!-- Event list -->
   {% for item in events %}
@@ -22,13 +52,20 @@
       {% if item.image_link %}
         <figure class="pt-4 px-4 w-full h-72 rounded-xl">
           <img
-                  src="{{ item.image_link }}"
-                  loading="lazy"
-                  class="object-cover object-center size-full "
-                  alt="Event Cover"
-                  style="border-radius: inherit"
+            src="{{ item.image_link }}"
+            loading="lazy"
+            class="object-cover object-center size-full"
+            alt="Event Cover"
+            style="border-radius: inherit"
           />
         </figure>
+      {% else %}
+      <figure class="pt-4 px-4 w-full h-72 rounded-xl">
+        <div class="flex items-center justify-center h-full text-white text-6xl font-bold rounded-xl"
+            style="background: linear-gradient(45deg, #4F46E5, #EC4899);">
+            {{ item.title[0:2] }}
+        </div>
+    </figure>
       {% endif %}
 
       <div class="card-body gap-4">
@@ -144,3 +181,46 @@
 
   {% endfor %}
 </section>
+
+<script>
+  document.addEventListener("htmx:afterRequest", function(event) {
+    if (event.detail.xhr.status === 200) {
+      showAlert(true);
+    } else {
+      showAlert(false);
+    }
+  });
+
+  function showAlert(success) {
+    let alertBanner;
+
+    if (success) {
+      alertBanner = document.getElementById("alert-success-banner");
+    } else {
+      alertBanner = document.getElementById("alert-fail-banner");
+    }
+
+    if (!alertBanner) return;
+
+    // Reset styles and ensure the element is visible before fade-in
+    alertBanner.classList.remove("hidden");
+    
+    // Allow a small delay to ensure the element is recognized as visible before fading in
+    setTimeout(() => {
+      alertBanner.classList.remove("opacity-0");
+      alertBanner.classList.add("opacity-100", "transition-opacity", "duration-200");
+    }, 50); // Tiny delay ensures transition applies
+
+    // Hide with fade-out after 3 seconds
+    setTimeout(() => {
+      alertBanner.classList.remove("opacity-100");
+      alertBanner.classList.add("opacity-0");
+
+      // Wait for the transition to complete before hiding
+      setTimeout(() => {
+        alertBanner.classList.add("hidden");
+      }, 500);
+      
+    }, 3000);
+  }
+</script>

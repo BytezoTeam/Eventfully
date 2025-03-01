@@ -3,6 +3,7 @@ from http import HTTPStatus
 from random import randint
 from uuid import uuid4
 
+import pytz
 import jwt
 from flask import Blueprint, render_template, request, make_response, Response
 from flask_wtf import FlaskForm
@@ -11,7 +12,7 @@ from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Length
 
 from eventfully.config import CONFIG
-from eventfully.database import crud, schemas
+from eventfully.database import crud, schemas, database
 from eventfully.logger import log
 from eventfully.routes.utils import jwt_check, translation_provider
 
@@ -22,17 +23,39 @@ bp = Blueprint("account", __name__)
 @jwt_check(deny_unauthenticated=True)
 def groups(user_id: str):
     groups = crud.get_groups_of_member(user_id)
+    user = crud.get_user(user_id)
+
+    liked_event_ids = [like.event_id for like in user.liked_events]  # pyright: ignore
 
     events_by_group_ids = {}
+    shared_event_names_by_group = {}
+
     for group in groups:
         events_by_group_ids[group.id] = []
-        liked_event_ids = [like.event_id for like in group.liked_events]  # pyright: ignore
-        for event_id in liked_event_ids:
+        group_shared_event_names = {}  # Reinitialize for each group
+
+        with database.db.atomic():
+            for shared_event in group.shared_events:  # pyright: ignore
+                # Get the name of the user who shared the event
+                sharer_name = crud.get_user(shared_event.user_id).name
+                group_shared_event_names[shared_event.event_id] = sharer_name
+
+        shared_event_names_by_group[group.id] = group_shared_event_names
+
+        for event_id in group_shared_event_names:
             event = crud.get_event_by_id(event_id)
             events_by_group_ids[group.id].append(event)
 
     return render_template(
-        "groups.html", groups=groups, events_by_group_ids=events_by_group_ids, t=translation_provider(), CONFIG=CONFIG
+        "groups.html",
+        groups=groups,
+        liked_events=liked_event_ids,
+        events_by_group_ids=events_by_group_ids,
+        shared_event_names=shared_event_names_by_group,
+        t=translation_provider(),
+        tz=pytz.timezone("Europe/Berlin"),
+        CONFIG=CONFIG,
+        user=user,
     )
 
 
@@ -52,7 +75,7 @@ def create_group(user_id: str):
     events_by_group_ids = {}
     for group in groups:
         events_by_group_ids[group.id] = []
-        liked_event_ids = [like.event_id for like in group.liked_events]  # pyright: ignore
+        liked_event_ids = [like.event_id for like in group.shared_events]  # pyright: ignore
         for event_id in liked_event_ids:
             event = crud.get_event_by_id(event_id)
             events_by_group_ids[group.id].append(event)
@@ -66,11 +89,26 @@ def create_group(user_id: str):
 @jwt_check(deny_unauthenticated=True)
 def share_to_group(user_id: str):
     event_id = request.args.get("event_id")
-    if event_id is None:
-        return "", HTTPStatus.BAD_REQUEST
     group_id = request.args.get("group_id")
 
-    crud.like_event(user_id, event_id, group_id)
+    if event_id is None or group_id is None:
+        return "", HTTPStatus.BAD_REQUEST
+
+    crud.share_event(user_id=user_id, event_id=event_id, group_id=group_id)
+
+    return "", HTTPStatus.OK
+
+
+@bp.route("/api/group/unshare")
+@jwt_check(deny_unauthenticated=True)
+def unshare_from_group(user_id: str):
+    event_id = request.args.get("event_id")
+    group_id = request.args.get("group_id")
+
+    if event_id is None or group_id is None:
+        return "", HTTPStatus.BAD_REQUEST
+
+    crud.unshare_event(user_id=user_id, event_id=event_id, group_id=group_id)
 
     return "", HTTPStatus.OK
 
