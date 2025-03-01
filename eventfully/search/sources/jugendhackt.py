@@ -45,7 +45,7 @@ def _extract_event_from_html(raw_event: PageElement) -> schemas.Event | None:
     soup = BeautifulSoup(request.text, "html.parser")
 
     raw_events = soup.find_all("div", class_="event-teaser-list-item")
-    event_item: PageElement = None
+    event_item: PageElement | None = None
     for item in raw_events:
         if title == item.find_next("h3", class_="mb-0").text:
             event_item = item
@@ -62,7 +62,8 @@ def _extract_event_from_html(raw_event: PageElement) -> schemas.Event | None:
     raw_date = time.split("|")
 
     #! TODO: Implement multiple date support
-    if len(raw_date) != 2:
+    allowed_date_length = 2
+    if len(raw_date) != allowed_date_length:
         return None  # Ignore the events with multiple dates for now
 
     time = raw_date[1].split("–")

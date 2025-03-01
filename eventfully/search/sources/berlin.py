@@ -77,7 +77,6 @@ def _extract_event(raw_event: PageElement, search_con: SearchContent) -> schemas
 
     raw_arguments = {key.text: value for key, value in zip(raw_event.find_all_next("dt"), raw_event.find_next("dd"))}
 
-    # FIXME: sometimes there is no price
     price = raw_arguments["Preis:"].text if raw_arguments else None
     address = raw_arguments["Adresse:"].text if raw_arguments else None
 
