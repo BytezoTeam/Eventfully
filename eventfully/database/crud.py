@@ -1,4 +1,5 @@
 from typing import Iterable
+from eventfully.utils import hash, verify_password
 
 from peewee import DoesNotExist
 from cachetools import cached, TTLCache
@@ -12,7 +13,6 @@ def create_tables():
     database.db.create_tables(
         [models.User, models.Likes, models.PossibleCities, models.Groups, models.GroupMembers, models.EventShare]
     )
-
 
 # Event Like
 @database.db.connection_context()
@@ -134,7 +134,7 @@ def create_account(username: str, password: str, user_id: str, email: str, event
         id=user_id,
         email=email,
         name=username,
-        password=password,
+        password=hash(password),
         event_organiser=event_organiser,
     )
     return user_id
@@ -153,10 +153,12 @@ def delete_account(user_id):
 @database.db.connection_context()
 def authenticate_user(username, password):
     try:
-        user = models.User.get((models.User.name == username) & (models.User.password == password))
-        return user.id
+        user = models.User.get((models.User.name == username))
+        if verify_password(user.password, password):
+            return user.id
+        else:
+            return False
     except DoesNotExist:
-        print("User not found or incorrect password.")
         return False
 
 

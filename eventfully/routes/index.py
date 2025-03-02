@@ -67,8 +67,6 @@ def get_events(user_id: str):
     date = request.args.get("date", "all")
     show = request.args.get("show", "")
 
-    print(show)
-
     if category not in ["", "sport", "culture", "education", "politics"]:
         return "", HTTPStatus.BAD_REQUEST
 

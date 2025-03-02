@@ -37,6 +37,17 @@
                 <button type="submit" class="btn btn-primary">{{ t("logout") }}</button>
               </li>
             </form>
+            <br>
+            <form
+              hx-get="/api/search?show=liked"
+              hx-target="#event-search-result"
+              hx-trigger="submit,load"
+              hx-indicator=".htmx-indicator" 
+            >
+              <li>
+                <button type="submit" class="btn btn-primary">{{ t("favourites") }}</button>
+              </li>
+            </form>
           </ul>
         </div>
       {% else %}
