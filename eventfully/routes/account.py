@@ -147,7 +147,7 @@ def signup_account():
         return form.errors, HTTPStatus.BAD_REQUEST
 
     user_id = str(uuid4())
-    crud.create_account(form.username.data, form.password.data, user_id, form.email.data)
+    crud.create_account(form.username.data, form.password.data, user_id, "test@test.com")
 
     response = make_response()
     response.headers["HX-Redirect"] = "/"
@@ -161,7 +161,6 @@ def signup_account():
 class SignUpForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired(), Length(min=4, max=20)])
     password = PasswordField("Password", validators=[DataRequired(), Length(min=8, max=64)])
-    email = StringField("Email", validators=[DataRequired()])
 
 
 class SignInForm(FlaskForm):
