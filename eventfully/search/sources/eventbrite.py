@@ -29,7 +29,7 @@ def search(_search_content: SearchContent) -> set[schemas.Event]:
         return set()
         for page in range(int(max_page)):
             try:
-                url = f"https://www.eventbrite.de/d/germany/arts--events/?page={page+1}&cur=EUR"
+                url = f"https://www.eventbrite.de/d/germany/arts--events/?page={page + 1}&cur=EUR"
                 request = niquests.get(url)
                 request.raise_for_status()
 
