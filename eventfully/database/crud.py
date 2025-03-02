@@ -14,6 +14,7 @@ def create_tables():
         [models.User, models.Likes, models.PossibleCities, models.Groups, models.GroupMembers, models.EventShare]
     )
 
+
 # Event Like
 @database.db.connection_context()
 def like_event(user_id: str, event_id: str, group_id: str | None = None):

@@ -101,6 +101,7 @@ def get_events(user_id: str):
     if not user_id:
         return render_template(
             "components/events.html",
+            shared_event_names=None,
             CONFIG=CONFIG,
             events=result,
             cities=crud.get_possible_cities(),
