@@ -12,6 +12,7 @@ from eventfully.types import SearchContent
 
 bp = Blueprint("index", __name__)
 
+
 def _get_time_range(date_str: str) -> tuple:
     match date_str:
         case "today":
@@ -27,6 +28,7 @@ def _get_time_range(date_str: str) -> tuple:
             return datetime.today(), datetime.today() + timedelta(days=365)
         case _:
             return (None, None)
+
 
 @bp.route("/", methods=["GET"])
 @jwt_check()
@@ -87,7 +89,7 @@ def get_events(user_id: str):
 
     min_time, max_time = _get_time_range(date)
 
-    if not min_time: # pyright: ignore
+    if not min_time:  # pyright: ignore
         return "", HTTPStatus.BAD_REQUEST
 
     search_content = SearchContent(
