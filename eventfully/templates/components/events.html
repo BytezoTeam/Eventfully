@@ -4,15 +4,7 @@
   </div>
 {% endif %}
 
-<div role="alert" id="alert-success-banner" class="hidden alert alert-success fixed bottom-4 left-4 p-4 flex items-center gap-2 rounded-lg shadow-lg z-50 w-auto max-w-xs">
-  {% include 'components/icons/check-circle.html' %}
-  <span id="alert-success-message">{{ t("task_success") }}</span>
-</div>
-
-<div role="alert" id="alert-fail-banner" class="hidden alert alert-error fixed bottom-4 left-4 p-4 flex items-center gap-2 rounded-lg shadow-lg z-50 w-auto max-w-xs">
-  {% include 'components/icons/alert-triangle.html' %}
-  <span id="alert-fail-message">{{ t("task_fail") }}</span>
-</div>
+{% include 'components/alert.html' %}
 
 <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
   <!-- Event list -->
@@ -20,46 +12,3 @@
     {% include 'components/event_card.html' %}
   {% endfor %}
 </section>
-
-<script>
-  document.addEventListener("htmx:afterRequest", function(event) {
-    if (event.detail.xhr.status === 200) {
-      showAlert(true);
-    } else {
-      showAlert(false);
-    }
-  });
-
-  function showAlert(success) {
-    let alertBanner;
-
-    if (success) {
-      alertBanner = document.getElementById("alert-success-banner");
-    } else {
-      alertBanner = document.getElementById("alert-fail-banner");
-    }
-
-    if (!alertBanner) return;
-
-    // Reset styles and ensure the element is visible before fade-in
-    alertBanner.classList.remove("hidden");
-    
-    // Allow a small delay to ensure the element is recognized as visible before fading in
-    setTimeout(() => {
-      alertBanner.classList.remove("opacity-0");
-      alertBanner.classList.add("opacity-100", "transition-opacity", "duration-200");
-    }, 50); // Tiny delay ensures transition applies
-
-    // Hide with fade-out after 3 seconds
-    setTimeout(() => {
-      alertBanner.classList.remove("opacity-100");
-      alertBanner.classList.add("opacity-0");
-
-      // Wait for the transition to complete before hiding
-      setTimeout(() => {
-        alertBanner.classList.add("hidden");
-      }, 500);
-      
-    }, 3000);
-  }
-</script>
