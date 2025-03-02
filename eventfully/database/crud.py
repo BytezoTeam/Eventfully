@@ -1,5 +1,5 @@
 from typing import Iterable
-from eventfully.utils import hash, verify_password
+from eventfully.utils import hash_password, verify_password
 
 from peewee import DoesNotExist
 from cachetools import cached, TTLCache
@@ -134,7 +134,7 @@ def create_account(username: str, password: str, user_id: str, email: str, event
         id=user_id,
         email=email,
         name=username,
-        password=hash(password),
+        password=hash_password(password),
         event_organiser=event_organiser,
     )
     return user_id

@@ -11,7 +11,7 @@ def get_hash_string(input_string):
     return hash_string
 
 
-def hash(password: str) -> str:
+def hash_password(password: str) -> str:
     """
     Hashing function for a password using random unique salt.
     """
@@ -19,11 +19,11 @@ def hash(password: str) -> str:
     return str(sha256(salt.encode() + password.encode()).hexdigest() + ":" + salt)
 
 
-def verify_password(hash: str, password: str) -> bool:
+def verify_password(password_hash: str, password: str) -> bool:
     """
     Check for the password in the hashed password
     """
-    _hashed_text, salt = hash.split(":")
+    _hashed_text, salt = password_hash.split(":")
     return _hashed_text == sha256(salt.encode() + password.encode()).hexdigest()
 
 

@@ -71,11 +71,13 @@ def _extract_event_from_html(raw_event: PageElement, parser: str) -> schemas.Eve
 
         details_soup.find("div", class_="location-info").find_next("div", "map-button-toggle").clear()
 
-        description_object = details_soup.find("div", class_="event-details__wrapper").find_all(
+        descriptions_object = details_soup.find("div", class_="event-details__wrapper").find_all(
             "div", class_="Layout-module__module___2eUcs undefined"
         )
-        for description in description_object:
-            if description.get("data-testid") == "summary":
+
+        description = ""
+        for descriptions in descriptions_object:
+            if descriptions.get("data-testid") == "summary":
                 description = description.find("div", class_="event-details__main-inner").text
                 break
 

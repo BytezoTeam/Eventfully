@@ -12,6 +12,21 @@ from eventfully.types import SearchContent
 
 bp = Blueprint("index", __name__)
 
+def _get_time_range(date_str: str) -> tuple:
+    match date_str:
+        case "today":
+            return datetime.today(), datetime.today()
+        case "tomorrow":
+            dt = datetime.today() + timedelta(days=1)
+            return dt, dt
+        case "week":
+            return datetime.today(), datetime.today() + timedelta(days=7)
+        case "month":
+            return datetime.today(), datetime.today() + timedelta(days=30)
+        case "all":
+            return datetime.today(), datetime.today() + timedelta(days=365)
+        case _:
+            return (None, None)
 
 @bp.route("/", methods=["GET"])
 @jwt_check()
@@ -70,24 +85,10 @@ def get_events(user_id: str):
     if category not in ["", "sport", "culture", "education", "politics"]:
         return "", HTTPStatus.BAD_REQUEST
 
-    match date:
-        case "today":
-            min_time = datetime.today()
-            max_time = datetime.today()
-        case "tomorrow":
-            min_time = datetime.today() + timedelta(days=1)
-            max_time = datetime.today() + timedelta(days=1)
-        case "week":
-            min_time = datetime.today()
-            max_time = datetime.today() + timedelta(days=7)
-        case "month":
-            min_time = datetime.today()
-            max_time = datetime.today() + timedelta(days=30)
-        case "all":
-            min_time = datetime.today()
-            max_time = datetime.today() + timedelta(days=365)
-        case _:
-            return "", HTTPStatus.BAD_REQUEST
+    min_time, max_time = _get_time_range(date)
+
+    if not min_time: # pyright: ignore
+        return "", HTTPStatus.BAD_REQUEST
 
     search_content = SearchContent(
         query=therm,
