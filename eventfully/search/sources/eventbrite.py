@@ -6,12 +6,13 @@ from eventfully.database import schemas
 from eventfully.types import SearchContent
 
 
-def search(search_content: SearchContent) -> set[schemas.Event]:
+def search(_search_content: SearchContent) -> set[schemas.Event]:
     events: set[schemas.Event] = set()
 
     max_page: int
 
-    url = f"https://www.eventbrite.de/d/germany/arts--events/?page=1&cur=EUR"
+    parser = "html.parser"
+    url = "https://www.eventbrite.de/d/germany/arts--events/?page=1&cur=EUR"
     request = niquests.get(url)
     request.raise_for_status()
 
@@ -26,33 +27,32 @@ def search(search_content: SearchContent) -> set[schemas.Event]:
 
     if not max_page:
         return set()
-    try:
         for page in range(int(max_page)):
-            print(f"Page {page+1}")
-            url = f"https://www.eventbrite.de/d/germany/arts--events/?page={page+1}&cur=EUR"
-            request = niquests.get(url)
-            request.raise_for_status()
-
-            soup = BeautifulSoup(request.text, "html.parser")
-            event_body = soup.find("div", class_="eds-structure__body")
-
             try:
-                raw_events = event_body.find(
-                    "ul", class_="SearchResultPanelContentEventCardList-module__eventList___2wk-D"
-                ).find_all("li")
+                url = f"https://www.eventbrite.de/d/germany/arts--events/?page={page+1}&cur=EUR"
+                request = niquests.get(url)
+                request.raise_for_status()
+
+                soup = BeautifulSoup(request.text, parser)
+                event_body = soup.find("div", class_="eds-structure__body")
+
+                try:
+                    raw_events = event_body.find(
+                        "ul", class_="SearchResultPanelContentEventCardList-module__eventList___2wk-D"
+                    ).find_all("li")
+                except AttributeError:
+                    continue
+
+                for raw_event in raw_events:
+                    if event := _extract_event_from_html(raw_event, parser):
+                        events.add(event)
             except AttributeError:
                 continue
-
-            for raw_event in raw_events:
-                if event := _extract_event_from_html(raw_event):
-                    events.add(event)
-    except:
-        return events
 
     return events
 
 
-def _extract_event_from_html(raw_event: PageElement) -> schemas.Event | None:
+def _extract_event_from_html(raw_event: PageElement, parser: str) -> schemas.Event | None:
     try:
         title = raw_event.find(
             "h3",
@@ -67,7 +67,7 @@ def _extract_event_from_html(raw_event: PageElement) -> schemas.Event | None:
 
         request = niquests.get(web_link)
         request.raise_for_status()
-        details_soup = BeautifulSoup(request.text, "html.parser")
+        details_soup = BeautifulSoup(request.text, parser)
 
         details_soup.find("div", class_="location-info").find_next("div", "map-button-toggle").clear()
 

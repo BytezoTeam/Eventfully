@@ -119,7 +119,7 @@ def get_events(user_id: str):
         shared_event_ids += [like.event_id for like in group.shared_events]  # pyright: ignore
 
     filtered = result.copy()
-    if show is not "":
+    if show != "":
         for event in result:
             if show == "liked" and event.id not in liked_event_ids:
                 filtered.discard(event)

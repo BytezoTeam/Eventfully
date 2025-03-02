@@ -19,7 +19,6 @@ def create_tables():
 @database.db.connection_context()
 def like_event(user_id: str, event_id: str, group_id: str | None = None):
     user = models.User.get(models.User.id == user_id)
-    # group = models.Groups.get(models.Groups.id == group_id) if group_id else None
 
     models.Likes.create(user=user, event_id=event_id)
 

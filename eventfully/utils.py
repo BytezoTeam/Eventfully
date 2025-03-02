@@ -23,8 +23,8 @@ def verify_password(hash: str, password: str) -> bool:
     """
     Check for the password in the hashed password
     """
-    _hashedText, salt = hash.split(":")
-    return _hashedText == sha256(salt.encode() + password.encode()).hexdigest()
+    _hashed_text, salt = hash.split(":")
+    return _hashed_text == sha256(salt.encode() + password.encode()).hexdigest()
 
 
 def extract_language_from_language_header(header: str | None, supported_languages: tuple) -> str:
