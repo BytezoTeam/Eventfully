@@ -1,6 +1,11 @@
 {
   "search": "Suche",
-  "more_options": "Mehr Optionen",
+  "show_filters": "Mehr Filter",
+  "hide_filters": "Weniger Filter",
+  "show": "Zeige nur",
+  "shared_only": "Geteilt",
+  "liked_only": "Geliked",
+  "favourites": "Favoriten",
   "profile": "Profil",
   "login": "Einloggen",
   "register": "Registrieren",
@@ -50,5 +55,7 @@
   "price": "Preis",
   "time": "Zeitpunkt",
   "to": "bis",
-  "please_wait": "Okay, Wir schauen gerade, was wir finden können. Warte einen Moment"
+  "please_wait": "Okay, Wir schauen gerade, was wir finden können. Warte einen Moment",
+  "task_success": "Erfolgreich!",
+  "task_fail": "Ein Fehler ist aufgetreten!"
 }

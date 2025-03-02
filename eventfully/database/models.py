@@ -35,7 +35,12 @@ class GroupMembers(_DBBaseModel):
 class Likes(_DBBaseModel):
     user = ForeignKeyField(User, backref="liked_events")
     event_id = TextField()
-    group = ForeignKeyField(Groups, null=True, backref="liked_events")
+
+
+class EventShare(_DBBaseModel):
+    user = ForeignKeyField(User)
+    event_id = TextField()
+    group = ForeignKeyField(Groups, backref="shared_events")
 
     class Meta:  # pyright: ignore
         primary_key = CompositeKey("user", "event_id", "group")

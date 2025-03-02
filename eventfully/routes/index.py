@@ -13,6 +13,23 @@ from eventfully.search_content import SearchContent
 bp = Blueprint("index", __name__)
 
 
+def _get_time_range(date_str: str) -> tuple:
+    match date_str:
+        case "today":
+            return datetime.today(), datetime.today()
+        case "tomorrow":
+            dt = datetime.today() + timedelta(days=1)
+            return dt, dt
+        case "week":
+            return datetime.today(), datetime.today() + timedelta(days=7)
+        case "month":
+            return datetime.today(), datetime.today() + timedelta(days=30)
+        case "all":
+            return datetime.today(), datetime.today() + timedelta(days=365)
+        case _:
+            return (None, None)
+
+
 @bp.route("/", methods=["GET"])
 @jwt_check()
 def index(user_id: str):
@@ -65,28 +82,15 @@ def get_events(user_id: str):
     city = request.args.get("city", "").strip().lower()
     category = request.args.get("category", "")
     date = request.args.get("date", "all")
+    show = request.args.get("show", "")
 
     if category not in ["", "sport", "culture", "education", "politics"]:
         return "", HTTPStatus.BAD_REQUEST
 
-    match date:
-        case "today":
-            min_time = datetime.today()
-            max_time = datetime.today()
-        case "tomorrow":
-            min_time = datetime.today() + timedelta(days=1)
-            max_time = datetime.today() + timedelta(days=1)
-        case "week":
-            min_time = datetime.today()
-            max_time = datetime.today() + timedelta(days=7)
-        case "month":
-            min_time = datetime.today()
-            max_time = datetime.today() + timedelta(days=30)
-        case "all":
-            min_time = datetime.today()
-            max_time = datetime.today() + timedelta(days=365)
-        case _:
-            return "", HTTPStatus.BAD_REQUEST
+    min_time, max_time = _get_time_range(date)
+
+    if not min_time:  # pyright: ignore
+        return "", HTTPStatus.BAD_REQUEST
 
     search_content = SearchContent(
         query=therm,
@@ -100,6 +104,7 @@ def get_events(user_id: str):
     if not user_id:
         return render_template(
             "components/events.html",
+            shared_event_names=None,
             CONFIG=CONFIG,
             events=result,
             cities=crud.get_possible_cities(),
@@ -114,11 +119,19 @@ def get_events(user_id: str):
 
     shared_event_ids: list[str] = []
     for group in groups:
-        shared_event_ids += [like.event_id for like in group.liked_events]  # pyright: ignore
+        shared_event_ids += [like.event_id for like in group.shared_events]  # pyright: ignore
+
+    filtered = result.copy()
+    if show != "":
+        for event in result:
+            if show == "liked" and event.id not in liked_event_ids:
+                filtered.discard(event)
+            if show == "shared" and event.id not in shared_event_ids:
+                filtered.discard(event)
 
     return render_template(
         "components/events.html",
-        events=result,
+        events=filtered,
         CONFIG=CONFIG,
         liked_events=liked_event_ids,
         groups=groups,

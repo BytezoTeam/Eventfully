@@ -50,6 +50,7 @@ virtual = true  # necessary for docker
 managed = true
 dev-dependencies = [
     "pytest>=8.3.4",
+    "ruff>=0.9.9",
 ]
 
 [tool.rye.scripts]

@@ -13,6 +13,37 @@
   {% endif %}
 {% endblock %}
 
+<!-- Alerts -->
+<div role="alert" id="alert-success-banner" class="hidden alert alert-success fixed bottom-4 left-4 p-4 flex items-center gap-2 rounded-lg shadow-lg z-50 w-auto max-w-xs">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="h-6 w-6 shrink-0 stroke-current"
+    fill="none"
+    viewBox="0 0 24 24">
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+  <span id="alert-success-message">{{ t("task_success") }}</span>
+</div>
+
+<div role="alert" id="alert-fail-banner" class="hidden alert alert-error fixed bottom-4 left-4 p-4 flex items-center gap-2 rounded-lg shadow-lg z-50 w-auto max-w-xs">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    class="h-6 w-6 shrink-0 stroke-current"
+    fill="none"
+    viewBox="0 0 24 24">
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+  <span id="alert-fail-message">{{ t("task_fail") }}</span>
+</div>
+
 {% block body %}
   <body class="container mx-auto">
 
@@ -22,73 +53,106 @@
   <!-- Main -->
   <main class="flex flex-col gap-8">
     <!-- Event Search -->
-    <section class="sticky top-8 z-10 cool-card">
+    <section class="sticky top-8 z-20 cool-card p-2">
       <form
-              class="flex flex-row items-end flex-wrap justify-start gap-4"
-              hx-get="/api/search"
-              hx-target="#event-search-result"
-              hx-trigger="submit,load"
-              hx-indicator=".htmx-indicator"
+        class="flex flex-row items-center flex-wrap justify-start gap-2 sm:gap-4 w-full"
+        hx-get="/api/search"
+        hx-target="#event-search-result"
+        hx-trigger="submit,load"
+        hx-indicator=".htmx-indicator"
+        x-data="{ showFilters: false }"
       >
-        <label class="form-control">
-          <div class="label">
-            <span class="label-text">{{ t("search_placeholder") }}</span>
-          </div>
+        <!-- Search Input (Always Visible) -->
+        <div class="form-control flex-1">
           <input
-                  name="therm"
-                  id="therm"
-                  class="input input-bordered"
-                  type="search"
-                  placeholder="{{ t('search_placeholder') }}"
+            name="therm"
+            id="therm"
+            class="input input-bordered w-full"
+            type="search"
+            placeholder="{{ t('search_placeholder') }}"
           />
-        </label>
-
-        <label class="form-control">
-          <div class="label">
-            <span class="label-text">{{ t("city") }}</span>
-          </div>
-          <input
-                  type="text"
-                  class="input input-bordered"
-                  placeholder="{{ t('city') }}"
-                  name="city"
-                  id="city"
-                  list="cities"
-          />
-          <datalist id="cities">
-            {% for city in cities %}
-              <option value="{{ city }}">{{ city }}</option>
-            {% endfor %}
-          </datalist>
-        </label>
-
-        <label class="form-control">
-          <div class="label">
-            <span class="label-text">{{ t("category.name") }}</span>
-          </div>
-          <select name="category" id="category" class="select select-bordered">
-            <option value="">{{ t("category.all") }}</option>
-            <option value="culture">{{ t("category.culture") }}</option>
-            <option value="education">{{ t("category.education") }}</option>
-            <option value="sport">{{ t("category.sport") }}</option>
-            <option value="politics">{{ t("category.politics") }}</option>
-          </select>
-        </label>
-
-        <label class="form-control">
-          <div class="label">
-            <span class="label-text">{{ t("date.date") }}</span>
-          </div>
-          <select name="date" id="date" class="select select-bordered">
-            <option value="all">{{ t("date.all") }}</option>
-            <option value="today">{{ t("date.today") }}</option>
-            <option value="tomorrow">{{ t("date.tomorrow") }}</option>
-            <option value="week">{{ t("date.week") }}</option>
-            <option value="month">{{ t("date.month") }}</option>
-          </select>
-        </label>
-
-        <button type="submit" class="btn btn-primary">{{ t("search") }}</button>
+        </div>
+    
+        <!-- Toggle Button for Filters (Always Visible) -->
+        <button type="button"
+                class="btn btn-accent btn-sm flex items-center"
+                @click="showFilters = !showFilters">
+          <span x-show="!showFilters">{{ t("show_filters") }}</span>
+          <span x-show="showFilters">{{ t("hide_filters") }}</span>
+        </button>
+    
+        <!-- Search Button -->
+        <button type="submit" class="btn btn-primary btn-sm flex items-center">
+          {{ t("search") }}
+        </button>
+    
+        <!-- Advanced Filters (Hidden by Default, Always Togglable) -->
+        <div class="w-full flex-wrap flex-col md:flex-row gap-2 md:gap-4"
+             :class="showFilters ? 'flex' : 'hidden'">
+    
+          <!-- City Filter -->
+          <label class="form-control w-full md:w-auto">
+            <div class="label">
+              <span class="label-text">{{ t("city") }}</span>
+            </div>
+            <input
+                    type="text"
+                    class="input input-bordered"
+                    placeholder="{{ t('city') }}"
+                    name="city"
+                    id="city"
+                    list="cities"
+            />
+            <datalist id="cities">
+              {% for city in cities %}
+                <option value="{{ city }}">{{ city }}</option>
+              {% endfor %}
+            </datalist>
+          </label>
+    
+          <!-- Category Filter -->
+          <label class="form-control w-full md:w-auto">
+            <div class="label">
+              <span class="label-text">{{ t("category.name") }}</span>
+            </div>
+            <select name="category" id="category" class="select select-bordered w-full">
+              <option value="">{{ t("category.all") }}</option>
+              <option value="culture">{{ t("category.culture") }}</option>
+              <option value="education">{{ t("category.education") }}</option>
+              <option value="sport">{{ t("category.sport") }}</option>
+              <option value="politics">{{ t("category.politics") }}</option>
+            </select>
+          </label>
+    
+          <!-- Date Filter -->
+          <label class="form-control w-full md:w-auto">
+            <div class="label">
+              <span class="label-text">{{ t("date.date") }}</span>
+            </div>
+            <select name="date" id="date" class="select select-bordered w-full">
+              <option value="all">{{ t("date.all") }}</option>
+              <option value="today">{{ t("date.today") }}</option>
+              <option value="tomorrow">{{ t("date.tomorrow") }}</option>
+              <option value="week">{{ t("date.week") }}</option>
+              <option value="month">{{ t("date.month") }}</option>
+            </select>
+          </label>
+          
+          {% if user %}
+            <!-- Category Filter -->
+            <label class="form-control w-full md:w-auto">
+              <div class="label">
+                <span class="label-text">{{ t("show") }}</span>
+              </div>
+              <select name="show" id="show" class="select select-bordered w-full">
+                <option value="">{{ t("category.all") }}</option>
+                <option value="liked">{{ t("liked_only") }}</option>
+                <option value="shared">{{ t("shared_only") }}</option>
+              </select>
+            </label>
+          {% endif %}
+    
+        </div>
       </form>
     </section>
 
@@ -118,7 +182,7 @@
       </aside>
     </div>
   </footer>
-  </body>
+</body>
 {% endblock %}
 
 

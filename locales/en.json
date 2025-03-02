@@ -1,6 +1,11 @@
 {
   "search": "Search",
-  "more_options": "More Options",
+  "show_filters": "More Filters",
+  "hide_filters": "Less Filters",
+  "show": "Show only",
+  "favourites": "Favourites",
+  "shared_only": "Shared",
+  "liked_only": "Liked",
   "profile": "Profile",
   "login": "Login",
   "register": "Register",
@@ -50,5 +55,7 @@
   "price": "Price",
   "time": "Time",
   "to": "until",
-  "please_wait": "Please Wait a few minutes while we search for new events"
+  "please_wait": "Please Wait a few minutes while we search for new events",
+  "task_success": "Successful!",
+  "task_fail": "An error occured"
 }

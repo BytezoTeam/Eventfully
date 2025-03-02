@@ -1,13 +1,13 @@
+{% include 'components/alert.html' %}
+
 {% for group in groups %}
   <div class="cool-card">
     <h2>{{ group.name }}</h2>
   </div>
 
-  <div class="grid grid-cols-3 gap-8">
-    {% for event in events_by_group_ids[group.id] %}
-    <div class="cool-card">
-      {{ event.title }}
-    </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+    {% for item in events_by_group_ids[group.id] %}
+      {% include 'components/event_card.html' %}
     {% endfor %}
   </div>
 {% endfor %}

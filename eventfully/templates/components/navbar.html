@@ -1,64 +1,61 @@
-<header class="navbar cool-card my-8" style="padding: 1rem !important;">
-  <!-- navigation menu in dropown -->
-  <div class="navbar-start">
-    <div class="flex">
-      <div class="dropdown z-50">
-        <button tabindex="0" class="btn btn-ghost btn-circle">
-          {% include 'components/icons/menu.html' %}
-        </button>
-        <ul
-                class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
-        >
-          <li><a href="/">{{ t("burger.home") }}</a></li>
-          {% if CONFIG.EVENTFULLY_ACCOUNTS_ENABLED %}
-            <li><a href="/groups">{{ t("burger.groups") }}</a></li>
-          {% endif %}
-        </ul>
+<header
+  class="navbar w-full flex-wrap items-center justify-between px-4 py-2 cool-card my-8 relative"
+  style="z-index: 10000;"
+>
+  <!-- Left: Burger + Logo -->
+  <div class="navbar-start flex items-center gap-2">
+    <div class="dropdown">
+      <div tabindex="-1" class="btn btn-ghost btn-circle">
+        {% include 'components/icons/menu.html' %}
       </div>
+      <ul class="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-52 p-2 shadow">
+        <li><a href="/">{{ t("burger.home") }}</a></li>
+        {% if CONFIG.EVENTFULLY_ACCOUNTS_ENABLED and user %}
+          <li><a href="/groups">{{ t("burger.groups") }}</a></li>
+        {% endif %}
+      </ul>
     </div>
-  </div>
 
-  <!-- Title -->
-  <div class="navbar-center">
-    <a href="/">
-      <h1>Eventfully</h1>
+    <a href="/" class="text-xl font-bold">
+      Eventfully
     </a>
   </div>
 
-  <!-- General Acctions -->
-  <div class="navbar-end">
-    <!-- Account Info -->
+  <!-- Right: Login/Register or User Menu + Theme Switch -->
+  <div class="navbar-end flex items-center gap-2">
     {% if CONFIG.EVENTFULLY_ACCOUNTS_ENABLED %}
       {% if user %}
-        <div class="flex gap-2">
-        <div class="dropdown dropdown-end z-50">
-          <button tabindex="0" class="btn btn-ghost btn-circle avatar">
+        <!-- User Dropdown -->
+        <div class="dropdown dropdown-end">
+          <label tabindex="-1" class="btn btn-ghost btn-circle avatar">
             {% include 'components/icons/user.html' %}
-          </button>
-          <ul
-                  class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
-          >
+          </label>
+          <ul class="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-52 p-2 shadow">
             <li><p>{{ user.name }}</p></li>
             <form hx-post="/api/account/signout" method="post">
               <li>
                 <button type="submit" class="btn btn-primary">{{ t("logout") }}</button>
               </li>
             </form>
+            <br>
+            <form
+              hx-get="/api/search?show=liked"
+              hx-target="#event-search-result"
+              hx-trigger="submit,load"
+              hx-indicator=".htmx-indicator" 
+            >
+              <li>
+                <button type="submit" class="btn btn-primary">{{ t("favourites") }}</button>
+              </li>
+            </form>
           </ul>
         </div>
       {% else %}
-        <div class="flex gap-2">
-        <button
-                class="btn btn-ghost btn-active"
-                @click="loginModal.showModal()"
-        >
+        <!-- Login / Register Buttons -->
+        <button class="btn btn-ghost btn-active" @click="loginModal.showModal()">
           {{ t("login") }}
         </button>
-
-        <button
-                class="btn btn-ghost btn-active"
-                @click="RegisterModal.showModal()"
-        >
+        <button class="btn btn-ghost btn-active" @click="RegisterModal.showModal()">
           {{ t("register") }}
         </button>
       {% endif %}
@@ -66,50 +63,37 @@
 
     <!-- Theme Switch -->
     <label class="swap swap-rotate btn btn-ghost btn-circle">
-      <input
-              @click="darkMode = !darkMode"
-              type="checkbox"
-              x-bind:checked="!darkMode"
-      />
+      <input @click="darkMode = !darkMode" type="checkbox" x-bind:checked="!darkMode" />
       <div class="swap-on">{% include 'components/icons/sun.html' %}</div>
       <div class="swap-off">{% include 'components/icons/moon.html' %}</div>
     </label>
-    </div>
-    </div>
   </div>
 </header>
 
 <!-- Login Modal -->
 <dialog id="loginModal" class="modal">
-  <div
-          class="modal-box dark:bg-gray-800 bg-gray-100 flex flex-col items-center gap-4"
-  >
-    <!-- Login Form -->
+  <div class="modal-box dark:bg-gray-800 bg-gray-100 flex flex-col items-center gap-4">
     <h1>{{ t("login") }}</h1>
     <form
-            class="flex flex-col items-center gap-4"
-            hx-post="/api/account/signin"
-            hx-trigger="submit"
-            hx-target="body"
+      class="flex flex-col items-center gap-4"
+      hx-post="/api/account/signin"
+      hx-trigger="submit"
+      hx-target="body"
     >
-      <!-- Username -->
       <input
-              name="username"
-              id="signin-username"
-              type="text"
-              class="grow input input-bordered"
-              placeholder="{{ t('username') }}"
+        name="username"
+        id="signin-username"
+        type="text"
+        class="grow input input-bordered"
+        placeholder="{{ t('username') }}"
       />
-
-      <!-- Password -->
       <input
-              name="password"
-              id="signin-password"
-              type="password"
-              class="grow input input-bordered"
-              placeholder="{{ t('password') }}"
+        name="password"
+        id="signin-password"
+        type="password"
+        class="grow input input-bordered"
+        placeholder="{{ t('password') }}"
       />
-
       <div class="w-full flex flex-row justify-center gap-8">
         <button type="submit" class="btn btn-primary">{{ t("login") }}</button>
       </div>
@@ -122,48 +106,43 @@
 
 <!-- Register Modal -->
 <dialog id="RegisterModal" class="modal">
-  <div
-          class="modal-box dark:bg-gray-800 bg-gray-100 flex flex-col items-center gap-4"
-  >
-    <!-- Register Form -->
+  <div class="modal-box dark:bg-gray-800 bg-gray-100 flex flex-col items-center gap-4">
     <h1>{{ t("register") }}</h1>
     <form
-            class="flex flex-col items-center gap-4"
-            hx-post="/api/account/signup"
-            hx-trigger="submit"
-            hx-target="body"
+      class="flex flex-col items-center gap-4"
+      hx-post="/api/account/signup"
+      hx-trigger="submit"
+      hx-target="body"
     >
-      <!-- Username -->
       <input
-              name="username"
-              id="signup-username"
-              type="text"
-              class="grow input input-bordered"
-              placeholder="{{ t('username') }}"
+        type="text"
+        name="username"
+        id="signup-username"
+        class="input validator"
+        required
+        placeholder="{{ t('username') }}"
+        minlength="4"
+        maxlength="20"
       />
-
-      <!-- Email -->
       <input
-              name="email"
-              id="signup-email"
-              type="email"
-              class="grow input input-bordered"
-              placeholder="{{ t('email') }}"
+        name="email"
+        id="signup-email"
+        type="email"
+        class="grow input input-bordered"
+        placeholder="{{ t('email') }}"
       />
-
-      <!-- Password -->
       <input
-              name="password"
-              id="signup-password"
-              type="password"
-              class="grow input input-bordered"
-              placeholder="{{ t('password') }}"
+        type="password"
+        name="password"
+        id="signup-password"
+        class="input validator"
+        required
+        placeholder="{{ t('password') }}"
+        minlength="8"
+        maxlength="64"
       />
-
       <div class="w-full flex flex-row justify-center gap-8">
-        <button type="submit" class="btn btn-primary">
-          {{ t("register") }}
-        </button>
+        <button type="submit" class="btn btn-primary">{{ t("register") }}</button>
       </div>
     </form>
     <form method="dialog" class="modal-backdrop">
@@ -171,3 +150,16 @@
     </form>
   </div>
 </dialog>
+
+<script>
+  // Wait for the DOM to load
+  document.addEventListener("DOMContentLoaded", function () {
+    // Add a click event listener to the Register Modal dialog.
+    document.getElementById('RegisterModal').addEventListener('click', function(e) {
+      // If the click is directly on the dialog element (the backdrop) and not inside its child elements, close it.
+      if (e.target === this) {
+        this.close();
+      }
+    });
+  });
+</script>

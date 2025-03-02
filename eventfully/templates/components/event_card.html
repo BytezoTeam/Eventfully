@@ -1,0 +1,110 @@
+<div class="cool-card w-full static" style="padding: 0 !important">
+    {% if shared_event_names %}
+    <div class="badge badge-primary">{{ shared_event_names[group.id][item.id] }}</div>
+    {% endif %} 
+    {# Like Button #}
+    {% if user and CONFIG.EVENTFULLY_ACCOUNTS_ENABLED %}
+    <div class="absolute m-4">
+        {% if item.id in liked_events %}
+            {% include 'components/liked-true-button.html' %}
+        {% else %}
+            {% include 'components/liked-false-button.html' %}
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% if item.image_link %}
+        <figure class="pt-4 px-4 w-full h-72 rounded-xl">
+            <img src="{{ item.image_link }}" loading="lazy" class="object-cover object-center size-full" alt="Event Cover" style="border-radius: inherit" />
+        </figure>
+        {% else %}
+        <figure class="pt-4 px-4 w-full h-72 rounded-xl">
+            <div class="flex items-center justify-center h-full text-white text-6xl font-bold rounded-xl" style="background: linear-gradient(45deg, #4F46E5, #EC4899);">
+                {{ item.title[0:2] }}
+            </div>
+        </figure>
+    {% endif %}
+
+    <div class="card-body gap-4">
+        <div>
+            <!-- Category -->
+            {% if item.category %}
+                <span class="badge badge-neutral capitalize">
+                    {{ t("category." + item.category) }}
+                </span>
+            {% endif %}
+
+            <!-- Title -->
+            <a class="card-title flex-gap-1" href="{{ item.web_link }}" target="_blank" rel="noopener">
+                <h2 class="line-clamp-3">{{ item.title }}</h2>
+                <div class="flex-1">
+                    {% include 'components/icons/external-link.html' %}
+                </div>
+            </a>
+        </div>
+
+        <div class="flex flex-col gap-4">
+            <p class="line-clamp-4 prose">{{ item.description }}</p>
+
+            <!-- Time -->
+            <div class="flex flex-col">
+                <div class="flex gap-2">
+                    {% include 'components/icons/calendar.html' %}
+                    <span class="font-bold">{{ t("time") }}</span>
+                </div>
+                <p class="prose">
+                    {{ item.start_time.astimezone(tz).strftime("%d.%m.%Y") }} |
+                    {{ item.start_time.astimezone(tz).strftime("%H:%M") }}
+                    {{ t("to") }}
+                    {{ item.end_time.strftime("%H:%M") }}
+                    <add-to-calendar-button name="{{ item.title }}" options="'Apple','Google'" description="{{ item.description }}" location="{{ item.address }}" startDate="{{ item.start_time.astimezone(tz).strftime("%Y-%m-%d") }}" endDate="{{ item.start_time.astimezone(tz).strftime("%Y-%m-%d") }}" startTime="{{ item.start_time.astimezone(tz).strftime("%H:%M") }}" endTime="{{ item.end_time.strftime("%H:%M") }}" timeZone="Europe/Berlin"></add-to-calendar-button>
+                </p>
+            </div>
+
+            <!-- Location -->
+            {% if item.address %}
+                <div class="flex flex-col">
+                    <a href="https://www.google.de/maps/search/{{ item.address }}" target="_blank" rel="noopener noreferrer">
+                        <div class="flex gap-2">
+                            {% include 'components/icons/map-pin.html' %}
+                            <span class="font-bold">{{ t("location") }}</span>
+                        </div>
+                        <p class="prose">{{ item.address }}</p>
+                    </a>
+                </div>
+            {% endif %}
+
+            <!-- Price -->
+            {% if item.price %}
+                <div class="flex flex-col">
+                    <div class="flex gap-2">
+                        {% include 'components/icons/dollar-sign.html' %}
+                        <span class="font-bold">{{ t("price") }}</span>
+                    </div>
+                    <p class="prose">{{ item.price }}</p>
+                </div>
+            {% endif %}
+        </div>
+
+        {# Share Feature #}
+        {% if user and CONFIG.EVENTFULLY_ACCOUNTS_ENABLED %}
+            <div class="dropdown">
+                <button tabindex="0" class="btn btn-ghost btn-active">
+                    {{ t("share_btn") }}
+                </button>
+
+                <ul tabindex="-1" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                    {% for group in groups %}
+                        {% if not group.id in shared_event_ids %}
+                            <li>
+                                <a class="btn m-1" hx-get="/api/group/share?event_id={{ item.id }}&group_id={{ group.id }}" hx-swap="outerHTML">
+                                    '{{ group.name }}' {{ t("group") }}
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+</div>
