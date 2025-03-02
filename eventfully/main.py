@@ -8,10 +8,10 @@ from flask_apscheduler import APScheduler
 from eventfully.config import CONFIG
 from eventfully.database import crud
 from eventfully.logger import log
-from eventfully.search import post_processing, crawl
 from eventfully.routes import account, api, index, legal_notice
+from eventfully.search import post_processing, crawl
 
-log.info("Starting Server v0.3.2 ...")
+log.info("Starting Server v0.4.0 ...")
 crud.create_tables()
 
 app = Flask(__name__)
