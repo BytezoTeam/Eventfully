@@ -1,20 +1,13 @@
-# editor generated files
-.idea/
-.vscode/
-
 # python generated files
 __pycache__/
 .venv/
-
-# nodejs
-node_modules/
-package.json
-package-lock.json
-bun.lockb
 
 # program generated files
 output.css
 *.log
 
-# private files
+# user files
+.DS_Store
 .env
+.idea/
+.vscode/
