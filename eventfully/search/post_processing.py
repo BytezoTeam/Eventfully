@@ -3,13 +3,14 @@ This module processes new web searches in the background one at a time so the se
 Some search won't return all event information directly so whe need to fetch them seperately (a.k.a. post processing).
 """
 
-from typing import Callable
 import queue
+from time import sleep
+from typing import Callable
 
-from eventfully.search_content import SearchContent
-from eventfully.logger import log
 from eventfully.database import crud, schemas
+from eventfully.logger import log
 from eventfully.search.sources import jugendhackt, zuerichunbezahlbar, neanderticket
+from eventfully.search_content import SearchContent
 
 SOURCES: list[Callable[[SearchContent], set[schemas.Event]]] = [
     zuerichunbezahlbar.search,
@@ -27,8 +28,9 @@ process_queue = queue.Queue()
 
 def main():
     while True:
-        # if process_queue.empty():
-        #    return
+        if process_queue.empty():
+            sleep(1)
+            continue
 
         item: SearchContent | schemas.Event = process_queue.get()
         log.debug(f"Processing item: {item}")
