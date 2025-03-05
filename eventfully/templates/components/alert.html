@@ -1,15 +1,17 @@
-<div role="alert" id="alert-success-banner" class="hidden alert alert-success fixed bottom-4 left-4 p-4 flex items-center gap-2 rounded-lg shadow-lg z-50 w-auto max-w-xs">
-    {% include 'components/icons/check-circle.html' %}
-    <span id="alert-success-message">{{ t("task_success") }}</span>
+<div role="alert" id="alert-success-banner"
+     class="hidden alert alert-success fixed bottom-4 left-4 p-4 flex items-center gap-2 rounded-lg shadow-lg z-50 w-auto max-w-xs">
+  {% include 'components/icons/check-circle.html' %}
+  <span id="alert-success-message">{{ t("task_success") }}</span>
 </div>
 
-<div role="alert" id="alert-fail-banner" class="hidden alert alert-error fixed bottom-4 left-4 p-4 flex items-center gap-2 rounded-lg shadow-lg z-50 w-auto max-w-xs">
-    {% include 'components/icons/alert-triangle.html' %}
-    <span id="alert-fail-message">{{ t("task_fail") }}</span>
+<div role="alert" id="alert-fail-banner"
+     class="hidden alert alert-error fixed bottom-4 left-4 p-4 flex items-center gap-2 rounded-lg shadow-lg z-50 w-auto max-w-xs">
+  {% include 'components/icons/alert-triangle.html' %}
+  <span id="alert-fail-message">{{ t("task_fail") }}</span>
 </div>
 
 <script>
-    document.addEventListener("htmx:afterRequest", function(event) {
+    document.addEventListener("htmx:afterRequest", function (event) {
         if (event.detail.xhr.status === 200) {
             showAlert(true);
         } else {

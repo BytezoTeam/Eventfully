@@ -5,22 +5,22 @@
   {% include "components/head_links.html" %}
 
   {% if CONFIG.EVENTFULLY_ANALYTICS_URL %}
-  <style>
-    body:hover {
-      border-image: url("{{ CONFIG.EVENTFULLY_ANALYTICS_URL }}?action=legal_notice");
-    }
-  </style>
+    <style>
+        body:hover {
+            border-image: url("{{ CONFIG.EVENTFULLY_ANALYTICS_URL }}?action=legal_notice");
+        }
+    </style>
   {% endif %}
 {% endblock %}
 
 {% block body %}
   <body class="container mx-auto">
-    {% include "components/navbar.html" %}
+  {% include "components/navbar.html" %}
 
-    <section class="cool-card mt-8">
-      <h1 class="mb-4">Legal Notice</h1>
+  <section class="cool-card mt-8">
+    <h1 class="mb-4">Legal Notice</h1>
 
-      <p class="prose whitespace-pre-line">{{ CONFIG.EVENTFULLY_LEGAL_NOTICE }}</p>
-    </section>
+    <p class="prose whitespace-pre-line">{{ CONFIG.EVENTFULLY_LEGAL_NOTICE }}</p>
+  </section>
   </body>
 {% endblock %}

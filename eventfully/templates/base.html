@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html
-  lang="de"
-  x-data="{ darkMode: localStorage.getItem('dark') === 'true' }"
-  x-init="$watch('darkMode', val => localStorage.setItem('dark', val))"
-  x-bind:class="darkMode ? 'dark' : ''"
-  x-bind:data-theme="darkMode ? 'dark' : 'light'"
-  class="dark:bg-gray-900 bg-gray-200"
+        lang="de"
+        x-data="{ darkMode: localStorage.getItem('dark') === 'true' }"
+        x-init="$watch('darkMode', val => localStorage.setItem('dark', val))"
+        x-bind:class="darkMode ? 'dark' : ''"
+        x-bind:data-theme="darkMode ? 'dark' : 'light'"
+        class="dark:bg-gray-900 bg-gray-200"
 >
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    {% include "components/head_links.html" %}
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  {% include "components/head_links.html" %}
 
-    {% block head%}
+  {% block head %}
     <title>Eventfully</title>
-    {% endblock %}
-  </head>
-
-  {% block body%}
   {% endblock %}
+</head>
+
+{% block body %}
+{% endblock %}
 </html>

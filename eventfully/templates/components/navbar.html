@@ -1,6 +1,6 @@
 <header
-  class="navbar w-full flex-wrap items-center justify-between px-4 py-2 cool-card my-8 relative"
-  style="z-index: 10000;"
+        class="navbar w-full flex-wrap items-center justify-between px-4 py-2 cool-card my-8 relative"
+        style="z-index: 10000;"
 >
   <!-- Left: Burger + Logo -->
   <div class="navbar-start flex items-center gap-2">
@@ -39,10 +39,10 @@
             </form>
             <br>
             <form
-              hx-get="/api/search?show=liked"
-              hx-target="#event-search-result"
-              hx-trigger="submit,load"
-              hx-indicator=".htmx-indicator" 
+                    hx-get="/api/search?show=liked"
+                    hx-target="#event-search-result"
+                    hx-trigger="submit,load"
+                    hx-indicator=".htmx-indicator"
             >
               <li>
                 <button type="submit" class="btn btn-primary">{{ t("favourites") }}</button>
@@ -63,7 +63,7 @@
 
     <!-- Theme Switch -->
     <label class="swap swap-rotate btn btn-ghost btn-circle">
-      <input @click="darkMode = !darkMode" type="checkbox" x-bind:checked="!darkMode" />
+      <input @click="darkMode = !darkMode" type="checkbox" x-bind:checked="!darkMode"/>
       <div class="swap-on">{% include 'components/icons/sun.html' %}</div>
       <div class="swap-off">{% include 'components/icons/moon.html' %}</div>
     </label>
@@ -75,24 +75,24 @@
   <div class="modal-box dark:bg-gray-800 bg-gray-100 flex flex-col items-center gap-4">
     <h1>{{ t("login") }}</h1>
     <form
-      class="flex flex-col items-center gap-4"
-      hx-post="/api/account/signin"
-      hx-trigger="submit"
-      hx-target="body"
+            class="flex flex-col items-center gap-4"
+            hx-post="/api/account/signin"
+            hx-trigger="submit"
+            hx-target="body"
     >
       <input
-        name="username"
-        id="signin-username"
-        type="text"
-        class="grow input input-bordered"
-        placeholder="{{ t('username') }}"
+              name="username"
+              id="signin-username"
+              type="text"
+              class="grow input input-bordered"
+              placeholder="{{ t('username') }}"
       />
       <input
-        name="password"
-        id="signin-password"
-        type="password"
-        class="grow input input-bordered"
-        placeholder="{{ t('password') }}"
+              name="password"
+              id="signin-password"
+              type="password"
+              class="grow input input-bordered"
+              placeholder="{{ t('password') }}"
       />
       <div class="w-full flex flex-row justify-center gap-8">
         <button type="submit" class="btn btn-primary">{{ t("login") }}</button>
@@ -109,20 +109,20 @@
   <div class="modal-box dark:bg-gray-800 bg-gray-100 flex flex-col items-center gap-4">
     <h1>{{ t("register") }}</h1>
     <form
-      class="flex flex-col items-center gap-4"
-      hx-post="/api/account/signup"
-      hx-trigger="submit"
-      hx-target="body"
+            class="flex flex-col items-center gap-4"
+            hx-post="/api/account/signup"
+            hx-trigger="submit"
+            hx-target="body"
     >
       <input
-        type="text"
-        name="username"
-        id="signup-username"
-        class="input validator"
-        required
-        placeholder="{{ t('username') }}"
-        minlength="4"
-        maxlength="20"
+              type="text"
+              name="username"
+              id="signup-username"
+              class="input validator"
+              required
+              placeholder="{{ t('username') }}"
+              minlength="4"
+              maxlength="20"
       />
       <!-- <input
         name="email"
@@ -132,14 +132,14 @@
         placeholder="{{ t('email') }}"
       /> -->
       <input
-        type="password"
-        name="password"
-        id="signup-password"
-        class="input validator"
-        required
-        placeholder="{{ t('password') }}"
-        minlength="8"
-        maxlength="64"
+              type="password"
+              name="password"
+              id="signup-password"
+              class="input validator"
+              required
+              placeholder="{{ t('password') }}"
+              minlength="8"
+              maxlength="64"
       />
       <div class="w-full flex flex-row justify-center gap-8">
         <button type="submit" class="btn btn-primary">{{ t("register") }}</button>
@@ -152,14 +152,14 @@
 </dialog>
 
 <script>
-  // Wait for the DOM to load
-  document.addEventListener("DOMContentLoaded", function () {
-    // Add a click event listener to the Register Modal dialog.
-    document.getElementById('RegisterModal').addEventListener('click', function(e) {
-      // If the click is directly on the dialog element (the backdrop) and not inside its child elements, close it.
-      if (e.target === this) {
-        this.close();
-      }
+    // Wait for the DOM to load
+    document.addEventListener("DOMContentLoaded", function () {
+        // Add a click event listener to the Register Modal dialog.
+        document.getElementById('RegisterModal').addEventListener('click', function (e) {
+            // If the click is directly on the dialog element (the backdrop) and not inside its child elements, close it.
+            if (e.target === this) {
+                this.close();
+            }
+        });
     });
-  });
 </script>
