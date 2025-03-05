@@ -2,6 +2,7 @@
   {% if shared_event_names %}
     <div class="badge badge-primary">{{ shared_event_names[group.id][item.id] }}</div>
   {% endif %}
+
   {# Like Button #}
   {% if user and CONFIG.EVENTFULLY_ACCOUNTS_ENABLED %}
     <div class="absolute m-4">
@@ -13,27 +14,27 @@
     </div>
   {% endif %}
 
-  {% if item.image_link %}
-    <figure class="pt-4 px-4 w-full h-72 rounded-xl">
+  {# Image #}
+  <figure class="pt-4 px-4 w-full h-72 rounded-xl">
+    {% if item.image_link %}
       <img src="{{ item.image_link }}" loading="lazy" class="object-cover object-center size-full" alt="Event Cover"
            style="border-radius: inherit"/>
-    </figure>
-  {% else %}
-    <figure class="pt-4 px-4 w-full h-72 rounded-xl">
+    {% else %}
       <div class="flex items-center justify-center h-full text-white text-6xl font-bold rounded-xl"
            style="background: linear-gradient(45deg, #4F46E5, #EC4899);">
         {{ item.title[0:2] }}
       </div>
-    </figure>
-  {% endif %}
+    {% endif %}
+  </figure>
 
-  <div class="card-body gap-4">
+  {# Body #}
+  <div class="card-body gap-4 p-4">
     <div>
       <!-- Category -->
       {% if item.category %}
         <span class="badge badge-neutral capitalize">
-                    {{ t("category." + item.category) }}
-                </span>
+          {{ t("category." + item.category) }}
+        </span>
       {% endif %}
 
       <!-- Title -->
@@ -48,50 +49,53 @@
     <div class="flex flex-col gap-4">
       <p class="line-clamp-4 prose">{{ item.description }}</p>
 
-      <!-- Time -->
-      <div class="flex flex-col">
-        <div class="flex gap-2">
-          {% include 'components/icons/calendar.html' %}
-          <span class="font-bold">{{ t("time") }}</span>
-        </div>
-        <p class="prose">
-          {{ item.start_time.astimezone(tz).strftime("%d.%m.%Y") }} |
-          {{ item.start_time.astimezone(tz).strftime("%H:%M") }}
-          {{ t("to") }}
-          {{ item.end_time.strftime("%H:%M") }}
-          <add-to-calendar-button name="{{ item.title }}" options="'Apple','Google'"
-                                  description="{{ item.description }}" location="{{ item.address }}"
-                                  startDate="{{ item.start_time.astimezone(tz).strftime("%Y-%m-%d") }}"
-                                  endDate="{{ item.start_time.astimezone(tz).strftime("%Y-%m-%d") }}"
-                                  startTime="{{ item.start_time.astimezone(tz).strftime("%H:%M") }}"
-                                  endTime="{{ item.end_time.strftime("%H:%M") }}"
-                                  timeZone="Europe/Berlin"></add-to-calendar-button>
-        </p>
-      </div>
-
-      <!-- Location -->
-      {% if item.address %}
-        <div class="flex flex-col">
-          <a href="https://www.google.de/maps/search/{{ item.address }}" target="_blank" rel="noopener noreferrer">
-            <div class="flex gap-2">
-              {% include 'components/icons/map-pin.html' %}
-              <span class="font-bold">{{ t("location") }}</span>
-            </div>
-            <p class="prose">{{ item.address }}</p>
-          </a>
-        </div>
-      {% endif %}
-
-      <!-- Price -->
-      {% if item.price %}
+      {# Event Attributes #}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Time -->
         <div class="flex flex-col">
           <div class="flex gap-2">
-            {% include 'components/icons/dollar-sign.html' %}
-            <span class="font-bold">{{ t("price") }}</span>
+            {% include 'components/icons/calendar.html' %}
+            <span class="font-bold">{{ t("time") }}</span>
           </div>
-          <p class="prose">{{ item.price }}</p>
+          <p class="prose">
+            {{ item.start_time.astimezone(tz).strftime("%d.%m.%Y") }} |
+            {{ item.start_time.astimezone(tz).strftime("%H:%M") }}
+            {{ t("to") }}
+            {{ item.end_time.strftime("%H:%M") }}
+            <add-to-calendar-button name="{{ item.title }}" options="'Apple','Google'"
+                                    description="{{ item.description }}" location="{{ item.address }}"
+                                    startDate="{{ item.start_time.astimezone(tz).strftime("%Y-%m-%d") }}"
+                                    endDate="{{ item.start_time.astimezone(tz).strftime("%Y-%m-%d") }}"
+                                    startTime="{{ item.start_time.astimezone(tz).strftime("%H:%M") }}"
+                                    endTime="{{ item.end_time.strftime("%H:%M") }}"
+                                    timeZone="Europe/Berlin"></add-to-calendar-button>
+          </p>
         </div>
-      {% endif %}
+
+        <!-- Location -->
+        {% if item.address %}
+          <div class="flex flex-col">
+            <a href="https://www.google.de/maps/search/{{ item.address }}" target="_blank" rel="noopener noreferrer">
+              <div class="flex gap-2">
+                {% include 'components/icons/map-pin.html' %}
+                <span class="font-bold">{{ t("location") }}</span>
+              </div>
+              <p class="prose">{{ item.address }}</p>
+            </a>
+          </div>
+        {% endif %}
+
+        <!-- Price -->
+        {% if item.price %}
+          <div class="flex flex-col">
+            <div class="flex gap-2">
+              {% include 'components/icons/dollar-sign.html' %}
+              <span class="font-bold">{{ t("price") }}</span>
+            </div>
+            <p class="prose">{{ item.price }}</p>
+          </div>
+        {% endif %}
+      </div>
     </div>
 
     {# Share Feature #}
