@@ -69,25 +69,26 @@
           <input
                   name="therm"
                   id="therm"
-                  class="input input-bordered w-full"
+                  class="input input-bordered input-primary w-full"
                   type="search"
                   placeholder="{{ t('search_placeholder') }}"
           />
         </div>
 
-        <!-- Toggle Button for Filters (Always Visible) -->
-        <button type="button"
-                class="btn btn-accent flex items-center"
-                @click="showFilters = !showFilters">
-          {% include "components/icons/filter.html" %}
-          <span x-show="!showFilters">{{ t("show_filters") }}</span>
-          <span x-show="showFilters">{{ t("hide_filters") }}</span>
-        </button>
-
         <!-- Search Button -->
         <button type="submit" class="btn btn-primary btn flex items-center">
           {% include "components/icons/search.html" %}
           {{ t("search") }}
+        </button>
+
+        <!-- Toggle Button for Filters (Always Visible) -->
+        <button type="button"
+                class="btn btn-ghost btn-active flex items-center"
+                @click="showFilters = !showFilters"
+        >
+          {% include "components/icons/filter.html" %}
+          <span x-show="!showFilters">{{ t("show_filters") }}</span>
+          <span x-show="showFilters">{{ t("hide_filters") }}</span>
         </button>
 
         <!-- Advanced Filters (Hidden by Default, Always Togglable) -->
