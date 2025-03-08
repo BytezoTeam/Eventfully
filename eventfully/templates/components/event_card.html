@@ -79,20 +79,24 @@
             {% include 'components/icons/calendar.html' %}
             <span class="font-bold">{{ t("time") }}</span>
           </div>
-          <p class="prose">
-            {{ item.start_time.astimezone(tz).strftime("%d.%m.%Y") }} |
-            {{ item.start_time.astimezone(tz).strftime("%H:%M") }}
-            {{ t("to") }}
-            {{ item.end_time.strftime("%H:%M") }}
-            <add-to-calendar-button name="{{ item.title }}" options="'Apple','Google'"
-                                    description="{{ item.description }}" location="{{ item.address }}"
-                                    startDate="{{ item.start_time.astimezone(tz).strftime("%Y-%m-%d") }}"
-                                    endDate="{{ item.start_time.astimezone(tz).strftime("%Y-%m-%d") }}"
-                                    startTime="{{ item.start_time.astimezone(tz).strftime("%H:%M") }}"
-                                    endTime="{{ item.end_time.strftime("%H:%M") }}"
-                                    timeZone="Europe/Berlin">
-            </add-to-calendar-button>
-          </p>
+          <div>
+            <p class="prose">
+              {{ item.start_time.astimezone(tz).strftime("%d.%m.%Y") }} |
+              {{ item.start_time.astimezone(tz).strftime("%H:%M") }}
+              {{ t("to") }}
+              {{ item.end_time.strftime("%H:%M") }}
+            </p>
+
+            <div title="Add to Calendar" class="addeventatc">
+              Add to Calendar
+              <span class="start">{{ item.start_time.astimezone(tz).strftime("%Y-%m-%d %H:%M") }}</span>
+              <span class="end">{{ item.end_time.astimezone(tz).strftime("%Y-%m-%d %H:%M") }}</span>
+              <span class="timezone">Europe/Berlin</span>
+              <span class="title">{{ item.title }}</span>
+              <span class="description">{{ item.description }}</span>
+              <span class="location">{{ item.address }}</span>
+            </div>
+          </div>
         </div>
 
         <!-- Location -->
