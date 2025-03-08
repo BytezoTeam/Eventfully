@@ -11,7 +11,7 @@
 }
 
 .feather {
-    @apply stroke-gray-800 dark:stroke-gray-100
+    @apply stroke-current
 }
 
 .feather-fill {
