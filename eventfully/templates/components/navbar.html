@@ -31,22 +31,22 @@
             <li><a class="font-bold">{{ user.name }}</a></li>
 
             <li>
-              <form hx-post="/api/account/signout" method="post">
+              <a hx-post="/api/account/signout">
                 {% include "components/icons/log-out.html" %}
-                <button type="submit" class="btn btn-sm btn-ghost">{{ t("logout") }}</button>
-              </form>
+                {{ t("logout") }}
+              </a>
             </li>
 
             <li>
-              <form
+              <a
                       hx-get="/api/search?show=liked"
                       hx-target="#event-search-result"
                       hx-trigger="submit,load"
                       hx-indicator=".htmx-indicator"
               >
                 {% include "components/icons/heart-full.html" %}
-                <button type="submit" class="btn btn-sm btn-ghost">{{ t("favourites") }}</button>
-              </form>
+                {{ t("favourites") }}
+              </a>
             </li>
           </ul>
         </details>
