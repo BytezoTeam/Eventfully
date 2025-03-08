@@ -3,22 +3,18 @@
         style="z-index: 10000;"
 >
   <!-- Left: Burger + Logo -->
-  <div class="navbar-start flex items-center gap-2">
-    <div class="dropdown">
-      <div tabindex="-1" class="btn btn-ghost btn-circle">
-        {% include 'components/icons/menu.html' %}
-      </div>
-      <ul class="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-52 p-2 shadow">
-        <li><a href="/">{{ t("burger.home") }}</a></li>
-        {% if CONFIG.EVENTFULLY_ACCOUNTS_ENABLED and user %}
-          <li><a href="/groups">{{ t("burger.groups") }}</a></li>
-        {% endif %}
-      </ul>
-    </div>
-
-    <a href="/" class="text-xl font-bold">
+  <div class="navbar-start flex items-center gap-4 sm:gap-8">
+    <a href="/" class="text-2xl font-bold ml-2">
       Eventfully
     </a>
+
+    <div class="flex gap-4 sm:gap-6">
+      <a href="/" class="text-lg">{{ t("burger.home") }}</a>
+
+      {% if CONFIG.EVENTFULLY_ACCOUNTS_ENABLED and user %}
+        <a href="/groups" class="text-lg">{{ t("burger.groups") }}</a>
+      {% endif %}
+    </div>
   </div>
 
   <!-- Right: Login/Register or User Menu + Theme Switch -->
