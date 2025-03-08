@@ -7,7 +7,7 @@ COPY tailwind.config.js ./
 # Build CSS Styles
 RUN pip install --no-cache-dir pytailwindcss-extra && \
     tailwindcss-extra && \
-    tailwindcss-extra -i ./eventfully/static/input.css -o ./eventfully/static/output.css
+    tailwindcss-extra -i ./eventfully/static/input.css -o ./eventfully/static/output.css --minify
 
 
 FROM python:3.11-alpine AS run
