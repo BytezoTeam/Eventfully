@@ -79,12 +79,14 @@
         <button type="button"
                 class="btn btn-accent flex items-center"
                 @click="showFilters = !showFilters">
+          {% include "components/icons/filter.html" %}
           <span x-show="!showFilters">{{ t("show_filters") }}</span>
           <span x-show="showFilters">{{ t("hide_filters") }}</span>
         </button>
 
         <!-- Search Button -->
         <button type="submit" class="btn btn-primary btn flex items-center">
+          {% include "components/icons/search.html" %}
           {{ t("search") }}
         </button>
 
