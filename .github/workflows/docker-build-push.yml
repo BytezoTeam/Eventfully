@@ -28,14 +28,6 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Cache Docker Layers
-        uses: actions/cache@v4
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-
       - name: Build and Push
         uses: docker/build-push-action@v4
         with:
@@ -43,10 +35,5 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: ghcr.io/bytezoteam/eventfully:latest,ghcr.io/bytezoteam/eventfully:${{ github.ref_name }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new
-
-      - name: Move Cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
