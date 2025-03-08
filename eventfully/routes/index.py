@@ -6,7 +6,7 @@ from flask import Blueprint, render_template, request
 from eventfully.database import crud
 from eventfully.config import CONFIG
 from eventfully.logger import log
-from eventfully.routes.utils import translation_provider, jwt_check
+from eventfully.routes.utils import translation_provider, jwt_check, no_cache
 from eventfully.search import search
 from eventfully.search_content import SearchContent
 
@@ -47,6 +47,7 @@ def index(user_id: str):
 
 
 @bp.route("/api/toggle_event_like")
+@no_cache
 @jwt_check()
 def toggle_event_like(user_id: str):
     """
@@ -71,6 +72,7 @@ def toggle_event_like(user_id: str):
 
 
 @bp.route("/api/search", methods=["GET"])
+@no_cache
 @jwt_check()
 def get_events(user_id: str):
     """

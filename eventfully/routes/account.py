@@ -14,7 +14,7 @@ from wtforms.validators import DataRequired, Length
 from eventfully.config import CONFIG
 from eventfully.database import crud, schemas, database
 from eventfully.logger import log
-from eventfully.routes.utils import jwt_check, translation_provider
+from eventfully.routes.utils import jwt_check, translation_provider, no_cache
 
 bp = Blueprint("account", __name__)
 
@@ -60,6 +60,7 @@ def groups(user_id: str):
 
 
 @bp.route("/api/group/create", methods=["POST"])
+@no_cache
 @jwt_check(deny_unauthenticated=True)
 def create_group(user_id: str):
     name = request.form.get("name")
@@ -86,6 +87,7 @@ def create_group(user_id: str):
 
 
 @bp.route("/api/group/share")
+@no_cache
 @jwt_check(deny_unauthenticated=True)
 def share_to_group(user_id: str):
     event_id = request.args.get("event_id")
@@ -100,6 +102,7 @@ def share_to_group(user_id: str):
 
 
 @bp.route("/api/group/unshare")
+@no_cache
 @jwt_check(deny_unauthenticated=True)
 def unshare_from_group(user_id: str):
     event_id = request.args.get("event_id")
@@ -114,6 +117,7 @@ def unshare_from_group(user_id: str):
 
 
 @bp.route("/api/group/request/invite")
+@no_cache
 @jwt_check(deny_unauthenticated=True)
 def add_member(user_id: str):
     """
@@ -130,6 +134,7 @@ def add_member(user_id: str):
 
 
 @bp.route("/api/account/delete", methods=["POST"])
+@no_cache
 @jwt_check(deny_unauthenticated=True)
 def delete_account(user_id: str):
     crud.delete_account(user_id)
@@ -140,6 +145,7 @@ def delete_account(user_id: str):
 
 
 @bp.route("/api/account/signup", methods=["POST"])
+@no_cache
 def signup_account():
     # TODO: Add check to look if email is real
     form = SignUpForm()
@@ -169,6 +175,7 @@ class SignInForm(FlaskForm):
 
 
 @bp.route("/api/account/signin", methods=["POST"])
+@no_cache
 def signin_account():
     form = SignInForm()
     if not form.validate():
@@ -187,6 +194,7 @@ def signin_account():
 
 
 @bp.route("/api/account/signout", methods=["POST"])
+@no_cache
 @jwt_check(deny_unauthenticated=True)
 def signout_account(user_id: str):
     response = make_response()
@@ -197,6 +205,7 @@ def signout_account(user_id: str):
 
 
 @bp.route("/api/event/create")
+@no_cache
 @jwt_check(deny_unauthenticated=True)
 def create_event():
     """
@@ -232,6 +241,7 @@ class EventForm(FlaskForm):
 
 
 @bp.route("/create-event", methods=["GET"])
+@no_cache
 def create_event_route():
     return render_template("create-event.html", t=translation_provider())
 
