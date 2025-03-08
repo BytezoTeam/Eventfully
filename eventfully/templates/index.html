@@ -77,14 +77,14 @@
 
         <!-- Toggle Button for Filters (Always Visible) -->
         <button type="button"
-                class="btn btn-accent btn-sm flex items-center"
+                class="btn btn-accent flex items-center"
                 @click="showFilters = !showFilters">
           <span x-show="!showFilters">{{ t("show_filters") }}</span>
           <span x-show="showFilters">{{ t("hide_filters") }}</span>
         </button>
 
         <!-- Search Button -->
-        <button type="submit" class="btn btn-primary btn-sm flex items-center">
+        <button type="submit" class="btn btn-primary btn flex items-center">
           {{ t("search") }}
         </button>
 
