@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html
         lang="de"
-        x-data="{ darkMode: localStorage.getItem('dark') === 'true' }"
-        x-init="$watch('darkMode', val => localStorage.setItem('dark', val))"
-        x-bind:class="darkMode ? 'dark' : ''"
-        x-bind:data-theme="darkMode ? 'dark' : 'light'"
         class="dark:bg-gray-900 bg-gray-200"
 >
 <head>
