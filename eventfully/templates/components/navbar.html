@@ -22,30 +22,34 @@
     {% if CONFIG.EVENTFULLY_ACCOUNTS_ENABLED %}
       {% if user %}
         <!-- User Dropdown -->
-        <div class="dropdown dropdown-end">
-          <label tabindex="-1" class="btn btn-ghost btn-circle avatar">
+        <details class="dropdown">
+          <summary class="btn btn-ghost btn-circle avatar">
             {% include 'components/icons/user.html' %}
-          </label>
-          <ul class="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-52 p-2 shadow">
-            <li><p>{{ user.name }}</p></li>
-            <form hx-post="/api/account/signout" method="post">
-              <li>
-                <button type="submit" class="btn btn-primary">{{ t("logout") }}</button>
-              </li>
-            </form>
-            <br>
-            <form
-                    hx-get="/api/search?show=liked"
-                    hx-target="#event-search-result"
-                    hx-trigger="submit,load"
-                    hx-indicator=".htmx-indicator"
-            >
-              <li>
-                <button type="submit" class="btn btn-primary">{{ t("favourites") }}</button>
-              </li>
-            </form>
+          </summary>
+
+          <ul class="menu dropdown-content rounded-box z-1 shadow bg-base-100">
+            <li><a class="font-bold">{{ user.name }}</a></li>
+
+            <li>
+              <form hx-post="/api/account/signout" method="post">
+                {% include "components/icons/log-out.html" %}
+                <button type="submit" class="btn btn-sm btn-ghost">{{ t("logout") }}</button>
+              </form>
+            </li>
+
+            <li>
+              <form
+                      hx-get="/api/search?show=liked"
+                      hx-target="#event-search-result"
+                      hx-trigger="submit,load"
+                      hx-indicator=".htmx-indicator"
+              >
+                {% include "components/icons/heart-full.html" %}
+                <button type="submit" class="btn btn-sm btn-ghost">{{ t("favourites") }}</button>
+              </form>
+            </li>
           </ul>
-        </div>
+        </details>
       {% else %}
         <!-- Login / Register Buttons -->
         <button class="btn btn-ghost btn-active" @click="loginModal.showModal()">
