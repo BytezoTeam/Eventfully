@@ -35,6 +35,7 @@ def translation_provider() -> Callable[[str], str]:
 
     return translate
 
+
 def no_cache(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -43,7 +44,9 @@ def no_cache(f):
         response.headers["Pragma"] = "no-cache"
         response.headers["Expires"] = "0"
         return response
+
     return decorated_function
+
 
 def jwt_check(deny_unauthenticated=False):
     """
