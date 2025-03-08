@@ -8,12 +8,12 @@
       Eventfully
     </a>
 
-    <div class="flex gap-4 sm:gap-6">
+    <!-- <div class="flex gap-4 sm:gap-6">
       <a href="/" class="text-lg">{{ t("burger.home") }}</a>
 
       {% if CONFIG.EVENTFULLY_ACCOUNTS_ENABLED and user %}
         <a href="/groups" class="text-lg">{{ t("burger.groups") }}</a>
-      {% endif %}
+      {% endif %} -->
     </div>
   </div>
 
@@ -41,7 +41,7 @@
               <a
                       hx-get="/api/search?show=liked"
                       hx-target="#event-search-result"
-                      hx-trigger="submit,load"
+                      hx-trigger="click"
                       hx-indicator=".htmx-indicator"
               >
                 {% include "components/icons/heart-full.html" %}
