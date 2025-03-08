@@ -3,13 +3,35 @@
     <div class="badge badge-primary">{{ shared_event_names[group.id][item.id] }}</div>
   {% endif %}
 
-  {# Like Button #}
   {% if user and CONFIG.EVENTFULLY_ACCOUNTS_ENABLED %}
-    <div class="absolute m-4">
+    <div class="absolute m-4 flex flex-col gap-2">
+      {# Like Button #}
       {% if item.id in liked_events %}
         {% include 'components/liked-true-button.html' %}
       {% else %}
         {% include 'components/liked-false-button.html' %}
+      {% endif %}
+
+      {# Share Feature #}
+      {% if groups %}
+        <details class="dropdown">
+          <summary class="btn btn-circle cool-border">
+            {% include "components/icons/share-2.html" %}
+          </summary>
+
+          <ul class="menu dropdown-content z-1 rounded-box shadow bg-base-100 w-52">
+            {% for group in groups %}
+              {% if not group.id in shared_event_ids %}
+                <li>
+                  <a class="text-nowrap" hx-get="/api/group/share?event_id={{ item.id }}&group_id={{ group.id }}"
+                     hx-swap="outerHTML">
+                    {{ group.name }} {{ t("group") }}
+                  </a>
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </details>
       {% endif %}
     </div>
   {% endif %}
@@ -68,7 +90,8 @@
                                     endDate="{{ item.start_time.astimezone(tz).strftime("%Y-%m-%d") }}"
                                     startTime="{{ item.start_time.astimezone(tz).strftime("%H:%M") }}"
                                     endTime="{{ item.end_time.strftime("%H:%M") }}"
-                                    timeZone="Europe/Berlin"></add-to-calendar-button>
+                                    timeZone="Europe/Berlin">
+            </add-to-calendar-button>
           </p>
         </div>
 
@@ -97,27 +120,5 @@
         {% endif %}
       </div>
     </div>
-
-    {# Share Feature #}
-    {% if user and CONFIG.EVENTFULLY_ACCOUNTS_ENABLED %}
-      <div class="dropdown">
-        <button tabindex="0" class="btn btn-ghost btn-active">
-          {{ t("share_btn") }}
-        </button>
-
-        <ul tabindex="-1" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-          {% for group in groups %}
-            {% if not group.id in shared_event_ids %}
-              <li>
-                <a class="btn m-1" hx-get="/api/group/share?event_id={{ item.id }}&group_id={{ group.id }}"
-                   hx-swap="outerHTML">
-                  '{{ group.name }}' {{ t("group") }}
-                </a>
-              </li>
-            {% endif %}
-          {% endfor %}
-        </ul>
-      </div>
-    {% endif %}
   </div>
 </div>
