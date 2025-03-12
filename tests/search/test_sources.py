@@ -2,7 +2,8 @@ from datetime import datetime
 
 import pytest
 
-from eventfully.search.sources import zuerichunbezahlbar, neanderticket, bpb, boundicca, berlin
+from eventfully.crawl.sources import neanderticket, bpb
+from eventfully.crawl.sources import zuerichunbezahlbar, berlin, boundicca
 from eventfully.search_content import SearchContent
 
 

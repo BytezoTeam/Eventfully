@@ -1,13 +1,14 @@
 from datetime import datetime, timedelta
 from http import HTTPStatus
-import pytz
 
+import pytz
 from flask import Blueprint, render_template, request
-from eventfully.database import crud
+
+from eventfully import search
 from eventfully.config import CONFIG
+from eventfully.database import crud
 from eventfully.logger import log
 from eventfully.routes.utils import translation_provider, jwt_check, no_cache
-from eventfully.search import search
 from eventfully.search_content import SearchContent
 
 bp = Blueprint("index", __name__)

@@ -1,24 +1,23 @@
+from datetime import datetime
+from typing import Generator
+
 import niquests
 from bs4 import BeautifulSoup, PageElement
-from datetime import datetime, date
 
 from eventfully.database import schemas
-from eventfully.search_content import SearchContent
 
 
-def search(search_content: SearchContent) -> set[schemas.Event]:
-    events: set[schemas.Event] = set()
-
+def crawl() -> Generator[schemas.Event, None, None]:
     url = "https://jugendhackt.org/kalender/"
     request = niquests.get(url)
     request.raise_for_status()
     soup = BeautifulSoup(request.text, "html.parser")
     raw_events = soup.find_all("div", class_="event-teaser-list-item no-hover")
-    for raw_event in raw_events:
-        if event := _extract_event_from_html(raw_event):
-            events.add(event)
 
-    return events
+    for raw_event in raw_events:
+        event = _extract_event_from_html(raw_event)
+        if event:
+            yield event
 
 
 def _extract_event_from_html(raw_event: PageElement) -> schemas.Event | None:
@@ -104,12 +103,27 @@ def _extract_event_from_html(raw_event: PageElement) -> schemas.Event | None:
 
 
 if __name__ == "__main__":
-    search(
-        SearchContent(
-            query="",
-            min_time=date(year=2025, month=2, day=1),
-            max_time=date(year=2025, month=2, day=1),
-            city="",
-            category="",
-        )
-    )
+    crawl()
+
+# SourceConfig(
+#     name="jugendhackt-events",
+#     base_url="https://jugendhackt.org",
+#     processing_config=ProcessingConfig(
+#         locale="de_DE.UTF-8",
+#         time_zone="Europe/Berlin",
+#         time_format="%d.%m."
+#     ),
+#     scraper=ScrapingConfig(
+#         data_type="html",
+#         url_getter=URLGenerator(
+#             function=lambda: ["https://jugendhackt.org/kalender/"],
+#         ),
+#         extraction_type="indirect",
+#         item_query=".//section[@id='events']/ul[1]/li",
+#         event_queries=EventQueries(
+#             web_link=".//h3/a[contains(@title, 'Mehr Infos')]/@href",
+#             start_time="concat(substring-before(.//time/text(), ' – '), substring-after(substring-after(.//time/text(), ' – '), '.'))",
+#             end_time="substring-after(.//time/text(), ' – ')",
+#         )
+#     )
+# )

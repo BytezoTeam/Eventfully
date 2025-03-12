@@ -1,6 +1,7 @@
 import csv
 import io
 from datetime import datetime
+from typing import Generator
 
 import niquests
 from pydantic import BaseModel, field_validator
@@ -79,25 +80,22 @@ class FossEvent(BaseModel):
         return datetime.strptime(value, "%Y%m%d")
 
 
-def crawl() -> set[schemas.Event]:
+def crawl() -> Generator[schemas.Event, None, None]:
     request = niquests.get(EVENT_CSV_URL)
     request.raise_for_status()
 
     reader = csv.DictReader(io.StringIO(request.text))
     raw_events = list(reader)
 
-    foss_events: list[FossEvent] = []
     for event in raw_events:
         try:
             foss_event = FossEvent(**event)  # type: ignore
         except MissingImportantFieldError:
             continue
-        foss_events.append(foss_event)
-
-    foss_events = [event for event in foss_events if _is_event_happening(event)]
-
-    events = [_normalize_foss_event(event) for event in foss_events]
-    return set(events)
+        else:
+            if not _is_event_happening(foss_event):
+                continue
+            yield _normalize_foss_event(foss_event)
 
 
 def _is_event_happening(event: FossEvent) -> bool:
@@ -121,10 +119,3 @@ def _normalize_foss_event(raw_event: FossEvent) -> schemas.Event:
         price=raw_event.entrance_fee,
         category="education",
     )
-
-
-if __name__ == "__main__":
-    events = crawl()
-    for event in events:
-        print(event)
-    print(len(events))

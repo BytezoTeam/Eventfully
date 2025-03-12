@@ -1,17 +1,16 @@
 from datetime import datetime, timedelta
+from typing import Generator
 
 import niquests
 
 from eventfully.database import schemas
-from eventfully.logger import log
 
 
-def crawl() -> set[schemas.Event]:
+def crawl() -> Generator[schemas.Event, None, None]:
     request = niquests.get("https://eventdb.boudicca.events/entries")
     request.raise_for_status()
     raw_events = request.json()
 
-    events: set[schemas.Event] = set()
     for raw_event in raw_events:
         # Exclude events that are more than a day old
         start_time = _extract_datetime(raw_event["startDate"])
@@ -38,24 +37,20 @@ def crawl() -> set[schemas.Event]:
             case _:
                 category = None
 
-        events.add(
-            schemas.Event(
-                web_link=raw_event["url"],
-                start_time=start_time,
-                end_time=end_time,
-                source="boundicca",
-                title=tile,
-                image_link=raw_event.get("pictureUrl"),
-                city=raw_event.get("location.city"),
-                description=raw_event.get("description"),
-                address=raw_event.get("location.address"),
-                operator_web_link=raw_event.get("location.url"),
-                category=category,
-            )
+        event = schemas.Event(
+            web_link=raw_event["url"],
+            start_time=start_time,
+            end_time=end_time,
+            source="boundicca",
+            title=tile,
+            image_link=raw_event.get("pictureUrl"),
+            city=raw_event.get("location.city"),
+            description=raw_event.get("description"),
+            address=raw_event.get("location.address"),
+            operator_web_link=raw_event.get("location.url"),
+            category=category,
         )
-
-    log.debug(f"Got {len(events)} new events from Boundicca")
-    return events
+        yield event
 
 
 def _extract_datetime(string: str) -> datetime:
@@ -71,3 +66,31 @@ def _extract_datetime(string: str) -> datetime:
 
 if __name__ == "__main__":
     print(crawl())
+
+
+# SourceConfig(
+#     name="baudicca",
+#     base_url="",
+#     processing_config=ProcessingConfig(
+#         time_zone="Europe/Berlin",
+#         time_format="%Y-%m-%dT%H:%M:%SZ",
+#         locale="de_DE.UTF-8"
+#     ),
+#     scraper=ScrapingConfig(
+#         item_query="[*]",
+#         url_getter=URLGenerator(
+#             function=lambda: ["https://eventdb.boudicca.events/entries"]
+#         ),
+#         data_type="json",
+#         extraction_type="direct",
+#         event_queries=EventQueries(
+#             description="description",
+#             web_link="url",
+#             address="location.address",
+#             image_link="pictureUrl",
+#             start_time="startDate:format=date",
+#             end_time="endDate:format=date",
+#             title="name",
+#         )
+#     )
+# )

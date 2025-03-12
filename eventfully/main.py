@@ -1,16 +1,15 @@
 import atexit
 from http import HTTPStatus
-from threading import Thread
 from uuid import uuid4
 
 from flask import Flask, make_response
 from flask_apscheduler import APScheduler
 
 from eventfully.config import CONFIG
+from eventfully.crawl.main import crawl
 from eventfully.database import crud
 from eventfully.logger import log
 from eventfully.routes import account, api, index, legal_notice
-from eventfully.search import post_processing, crawl
 
 log.info("Starting Server v0.4.4 ...")
 crud.create_tables()
@@ -25,13 +24,9 @@ scheduler = APScheduler()
 scheduler.init_app(app)
 atexit.register(lambda: scheduler.shutdown())
 
-scheduler.add_job("collect", crawl.main, trigger="cron", day="*", max_instances=1)
+scheduler.add_job("collect", crawl, trigger="cron", day="*", max_instances=1)
 
 scheduler.start()
-
-# Background Tasks that run continuously
-post_process_thread = Thread(target=post_processing.main)
-post_process_thread.start()
 
 
 @app.errorhandler(500)

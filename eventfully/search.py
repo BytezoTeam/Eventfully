@@ -1,9 +1,6 @@
 from time import mktime
 
-from cachetools import cached, TTLCache
-
 from eventfully.database import schemas, crud
-from eventfully.search import post_processing
 from eventfully.search_content import SearchContent
 
 
@@ -15,14 +12,8 @@ def main(search_content: SearchContent) -> set[schemas.Event]:
     """
 
     events = search_db(search_content)
-    _update_post_process_queue(search_content)
 
     return events
-
-
-@cached(cache=TTLCache(maxsize=1024, ttl=3600))
-def _update_post_process_queue(search_content: SearchContent):
-    post_processing.process_queue.put(search_content)
 
 
 def search_db(search: SearchContent) -> set[schemas.Event]:
