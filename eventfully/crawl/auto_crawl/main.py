@@ -80,13 +80,18 @@ def get_raw_events_from_source(config: SourceConfig) -> Generator[RawEvent, None
                 continue
             yield raw_event
 
-        # Get the possible new url
-        if config.scraper.url_getter.terminator_query:
-            terminator_query_exists = data_wrapper.get_value(config.scraper.url_getter.terminator_query)
-            if (terminator_query_exists and not config.scraper.url_getter.invert_terminator) or (
-                not terminator_query_exists and config.scraper.url_getter.invert_terminator
-            ):
-                break
+        if not _should_scrape_continue(config, data_wrapper):
+            break
+
+
+def _should_scrape_continue(config: SourceConfig, data: DataWrapper) -> bool:
+    if config.scraper.url_getter.terminator_query:
+        terminator_query_exists = data.get_value(config.scraper.url_getter.terminator_query)
+        if (terminator_query_exists and not config.scraper.url_getter.invert_terminator) or (
+            not terminator_query_exists and config.scraper.url_getter.invert_terminator
+        ):
+            return False
+    return True
 
 
 def get_event_data_objects(config: SourceConfig, url: str) -> Generator[DataWrapper, None, None]:
