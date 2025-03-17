@@ -13,14 +13,14 @@ def crawl() -> Generator[schemas.Event, None, None]:
 
     for raw_event in raw_events:
         # Exclude events that are more than a day old
-        start_time = _extract_datetime(raw_event["startDate"])
+        start_time = _extract_datetime(raw_event["startDate:format=date"])
         if start_time < datetime.now() - timedelta(days=1):
             continue
         # Exclude events without a web link since the web_link is mandatory
         if "url" not in raw_event:
             continue
 
-        end_time = _extract_datetime(raw_event["endDate"]) if "endDate" in raw_event else start_time
+        end_time = _extract_datetime(raw_event["endDate:format=date"]) if "endDate" in raw_event else start_time
 
         raw_name = raw_event.get("name")
         tile = raw_name.strip() if raw_name else raw_name
