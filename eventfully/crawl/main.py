@@ -3,22 +3,10 @@ Some event sources directly return most the events so whe can pre crawl them ahe
 """
 
 import inspect
-from typing import Callable, Generator
 
-from eventfully.crawl.sources import foss, berlin, neanderticket, zuerichunbezahlbar, jugendhackt, bpb, boundicca
+from eventfully.crawl.source_list import SOURCES
 from eventfully.database import crud
-from eventfully.database.schemas import Event
 from eventfully.logger import log
-
-SOURCES: list[Callable[[], Generator[Event, None, None]]] = [
-    boundicca.crawl,
-    bpb.crawl,
-    foss.crawl,
-    jugendhackt.crawl,
-    berlin.crawl,
-    neanderticket.crawl,
-    zuerichunbezahlbar.crawl,
-]
 
 
 def crawl():
