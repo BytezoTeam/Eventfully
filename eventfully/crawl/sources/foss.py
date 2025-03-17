@@ -36,7 +36,6 @@ class FossEvent(BaseModel):
     cfp_date: str | None
     cfp_link: str | None
     type: str | None
-    tags: str | None
     entrance_fee: str | None
     registration: str | None
     participants_last_time: str | None
@@ -46,11 +45,7 @@ class FossEvent(BaseModel):
     main_organiser: str | None
     specialities: str | None
     first_edition: str | None
-    main_sponsors: str | None
-    editions_topic: str | None
-    technologies_in_use: str | None
     online_interactivity: str | None
-    technical_liberties: str | None
     timezone: str | None
     mastodon: str | None
     cancelled: str | None
@@ -59,6 +54,11 @@ class FossEvent(BaseModel):
     cancellation_description: str | None
     logo: str | None
     matrix: str | None
+    mailinglist: str | None
+    changed_at: str | None
+    change_email: str | None
+    change_comment: str | None
+    revision: str | None
 
     @field_validator("lat", "lon", mode="before")
     def convert_empty_string_to_none(cls, value: str):
