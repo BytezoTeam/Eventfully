@@ -1,7 +1,12 @@
 from typing import Generator
 
-from eventfully.crawl.auto_crawl.config import SourceConfig, ScrapingConfig, ProcessingConfig, EventQueries, \
-    URLGenerator
+from eventfully.crawl.auto_crawl.config import (
+    SourceConfig,
+    ScrapingConfig,
+    ProcessingConfig,
+    EventQueries,
+    URLGenerator,
+)
 from eventfully.crawl.auto_crawl.main import get_raw_events_from_source, normalize_event
 from eventfully.database import schemas
 from eventfully.logger import log
