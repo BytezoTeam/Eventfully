@@ -24,6 +24,8 @@ dependencies = [
     "pyjwt==2.*",
     "cachetools==5.*",
     "yet-another-i18n==0.*",
+    "parsel==1.*",
+    "jsonpath-ng==1.*",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"

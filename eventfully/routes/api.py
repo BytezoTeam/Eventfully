@@ -4,8 +4,8 @@ from cachetools import cached, TTLCache
 from flask import Blueprint, request, jsonify
 from pydantic import ValidationError
 
+from eventfully import search
 from eventfully.logger import log
-from eventfully.search import search
 from eventfully.search_content import SearchContent
 
 bp = Blueprint("api", __name__)
