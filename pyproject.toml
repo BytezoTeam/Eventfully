@@ -53,6 +53,7 @@ managed = true
 dev-dependencies = [
     "pytest>=8.3.4",
     "ruff>=0.9.9",
+    "pre-commit==4.*",
 ]
 
 [tool.rye.scripts]

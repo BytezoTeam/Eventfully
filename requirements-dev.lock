@@ -21,6 +21,8 @@ camel-converter==3.1.2
     # via meilisearch
 certifi==2024.6.2
     # via requests
+cfgv==3.4.0
+    # via pre-commit
 charset-normalizer==3.3.2
     # via niquests
     # via requests
@@ -28,6 +30,10 @@ click==8.1.7
     # via flask
 cssselect==1.3.0
     # via parsel
+distlib==0.3.9
+    # via virtualenv
+filelock==3.18.0
+    # via virtualenv
 flask==3.1.0
     # via flask-apscheduler
     # via flask-wtf
@@ -37,6 +43,8 @@ get-project-root==0.2
 gunicorn==22.0.0
 h11==0.14.0
     # via urllib3-future
+identify==2.6.9
+    # via pre-commit
 idna==3.7
     # via niquests
     # via requests
@@ -63,16 +71,21 @@ markupsafe==2.1.5
 meilisearch==0.33.0
 niquests==3.7.0
     # via pytailwindcss-extra
+nodeenv==1.9.1
+    # via pre-commit
 packaging==24.1
     # via gunicorn
     # via parsel
     # via pytest
 parsel==1.10.0
 peewee==3.17.5
+platformdirs==4.3.6
+    # via virtualenv
 pluggy==1.5.0
     # via pytest
 ply==3.11
     # via jsonpath-ng
+pre-commit==4.1.0
 pydantic==2.7.4
     # via camel-converter
 pydantic-core==2.18.4
@@ -85,6 +98,8 @@ python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 pytz==2024.1
     # via apscheduler
+pyyaml==6.0.2
+    # via pre-commit
 qh3==1.0.8
     # via urllib3-future
 requests==2.32.3
@@ -105,6 +120,8 @@ urllib3==2.2.2
     # via requests
 urllib3-future==2.8.901
     # via niquests
+virtualenv==20.29.3
+    # via pre-commit
 w3lib==2.3.1
     # via parsel
 wassima==1.1.1
