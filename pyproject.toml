@@ -11,19 +11,19 @@ dependencies = [
     "flask==3.*",
     "peewee==3.*",
     "python-dotenv==1.*",
-    "meilisearch==0.*",
+    "meilisearch==0.33.*",
     "pydantic==2.*",
     "Flask-APScheduler==1.*",
     "gunicorn==23.*",
-    "get-project-root==0.*",
+    "get-project-root==0.2.*",
     "flask-wtf==1.*",
     "niquests==3.*",
     "beautifulsoup4==4.*",
-    "pytailwindcss-extra==0.*",
-    "sqids==0.*",
+    "pytailwindcss-extra==0.1.*",
+    "sqids==0.4.*",
     "pyjwt==2.*",
     "cachetools==5.*",
-    "yet-another-i18n==0.*",
+    "yet-another-i18n==0.1.*",
     "parsel==1.*",
     "jsonpath-ng==1.*",
 ]
@@ -48,9 +48,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.rye]
-virtual = true                                                         # necessary for docker
+virtual = true                                                        # necessary for docker
 managed = true
-dev-dependencies = ["pytest>=8.3.4", "ruff>=0.9.9", "pre-commit==4.*"]
+dev-dependencies = ["pytest==8.*", "ruff==0.11.*", "pre-commit==4.*"]
 
 [tool.rye.scripts]
 dev = "python3 -m eventfully.main"
