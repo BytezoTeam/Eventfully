@@ -11,20 +11,20 @@
 
 annotated-types==0.7.0
     # via pydantic
-apscheduler==3.10.4
+apscheduler==3.11.0
     # via flask-apscheduler
-beautifulsoup4==4.12.3
+beautifulsoup4==4.13.3
 blinker==1.9.0
     # via flask
-cachetools==5.5.0
-camel-converter==3.1.2
+cachetools==5.5.2
+camel-converter==4.0.1
     # via meilisearch
-certifi==2024.6.2
+certifi==2025.1.31
     # via requests
-charset-normalizer==3.3.2
+charset-normalizer==3.4.1
     # via niquests
     # via requests
-click==8.1.7
+click==8.1.8
     # via flask
 cssselect==1.3.0
     # via parsel
@@ -32,78 +32,73 @@ flask==3.1.0
     # via flask-apscheduler
     # via flask-wtf
 flask-apscheduler==1.13.1
-flask-wtf==1.2.1
+flask-wtf==1.2.2
 get-project-root==0.2
 gunicorn==23.0.0
 h11==0.14.0
     # via urllib3-future
-idna==3.7
-    # via niquests
+idna==3.10
     # via requests
 itsdangerous==2.2.0
     # via flask
     # via flask-wtf
-jh2==5.0.3
+jh2==5.0.8
     # via urllib3-future
-jinja2==3.1.4
+jinja2==3.1.6
     # via flask
 jmespath==1.0.1
     # via parsel
 jsonpath-ng==1.7.0
-kiss-headers==2.4.3
-    # via niquests
 lxml==5.3.1
     # via parsel
-markupsafe==2.1.5
+markupsafe==3.0.2
     # via jinja2
     # via werkzeug
     # via wtforms
-meilisearch==0.33.0
-niquests==3.7.0
+meilisearch==0.33.1
+niquests==3.13.1
     # via pytailwindcss-extra
-packaging==24.1
+packaging==24.2
     # via gunicorn
     # via parsel
 parsel==1.10.0
-peewee==3.17.5
+peewee==3.17.9
 ply==3.11
     # via jsonpath-ng
-pydantic==2.7.4
+pydantic==2.10.6
     # via camel-converter
-pydantic-core==2.18.4
+pydantic-core==2.27.2
     # via pydantic
-pyjwt==2.8.0
-pytailwindcss-extra==0.1.0
+pyjwt==2.10.1
+pytailwindcss-extra==0.1.1
 python-dateutil==2.9.0.post0
     # via flask-apscheduler
 python-dotenv==1.0.1
-pytz==2024.1
-    # via apscheduler
-qh3==1.0.8
+qh3==1.4.2
     # via urllib3-future
 requests==2.32.3
     # via meilisearch
-six==1.16.0
-    # via apscheduler
+six==1.17.0
     # via python-dateutil
-soupsieve==2.5
+soupsieve==2.6
     # via beautifulsoup4
 sqids==0.4.1
 typing-extensions==4.12.2
+    # via beautifulsoup4
     # via pydantic
     # via pydantic-core
-tzlocal==5.2
+tzlocal==5.3.1
     # via apscheduler
-urllib3==2.2.2
+urllib3==2.3.0
     # via requests
-urllib3-future==2.8.901
+urllib3-future==2.12.913
     # via niquests
 w3lib==2.3.1
     # via parsel
-wassima==1.1.1
+wassima==1.2.2
     # via niquests
 werkzeug==3.1.3
     # via flask
-wtforms==3.1.2
+wtforms==3.2.1
     # via flask-wtf
-yet-another-i18n==0.1.0
+yet-another-i18n==0.2.0
