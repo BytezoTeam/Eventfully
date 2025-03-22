@@ -60,13 +60,6 @@
         </button>
       {% endif %}
     {% endif %}
-
-    <!-- Theme Switch -->
-    <label class="swap swap-rotate btn btn-ghost btn-circle">
-      <input @click="darkMode = !darkMode" type="checkbox" x-bind:checked="!darkMode"/>
-      <div class="swap-on">{% include 'components/icons/sun.html' %}</div>
-      <div class="swap-off">{% include 'components/icons/moon.html' %}</div>
-    </label>
   </div>
 </header>
 
