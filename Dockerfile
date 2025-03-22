@@ -4,7 +4,9 @@ WORKDIR /app
 
 COPY eventfully/ eventfully/
 COPY tailwind.config.js ./
+
 # Build CSS Styles
+ENV PYTAILWINDCSS_EXTRA_VERSION=v1.7.27
 RUN pip install --no-cache-dir pytailwindcss-extra && \
     tailwindcss-extra && \
     tailwindcss-extra -i ./eventfully/static/input.css -o ./eventfully/static/output.css --minify
@@ -16,7 +18,7 @@ WORKDIR /app
 
 # Add Tini
 RUN apk add --no-cache tini && \
-# Running eventfully without root with gosu
+    # Running eventfully without root with gosu
     addgroup nonroot && \
     adduser --system -G nonroot --disabled-password nonroot && \
     apk add --no-cache gosu --repository https://dl-cdn.alpinelinux.org/alpine/edge/testing/
