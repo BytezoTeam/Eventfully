@@ -15,7 +15,6 @@ dependencies = [
     "pydantic==2.*",
     "Flask-APScheduler==1.*",
     "gunicorn==23.*",
-    "get-project-root==0.2.*",
     "flask-wtf==1.*",
     "niquests==3.*",
     "beautifulsoup4==4.*",

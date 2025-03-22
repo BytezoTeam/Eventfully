@@ -1,16 +1,15 @@
 import atexit
-from os import path
+from pathlib import Path
 from random import choice
 
 import meilisearch as ms
-from get_project_root import root_path
 from peewee import Model
 from playhouse.sqlite_ext import SqliteExtDatabase
 from playhouse.shortcuts import ThreadSafeDatabaseMetadata
 
 from eventfully.config import CONFIG
 
-_SQL_DB_PATH = path.join(root_path(ignore_cwd=True), "database", "sqlite", "database.db")
+_SQL_DB_PATH = Path.cwd() / "database" / "sqlite" / "database.db"
 
 # Meilisearch
 ms_client = ms.Client(CONFIG.MEILI_HOST, CONFIG.MEILI_MASTER_KEY)
