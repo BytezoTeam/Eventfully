@@ -40,7 +40,7 @@ flask==3.1.0
 flask-apscheduler==1.13.1
 flask-wtf==1.2.1
 get-project-root==0.2
-gunicorn==22.0.0
+gunicorn==23.0.0
 h11==0.14.0
     # via urllib3-future
 identify==2.6.9

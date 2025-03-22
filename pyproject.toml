@@ -5,7 +5,7 @@ description = "Add your description here"
 authors = [
     { name = "2mal3", email = "56305732+2mal3@users.noreply.github.com" },
     { name = "Luis Schuimer", email = "85784931+LuisSchuimer@users.noreply.github.com" },
-    { name = "BlitzBenedikt", email = "117511666+BlitzBenedikt@users.noreply.github.com" }
+    { name = "BlitzBenedikt", email = "117511666+BlitzBenedikt@users.noreply.github.com" },
 ]
 dependencies = [
     "flask==3.*",
@@ -14,7 +14,7 @@ dependencies = [
     "meilisearch==0.*",
     "pydantic==2.*",
     "Flask-APScheduler==1.*",
-    "gunicorn==22.*",
+    "gunicorn==23.*",
     "get-project-root==0.*",
     "flask-wtf==1.*",
     "niquests==3.*",
@@ -48,13 +48,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.rye]
-virtual = true  # necessary for docker
+virtual = true                                                         # necessary for docker
 managed = true
-dev-dependencies = [
-    "pytest>=8.3.4",
-    "ruff>=0.9.9",
-    "pre-commit==4.*",
-]
+dev-dependencies = ["pytest>=8.3.4", "ruff>=0.9.9", "pre-commit==4.*"]
 
 [tool.rye.scripts]
 dev = "python3 -m eventfully.main"
