@@ -73,6 +73,7 @@ pytailwindcss-extra==0.1.1
 python-dateutil==2.9.0.post0
     # via flask-apscheduler
 python-dotenv==1.0.1
+pytz==2025.1
 qh3==1.4.2
     # via urllib3-future
 requests==2.32.3
