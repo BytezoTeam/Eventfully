@@ -13,11 +13,10 @@ from eventfully.config import CONFIG
 from eventfully.database import crud
 from eventfully.logger import log
 
-
 translator = Translator("en")
 
 
-def translation_provider() -> Callable[[str], str]:
+def translation_provider() -> Callable[[str, dict], str]:
     """
     Tries to find the best language for a given request and returns function that is used in the html templates to translate text.
     """
@@ -26,9 +25,9 @@ def translation_provider() -> Callable[[str], str]:
     supported_languages = ("en", "de", "cze", "fr", "nl", "ru", "tr")
     lang_code = utils.extract_language_from_language_header(language_header, supported_languages)
 
-    def translate(text: str) -> str:
+    def translate(text: str, args: dict = {}) -> str:
         try:
-            translation = translator(text, lang_code)
+            translation = translator(text, lang_code, args)
         except KeyError:
             translation = text
         return translation
