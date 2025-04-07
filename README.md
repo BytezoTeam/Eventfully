@@ -28,6 +28,8 @@ Eventfully is a software to find and explore new events in your area and learn m
 - [Neanderticket](https://www.neanderticket.de/): events for the North Rhine-Westphalia state in Germany
 - [bpb: Bundeszentrale für politische Bildung](https://www.bpb.de/veranstaltungen/): various political events in Germany
 - [foss.events](https://foss.events): collection of Free, Libre and/or Open Source Software events happening in Europe and online
+- [Berlin](https://www.berlin.de/tickets/): various events in Berlin
+- [Jugend Hackt](https://jugendhackt.org/): events in German-speaking countries for young people interested in technology
 
 ## Documentation
 
@@ -35,10 +37,6 @@ Eventfully is a software to find and explore new events in your area and learn m
 - [Running In Production](/docs/running-in-production.md) (Docker)
 - [Architecture](/docs/architecture.md)
 - [Use Case](/docs/use-case.md)
-
-## Communication and Social Media
-
-  - Discord : https://discord.gg/NQXpSuq2wp
 
 ## Contributors
 
