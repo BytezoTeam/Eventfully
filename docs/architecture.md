@@ -2,13 +2,31 @@
 
 ## Bird's Eye View
 
-![Network Graph](/docs/network.drawio.svg)
+```mermaid
+architecture-beta
+    service user(internet)[User]
+
+    service sources(internet)[Sources]
+
+    group server(server)[Server]
+
+    service sql(database)[SQL DB] in server
+    service meilisearch(database)[Meilisearch] in server
+    service flask(server)[Flask Server] in server
+    service scraper(server)[Scraper] in server
+
+    junction db in server
+
+    flask:L -- R:db
+    db:T -- B:sql
+    db:B -- T:meilisearch
+    user:L -- R:flask
+    scraper:L -- R:meilisearch
+    scraper:R -- L:sources
+```
 
 You can think of Eventfully as a meta search engine for event websites with additional social features.
-When a user searches for something, he gets a direct and more importantly fast answer from the no sql event database. In
-the background, the app then passes the search to its other sources to get their events and integrate them into the
-database for further searches. Some sources allow to get all stored events at once. They are contacted in a specified
-time interval and also integrated into our own database.
+When a user searches for something, he gets a direct and more importantly fast answer from the no sql event database. In the background, the crawler crawls all specified sources once a day and adds them to the database.
 
 ## Code Map
 
@@ -16,7 +34,7 @@ time interval and also integrated into our own database.
 
 All code needed to run the application, including the frontend.
 
-### eventfully/database
+### eventfully/database/
 
 Contains all the logic for communicating with and managing the databases and their connections needed to run the
 application.
@@ -30,34 +48,36 @@ application.
 - `schemas`: classes that represent the structure of database tables and documents without being directly connected to a
   database.
 
-### eventfully/search
+### eventfully/search.py
 
 Contains the search logic aka. querying meilisearch.
 
-### eventfully/crawl
+### eventfully/crawl/
 
-Contains all the logic to get the events from our sources in our own format with as much data as we can get. The data
-through web crawling in a specific time interval.
-The crawling for a source can be entirely self coded or the `auto_crawl` module can be used as a building block system
-for a scraper.
+Contains all the logic to get the events from our sources in our own format with as much data as we can get through web crawling in a specific time interval.
+The crawling for a source can be entirely self coded or the `auto_crawl` module can be used as a building block system for a scraper.
 
-### eventfully/static
+### eventfully/static/
 
 Static, mostly binary files for the site that don't change often, including images or css.
 
-### eventfully/templates
+### eventfully/templates/
 
 The HTML and jinja2 templates used by the application to render the frontend website, mostly on the server.
 
 ### eventfully/main.py
 
-The main entry point for the application, which defines most of the http routes and apis.
+The main entry point for the application. Starts the flask server, database and the crawler.
+
+### eventfully/routes/
+
+All web-accessible routes for users and APIs, loosely separated into files by function.
 
 ### tests/
 
 Mostly Python code that tests the main application in `eventfully/`.
 
-### .github/workflows
+### .github/workflows/
 
 Various CI/CD scripts that perform automated tasks on GitHub such as docker image building, quality control, and code
 linting.
