@@ -39,6 +39,9 @@ line-length = 120
 select = ["E4", "E7", "E9", "F", "C", "N", "A", "SIM", "PL"]
 ignore = ["N805"]
 
+[tool.pyright]
+ignore = ["**/jugendhackt.py"]
+
 
 [build-system]
 requires = ["hatchling"]
