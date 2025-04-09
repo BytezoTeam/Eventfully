@@ -58,6 +58,11 @@
           {{ t("category." + item.category) }}
         </span>
       {% endif %}
+      {% if item.source %}
+        <span class="badge badge-neutral capitalize">
+          {{ item.source }}
+        </span>
+      {% endif %}
 
       <!-- Title -->
       <a class="card-title flex-gap-1" href="{{ item.web_link }}" target="_blank" rel="noopener">
