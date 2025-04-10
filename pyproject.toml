@@ -50,7 +50,12 @@ build-backend = "hatchling.build"
 [tool.rye]
 virtual = true                                                        # necessary for docker
 managed = true
-dev-dependencies = ["pytest==8.*", "ruff==0.11.*", "pre-commit==4.*"]
+dev-dependencies = [
+    "pytest==8.*",
+    "ruff==0.11.*",
+    "pre-commit==4.*",
+    "coverage==7.*",
+]
 
 [tool.rye.scripts]
 dev = "python3 -m eventfully.main"

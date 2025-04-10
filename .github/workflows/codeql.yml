@@ -2,7 +2,7 @@ name: "CodeQL"
 
 on:
   push:
-    branches: ["main"]
+    branches: [ "main" ]
     paths:
       - "**.py"
       - "**.html"
@@ -10,7 +10,7 @@ on:
       - "**Dockerfile"
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: ["main"]
+    branches: [ "main" ]
     paths:
       - "**.py"
       - "**.html"
@@ -20,6 +20,27 @@ on:
     - cron: "29 19 * * 5"
 
 jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          cache: pip
+
+      - name: Install Dependencies
+        run: pip install -r requirements-dev.lock
+
+      - name: Run Tests
+        run: coverage run --source=eventfully --branch -m pytest -v
+
+      - name: Generate Coverage Report
+        run: coverage report -m
+
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
