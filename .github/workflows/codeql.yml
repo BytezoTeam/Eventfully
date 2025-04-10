@@ -31,6 +31,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install Locales
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y locales language-pack-de
+          sudo locale-gen de_DE.UTF-8
+
       - name: Install Python
         uses: actions/setup-python@v5
         with:
