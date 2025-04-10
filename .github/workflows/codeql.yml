@@ -23,6 +23,8 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    env:
+      EVENTFULLY_JWT_KEY: blub
     steps:
       - name: Checkout
         uses: actions/checkout@v4
