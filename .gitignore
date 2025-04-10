@@ -1,13 +1,11 @@
-# python generated files
 __pycache__/
 .venv/
+.idea/
+.vscode/
+.DS_Store
+.coverage
 
-# program generated files
 output.css
 *.log
 
-# user files
-.DS_Store
 .env
-.idea/
-.vscode/
