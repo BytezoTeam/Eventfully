@@ -148,7 +148,7 @@ def normalize_event(raw_event: RawEvent, config: SourceConfig) -> Event:
         if isinstance(value, str):
             clean_string = value
             clean_string = clean_string.strip()
-            clean_string = value.replace("\n", "")
+            clean_string = clean_string.replace("\n", "")
             raw_dict_event[key] = clean_string
     raw_event = RawEvent(**raw_dict_event)
 
