@@ -4,7 +4,6 @@ from json import loads, dumps
 from typing import Generator, Literal
 from zoneinfo import ZoneInfo
 
-import niquests
 from jsonpath_ng import parse, DatumInContext
 from parsel import Selector
 from pydantic import ValidationError
@@ -12,6 +11,7 @@ from pydantic import ValidationError
 from eventfully.crawl.auto_crawl.config import RawEvent, SourceConfig, EventQueries
 from eventfully.database.schemas import Event
 from eventfully.logger import log
+from eventfully.utils import send_niquests_get
 
 
 class DataWrapper:
@@ -63,12 +63,11 @@ def get_raw_events_from_source(config: SourceConfig) -> Generator[RawEvent, None
     for current_url in urls:
         log.debug(f"Processing {current_url} ...")
 
-        request = niquests.get(current_url)
-        request.raise_for_status()
-        if not request.text:
+        response = send_niquests_get(current_url)
+        if not response.text:
             raise ValueError("Got no data")
 
-        data_wrapper = DataWrapper(data=request.text, data_type=config.scraper.data_type)
+        data_wrapper = DataWrapper(data=response.text, data_type=config.scraper.data_type)
 
         # Extract all events from the current url
         for event_object in get_event_data_objects(config, current_url):
@@ -100,11 +99,10 @@ def get_event_data_objects(config: SourceConfig, url: str) -> Generator[DataWrap
     the event objects got from the queried links in the current source.
     """
 
-    request = niquests.get(url)
-    request.raise_for_status()
-    if not request.text:
+    response = send_niquests_get(url)
+    if not response.text:
         raise ValueError("Got no data")
-    data_wrapper = DataWrapper(data=request.text, data_type=config.scraper.data_type)
+    data_wrapper = DataWrapper(data=response.text, data_type=config.scraper.data_type)
 
     if config.scraper.extraction_type == "indirect" and config.scraper.data_type == "json":
         raise ValueError("Indirect extraction is not supported for json data")
@@ -116,12 +114,12 @@ def get_event_data_objects(config: SourceConfig, url: str) -> Generator[DataWrap
                 continue
             if event_link.startswith("/"):
                 event_link = config.base_url + event_link
-            request = niquests.get(event_link)
-            request.raise_for_status()
-            if not request.text:
+
+            event_response = send_niquests_get(event_link)
+            if not event_response.text:
                 continue
             # include the newly fetched side in the event body
-            event_object._data += request.text
+            event_object._data += event_response.text
         yield event_object
 
 

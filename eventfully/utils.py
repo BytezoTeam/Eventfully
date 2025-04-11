@@ -4,6 +4,7 @@ Some functions that are used in many places in the project.
 
 from hashlib import sha256
 from uuid import uuid4
+import niquests
 
 
 def get_hash_string(input_string):
@@ -39,3 +40,10 @@ def extract_language_from_language_header(header: str | None, supported_language
             return lang_code
 
     return "en"
+
+
+def send_niquests_get(url: str) -> niquests.Response:
+    headers = {"User-Agent": "BytezoTeam/Eventfully"}
+    request = niquests.get(url, headers=headers)
+    request.raise_for_status()
+    return request
