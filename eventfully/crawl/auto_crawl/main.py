@@ -1,3 +1,5 @@
+import io
+import csv
 import locale
 from datetime import datetime
 from json import loads, dumps
@@ -15,7 +17,7 @@ from eventfully.utils import send_niquests_get
 
 
 class DataWrapper:
-    def __init__(self, data: str, data_type: Literal["html", "json"]):
+    def __init__(self, data: str, data_type: Literal["html", "json", "csv"]):
         self._data_type = data_type
         self._data = data
 
@@ -29,6 +31,10 @@ class DataWrapper:
                 dict_data = loads(self._data)
                 results = parse(query).find(dict_data)
                 return [DataWrapper(data=dumps(new.value), data_type=self._data_type) for new in results]
+            case "csv":
+                lines = self._data.splitlines()
+                events = lines[1:]
+                return [DataWrapper(lines[0] + "\n" + event, "csv") for event in events]
             case _:
                 raise ValueError("Unknown data type")
 
@@ -40,6 +46,13 @@ class DataWrapper:
             case "json":
                 dict_data = loads(self._data)
                 return parse(query).find(dict_data)[0].value
+            case "csv":
+                text_buffer = io.StringIO(self._data)
+                reader = csv.DictReader(text_buffer)
+                result = list(reader)
+                return result[0][query]
+            case _:
+                raise ValueError("Unknown data type")
 
     def get_values(self, query: str) -> list[str]:
         match self._data_type:
@@ -50,6 +63,8 @@ class DataWrapper:
                 dict_data = loads(self._data)
                 results: list[DatumInContext] = parse(query).find(dict_data)
                 return [result.value for result in results]
+            case "csv":
+                raise ValueError("CSV data type does not support get_values")
             case _:
                 raise ValueError("Unknown data type")
 
