@@ -10,7 +10,11 @@
 ![repo size](https://img.shields.io/github/repo-size/BytezoTeam/Eventfully?style=flat-square)
 ![commit activity](https://img.shields.io/github/commit-activity/m/BytezoTeam/Eventfully?style=flat-square)
 
-Eventfully is a software to find and explore new events in your area and learn more about culture, technology and more from one website. It combines many different event sites in one and there are many events in your area and in Europe. Plus, you can connect with people and make new friends and have an exprerience you never had before. Eventfully eliminates the hard search for events on the Internet and it has many different events so that everyone can find the event they are looking for.
+Eventfully is a software to find and explore new events in your area and learn more about culture, technology and more
+from one website. It combines many different event sites in one and there are many events in your area and in Europe.
+Plus, you can connect with people and make new friends and have an exprerience you never had before. Eventfully
+eliminates the hard search for events on the Internet and it has many different events so that everyone can find the
+event they are looking for.
 
 ## Techstack
 
@@ -24,12 +28,13 @@ Eventfully is a software to find and explore new events in your area and learn m
 ## Our Sources
 
 - [Zuerichunbezahlbar](https://www.zuerichunbezahlbar.ch/events/): events for Zürich in Switzerland
-- [Boudicca](https://boudicca.events): aggregated event database combining multiple smaller sources and laying a special focus on accessibility
+- [Boudicca](https://boudicca.events): aggregated event database combining multiple smaller sources and laying a special
+  focus on accessibility
 - [Neanderticket](https://www.neanderticket.de/): events for the North Rhine-Westphalia state in Germany
 - [bpb: Bundeszentrale für politische Bildung](https://www.bpb.de/veranstaltungen/): various political events in Germany
-- [foss.events](https://foss.events): collection of Free, Libre and/or Open Source Software events happening in Europe and online
 - [Berlin](https://www.berlin.de/tickets/): various events in Berlin
-- [Jugend Hackt](https://jugendhackt.org/): events in German-speaking countries for young people interested in technology
+- [Jugend Hackt](https://jugendhackt.org/): events in German-speaking countries for young people interested in
+  technology
 
 ## Documentation
 
