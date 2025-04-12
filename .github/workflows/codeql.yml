@@ -46,10 +46,7 @@ jobs:
         run: pip install -r requirements-dev.lock
 
       - name: Run Tests
-        run: pytest -v -n 2 --cov=eventfully
-
-      - name: Generate Coverage Report
-        run: coverage report -m
+        run: pytest -v -n 3 --cov=eventfully
 
   sonarcloud:
     name: SonarCloud
