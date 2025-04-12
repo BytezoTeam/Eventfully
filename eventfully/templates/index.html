@@ -100,19 +100,13 @@
             <div class="label">
               <span class="label-text">{{ t("city") }}</span>
             </div>
-            <input
-                    type="text"
-                    class="input input-bordered"
-                    placeholder="{{ t('city') }}"
-                    name="city"
-                    id="city"
-                    list="cities"
-            />
-            <datalist id="cities">
+
+            <select class="select select-bordered" id="city" name="city">
+              <option selected value="">{{ t('all_cities') }}</option>
               {% for city in cities %}
                 <option value="{{ city }}">{{ city }}</option>
               {% endfor %}
-            </datalist>
+            </select>
           </label>
 
           <!-- Category Filter -->
