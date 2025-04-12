@@ -46,7 +46,7 @@ jobs:
         run: pip install -r requirements-dev.lock
 
       - name: Run Tests
-        run: coverage run --source=eventfully --branch -m pytest -v
+        run: pytest -v -n 2 --cov=eventfully
 
       - name: Generate Coverage Report
         run: coverage report -m

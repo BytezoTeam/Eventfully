@@ -55,6 +55,8 @@ dev-dependencies = [
     "ruff==0.11.*",
     "pre-commit==4.*",
     "coverage==7.*",
+    "pytest-xdist==3.*",
+    "pytest-cov==6.*",
 ]
 
 [tool.rye.scripts]
