@@ -57,5 +57,6 @@
   "to": "until",
   "please_wait": "Please Wait a few minutes while we search for new events",
   "task_success": "Successful!",
-  "task_fail": "An error occured"
+  "task_fail": "An error occured",
+  "all_cities": "All Cities"
 }

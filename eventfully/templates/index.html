@@ -102,7 +102,7 @@
             </div>
 
             <select class="select select-bordered" id="city" name="city">
-              <option disabled selected>{{ t('city') }}</option>
+              <option selected value="">{{ t('all_cities') }}</option>
               {% for city in cities %}
                 <option value="{{ city }}">{{ city }}</option>
               {% endfor %}

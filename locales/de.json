@@ -25,7 +25,7 @@
     "politics": "Politik",
     "sport": "Sport",
     "education": "Bildung"
-    },
+  },
   "date": {
     "date": "Datum",
     "all": "Alle",
@@ -57,5 +57,6 @@
   "to": "bis",
   "please_wait": "Okay, Wir schauen gerade, was wir finden können. Warte einen Moment",
   "task_success": "Erfolgreich!",
-  "task_fail": "Ein Fehler ist aufgetreten!"
+  "task_fail": "Ein Fehler ist aufgetreten!",
+  "all_cities": "Alle Städte"
 }
