@@ -49,8 +49,10 @@ class DataWrapper:
             case "csv":
                 text_buffer = io.StringIO(self._data)
                 reader = csv.DictReader(text_buffer)
-                result = list(reader)
-                return result[0][query]
+                result = list(reader)[0]
+                if query not in result:
+                    return None
+                return result[query]
             case _:
                 raise ValueError("Unknown data type")
 
