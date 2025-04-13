@@ -37,6 +37,7 @@ CONFIG = SourceConfig(
             description="teaser.text",
             image_link="teaser.image.sources[0].url",
             city="extension.address.city",
+            category="extension.overline",
         ),
     ),
 )

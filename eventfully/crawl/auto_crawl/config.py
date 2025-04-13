@@ -29,6 +29,7 @@ class EventQueries(BaseModel):
     address: str | None = None
     description: str | None = None
     city: str | None = None
+    category: str | None = None
 
 
 class ScrapingConfig(BaseModel):

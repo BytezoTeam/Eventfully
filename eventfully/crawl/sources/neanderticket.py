@@ -50,6 +50,7 @@ CONFIG = SourceConfig(
             image_link=".//img/@src",
             address=".//span[@class='location']/text()",
             description=".//div[@class='bText']/p/text()",
+            category=".//div[contains(@class, 'rubrik')]/span/nobr/text()",
         ),
     ),
 )
