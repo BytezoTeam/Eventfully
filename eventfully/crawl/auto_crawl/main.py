@@ -5,6 +5,7 @@ from datetime import datetime
 from json import loads, dumps
 from typing import Generator, Literal
 from zoneinfo import ZoneInfo
+from enum import Enum
 
 from jsonpath_ng import parse, DatumInContext
 from parsel import Selector
@@ -187,3 +188,92 @@ def normalize_event(raw_event: RawEvent, config: SourceConfig) -> Event:
 
 def _convert_time_str_to_timestamp(time_string: str, time_format: str, time_zone: str) -> int:
     return int(datetime.strptime(time_string, time_format).astimezone(ZoneInfo(time_zone)).timestamp())
+
+
+class Category(Enum):
+    Religion = 0
+    Movie = 1
+    Children = 2
+    Literature = 3
+    Theater = 4
+    Culture = 5
+    Nightlife = 6
+    Education = 7
+    Sport = 8
+    Digital = 9
+    Reading = 10
+    Art = 11
+    Festivals = 12
+    Dance = 13
+    Circus = 14
+    Fair = 15
+    Talk = 16
+    Opera = 17
+    Party = 18
+    Politics = 19
+    Workshop = 20
+    Concerts = 21
+    Comedy = 22
+    Food = 23
+    Muiscal = 24
+    Show = 25
+    Cabaret = 26
+    Music = 27
+    Exebition = 28
+
+
+def map_category(raw_category: str) -> list[Category]:
+    category_map: dict[str, list[Category]] = {
+        "externe Veranstaltungen": [],
+        "Politik im Freien Theater": [Category.Politics, Category.Theater],
+        "Workshop / Seminar": [Category.Workshop],
+        "Podium / Vortrag": [Category.Talk],
+        "Eltern-LAN": [Category.Digital],
+        "Konferenz / Tagung": [Category.Fair],
+        "Messe": [Category.Fair],
+        "Show": [Category.Show],
+        "Schlager & Volksmusik": [Category.Music],
+        "Comedy": [Category.Comedy],
+        "Musical": [Category.Muiscal, Category.Music],
+        "Theater": [Category.Theater, Category.Culture],
+        "Literatur": [Category.Literature, Category.Culture],
+        "Kinder": [Category.Children],
+        "Konzerte": [Category.Concerts],
+        "Freizeit": [],
+        "Kabarett": [Category.Cabaret],
+        "Klassische Konzerte": [Category.Concerts, Category.Music],
+        "Bildung & Vorträge": [Category.Education, Category.Talk],
+        "Ausstellungen": [Category.Exebition],
+        "Sport": [Category.Sport],
+        "Tanz": [Category.Dance],
+        "Pop & Rock": [Category.Concerts, Category.Music],
+        "Vermischtes": [],
+        "Zirkus": [Category.Circus],
+        "HipHop": [Category.Music],
+        "Party": [Category.Party],
+        "Oper": [Category.Opera],
+        "Country & Folk": [Category.Music],
+        "Jazz": [Category.Music],
+        "Electronic & Dance": [Category.Music, Category.Party],
+        "Festivals": [Category.Festivals],
+        "Kleinkunst, Show, Zirkus": [Category.Circus, Category.Show],
+        "Tanz & Tanztheater": [Category.Dance, Category.Theater],
+        "Party & Clubkultur": [Category.Party],
+        "Food, Drinks & Events": [Category.Food],
+        "Vorträge, Infotainment & Workshops": [Category.Talk, Category.Workshop],
+        "Kunst": [Category.Art],
+        "Märkte, Messen & Feste": [Category.Fair],
+        "Religion & Glaube": [Category.Religion],
+        "Film": [Category.Movie],
+        "Literatur, Lesung, Hörspiel": [Category.Literature, Category.Reading],
+        "Kids & Teens": [Category.Children],
+        "Sport & Action": [Category.Sport],
+        "Bildung & Ausbildung": [Category.Education],
+        "Digital": [Category.Digital],
+        "Erleben & Entdecken": [],
+        "Sport & Freizeit": [Category.Sport],
+        "Bildung": [Category.Education],
+        "Kultur & Nachtleben": [Category.Culture, Category.Nightlife],
+    }
+
+    return category_map.get(raw_category, [])
