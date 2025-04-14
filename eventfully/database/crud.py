@@ -1,10 +1,10 @@
 from typing import Iterable
-from eventfully.utils import hash_password, verify_password
 
-from peewee import DoesNotExist
 from cachetools import cached, TTLCache
+from peewee import DoesNotExist
 
 from eventfully.database import models, schemas, database
+from eventfully.utils import hash_password, verify_password
 
 
 # General
@@ -189,6 +189,13 @@ def search_events(therm: str, filter_string: str) -> set[schemas.Event]:
     )
     events = [schemas.Event(**raw_event) for raw_event in raw["hits"]]
     return set(events)
+
+
+@cached(cache=TTLCache(maxsize=5, ttl=60 * 60 * 24))
+def get_event_count() -> int:
+    stats = models.event_index.get_stats()
+    count = stats.numberOfDocuments
+    return count
 
 
 @database.db.connection_context()

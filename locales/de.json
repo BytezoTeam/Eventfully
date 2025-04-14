@@ -14,7 +14,7 @@
   "location": "Veranstaltungsort",
   "username": "Benutzername",
   "email": "E-Mail",
-  "search_placeholder": "Stichwörter suchen",
+  "search_placeholder": "Durchsuche {event_count} Events",
   "city": "Stadt",
   "share_btn": "Mit Gruppe teilen",
   "group": "Gruppe",
