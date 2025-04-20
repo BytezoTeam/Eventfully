@@ -18,7 +18,7 @@ dependencies = [
     "flask-wtf==1.*",
     "niquests==3.*",
     "beautifulsoup4==4.*",
-    "pytailwindcss-extra==0.1.*",
+    "pytailwindcss-extra==0.2.*",
     "sqids==0.4.*",
     "pyjwt==2.*",
     "cachetools==5.*",
