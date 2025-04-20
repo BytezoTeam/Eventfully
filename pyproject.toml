@@ -62,8 +62,8 @@ dev-dependencies = [
 [tool.rye.scripts]
 dev = "python3 -m eventfully.main"
 test = "pytest -n 2 -v --cov=eventfully"
-css-gen = { cmd = "tailwindcss-extra -i ./eventfully/static/input.css -o ./eventfully/static/output.css --watch", env = { PYTAILWINDCSS_EXTRA_VERSION = "v1.7.27" } }
-css-build = { cmd = "tailwindcss-extra -i ./eventfully/static/input.css -o ./eventfully/static/output.css", env = { PYTAILWINDCSS_EXTRA_VERSION = "v1.7.27" } }
+css-gen = "tailwindcss-extra -i ./eventfully/static/input.css -o ./eventfully/static/output.css --watch"
+css-build = "tailwindcss-extra -i ./eventfully/static/input.css -o ./eventfully/static/output.css"
 reset-db = "rm -r database/meilisearch/data.ms/ database/sqlite/database.db"
 
 [tool.hatch.metadata]
