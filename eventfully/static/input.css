@@ -1,6 +1,8 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "daisyui";
+@plugin "@tailwindcss/typography";
+@source "../templates/**/*.html";
+@custom-variant dark (&:where(.dark, .dark *));
 
 .cool-card {
     @apply dark:bg-gray-800 bg-gray-100 shadow-2xl rounded-xl p-4 cool-border
