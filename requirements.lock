@@ -56,14 +56,11 @@ markupsafe==3.0.2
     # via wtforms
 meilisearch==0.33.1
 niquests==3.13.1
-    # via pytailwindcss-extra
 packaging==24.2
     # via gunicorn
     # via parsel
 parsel==1.10.0
 peewee==3.17.9
-platformdirs==4.3.7
-    # via pytailwindcss-extra
 ply==3.11
     # via jsonpath-ng
 pydantic==2.10.6
@@ -71,7 +68,6 @@ pydantic==2.10.6
 pydantic-core==2.27.2
     # via pydantic
 pyjwt==2.10.1
-pytailwindcss-extra==0.2.0
 python-dateutil==2.9.0.post0
     # via flask-apscheduler
 python-dotenv==1.0.1
@@ -85,8 +81,6 @@ six==1.17.0
 soupsieve==2.6
     # via beautifulsoup4
 sqids==0.4.1
-tqdm==4.67.1
-    # via pytailwindcss-extra
 typing-extensions==4.12.2
     # via beautifulsoup4
     # via pydantic
