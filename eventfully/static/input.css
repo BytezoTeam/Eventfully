@@ -8,7 +8,7 @@
     @apply dark:bg-gray-800 bg-gray-100 shadow-2xl rounded-xl p-4 cool-border;
 }
 
-.cool-border {
+@utility cool-border {
     @apply border-2 border-gray-300 dark:border-gray-700;
 }
 
