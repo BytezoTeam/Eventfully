@@ -5,29 +5,28 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 .cool-card {
-    @apply dark:bg-gray-800 bg-gray-100 shadow-2xl rounded-xl p-4 cool-border
+    @apply dark:bg-gray-800 bg-gray-100 shadow-2xl rounded-xl p-4 cool-border;
 }
 
 .cool-border {
-    @apply border-2 border-gray-300 dark:border-gray-700
+    @apply border-2 border-gray-300 dark:border-gray-700;
 }
 
 .feather {
-    @apply stroke-current
+    @apply stroke-current;
 }
 
 .feather-fill {
-    @apply fill-gray-800 dark:fill-gray-100
+    @apply fill-gray-800 dark:fill-gray-100;
 }
 
 h1 {
-    @apply font-extrabold text-4xl
+    @apply font-extrabold text-4xl;
 }
 
 h2 {
-    @apply font-bold text-2xl
+    @apply font-bold text-2xl;
 }
-
 
 /* Things for the loading indicator in search to work */
 /* Show Loader while the request is loading */
