@@ -37,12 +37,12 @@
   {% endif %}
 
   {# Image #}
-  <figure class="pt-4 px-4 w-full h-72 rounded-xl">
+  <figure class="pt-4 px-4 w-full h-72 rounded-md">
     {% if item.image_link %}
       <img src="{{ item.image_link }}" loading="lazy" class="object-cover object-center size-full" alt="Event Cover"
            style="border-radius: inherit"/>
     {% else %}
-      <div class="flex items-center justify-center h-full text-white text-6xl font-bold rounded-xl"
+      <div class="flex items-center justify-center h-full text-white text-6xl font-bold rounded-md"
            style="background: linear-gradient(45deg, #4F46E5, #EC4899);">
         {{ item.title[0:2] }}
       </div>
