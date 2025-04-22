@@ -14,7 +14,7 @@
   "location": "Event Location",
   "username": "Username",
   "email": "Email",
-  "search_placeholder": "Search Keywords",
+  "search_placeholder": "Search {event_count} Events",
   "city": "City",
   "share_btn": "Share With Group",
   "group": "Group",

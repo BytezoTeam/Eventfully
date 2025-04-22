@@ -45,6 +45,7 @@ def index(user_id: str):
         cities=cities,
         t=translation_provider(),
         CONFIG=CONFIG,
+        event_count=crud.get_event_count(),
     )
 
 
