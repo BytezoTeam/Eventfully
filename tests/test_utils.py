@@ -1,6 +1,6 @@
 import pytest
 
-from eventfully.utils import extract_language_from_language_header
+from eventfully.utils import extract_language_from_language_header, generate_nice_looking_id
 
 
 @pytest.mark.parametrize(
@@ -13,3 +13,8 @@ from eventfully.utils import extract_language_from_language_header
 )
 def test_extract_language_from_language_header(language_header: str, accepted_languages: tuple, expected_result: str):
     assert extract_language_from_language_header(language_header, accepted_languages) == expected_result
+
+
+def test_generate_nice_looking_id():
+    id_length = 8
+    assert len(generate_nice_looking_id()) == id_length

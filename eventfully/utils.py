@@ -4,6 +4,8 @@ Some functions that are used in many places in the project.
 
 from hashlib import sha256
 from uuid import uuid4
+from random import choice
+
 import niquests
 
 
@@ -47,3 +49,8 @@ def send_niquests_get(url: str) -> niquests.Response:
     request = niquests.get(url, headers=headers)
     request.raise_for_status()
     return request
+
+
+def generate_nice_looking_id() -> str:
+    possible_chars = "abcdefghijklmnopqrstuvwxyz0123456789"
+    return "".join(choice(possible_chars) for _ in range(8))

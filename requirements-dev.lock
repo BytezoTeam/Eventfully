@@ -113,7 +113,6 @@ six==1.17.0
     # via python-dateutil
 soupsieve==2.6
     # via beautifulsoup4
-sqids==0.4.1
 tqdm==4.67.1
     # via pytailwindcss-extra
 typing-extensions==4.12.2
