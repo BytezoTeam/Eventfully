@@ -5,6 +5,7 @@ from peewee import DoesNotExist
 from cachetools import cached, TTLCache
 
 from eventfully.database import models, schemas, database
+from eventfully.utils import generate_nice_looking_id
 
 
 # General
@@ -49,8 +50,10 @@ def unlike_event(user_id: str, event_id: str) -> None:
 
 
 @database.db.connection_context()
-def add_group(admin_id, group_id, group_name):
-    group = models.Groups.create(id=group_id, name=group_name)
+def create_group(admin_id: str, name: str) -> str:
+    group_id = generate_nice_looking_id()
+
+    group = models.Groups.create(id=group_id, name=name)
 
     user = models.User.get(models.User.id == admin_id)
     models.GroupMembers.create(user=user, group=group, admin=True)

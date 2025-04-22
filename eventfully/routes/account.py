@@ -13,7 +13,6 @@ from eventfully.config import CONFIG
 from eventfully.database import crud, schemas, database
 from eventfully.logger import log
 from eventfully.routes.utils import jwt_check, translation_provider, no_cache
-from eventfully.utils import generate_nice_looking_id
 
 bp = Blueprint("account", __name__)
 
@@ -67,8 +66,7 @@ def create_group(user_id: str):
     if not name:
         return "", HTTPStatus.BAD_REQUEST
 
-    cool_id = generate_nice_looking_id()
-    crud.add_group(user_id, cool_id, name)
+    crud.create_group(user_id, name)
 
     groups = crud.get_groups_of_member(user_id)
 
