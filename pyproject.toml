@@ -17,7 +17,6 @@ dependencies = [
     "gunicorn==23.*",
     "flask-wtf==1.*",
     "niquests==3.*",
-    "beautifulsoup4==4.*",
     "pyjwt==2.*",
     "cachetools==5.*",
     "yet-another-i18n==0.2.*",
@@ -36,10 +35,6 @@ line-length = 120
 # Rules are explained here: https://docs.astral.sh/ruff/rules
 select = ["E4", "E7", "E9", "F", "C", "N", "A", "SIM", "PL"]
 ignore = ["N805"]
-
-[tool.pyright]
-ignore = ["**/jugendhackt.py"]
-
 
 [build-system]
 requires = ["hatchling"]
