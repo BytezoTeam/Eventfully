@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .cool-card {
-    @apply dark:bg-gray-800 bg-gray-100 shadow-2xl rounded-xl p-4 cool-border
+    @apply dark:bg-gray-800 bg-gray-100 shadow-xl rounded-xl p-4 cool-border;
 }
 
 .cool-border {
