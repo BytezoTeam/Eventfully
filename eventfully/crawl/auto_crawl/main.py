@@ -5,7 +5,6 @@ from datetime import datetime
 from json import loads, dumps
 from typing import Generator, Literal
 from zoneinfo import ZoneInfo
-from enum import Enum
 
 from jsonpath_ng import parse, DatumInContext
 from parsel import Selector
@@ -147,6 +146,7 @@ def extract_raw_event(event_object: DataWrapper, queries: EventQueries) -> RawEv
         field_query = queries.model_dump().get(field)
         if not field_query:
             continue
+
         content = event_object.get_value(field_query)
         if not content:
             continue
@@ -157,6 +157,7 @@ def extract_raw_event(event_object: DataWrapper, queries: EventQueries) -> RawEv
 
 
 def normalize_event(raw_event: RawEvent, config: SourceConfig) -> Event:
+    # Remove unneded white spaces and newlines from the raw event
     raw_dict_event = raw_event.model_dump()
     for key, value in raw_dict_event.items():
         if not value:
@@ -168,11 +169,13 @@ def normalize_event(raw_event: RawEvent, config: SourceConfig) -> Event:
             raw_dict_event[key] = clean_string
     raw_event = RawEvent(**raw_dict_event)
 
+    # Complete incomplete urls
     if raw_event.web_link.startswith("/"):
         raw_event.web_link = config.base_url + raw_event.web_link
     if raw_event.image_link and raw_event.image_link.startswith("/"):
         raw_event.image_link = config.base_url + raw_event.image_link
 
+    # Convert time strings to timestamps
     locale.setlocale(locale.LC_TIME, config.processing_config.locale)
     if isinstance(raw_event.start_time, str):
         raw_event.start_time = _convert_time_str_to_timestamp(
@@ -183,6 +186,14 @@ def normalize_event(raw_event: RawEvent, config: SourceConfig) -> Event:
             raw_event.end_time, config.processing_config.time_format, config.processing_config.time_zone
         )
 
+    # Map categories
+    assert not isinstance(raw_event.categories, list)
+    raw_category_list = raw_event.categories.split(" ") if raw_event.categories else []
+    categories: set[str] = set()
+    for raw_category in raw_category_list:
+        categories.update(map_category(raw_category.lower()))
+    raw_event.categories = list(categories)
+
     return Event(**raw_event.model_dump(), source=config.name)
 
 
@@ -190,49 +201,17 @@ def _convert_time_str_to_timestamp(time_string: str, time_format: str, time_zone
     return int(datetime.strptime(time_string, time_format).astimezone(ZoneInfo(time_zone)).timestamp())
 
 
-class Category(Enum):
-    Religion = 0
-    Movie = 1
-    Children = 2
-    Literature = 3
-    Theater = 4
-    Culture = 5
-    Nightlife = 6
-    Education = 7
-    Sport = 8
-    Digital = 9
-    Reading = 10
-    Art = 11
-    Festivals = 12
-    Dance = 13
-    Circus = 14
-    Fair = 15
-    Talk = 16
-    Opera = 17
-    Party = 18
-    Politics = 19
-    Workshop = 20
-    Concerts = 21
-    Comedy = 22
-    Food = 23
-    Muiscal = 24
-    Show = 25
-    Cabaret = 26
-    Music = 27
-    Exebition = 28
-
-
-def map_category(raw_category: str) -> list[Category]:
-    category_map: dict[Category, list[str]] = {
-        Category.Politics: ["politik"],
-        Category.Culture: ["theater", "literatur", "kultur"],
-        Category.Theater: ["theater"],
-        Category.Workshop: ["workshop", "seminar", "workshops"],
-        Category.Talk: ["podium", "vortrag", "vorträge"],
-        Category.Digital: ["lan", "digital"],
-        Category.Fair: ["konferenz", "tagung", "messe", "messen"],
-        Category.Show: ["show"],
-        Category.Music: [
+def map_category(raw_category: str) -> set[str]:
+    category_map: dict[str, list[str]] = {
+        "politics": ["politik"],
+        "culture": ["theater", "literatur", "kultur"],
+        "theater": ["theater"],
+        "workshop": ["workshop", "seminar", "workshops"],
+        "talk": ["podium", "vortrag", "vorträge"],
+        "digital": ["lan", "digital"],
+        "fair": ["konferenz", "tagung", "messe", "messen"],
+        "show": ["show"],
+        "music": [
             "schlager",
             "volksmusik",
             "musical",
@@ -246,26 +225,31 @@ def map_category(raw_category: str) -> list[Category]:
             "electronic",
             "dance",
         ],
-        Category.Comedy: ["comedy", "kabarett", "kleinkunst"],
-        Category.Muiscal: ["musical"],
-        Category.Literature: ["literatur", "lesung", "hörspiel"],
-        Category.Children: ["kinder", "kids", "teens"],
-        Category.Concerts: ["konzerte"],
-        Category.Cabaret: ["kabarett", "kleinkunst"],
-        Category.Education: ["bildung", "ausbildung"],
-        Category.Exebition: ["ausstellung"],
-        Category.Sport: ["sport"],
-        Category.Dance: ["tanz"],
-        Category.Circus: ["zirkus"],
-        Category.Party: ["party", "clubcultur"],
-        Category.Opera: ["oper"],
-        Category.Festivals: ["festivals"],
-        Category.Nightlife: ["clubkultur", "nachtleben"],
-        Category.Food: ["food", "drinks"],
-        Category.Art: ["kunst"],
-        Category.Religion: ["glaube", "religion"],
-        Category.Movie: ["film"],
-        Category.Reading: ["lesung"],
+        "comedy": ["comedy", "kabarett", "kleinkunst"],
+        "muiscal": ["musical"],
+        "literature": ["literatur", "lesung", "hörspiel"],
+        "children": ["kinder", "kids", "teens"],
+        "concerts": ["konzerte"],
+        "cabaret": ["kabarett", "kleinkunst"],
+        "education": ["bildung", "ausbildung"],
+        "exebition": ["ausstellung"],
+        "sport": ["sport"],
+        "dance": ["tanz"],
+        "circus": ["zirkus"],
+        "party": ["party", "clubcultur"],
+        "opera": ["oper"],
+        "festivals": ["festivals"],
+        "nightlife": ["clubkultur", "nachtleben"],
+        "food": ["food", "drinks"],
+        "art": ["kunst"],
+        "religion": ["glaube", "religion"],
+        "movie": ["film"],
+        "reading": ["lesung"],
     }
 
-    return category_map.get(raw_category, [])
+    categories: set[str] = set()
+    for category, keywords in category_map.items():
+        if raw_category in keywords:
+            categories.add(category)
+
+    return categories

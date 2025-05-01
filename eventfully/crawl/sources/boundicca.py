@@ -48,7 +48,7 @@ def crawl() -> Generator[schemas.Event, None, None]:
             description=raw_event.get("description"),
             address=raw_event.get("location.address"),
             operator_web_link=raw_event.get("location.url"),
-            category=category,
+            categories=category,
         )
         yield event
 
