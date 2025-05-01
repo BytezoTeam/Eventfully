@@ -53,11 +53,11 @@
   {% include "components/navbar.html" %}
 
   <!-- Main -->
-  <main class="flex flex-col gap-8">
+  <main class="flex flex-col gap-4">
     <!-- Event Search -->
     <section class="sticky top-8 z-20 cool-card p-2">
       <form
-              class="flex flex-row items-center flex-wrap justify-start gap-2 sm:gap-4 w-full"
+              class="flex flex-row items-center flex-wrap justify-start gap-2 w-full"
               hx-get="/api/search"
               hx-target="#event-search-result"
               hx-trigger="submit,load,change"
