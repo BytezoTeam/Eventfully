@@ -1,13 +1,11 @@
 from datetime import datetime, timedelta
 from http import HTTPStatus
-from random import randint
 from uuid import uuid4
 
 import pytz
 import jwt
 from flask import Blueprint, render_template, request, make_response, Response
 from flask_wtf import FlaskForm
-from sqids.sqids import Sqids
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Length
 
@@ -68,8 +66,7 @@ def create_group(user_id: str):
     if not name:
         return "", HTTPStatus.BAD_REQUEST
 
-    cool_id = Sqids().encode([randint(0, int(1e15))])
-    crud.add_group(user_id, cool_id, name)
+    crud.create_group(user_id, name)
 
     groups = crud.get_groups_of_member(user_id)
 

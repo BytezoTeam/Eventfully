@@ -5,8 +5,6 @@
    - `sh get-docker.sh`
 2. Verify if Docker was Installed sucessfully
    - `docker run hello-world`
-3. Install Git
-   - Example Debian/Ubuntu: `apt-get install git`
 4. Get the [docker-compose.yml file](https://github.com/BytezoTeam/Eventfully/blob/main/docker-compose.yml) from the Eventfully repository
 5. Replace placeholders for environment variables with fitting values
 6. Start the server

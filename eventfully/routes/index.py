@@ -35,6 +35,7 @@ def _get_time_range(date_str: str) -> tuple:
 @jwt_check()
 def index(user_id: str):
     cities = crud.get_possible_cities()
+    cities.sort()
 
     user = crud.get_user(user_id) if user_id else None
 

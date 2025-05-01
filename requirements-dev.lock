@@ -13,7 +13,6 @@ annotated-types==0.7.0
     # via pydantic
 apscheduler==3.11.0
     # via flask-apscheduler
-beautifulsoup4==4.13.3
 blinker==1.9.0
     # via flask
 cachetools==5.5.2
@@ -80,6 +79,7 @@ packaging==24.2
 parsel==1.10.0
 peewee==3.17.9
 platformdirs==4.3.7
+    # via pytailwindcss-extra
     # via virtualenv
 pluggy==1.5.0
     # via pytest
@@ -91,7 +91,7 @@ pydantic==2.10.6
 pydantic-core==2.27.2
     # via pydantic
 pyjwt==2.10.1
-pytailwindcss-extra==0.1.1
+pytailwindcss-extra==0.2.0
 pytest==8.3.5
     # via pytest-cov
     # via pytest-xdist
@@ -110,11 +110,9 @@ requests==2.32.3
 ruff==0.11.2
 six==1.17.0
     # via python-dateutil
-soupsieve==2.6
-    # via beautifulsoup4
-sqids==0.4.1
+tqdm==4.67.1
+    # via pytailwindcss-extra
 typing-extensions==4.12.2
-    # via beautifulsoup4
     # via pydantic
     # via pydantic-core
 tzlocal==5.3.1

@@ -6,8 +6,7 @@ COPY eventfully/ eventfully/
 COPY tailwind.config.js ./
 
 # Build CSS Styles
-ENV PYTAILWINDCSS_EXTRA_VERSION=v1.7.27
-RUN pip install --no-cache-dir pytailwindcss-extra && \
+RUN pip install --no-cache-dir pytailwindcss-extra==0.2.* && \
     tailwindcss-extra && \
     tailwindcss-extra -i ./eventfully/static/input.css -o ./eventfully/static/output.css --minify
 

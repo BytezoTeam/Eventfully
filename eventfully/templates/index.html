@@ -47,17 +47,17 @@
 </div>
 
 {% block body %}
-  <body class="container mx-auto">
+  <body class="container mx-auto px-2 sm:px-0">
 
   <!-- Head -->
   {% include "components/navbar.html" %}
 
   <!-- Main -->
-  <main class="flex flex-col gap-8">
+  <main class="flex flex-col gap-4">
     <!-- Event Search -->
     <section class="sticky top-8 z-20 cool-card p-2">
       <form
-              class="flex flex-row items-center flex-wrap justify-start gap-2 sm:gap-4 w-full"
+              class="flex flex-row items-center flex-wrap justify-start gap-2 w-full"
               hx-get="/api/search"
               hx-target="#event-search-result"
               hx-trigger="submit,load,change"
@@ -101,7 +101,7 @@
               <span class="label-text">{{ t("city") }}</span>
             </div>
 
-            <select class="select select-bordered" id="city" name="city">
+            <select class="select select-bordered w-full" id="city" name="city">
               <option selected value="">{{ t('all_cities') }}</option>
               {% for city in cities %}
                 <option value="{{ city }}">{{ city }}</option>
@@ -183,5 +183,3 @@
   </footer>
   </body>
 {% endblock %}
-
-
