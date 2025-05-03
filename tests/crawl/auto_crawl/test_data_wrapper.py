@@ -1,4 +1,4 @@
-from eventfully.crawl.auto_crawl.data_wrapper import CSVDataWrapper
+from eventfully.crawl.auto_crawl.data_wrapper import CSVDataWrapper, JSONDataWrapper
 
 
 def test_data_wrapper_csv():
@@ -13,3 +13,23 @@ def test_data_wrapper_csv():
 
     id1 = objects[0].get_value("id")
     assert id1 == "1"
+
+
+def test_json_special_char_key():
+    json_text = '{"some:text": "hi"}'
+    data_wrapper = JSONDataWrapper(data=json_text)
+    assert data_wrapper.get_value("'some:text'") == "hi"
+
+
+def test_json_all_key():
+    json_text = '{ "people": [{"name": "John Doe"}, {"name": "Jane Smith"}] }'
+    data_wrapper = JSONDataWrapper(data=json_text)
+    people_count = 2
+    assert len(data_wrapper.get_objects("people[*]")) == people_count
+
+
+def test_json_all_root():
+    json_text = '[{"name": "John Doe"}, {"name": "Jane Smith"}]'
+    data_wrapper = JSONDataWrapper(data=json_text)
+    people_count = 2
+    assert len(data_wrapper.get_objects("[*]")) == people_count

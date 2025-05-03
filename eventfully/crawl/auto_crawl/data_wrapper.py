@@ -57,7 +57,10 @@ class JSONDataWrapper(AbstractDataWrapper):
 
     def get_value(self, query: str) -> str | None:
         dict_data = loads(self._data)
-        return parse(query).find(dict_data)[0].value
+        results = parse(query).find(dict_data)
+        if not results:
+            return None
+        return results[0].value
 
     def get_values(self, query: str) -> list[str]:
         dict_data = loads(self._data)
