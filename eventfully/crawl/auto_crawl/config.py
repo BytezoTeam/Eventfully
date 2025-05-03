@@ -1,6 +1,8 @@
-from typing import Literal, Callable
+from typing import Literal, Callable, Type
 
 from pydantic import BaseModel
+
+from eventfully.crawl.auto_crawl.data_wrapper import AbstractDataWrapper
 
 
 class ProcessingConfig(BaseModel):
@@ -32,7 +34,7 @@ class EventQueries(BaseModel):
 
 
 class ScrapingConfig(BaseModel):
-    data_type: Literal["html", "json"]
+    data_wrapper: Type[AbstractDataWrapper]
     url_getter: URLGenerator
     extraction_type: Literal["direct", "indirect"]
     item_query: str
