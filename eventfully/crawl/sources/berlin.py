@@ -7,6 +7,7 @@ from eventfully.crawl.auto_crawl.config import (
     EventQueries,
     URLGenerator,
 )
+from eventfully.crawl.auto_crawl.data_wrapper import HTMLDataWrapper
 from eventfully.crawl.auto_crawl.main import get_raw_events_from_source, normalize_event
 from eventfully.database import schemas
 from eventfully.logger import log
@@ -25,7 +26,7 @@ CONFIG = SourceConfig(
         time_zone="Europe/Berlin",
     ),
     scraper=ScrapingConfig(
-        data_type="html",
+        data_wrapper=HTMLDataWrapper,
         url_getter=URLGenerator(
             function=_url_generator,
             terminator_query=".//li[contains(@class, 'pager-item-next') and @aria-disabled='true']",

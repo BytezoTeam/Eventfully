@@ -11,6 +11,7 @@ from eventfully.crawl.auto_crawl.config import (
 from eventfully.crawl.auto_crawl.main import get_raw_events_from_source, normalize_event
 from eventfully.database import schemas
 from eventfully.logger import log
+from eventfully.crawl.auto_crawl.data_wrapper import HTMLDataWrapper
 
 
 def _url_generator() -> list[str]:
@@ -36,7 +37,7 @@ CONFIG = SourceConfig(
         time_zone="Europe/Berlin",
     ),
     scraper=ScrapingConfig(
-        data_type="html",
+        data_wrapper=HTMLDataWrapper,
         extraction_type="indirect",
         item_query=".//div[contains(@id, 'event')]",
         url_getter=URLGenerator(

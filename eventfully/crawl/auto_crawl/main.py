@@ -1,77 +1,15 @@
-import io
-import csv
 import locale
 from datetime import datetime
-from json import loads, dumps
-from typing import Generator, Literal
+from typing import Generator
 from zoneinfo import ZoneInfo
 
-from jsonpath_ng import parse, DatumInContext
-from parsel import Selector
 from pydantic import ValidationError
 
 from eventfully.crawl.auto_crawl.config import RawEvent, SourceConfig, EventQueries
 from eventfully.database.schemas import Event
 from eventfully.logger import log
 from eventfully.utils import send_niquests_get
-
-
-class DataWrapper:
-    def __init__(self, data: str, data_type: Literal["html", "json", "csv"]):
-        self._data_type = data_type
-        self._data = data
-
-    def get_objects(self, query: str) -> list["DataWrapper"]:
-        match self._data_type:
-            case "html":
-                selector = Selector(text=self._data)
-                new_objects = selector.xpath(query)
-                return [DataWrapper(data=new_object.get(), data_type=self._data_type) for new_object in new_objects]
-            case "json":
-                dict_data = loads(self._data)
-                results = parse(query).find(dict_data)
-                return [DataWrapper(data=dumps(new.value), data_type=self._data_type) for new in results]
-            case "csv":
-                lines = self._data.splitlines()
-                events = lines[1:]
-                return [DataWrapper(lines[0] + "\n" + event, "csv") for event in events]
-            case _:
-                raise ValueError("Unknown data type")
-
-    def get_value(self, query: str) -> str | None:
-        match self._data_type:
-            case "html":
-                selector = Selector(text=self._data)
-                return selector.xpath(query).get()
-            case "json":
-                dict_data = loads(self._data)
-                return parse(query).find(dict_data)[0].value
-            case "csv":
-                text_buffer = io.StringIO(self._data)
-                reader = csv.DictReader(text_buffer)
-                result = list(reader)[0]
-                if query not in result:
-                    return None
-                return result[query]
-            case _:
-                raise ValueError("Unknown data type")
-
-    def get_values(self, query: str) -> list[str]:
-        match self._data_type:
-            case "html":
-                selector = Selector(text=self._data)
-                return selector.xpath(query).getall()
-            case "json":
-                dict_data = loads(self._data)
-                results: list[DatumInContext] = parse(query).find(dict_data)
-                return [result.value for result in results]
-            case "csv":
-                raise ValueError("CSV data type does not support get_values")
-            case _:
-                raise ValueError("Unknown data type")
-
-    def __repr__(self) -> str:
-        return self._data
+from eventfully.crawl.auto_crawl.data_wrapper import AbstractDataWrapper, JSONDataWrapper
 
 
 def get_raw_events_from_source(config: SourceConfig) -> Generator[RawEvent, None, None]:
@@ -84,10 +22,9 @@ def get_raw_events_from_source(config: SourceConfig) -> Generator[RawEvent, None
         if not response.text:
             raise ValueError("Got no data")
 
-        data_wrapper = DataWrapper(data=response.text, data_type=config.scraper.data_type)
-
+        data_wrapper: AbstractDataWrapper = config.scraper.data_wrapper(response.text)
         # Extract all events from the current url
-        for event_object in get_event_data_objects(config, current_url):
+        for event_object in get_event_data_objects(config, data_wrapper):
             try:
                 raw_event = extract_raw_event(event_object, config.scraper.event_queries)
             except ValidationError as e:
@@ -100,7 +37,7 @@ def get_raw_events_from_source(config: SourceConfig) -> Generator[RawEvent, None
             break
 
 
-def _should_scrape_continue(config: SourceConfig, data: DataWrapper) -> bool:
+def _should_scrape_continue(config: SourceConfig, data: AbstractDataWrapper) -> bool:
     if config.scraper.url_getter.terminator_query:
         terminator_query_exists = data.get_value(config.scraper.url_getter.terminator_query)
         if (terminator_query_exists and not config.scraper.url_getter.invert_terminator) or (
@@ -110,18 +47,15 @@ def _should_scrape_continue(config: SourceConfig, data: DataWrapper) -> bool:
     return True
 
 
-def get_event_data_objects(config: SourceConfig, url: str) -> Generator[DataWrapper, None, None]:
+def get_event_data_objects(
+    config: SourceConfig, data_wrapper: AbstractDataWrapper
+) -> Generator[AbstractDataWrapper, None, None]:
     """
     Returns either the queried event objects from the current source or
     the event objects got from the queried links in the current source.
     """
 
-    response = send_niquests_get(url)
-    if not response.text:
-        raise ValueError("Got no data")
-    data_wrapper = DataWrapper(data=response.text, data_type=config.scraper.data_type)
-
-    if config.scraper.extraction_type == "indirect" and config.scraper.data_type == "json":
+    if config.scraper.extraction_type == "indirect" and isinstance(config.scraper.data_wrapper, JSONDataWrapper):
         raise ValueError("Indirect extraction is not supported for json data")
 
     for event_object in data_wrapper.get_objects(config.scraper.item_query):
@@ -140,7 +74,7 @@ def get_event_data_objects(config: SourceConfig, url: str) -> Generator[DataWrap
         yield event_object
 
 
-def extract_raw_event(event_object: DataWrapper, queries: EventQueries) -> RawEvent:
+def extract_raw_event(event_object: AbstractDataWrapper, queries: EventQueries) -> RawEvent:
     data = {}
     for field, _ in RawEvent.model_fields.items():
         field_query = queries.model_dump().get(field)

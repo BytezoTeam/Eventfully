@@ -10,6 +10,7 @@ from eventfully.crawl.auto_crawl.config import (
 from eventfully.crawl.auto_crawl.main import get_raw_events_from_source, normalize_event
 from eventfully.database import schemas
 from eventfully.logger import log
+from eventfully.crawl.auto_crawl.data_wrapper import JSONDataWrapper
 
 
 def _url_generator() -> list[str]:
@@ -25,7 +26,7 @@ CONFIG = SourceConfig(
         time_zone="Europe/Berlin",
     ),
     scraper=ScrapingConfig(
-        data_type="json",
+        data_wrapper=JSONDataWrapper,
         url_getter=URLGenerator(function=_url_generator, terminator_query="lastPage"),
         extraction_type="direct",
         item_query="teaser[*]",

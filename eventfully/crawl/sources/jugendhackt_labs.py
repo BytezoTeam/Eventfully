@@ -10,6 +10,7 @@ from eventfully.crawl.auto_crawl.config import (
 from eventfully.crawl.auto_crawl.main import get_raw_events_from_source, normalize_event
 from eventfully.database import schemas
 from eventfully.logger import log
+from eventfully.crawl.auto_crawl.data_wrapper import HTMLDataWrapper
 
 
 CONFIG = SourceConfig(
@@ -17,7 +18,7 @@ CONFIG = SourceConfig(
     base_url="https://jugendhackt.org",
     processing_config=ProcessingConfig(locale="de_DE.UTF-8", time_zone="Europe/Berlin", time_format="%d.%m.%Y %H:%M"),
     scraper=ScrapingConfig(
-        data_type="html",
+        data_wrapper=HTMLDataWrapper,
         url_getter=URLGenerator(
             function=lambda: ["https://jugendhackt.org/kalender/"],
         ),
