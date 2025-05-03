@@ -122,7 +122,7 @@ def normalize_event(raw_event: RawEvent, config: SourceConfig) -> Event:
 
     # Map categories
     assert not isinstance(raw_event.categories, list)
-    raw_category_list = raw_event.categories.split(" ") if raw_event.categories else []
+    raw_category_list = raw_event.categories.lower().split(" ") if raw_event.categories else []
     categories: set[str] = set()
     for raw_category in raw_category_list:
         categories.update(map_category(raw_category.lower()))
