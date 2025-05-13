@@ -42,6 +42,7 @@ CONFIG = SourceConfig(
             start_time=".//time/text()[following-sibling::br][1]",
             end_time=".//time/text()[following-sibling::br][1]",
             title=".//span[contains(@class, 'poster__title-span-text')]/text()",
+            categories=".//li[contains(@class, 'detailpost__tag')]/a/text()",
         ),
     ),
 )
