@@ -20,7 +20,7 @@ RUN apk add --no-cache tini && \
     # Running eventfully without root with gosu
     addgroup nonroot && \
     adduser --system -G nonroot --disabled-password nonroot && \
-    apk add --no-cache gosu --repository https://dl-cdn.alpinelinux.org/alpine/edge/testing/
+    apk add --no-cache gosu --repository https://dl-cdn.alpinelinux.org/alpine/edge/community
 
 # Install and setup dependencies
 COPY requirements.lock ./
