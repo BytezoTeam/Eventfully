@@ -1,9 +1,8 @@
-FROM python:3.11-alpine AS build
+FROM python:3.11 AS build
 
 WORKDIR /app
 
 COPY eventfully/ eventfully/
-COPY tailwind.config.js ./
 
 # Build CSS Styles
 RUN pip install --no-cache-dir pytailwindcss-extra==0.2.* && \
@@ -30,7 +29,7 @@ RUN PYTHONDONTWRITEBYTECODE=1 pip install --no-cache-dir -r requirements.lock
 COPY --from=build /app/eventfully/ eventfully/
 COPY tests/ tests/
 COPY locales/ locales/
-COPY tailwind.config.js docker-entrypoint.sh ./
+COPY docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
 
 # The server runs on port 8000
