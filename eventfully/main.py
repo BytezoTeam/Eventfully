@@ -11,7 +11,7 @@ from eventfully.database import crud
 from eventfully.logger import log
 from eventfully.routes import account, api, index, legal_notice
 
-log.info("Starting Server v0.6.0 ...")
+log.info("Starting Server v0.6.1 ...")
 crud.create_tables()
 
 app = Flask(__name__)
