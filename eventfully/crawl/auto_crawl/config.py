@@ -31,6 +31,7 @@ class EventQueries(BaseModel):
     address: str | None = None
     description: str | None = None
     city: str | None = None
+    categories: str | None = None
 
 
 class ScrapingConfig(BaseModel):
@@ -59,4 +60,4 @@ class RawEvent(BaseModel):
     address: str | None = None
     operator_web_link: str | None = None
     price: str | None = None
-    category: str | None = None
+    categories: str | list[str] | None = None

@@ -23,7 +23,7 @@ class Event(BaseModel):
     address: str | None = None
     operator_web_link: str | None = None
     price: str | None = None
-    category: str | None = None
+    categories: list[str] = []
 
     @computed_field()
     @property

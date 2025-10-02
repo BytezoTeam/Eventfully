@@ -42,6 +42,7 @@ CONFIG = SourceConfig(
             image_link=".//img/@src",
             price=".//dd[last()]/text()",
             address=".//dt[text()='Adresse:']/following-sibling::dd[1]/a/text()",
+            categories=".//ul[contains(@class, 'categories')]/li/a/text()",
         ),
     ),
 )

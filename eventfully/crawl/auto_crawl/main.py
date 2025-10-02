@@ -80,6 +80,7 @@ def extract_raw_event(event_object: AbstractDataWrapper, queries: EventQueries) 
         field_query = queries.model_dump().get(field)
         if not field_query:
             continue
+
         content = event_object.get_value(field_query)
         if not content:
             continue
@@ -90,6 +91,7 @@ def extract_raw_event(event_object: AbstractDataWrapper, queries: EventQueries) 
 
 
 def normalize_event(raw_event: RawEvent, config: SourceConfig) -> Event:
+    # Remove unneded white spaces and newlines from the raw event
     raw_dict_event = raw_event.model_dump()
     for key, value in raw_dict_event.items():
         if not value:
@@ -101,11 +103,13 @@ def normalize_event(raw_event: RawEvent, config: SourceConfig) -> Event:
             raw_dict_event[key] = clean_string
     raw_event = RawEvent(**raw_dict_event)
 
+    # Complete incomplete urls
     if raw_event.web_link.startswith("/"):
         raw_event.web_link = config.base_url + raw_event.web_link
     if raw_event.image_link and raw_event.image_link.startswith("/"):
         raw_event.image_link = config.base_url + raw_event.image_link
 
+    # Convert time strings to timestamps
     locale.setlocale(locale.LC_TIME, config.processing_config.locale)
     if isinstance(raw_event.start_time, str):
         raw_event.start_time = _convert_time_str_to_timestamp(
@@ -116,8 +120,70 @@ def normalize_event(raw_event: RawEvent, config: SourceConfig) -> Event:
             raw_event.end_time, config.processing_config.time_format, config.processing_config.time_zone
         )
 
+    # Map categories
+    assert not isinstance(raw_event.categories, list)
+    raw_category_list = raw_event.categories.lower().split(" ") if raw_event.categories else []
+    categories: set[str] = set()
+    for raw_category in raw_category_list:
+        categories.update(map_category(raw_category.lower()))
+    raw_event.categories = list(categories)
+
     return Event(**raw_event.model_dump(), source=config.name)
 
 
 def _convert_time_str_to_timestamp(time_string: str, time_format: str, time_zone: str) -> int:
     return int(datetime.strptime(time_string, time_format).astimezone(ZoneInfo(time_zone)).timestamp())
+
+
+def map_category(raw_category: str) -> set[str]:
+    category_map: dict[str, list[str]] = {
+        "politics": ["politik"],
+        "culture": ["theater", "literatur", "kultur"],
+        "theater": ["theater"],
+        "workshop": ["workshop", "seminar", "workshops"],
+        "talk": ["podium", "vortrag", "vorträge"],
+        "digital": ["lan", "digital"],
+        "fair": ["konferenz", "tagung", "messe", "messen"],
+        "show": ["show"],
+        "music": [
+            "schlager",
+            "volksmusik",
+            "musical",
+            "konzerte",
+            "pop",
+            "rock",
+            "hiphop",
+            "country",
+            "folk",
+            "jazz",
+            "electronic",
+            "dance",
+        ],
+        "comedy": ["comedy", "kabarett", "kleinkunst"],
+        "muiscal": ["musical"],
+        "literature": ["literatur", "lesung", "hörspiel"],
+        "children": ["kinder", "kids", "teens"],
+        "concerts": ["konzerte"],
+        "cabaret": ["kabarett", "kleinkunst"],
+        "education": ["bildung", "ausbildung"],
+        "exebition": ["ausstellung"],
+        "sport": ["sport"],
+        "dance": ["tanz"],
+        "circus": ["zirkus"],
+        "party": ["party", "clubcultur"],
+        "opera": ["oper"],
+        "festivals": ["festivals"],
+        "nightlife": ["clubkultur", "nachtleben"],
+        "food": ["food", "drinks"],
+        "art": ["kunst"],
+        "religion": ["glaube", "religion"],
+        "movie": ["film"],
+        "reading": ["lesung"],
+    }
+
+    categories: set[str] = set()
+    for category, keywords in category_map.items():
+        if raw_category in keywords:
+            categories.add(category)
+
+    return categories
